@@ -70,6 +70,7 @@ public class PlayerMovementSync : NetworkBehaviour {
             // send state to server
             CmdProvideMovementToServer(moveState.HorizontalAxis, moveState.VerticalAxis, playerTransform.position);
         }
+        LerpTransform();
     }
 
     [Command]
