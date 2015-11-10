@@ -50,3 +50,14 @@ Temporary Items
 # When checking the project into a version control system, you should add the Assets and the ProjectSettings directories to the system. The Library directory should be completely ignored - when using .meta files, it’s only a local cache of imported assets.
 # http://docs.unity3d.com/Manual/ExternalVersionControlSystemSupport.html
 Library
+
+# http://answers.unity3d.com/questions/22604/which-unity-project-files-can-be-ignored-for-versi.html
+Temp
+Obj
+
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.user
+*.userprefs
