@@ -43,7 +43,7 @@ public class PlayerMovementSync : NetworkBehaviour {
     }
 
     void Update() {
-        LerpTransform();
+        //LerpTransform();
         TransmitOrientation();
     }
 

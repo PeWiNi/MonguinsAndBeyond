@@ -61,8 +61,8 @@ public class Player : NetworkBehaviour {
         transform.Translate(new Vector3(0f, jumpAxis, 0f) * JumpSpeed * Time.fixedDeltaTime);
 
         // Rotate View
-        if (Input.GetMouseButton(1) || !mouse)
-            transform.Rotate(new Vector3(0, rotateAxis, 0));
+        //if (Input.GetMouseButton(1) || !mouse)
+        //    transform.Rotate(new Vector3(0, rotateAxis, 0));
         //m_MouseLook.LookRotation(transform, characterCam.transform);
     }
 

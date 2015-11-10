@@ -22,6 +22,8 @@ public class OrbitCharacter : MonoBehaviour {
 
     private float x = 0.0f;
     private float y = 0.0f;
+    
+    float rotationDampening = 3f;
 
     void Start() {
         currentDistance = distance;
@@ -34,43 +36,45 @@ public class OrbitCharacter : MonoBehaviour {
     }
 
     void LateUpdate() {
-        if (target) {
-            if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) {
-                x += Input.GetAxis("Mouse X");// * xSpeed * 0.02f;
-                y -= Input.GetAxis("Mouse Y");// * ySpeed * 0.02f;
-            }
-
-            y = Mathf.Clamp(y, yMin, yMax);//Restrain 'Y' between MAX and MIN values.
-
-            var rotation = Quaternion.Euler(y, x, 0);
-
-            #region Zoom in-out
-            desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * zoomRate * Mathf.Abs(desiredDistance);//Calculates the desired distance from the Character.
-            desiredDistance = Mathf.Clamp(desiredDistance, minViewDistance, maxViewDistance);//Restrain the distance between MAX and MIN values.
-            correctedDistance = desiredDistance;
-            #endregion
-
-            #region Obstructed view fixed
-            Vector3 position = target.position - (rotation * Vector3.forward * desiredDistance);//
-            RaycastHit hitInfo;
-            Vector3 cameraTargetPosition = new Vector3(target.position.x, target.position.y + parentHeight, target.position.z);
-            isCorrected = false;
-            if (Physics.Linecast(cameraTargetPosition, position, out hitInfo)) {
-                position = hitInfo.point;
-                correctedDistance = Vector3.Distance(cameraTargetPosition, position);
-                isCorrected = true;
-            }
-            currentDistance = !isCorrected || correctedDistance > currentDistance ? Mathf.Lerp(currentDistance, correctedDistance, Time.deltaTime * zoomRate) : correctedDistance;
-            #endregion
-
-            if (Input.GetMouseButton(1)) {
-                target.rotation = Quaternion.Euler(0, x, 0);
-            }
-
-            position = rotation * new Vector3(0.0f, parentHeight, -currentDistance) + target.position;
-            
-            transform.rotation = rotation;
-            transform.position = position;
+        if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) { // Move camera
+            x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
+            y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
+        } else if (Input.GetAxis("Vertical") != 0f || Input.GetAxis("Horizontal") != 0f) { // Reset rotation
+            var targetRotationAngle = target.eulerAngles.y;
+            var currentRotationAngle = transform.eulerAngles.y;
+            x = Mathf.LerpAngle(currentRotationAngle, targetRotationAngle, Time.deltaTime * rotationDampening);
         }
+
+        y = Mathf.Clamp(y, yMin, yMax);//Restrain 'Y' between MAX and MIN values.
+
+        var rotation = Quaternion.Euler(y, x, 0);
+
+        #region Zoom in-out
+        desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * zoomRate * Mathf.Abs(desiredDistance);//Calculates the desired distance from the Character.
+        desiredDistance = Mathf.Clamp(desiredDistance, minViewDistance, maxViewDistance);//Restrain the distance between MAX and MIN values.
+        correctedDistance = desiredDistance;
+        #endregion
+
+        #region Obstructed view fixed
+        Vector3 position = target.position - (rotation * Vector3.forward * desiredDistance);
+        RaycastHit hitInfo;
+        Vector3 cameraTargetPosition = new Vector3(target.position.x, target.position.y + parentHeight, target.position.z);
+        isCorrected = false;
+        if (Physics.Linecast(cameraTargetPosition, position, out hitInfo)) {
+            position = hitInfo.point;
+            correctedDistance = Vector3.Distance(cameraTargetPosition, position);
+            isCorrected = true;
+        }
+        currentDistance = !isCorrected || correctedDistance > currentDistance ? Mathf.Lerp(currentDistance, correctedDistance, Time.deltaTime * zoomRate) : correctedDistance;
+        #endregion
+
+        if (Input.GetMouseButton(1)) {
+            target.rotation = Quaternion.Euler(0, x, 0);
+        }
+
+        position = rotation * new Vector3(0.0f, parentHeight, -currentDistance) + target.position;
+
+        transform.rotation = rotation;
+        transform.position = position;
     }
 }
