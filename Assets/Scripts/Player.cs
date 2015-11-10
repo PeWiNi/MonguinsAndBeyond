@@ -6,6 +6,7 @@ public class Player : NetworkBehaviour {
 
     public float WalkSpeed = 5f;
     public float RunSpeed = 10f;
+    public float JumpSpeed = 5f;
     [System.NonSerialized]
     public float horizAxis = 0f;
     [System.NonSerialized]
@@ -16,6 +17,8 @@ public class Player : NetworkBehaviour {
     public float rotateAxis = 0f;
 
     bool isWalking;
+    public bool isMoving;
+    public bool mouse;
 
     //[SerializeField]
     //private UnityStandardAssets.Characters.FirstPerson.MouseLook m_MouseLook;
@@ -42,7 +45,10 @@ public class Player : NetworkBehaviour {
             horizAxis = Input.GetAxis("Horizontal");
             vertAxis = Input.GetAxis("Vertical");
             jumpAxis = Input.GetAxis("Jump");
-            rotateAxis = Input.GetAxis("Rotate");
+            if(mouse)
+                rotateAxis = Input.GetAxis("Mouse X");
+            else
+                rotateAxis = Input.GetAxis("Rotate");
         }
     }
 
@@ -50,10 +56,13 @@ public class Player : NetworkBehaviour {
         float speed;
         SetSpeed(out speed);
         // Movement
-        transform.Translate(new Vector3(horizAxis, jumpAxis, vertAxis) * speed * Time.fixedDeltaTime);
+        transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * speed * Time.fixedDeltaTime);
+        // Jumping
+        transform.Translate(new Vector3(0f, jumpAxis, 0f) * JumpSpeed * Time.fixedDeltaTime);
 
         // Rotate View
-        transform.Rotate(new Vector3(0, rotateAxis, 0));
+        if (Input.GetMouseButton(1) || !mouse)
+            transform.Rotate(new Vector3(0, rotateAxis, 0));
         //m_MouseLook.LookRotation(transform, characterCam.transform);
     }
 

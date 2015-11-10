@@ -40,9 +40,9 @@ public class CameraMovement : MonoBehaviour
         if (Input.GetMouseButton (0)) {
 			currentAngles.y += Input.GetAxis ("Mouse X");//Horizontal.
 			currentAngles.x -= Input.GetAxis ("Mouse Y");//Vertical.
-		}
-		currentAngles.y = Mathf.Clamp (currentAngles.y, minSetHorizontal, maxSetHorizontal);//Restrain 'Y' between MAX and MIN values.
-		currentAngles.x = Mathf.Clamp (currentAngles.x, minVerticalRotation, maxVerticalRotation);//Restrain 'X' between MAX and MIN values.
+            //currentAngles.y = Mathf.Clamp(currentAngles.y, minSetHorizontal, maxSetHorizontal);//Restrain 'Y' between MAX and MIN values.
+            currentAngles.x = Mathf.Clamp(currentAngles.x, minVerticalRotation, maxVerticalRotation);//Restrain 'X' between MAX and MIN values.
+        }
 		Quaternion rotation = Quaternion.Euler(currentAngles.x, currentAngles.y, 0f);
         #endregion
 
@@ -64,25 +64,27 @@ public class CameraMovement : MonoBehaviour
 		}
 		currentDistance = !isCorrected || correctedDistance > currentDistance ? Mathf.Lerp(currentDistance, correctedDistance, Time.deltaTime * zoomRate) : correctedDistance;
         #endregion
-        
-        //Move player according to camera when right-clicking
-        if (Input.GetMouseButton(1)) {
-            //Rotate parent
-            parentTransform.Rotate(new Vector3(0f, rotation.eulerAngles.y, rotation.eulerAngles.z));
-            //transform.Rotate(new Vector3(0f, -rotation.eulerAngles.y, -rotation.eulerAngles.z));
-            
-            //Don't keep spinning
-            currentAngles.y = 0;
-            currentAngles.x = 0;
 
-            //This is how you reset the camera:
+        #region Move player according to camera when right-clicking
+        if (Input.GetMouseButton(1)) {
+            //currentAngles.y = 0;
+            //currentAngles.x = 0;
+
+            //Rotate parent
+            currentAngles.y += Input.GetAxis("Mouse X");//Horizontal.
+            parentTransform.rotation = Quaternion.Euler(0f, currentAngles.y, 0f);
+
+            //Pin camera behind player
             position = parentTransform.position - (parentTransform.forward * currentDistance + new Vector3(0f, -parentHeight / 2, 0f));
             rotation = new Quaternion(0f, 0f, 0f, 0f);
-        }
-        else { 
+        } else { 
             //Keeps it in its original position
             position = parentTransform.position - (rotation * parentTransform.forward * currentDistance + new Vector3(0f, -parentHeight / 2, 0f));
+            //currentAngles.y = 0;
+            //currentAngles.x = 0;
+            rotation.eulerAngles += new Vector3(0f, parentTransform.rotation.eulerAngles.y, 0f);
         }
+        #endregion
 
         transform.rotation = rotation;
 		transform.position = position;
