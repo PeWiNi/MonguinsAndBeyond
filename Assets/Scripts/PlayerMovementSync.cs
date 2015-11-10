@@ -36,10 +36,12 @@ public class PlayerMovementSync : NetworkBehaviour {
     // a history of move states sent from client to server
     List<move> moveHistory = new List<move>();
     // a reference to the Player script attached to the game object.
-    Player playerScript;
+    PlayerLogic playerScript;
+    OrbitCharacter orbitCharacter;
 
     void Start() {
-        playerScript = GetComponent<Player>();
+        playerScript = GetComponent<PlayerLogic>();
+        orbitCharacter = GetComponent<OrbitCharacter>();
     }
 
     void Update() {
@@ -68,11 +70,12 @@ public class PlayerMovementSync : NetworkBehaviour {
             // simulate
             playerScript.Simulate();
             // send state to server
-            CmdProvideMovementToServer(moveState.HorizontalAxis, moveState.VerticalAxis, playerTransform.position);
+            //CmdProvideMovementToServer(moveState.HorizontalAxis, moveState.VerticalAxis, playerTransform.position);
         }
         LerpTransform();
     }
 
+    /* Code to prevent speed-hacking, teleporting and high latency - didn't work 10/11-2015
     [Command]
     void CmdProvideMovementToServer(float hori, float vert, Vector3 pos) {
         syncInput = new Vector2(hori, vert);
@@ -108,7 +111,7 @@ public class PlayerMovementSync : NetworkBehaviour {
 
         // clear
         moveHistory.Clear();
-    }
+    }*/
 
     [Command]
     void CmdProvideOrientation(Vector3 pos, Quaternion playerRot, Quaternion camRot) {

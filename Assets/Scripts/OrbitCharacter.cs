@@ -5,16 +5,21 @@ public class OrbitCharacter : MonoBehaviour {
     public Transform target;
     public float maxViewDistance = 15f;
     public float minViewDistance = 3f;
+    public float parentHeight = 1.5f; //height of Player Character.
+
+    // Correction variables
     float distance = 10.0f;
     float correctedDistance;
     float desiredDistance;
     float currentDistance;
     bool isCorrected = false;
-    public float parentHeight = 1.5f; //height of Player Character.
 
+    // Camera Speed
     float xSpeed = 250.0f;
     float ySpeed = 120.0f;
+    float rotationDampening = 3f;
 
+    // Vertical restictions on camera movement
     public float yMax = 10;
     public float yMin = -30;
 
@@ -23,7 +28,7 @@ public class OrbitCharacter : MonoBehaviour {
     private float x = 0.0f;
     private float y = 0.0f;
     
-    float rotationDampening = 3f;
+    public Quaternion rotate;
 
     void Start() {
         currentDistance = distance;
@@ -69,7 +74,7 @@ public class OrbitCharacter : MonoBehaviour {
         #endregion
 
         if (Input.GetMouseButton(1)) {
-            target.rotation = Quaternion.Euler(0, x, 0);
+            rotate = Quaternion.Euler(0, x, 0);
         }
 
         position = rotation * new Vector3(0.0f, parentHeight, -currentDistance) + target.position;

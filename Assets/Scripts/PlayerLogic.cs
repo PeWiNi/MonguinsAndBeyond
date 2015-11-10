@@ -2,11 +2,11 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class Player : NetworkBehaviour {
+public class PlayerLogic : NetworkBehaviour {
 
-    public float WalkSpeed = 5f;
-    public float RunSpeed = 10f;
-    public float JumpSpeed = 5f;
+    PlayerStats stats;
+    OrbitCharacter cam;
+    private float Speed = 5f; // Should JumpSpeed be a constant?
     [System.NonSerialized]
     public float horizAxis = 0f;
     [System.NonSerialized]
@@ -17,8 +17,6 @@ public class Player : NetworkBehaviour {
     public float rotateAxis = 0f;
 
     bool isWalking;
-    public bool isMoving;
-    public bool mouse;
 
     //[SerializeField]
     //private UnityStandardAssets.Characters.FirstPerson.MouseLook m_MouseLook;
@@ -37,6 +35,9 @@ public class Player : NetworkBehaviour {
 
             //m_MouseLook.Init(transform, characterCam.transform);
         }
+        cam = transform.Find("Character").GetComponent<OrbitCharacter>();
+        stats = GetComponent<PlayerStats>();
+        Speed = stats? stats.speed : Speed;
     }
 
     void Update() {
@@ -45,10 +46,6 @@ public class Player : NetworkBehaviour {
             horizAxis = Input.GetAxis("Horizontal");
             vertAxis = Input.GetAxis("Vertical");
             jumpAxis = Input.GetAxis("Jump");
-            if(mouse)
-                rotateAxis = Input.GetAxis("Mouse X");
-            else
-                rotateAxis = Input.GetAxis("Rotate");
         }
     }
 
@@ -58,17 +55,14 @@ public class Player : NetworkBehaviour {
         // Movement
         transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * speed * Time.fixedDeltaTime);
         // Jumping
-        transform.Translate(new Vector3(0f, jumpAxis, 0f) * JumpSpeed * Time.fixedDeltaTime);
+        transform.Translate(new Vector3(0f, jumpAxis, 0f) * Speed * Time.fixedDeltaTime);
 
-        // Rotate View
-        //if (Input.GetMouseButton(1) || !mouse)
-        //    transform.Rotate(new Vector3(0, rotateAxis, 0));
-        //m_MouseLook.LookRotation(transform, characterCam.transform);
+        transform.rotation = cam.rotate;
     }
 
     void SetSpeed(out float speed) {
         isWalking = !Input.GetKey(KeyCode.LeftShift);
-        speed = isWalking ? WalkSpeed : RunSpeed;
+        speed = isWalking ? Speed : Speed * 2;
     }
 
     void OnCollisionEnter(Collision _collision) {
