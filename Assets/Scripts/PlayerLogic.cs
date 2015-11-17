@@ -5,7 +5,7 @@ using UnityEngine.Networking;
 public class PlayerLogic : NetworkBehaviour {
 
     PlayerStats stats;
-    OrbitCharacter cam;
+    CharacterCamera cam;
     private float Speed = 5f; // Should JumpSpeed be a constant?
     [System.NonSerialized]
     public float horizAxis = 0f;
@@ -35,7 +35,7 @@ public class PlayerLogic : NetworkBehaviour {
 
             //m_MouseLook.Init(transform, characterCam.transform);
         }
-        cam = transform.Find("Character").GetComponent<OrbitCharacter>();
+        cam = characterCam.GetComponent<CharacterCamera>();
         stats = GetComponent<PlayerStats>();
         Speed = stats? stats.speed : Speed;
     }
@@ -57,7 +57,10 @@ public class PlayerLogic : NetworkBehaviour {
         // Jumping
         transform.Translate(new Vector3(0f, jumpAxis, 0f) * Speed * Time.fixedDeltaTime);
 
-        transform.rotation = cam.rotate;
+        if (Input.GetMouseButton(1)) {
+            transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
+        }
+        //transform.transform.Find("Cube").rotation = Quaternion.Euler(cam.rotate);
     }
 
     void SetSpeed(out float speed) {

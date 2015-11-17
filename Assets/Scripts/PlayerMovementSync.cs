@@ -37,11 +37,11 @@ public class PlayerMovementSync : NetworkBehaviour {
     List<move> moveHistory = new List<move>();
     // a reference to the Player script attached to the game object.
     PlayerLogic playerScript;
-    OrbitCharacter orbitCharacter;
+    CharacterCamera orbitCharacter;
 
     void Start() {
         playerScript = GetComponent<PlayerLogic>();
-        orbitCharacter = GetComponent<OrbitCharacter>();
+        orbitCharacter = GetComponent<CharacterCamera>();
     }
 
     void Update() {

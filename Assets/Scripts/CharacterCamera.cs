@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class OrbitCharacter : MonoBehaviour {
+public class CharacterCamera : MonoBehaviour {
     public Transform target;
     public float maxViewDistance = 15f;
     public float minViewDistance = 3f;
@@ -28,7 +28,7 @@ public class OrbitCharacter : MonoBehaviour {
     private float x = 0.0f;
     private float y = 0.0f;
     
-    public Quaternion rotate;
+    public Vector3 rotate;
 
     void Start() {
         currentDistance = distance;
@@ -73,9 +73,7 @@ public class OrbitCharacter : MonoBehaviour {
         currentDistance = !isCorrected || correctedDistance > currentDistance ? Mathf.Lerp(currentDistance, correctedDistance, Time.deltaTime * zoomRate) : correctedDistance;
         #endregion
 
-        if (Input.GetMouseButton(1)) {
-            rotate = Quaternion.Euler(0, x, 0);
-        }
+        rotate = new Vector3(y, x, 0);
 
         position = rotation * new Vector3(0.0f, parentHeight, -currentDistance) + target.position;
 
