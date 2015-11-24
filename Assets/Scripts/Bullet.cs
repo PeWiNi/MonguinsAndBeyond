@@ -10,11 +10,6 @@ public class Bullet : MonoBehaviour {
         GetComponent<MeshRenderer>().material.color = colour;
     }
 
-    // Update is called once per frame
-    void Update() {
-
-    }
-
     void OnCollisionEnter(Collision _collision) {
         if (_collision.collider.tag == "Player") {
             _collision.transform.GetComponentInParent<PlayerStats>().CmdTakeDmg(damage);

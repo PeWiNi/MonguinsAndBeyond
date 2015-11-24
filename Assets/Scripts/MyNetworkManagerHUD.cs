@@ -2,7 +2,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 public class MyNetworkManagerHUD : MonoBehaviour {
 	private NetworkManager manager;
-	[SerializeField] public bool showGUI = true;
+    private System.Collections.Hashtable attributes;
+    [SerializeField] public bool showGUI = true;
 	[SerializeField] public int offsetX;
 	[SerializeField] public int offsetY;
 
@@ -23,13 +24,13 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 
         if (!NetworkClient.active && !NetworkServer.active && manager.matchMaker == null) {
 			if (Input.GetKeyDown(KeyCode.S)) {
-				manager.StartServer();
+				S();
 			}
 			if (Input.GetKeyDown(KeyCode.H)) {
-				manager.StartHost();
+				H();
 			}
 			if (Input.GetKeyDown(KeyCode.C)) {
-				manager.StartClient();
+				C();
             }
         }
 		if (NetworkServer.active && NetworkClient.active) {
@@ -49,18 +50,18 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 
 		if (!NetworkClient.active && !NetworkServer.active && manager.matchMaker == null) {
 			if (GUI.Button(new Rect(xpos, ypos, 200, 20), "LAN Host(H)")) {
-				manager.StartHost();
+				H();
 			}
 			ypos += spacing;
 
 			if (GUI.Button(new Rect(xpos, ypos, 105, 20), "LAN Client(C)")) {
-				manager.StartClient();
+				C();
 			}
 			manager.networkAddress = GUI.TextField(new Rect(xpos + 100, ypos, 95, 20), manager.networkAddress);
 			ypos += spacing;
 
 			if (GUI.Button(new Rect(xpos, ypos, 200, 20), "LAN Server Only(S)")) {
-				manager.StartServer();
+				S();
 			}
 			ypos += spacing;
 
@@ -97,8 +98,8 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 			}
 			ypos += spacing;
 		}
-
-		if (!NetworkServer.active && !NetworkClient.active) {
+        #region Matchmaking stuff
+        if (!NetworkServer.active && !NetworkClient.active) {
 			ypos += 10;
 
 			if (manager.matchMaker == null) {
@@ -170,5 +171,27 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 				ypos += spacing;
 			}
 		}
-	}
+        #endregion
+    }
+
+    void H() { //LAN Host
+        fetchAttributes();
+        manager.StartHost();
+    }
+
+    void C() { //LAN Client
+        fetchAttributes();
+        manager.StartClient();
+    }
+
+    void S() { //LAN Server Only
+        manager.StartServer();
+    }
+
+    void fetchAttributes() {
+        attributes = GameObject.Find("attributeWheel").GetComponent<AttributeScript>().getAttributes();
+    }
+    public System.Collections.Hashtable getAttributes() {
+        return attributes;
+    }
 }

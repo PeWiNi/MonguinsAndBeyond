@@ -29,12 +29,17 @@ public class AttributeScript : MonoBehaviour {
             currentPosition = dragUI.getPosition();
             //Update attribute values
             int[] attributes = getDistribution();
-            int i = 0;
-            foreach (int att in attributes) {
-                print(attFields[i++].text + " is (" + att + " of 100)");
-            }
         }
 
+    }
+
+    public Hashtable getAttributes() {
+        Hashtable ht = new Hashtable();
+        int[] attributes = getDistribution();
+        int i = 0;
+        foreach (int att in attributes)
+            ht.Add(attFields[i++].text, att);
+        return ht;
     }
 
     private Vector3[] setPoints() {
@@ -77,7 +82,7 @@ public class AttributeScript : MonoBehaviour {
         int[] min = new int[attLength];
         int minNum = 100;
         int z = 0;
-        print("Total is " + total);
+        //print("Total is " + total);
         //TODO: make fix for more than 4 ._. it goes NEGATIVE (at certain values)
         for (int i = 0; i < attLength; i++) {
             double value = (dist[i] / total * 100) * (attLength - 1) - 100; // try 100 - (dist[i] / total * 100) * (attLength - 1) and make fix for Abs ^^
@@ -92,7 +97,7 @@ public class AttributeScript : MonoBehaviour {
                 min[z++] = i;
                 minNum = distribution[i];
             }
-            print(attFields[i].text + " is " + dist[i] + " or (" + distribution[i] + " of 100)");
+            //print(attFields[i].text + " is " + dist[i] + " or (" + distribution[i] + " of 100)");
         }
         int newMissing = 0;
         missing = 100 - missing;

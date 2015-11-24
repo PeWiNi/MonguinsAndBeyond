@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class HealthSlider : MonoBehaviour {
 
-    UnityEngine.UI.Slider healthSlider;
-    UnityEngine.UI.Text healthText;
+    Slider healthSlider;
+    Text healthText;
     PlayerStats ps;
     Canvas canv;
     [SerializeField]
@@ -12,8 +13,8 @@ public class HealthSlider : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        healthSlider = this.gameObject.GetComponentInChildren<UnityEngine.UI.Slider>();
-        healthText = healthSlider.GetComponentInChildren<UnityEngine.UI.Text>();
+        healthSlider = this.gameObject.GetComponentInChildren<Slider>();
+        healthText = healthSlider.GetComponentInChildren<Text>();
         ps = gameObject.GetComponentInParent<PlayerStats>();
         canv = gameObject.GetComponentInParent<Canvas>();
     }
