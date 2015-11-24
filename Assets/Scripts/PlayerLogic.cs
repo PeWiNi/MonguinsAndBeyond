@@ -16,6 +16,8 @@ public class PlayerLogic : NetworkBehaviour {
     [System.NonSerialized]
     public float rotateAxis = 0f;
 
+    public Collision collidedPlayer;
+
     bool isWalking;
 
     //[SerializeField]
@@ -46,6 +48,9 @@ public class PlayerLogic : NetworkBehaviour {
             horizAxis = Input.GetAxis("Horizontal");
             vertAxis = Input.GetAxis("Vertical");
             jumpAxis = Input.GetAxis("Jump");
+            // Don't do this all the time ._. but only when new peeps connect
+            foreach (HealthSlider hs in FindObjectsOfType<HealthSlider>())
+                hs.setCamera(characterCam);
         }
     }
 
@@ -71,6 +76,7 @@ public class PlayerLogic : NetworkBehaviour {
     void OnCollisionEnter(Collision _collision) {
         //Ignore collisions with other players
         if (_collision.collider.tag == "Player") {
+            collidedPlayer = _collision;
             Physics.IgnoreCollision(_collision.collider, GetComponent<Collider>());
         }
     }
