@@ -14,7 +14,7 @@ public class PlayerStats : NetworkBehaviour {
     [SerializeField]
     public float maxHealth = 1000f; // Full amount of health
     [SerializeField]
-    public float health = 1000f; // Reach 0 and you die
+    public float health; // Reach 0 and you die
     [Range(0, 100)] [SerializeField]
     int resilience = 0; // Recieved damage modifier, 100 means 100% dmg reduction
     [SerializeField]
@@ -66,16 +66,17 @@ public class PlayerStats : NetworkBehaviour {
             RoleCharacteristics(role);
             #endregion
         }
+        syncHealth = maxHealth;
     }
 	
 	// Update is called once per frame
 	void Update () {
         SelectRole();
         ApplyRole();
+        StatSync();
         if (isLocalPlayer)
             if (Input.GetKeyDown(KeyCode.E))
                 CmdDoFire(3.0f);
-        StatSync();
     }
 
     void ApplyRole() {
@@ -134,6 +135,7 @@ public class PlayerStats : NetworkBehaviour {
         }
         gameObject.GetComponent<Rigidbody>().transform.localScale *= sizeModifier;
         health = maxHealth;
+        syncHealth = maxHealth;
     }
 
     [ClientCallback]
@@ -145,17 +147,18 @@ public class PlayerStats : NetworkBehaviour {
 
     [ClientCallback]
     void StatSync() {
-        if (isLocalPlayer)
-            CmdProvideStats(health, resilience);
+        health = syncHealth;
+        if (isLocalPlayer) {
+            CmdProvideStats(resilience);
+        }
         if (!isLocalPlayer) {
-            health = syncHealth;
             resilience = syncResilience;
         }
     }
 
     [Command]
-    void CmdProvideStats(float hp, int resi) {
-        syncHealth = hp;
+    void CmdProvideStats(int resi) {
+        //syncHealth = hp;
         syncResilience = resi;
     }
 
@@ -167,7 +170,7 @@ public class PlayerStats : NetworkBehaviour {
     [Command]
     void CmdDoFire(float lifeTime) {
         GameObject bullet = (GameObject)Instantiate(
-            bulletPrefab, transform.position + (transform.forward),
+            bulletPrefab, transform.position + (transform.localScale.x * transform.forward),
             Quaternion.identity);
 
         var bullet3D = bullet.GetComponent<Rigidbody>();
@@ -179,6 +182,8 @@ public class PlayerStats : NetworkBehaviour {
 
     [Command]
     public void CmdTakeDmg(float damage) {
+        if (!isServer)
+            return;
         syncHealth -= damage;
     }
 }
