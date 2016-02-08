@@ -28,6 +28,8 @@ public class PlayerStats : NetworkBehaviour {
     [SerializeField]
     Transform body;
 
+    public Ability[] abilities;
+
     public GameObject bulletPrefab;
 
     public enum Role {
@@ -90,6 +92,7 @@ public class PlayerStats : NetworkBehaviour {
 
     // Apply characteristics of Role - Taken from Wikia, last updated: 24th of November 2015
     void RoleCharacteristics(Role role) {
+        abilities = new Ability[3];
         switch (role) {
             case (Role.Defender):
                 maxHealth *= 1.3f;
@@ -172,6 +175,8 @@ public class PlayerStats : NetworkBehaviour {
         GameObject bullet = (GameObject)Instantiate(
             bulletPrefab, transform.position + (transform.localScale.x * transform.forward),
             Quaternion.identity);
+
+        bullet.GetComponent<Bullet>().setOwner(transform.name);
 
         var bullet3D = bullet.GetComponent<Rigidbody>();
         bullet3D.velocity = transform.forward * 5f;

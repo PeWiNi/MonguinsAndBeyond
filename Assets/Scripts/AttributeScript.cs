@@ -16,11 +16,40 @@ public class AttributeScript : MonoBehaviour {
 
     private int lowerTreshold = 5;
 
+    public GameObject capsule;
+
     // Use this for initialization
     void Start() {
         attributeTextPrefab = Resources.Load("Prefabs/attributeText", typeof(Text)) as Text;
         attFields = new Text[attributes.Split(';').Length];
         attPoints = setPoints();
+        capsule = Resources.Load("Prefabs/Capsule", typeof(GameObject)) as GameObject;
+        for (int i = 1; i <= 35; i++) {
+            print(i + " = " + compositeHealthFormula(i));
+            GameObject Capsule3 = (GameObject)Instantiate(capsule, new Vector3(i, 4, 0), Quaternion.identity);
+            float size = compositeHealthFormula(i) / 1000;
+            Capsule3.transform.localScale = new Vector3(size, size, size);
+            /*
+            GameObject Capsule = (GameObject)Instantiate(capsule, new Vector3(i, 0, 0), Quaternion.identity);
+            size = healthFormula3(i) / 1000;
+            Capsule.transform.localScale = new Vector3(size, size, size);
+            GameObject Capsule2 = (GameObject)Instantiate(capsule, new Vector3(i, 2, 0), Quaternion.identity);
+            size = healthFormula2(i) / 1000;
+            Capsule2.transform.localScale = new Vector3(size, size, size);
+            GameObject Capsule4 = (GameObject)Instantiate(capsule, new Vector3(i, -2, 0), Quaternion.identity);
+            size = healthFormula(i) / 100;
+            Capsule4.transform.localScale = new Vector3(size, size, size);
+            //GameObject Capsule5 = (GameObject)Instantiate(capsule, new Vector3(i, -4, 0), Quaternion.identity);
+            //size = compositeHealthFormula2(i) / 1000;
+            //Capsule5.transform.localScale = new Vector3(size, size, size);
+            GameObject Capsule6 = (GameObject)Instantiate(capsule, new Vector3(i, 6, 0), Quaternion.identity);
+            size = compositeHealthFormula3(i) / 1000;
+            Capsule6.transform.localScale = new Vector3(size, size, size);
+            GameObject Capsule7 = (GameObject)Instantiate(capsule, new Vector3(i, 8, 0), Quaternion.identity);
+            size = healthFormula4(i) / 1000;
+            Capsule7.transform.localScale = new Vector3(size, size, size);
+            */
+        }
     }
 
     // Update is called once per frame
@@ -31,6 +60,78 @@ public class AttributeScript : MonoBehaviour {
             int[] attributes = getDistribution();
         }
 
+    }
+
+    public float healthFormula(int numberOfPlayers) {
+        float health = 100;
+        for (int i = 1; i < numberOfPlayers; i++) {
+            health = (health - ((100.0f / (Mathf.Pow(1.71f, i))) / 100.0f) * health);
+        }
+        return health;
+    }
+
+    public float healthFormula2(int numberOfPlayers) {
+        float health = 1000 + (numberOfPlayers - 1) * 100;
+        health /= numberOfPlayers;
+        return health;
+    }
+
+    public float healthFormula3(int numberOfPlayers) {
+        float health = 1000;
+        for (int i = 1; i < numberOfPlayers; i++) {
+            health *=  0.875f;
+        }
+        return health;
+    }
+
+    public float healthFormula4(int numberOfPlayers) {
+        float health = 1000;
+        for (int i = 1; i < numberOfPlayers; i++) {
+            health *= 0.90f;
+        }
+        health += 1000.0f / 3.0f;
+        return health;// - 1000 * (1 / 3);
+    }
+
+    public float compositeHealthFormula(int numberOfPlayers) {
+        float health = 1000;
+        for (int i = 1; i < numberOfPlayers; i++) {
+            health *= 0.875f;
+        }
+        if(numberOfPlayers > 9) {
+            health += (numberOfPlayers - 7) * 100;
+            health /= numberOfPlayers - 8;
+        }
+
+        return health;
+    }
+
+    public float compositeHealthFormula2(int numberOfPlayers) { //BEST IN TEST
+        float health = 1000;
+        for (int i = 1; i < numberOfPlayers; i++) {
+            health *= 0.875f;
+        }
+        if (numberOfPlayers > 6) {
+            health += (numberOfPlayers - 4) * 100;
+            health /= numberOfPlayers - 5;
+        }
+
+        return health;
+    }
+
+    public float compositeHealthFormula3(int numberOfPlayers) {
+        float health = 1000;
+        for (int i = 1; i < numberOfPlayers; i++) {
+            health *= 0.875f;
+        }
+        if (numberOfPlayers > 9) {
+            health *= 0.9375f;
+        }
+        if (numberOfPlayers > 17) {
+            health = health + ((numberOfPlayers - 15) * 100) / numberOfPlayers - 16;
+        }
+
+        return health;
     }
 
     public Hashtable getAttributes() {

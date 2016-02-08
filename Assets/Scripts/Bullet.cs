@@ -4,6 +4,7 @@ using System.Collections;
 public class Bullet : MonoBehaviour {
     public float damage;
     public Color colour;
+    public string owner;
 
     // Use this for initialization
     void Start() {
@@ -11,10 +12,15 @@ public class Bullet : MonoBehaviour {
     }
 
     void OnCollisionEnter(Collision _collision) {
-        if (_collision.collider.tag == "Player") {
+        Physics.IgnoreCollision(_collision.collider, GetComponent<Collider>());
+        if (_collision.collider.tag == "Player" && _collision.collider.GetComponentInParent<PlayerID>().transform.name != owner) {
             _collision.transform.GetComponentInParent<PlayerStats>().CmdTakeDmg(damage);
-            Physics.IgnoreCollision(_collision.collider, GetComponent<Collider>());
         }
-        Destroy(gameObject);
+        if(_collision.collider.tag != "Ability")
+            Destroy(gameObject);
+    }
+
+    public void setOwner(string s) {
+        owner = s;
     }
 }
