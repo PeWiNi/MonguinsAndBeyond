@@ -11,6 +11,14 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     Role syncRole = Role.Basic;
 
+    #region Death
+    [SyncVar]
+    public bool isDead = false;
+    [SyncVar]
+    float deathTimer;
+    public float deathCooldown = 15f;
+    #endregion
+
     [SerializeField]
     public float maxHealth = 1000f; // Full amount of health
     [SerializeField]
@@ -27,6 +35,8 @@ public class PlayerStats : NetworkBehaviour {
     public float speed = 5f; // Movement (and jumping) speed (see PlayerLogic.cs)
     [SerializeField]
     Transform body;
+    [SyncVar]
+    public int team;
 
     public Ability[] abilities;
 
@@ -73,12 +83,35 @@ public class PlayerStats : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (isDead) {
+            Color c = body.GetComponent<MeshRenderer>().material.color;
+            if (((float)Network.time - deathTimer) > deathCooldown) {
+                body.GetComponent<MeshRenderer>().material.color = new Color(c.r, c.g, c.b, 1f);
+                if (isLocalPlayer) {
+                    CmdRespawn();
+                }
+                return;
+            }
+            health = 0;
+            body.GetComponent<MeshRenderer>().material.color = new Color(c.r, c.g, c.b, .2f);
+            return;
+        }
         SelectRole();
         ApplyRole();
         StatSync();
-        if (isLocalPlayer)
-            if (Input.GetKeyDown(KeyCode.E))
-                CmdDoFire(3.0f);
+        if (isLocalPlayer) {
+            //if(abilities.Length > 0) {
+                if (Input.GetKeyDown(KeyCode.E) && ((float)Network.time - abilities[0].timer) > abilities[0].cooldown) { //TODO make use of inputManager 
+                    //CmdDoFire(3.0f); // Dummy ability shooting bullets
+                    abilities[0].Trigger();
+                    abilities[0].timer = (float)Network.time;
+                }
+                if (Input.GetKeyDown(KeyCode.Q) && ((float)Network.time - abilities[1].timer) > abilities[1].cooldown) { //TODO make use of inputManager 
+                    abilities[1].Trigger();
+                    abilities[1].timer = (float)Network.time;
+                }
+            //} // Assign other Abilities
+        }
     }
 
     void ApplyRole() {
@@ -134,6 +167,8 @@ public class PlayerStats : NetworkBehaviour {
                 break;
             default:
                 body.GetComponent<MeshRenderer>().material.color = Color.white;
+                abilities[0] = GetComponent<ShootBullet>();
+                abilities[1] = GetComponent<HealSelf>();
                 break;
         }
         gameObject.GetComponent<Rigidbody>().transform.localScale *= sizeModifier;
@@ -166,18 +201,24 @@ public class PlayerStats : NetworkBehaviour {
     }
 
     [Command]
+    void CmdRespawn() {
+        isDead = false;
+        syncHealth = maxHealth;
+    }
+
+    [Command]
     void CmdProvideRole(Role role) {
         syncRole = role;
     }
 
     [Command]
-    void CmdDoFire(float lifeTime) {
+    public void CmdDoFire(float lifeTime) {
         GameObject bullet = (GameObject)Instantiate(
             bulletPrefab, transform.position + (transform.localScale.x * transform.forward),
             Quaternion.identity);
 
-        bullet.GetComponent<Bullet>().setOwner(transform.name);
-
+        bullet.GetComponent<Bullet>().setOwner(team);
+        
         var bullet3D = bullet.GetComponent<Rigidbody>();
         bullet3D.velocity = transform.forward * 5f;
         Destroy(bullet, lifeTime);
@@ -189,6 +230,19 @@ public class PlayerStats : NetworkBehaviour {
     public void CmdTakeDmg(float damage) {
         if (!isServer)
             return;
-        syncHealth -= damage;
+        syncHealth -= damage * (1.0f - ((float)resilience / 100.0f));
+        if (syncHealth <= 0 && !isDead) {
+            isDead = true;
+            deathTimer = (float)Network.time;
+            syncHealth = 0;
+        }
+    }
+    [Command]
+    public void CmdHealing(float healing) {
+        if (!isServer)
+            return;
+        syncHealth += healing;
+        if (syncHealth > maxHealth)
+            syncHealth = maxHealth;
     }
 }

@@ -43,7 +43,7 @@ public class PlayerLogic : NetworkBehaviour {
     }
 
     void Update() {
-        if (isLocalPlayer) {
+        if (isLocalPlayer && !stats.isDead) { // if dead they cannot move
             // Send Critical Input
             horizAxis = Input.GetAxis("Horizontal");
             vertAxis = Input.GetAxis("Vertical");
@@ -62,7 +62,7 @@ public class PlayerLogic : NetworkBehaviour {
         // Jumping
         transform.Translate(new Vector3(0f, jumpAxis, 0f) * Speed * Time.fixedDeltaTime);
 
-        if (Input.GetMouseButton(1)) {
+        if (Input.GetMouseButton(1) && !stats.isDead) { // if dead they cannot turn their char around
             transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
         }
         //transform.transform.Find("Cube").rotation = Quaternion.Euler(cam.rotate);
