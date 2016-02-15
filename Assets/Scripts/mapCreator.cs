@@ -50,20 +50,21 @@ public class mapCreator : MonoBehaviour {
 				//assess its possition considering the number of rings existent
 				Vector3 mapPartPosition=new Vector3(0f,0f,0f);
 				if (rings > 1) {
-					mapPartPosition.x=((currentDegree>90f && currentDegree<270f) ? -1f : 1f)*(float)(rings-1);
-					mapPartPosition.z=((currentDegree>90f && currentDegree<270f) ? -1f : 1f)*(float)(rings-1);
+					mapPartPosition.x=((currentDegree>90f && currentDegree<=270f) ? -1f : 1f)*(float)(i-1);
+					mapPartPosition.z=((currentDegree>90f && currentDegree<=270f) ? -1f : 1f)*(float)(i-1);
 				}
 			
 
 				GameObject mapPartTemp=Instantiate(mapPart, mapPartPosition, mapPartNewRotation) as GameObject;
+			
 				//set its parent as the Map GameObject
 				mapPartTemp.transform.parent = map.transform;
 				mapPartTemp.name = "mapPart_" + currentDegree.ToString () + "_ring" + (i).ToString ();
 
 				//set scale according to which ring the part belongs to
 				Vector3 newMapPartScale=new Vector3(1f,1f,1f);
-				newMapPartScale.x *= rings;
-				newMapPartScale.z *= rings;
+				newMapPartScale.x *= i;
+				newMapPartScale.z *= i;
 				mapPartTemp.transform.localScale=newMapPartScale;
 
 				currentDegree-=22.5f;
