@@ -9,6 +9,7 @@ public class mapPartBehavior : MonoBehaviour {
 	float startTime;
 	float speed =0.75f;
 	float journeyLength;
+	bool shouldSink=false;
 	// Use this for initialization
 	void Start () {
 		startPos = transform.position;
@@ -31,16 +32,22 @@ public class mapPartBehavior : MonoBehaviour {
 	public void MoveBelowWater()
 	{	
 		sinking = true;
-		startTime = Time.time;
-
-
+		startTime = Time.time;			
 		Color c = gameObject.GetComponent<MeshRenderer>().material.color;
 		gameObject.GetComponent<MeshRenderer>().material.color = new Color(c.r, c.g, c.b, 0.25f);
-				
-		DestroyAfterSink ();
+		StartCoroutine(DestroyAfterSink ());
 	}
-	public void DestroyAfterSink()
+	IEnumerator DestroyAfterSink()
 	{
-		Destroy (gameObject, 10f);
+		yield return new WaitForSeconds (10f);
+		if (sinking) Destroy (gameObject);
+	}
+
+	public void stopSinking()
+	{
+		sinking = false;
+		Color c = gameObject.GetComponent<MeshRenderer>().material.color;
+		gameObject.GetComponent<MeshRenderer>().material.color = new Color(c.r, c.g, c.b, 1f);
+		transform.position = startPos;
 	}
 }
