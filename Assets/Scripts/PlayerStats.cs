@@ -78,6 +78,8 @@ public class PlayerStats : NetworkBehaviour {
             RoleCharacteristics(role);
             #endregion
         }
+        if (team == 1) body.GetChild(0).gameObject.SetActive(true);
+        if (team == 2) body.GetChild(1).gameObject.SetActive(true);
         syncHealth = maxHealth;
     }
 	
