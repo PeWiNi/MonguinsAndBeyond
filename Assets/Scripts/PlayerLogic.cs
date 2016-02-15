@@ -16,6 +16,9 @@ public class PlayerLogic : NetworkBehaviour {
     [System.NonSerialized]
     public float rotateAxis = 0f;
 
+    Ability[] abilities;
+    double castTime;
+
     public Collision collidedPlayer;
 
     bool isWalking;
@@ -43,7 +46,10 @@ public class PlayerLogic : NetworkBehaviour {
     }
 
     void Update() {
-        if (isLocalPlayer && !stats.isDead) { // if dead they cannot move
+        if(abilities == null || abilities.Length <= 0) {
+            abilities = stats.abilities;
+        }
+        if (isLocalPlayer && !stats.isDead && castTime < Network.time && !stats.isStunned) { // if dead they cannot move
             // Send Critical Input
             horizAxis = Input.GetAxis("Horizontal");
             vertAxis = Input.GetAxis("Vertical");
@@ -51,7 +57,24 @@ public class PlayerLogic : NetworkBehaviour {
             // Don't do this all the time ._. but only when new peeps connect
             foreach (HealthSlider hs in FindObjectsOfType<HealthSlider>())
                 hs.setCamera(characterCam);
-        } if(stats.isDead) { // Don't keep moving when dead~
+
+            #region abilities
+            if (Input.GetKeyDown(KeyCode.E) && ((float)Network.time - abilities[0].timer) > abilities[0].cooldown) { //TODO make use of inputManager 
+                //CmdDoFire(3.0f); // Dummy ability shooting bullets
+                castTime = abilities[0].Trigger() + Network.time;
+                abilities[0].timer = (float)Network.time;
+            }
+            if (Input.GetKeyDown(KeyCode.Q) && ((float)Network.time - abilities[1].timer) > abilities[1].cooldown) { //TODO make use of inputManager 
+                castTime = abilities[1].Trigger() + Network.time;
+                abilities[1].timer = (float)Network.time;
+            }
+            if (Input.GetKeyDown(KeyCode.F) && ((float)Network.time - abilities[2].timer) > abilities[2].cooldown) { //TODO make use of inputManager 
+                castTime = abilities[2].Trigger() + Network.time;
+                abilities[2].timer = (float)Network.time;
+            }
+            #endregion
+        }
+        if (stats.isDead || castTime > Network.time || stats.isStunned) { // Don't keep moving when dead~
             horizAxis = 0;
             vertAxis = 0;
             jumpAxis = 0;
@@ -66,7 +89,7 @@ public class PlayerLogic : NetworkBehaviour {
         // Jumping
         transform.Translate(new Vector3(0f, jumpAxis, 0f) * Speed * Time.fixedDeltaTime);
 
-        if (Input.GetMouseButton(1) && !stats.isDead) { // if dead they cannot turn their char around
+        if (Input.GetMouseButton(1) && !stats.isDead && !stats.isStunned) { // if dead they cannot turn their char around
             transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
         }
         //transform.transform.Find("Cube").rotation = Quaternion.Euler(cam.rotate);

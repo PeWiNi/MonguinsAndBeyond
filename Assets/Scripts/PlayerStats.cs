@@ -40,6 +40,11 @@ public class PlayerStats : NetworkBehaviour {
 
     public Ability[] abilities;
 
+    [SyncVar]
+    public bool isStunned = false;
+    [SyncVar]
+    double stunTimer;
+
     public GameObject bulletPrefab;
 
     public enum Role {
@@ -97,23 +102,14 @@ public class PlayerStats : NetworkBehaviour {
             health = 0;
             body.GetComponent<MeshRenderer>().material.color = new Color(c.r, c.g, c.b, .2f);
             return;
+        } if (isStunned) {
+            if (stunTimer < Network.time) {
+                isStunned = false;
+            }
         }
         SelectRole();
         ApplyRole();
         StatSync();
-        if (isLocalPlayer) {
-            //if(abilities.Length > 0) {
-                if (Input.GetKeyDown(KeyCode.E) && ((float)Network.time - abilities[0].timer) > abilities[0].cooldown) { //TODO make use of inputManager 
-                    //CmdDoFire(3.0f); // Dummy ability shooting bullets
-                    abilities[0].Trigger();
-                    abilities[0].timer = (float)Network.time;
-                }
-                if (Input.GetKeyDown(KeyCode.Q) && ((float)Network.time - abilities[1].timer) > abilities[1].cooldown) { //TODO make use of inputManager 
-                    abilities[1].Trigger();
-                    abilities[1].timer = (float)Network.time;
-                }
-            //} // Assign other Abilities
-        }
     }
 
     void ApplyRole() {
@@ -155,7 +151,8 @@ public class PlayerStats : NetworkBehaviour {
                 // Placeholder visual thing
                 body.GetComponent<MeshRenderer>().material.color = Color.red;
                 abilities[0] = GetComponent<ThrowBoomnana>();
-                abilities[1] = GetComponent<HealSelf>();
+                abilities[1] = GetComponent<TailSlap>();
+                abilities[2] = GetComponent<PunchDance>();
                 break;
             case (Role.Supporter):
                 maxHealth *= 1f;
@@ -250,6 +247,11 @@ public class PlayerStats : NetworkBehaviour {
             syncHealth = maxHealth;
         RpcHealing(amount);
     }
+    public void Stun(float duration) {
+        isStunned = true;
+        stunTimer = Network.time + duration;
+        RpcStunning(duration);
+    }
 
     [Command]
     public void CmdTakeDmg(float amount) {
@@ -267,5 +269,9 @@ public class PlayerStats : NetworkBehaviour {
     [ClientRpc]
     void RpcHealing(float amount) {
         Debug.Log("Recieved healing: " + amount);
+    }
+    [ClientRpc]
+    void RpcStunning(float duration) {
+        Debug.Log("Stunned for: " + duration);
     }
 }

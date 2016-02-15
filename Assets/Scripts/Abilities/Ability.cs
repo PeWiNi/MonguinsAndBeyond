@@ -8,7 +8,8 @@ public class Ability : NetworkBehaviour {
     public float timer = 0.0f;
     [SyncVar]
     int syncTeam;
-    public int team;
+    internal int team;
+    public double castTime;
 
     // Use this for initialization
     void Start () {
@@ -40,5 +41,14 @@ public class Ability : NetworkBehaviour {
         syncTeam = team;
     }
 
-    public virtual void Trigger() { }
+    public virtual double Trigger() { return castTime; }
+
+    [Command]
+    internal void CmdDamagePlayer(GameObject player, float damage) {
+        player.GetComponent<PlayerStats>().TakeDmg(damage);
+    }
+    [Command]
+    internal void CmdStunPlayer(GameObject player, float duration) {
+        player.GetComponent<PlayerStats>().Stun(duration);
+    }
 }
