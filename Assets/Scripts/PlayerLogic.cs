@@ -51,6 +51,10 @@ public class PlayerLogic : NetworkBehaviour {
             // Don't do this all the time ._. but only when new peeps connect
             foreach (HealthSlider hs in FindObjectsOfType<HealthSlider>())
                 hs.setCamera(characterCam);
+        } if(stats.isDead) { // Don't keep moving when dead~
+            horizAxis = 0;
+            vertAxis = 0;
+            jumpAxis = 0;
         }
     }
 

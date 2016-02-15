@@ -17,7 +17,7 @@ public class Bullet : NetworkBehaviour {
     void OnCollisionEnter(Collision _collision) {
         //if (_collision.collider.tag == "Player" && _collision.collider.GetComponentInParent<PlayerID>().transform.name != owner) {
         if (_collision.collider.tag == "Player" && _collision.collider.GetComponentInParent<PlayerStats>().team != ownerTeam) {
-            _collision.transform.GetComponentInParent<PlayerStats>().CmdTakeDmg(damage);
+            _collision.transform.GetComponentInParent<PlayerStats>().TakeDmg(damage); // Bullet is spawned and is on server, trigger on client
         }
         if(_collision.collider.tag != "Ability")
             Destroy(gameObject);

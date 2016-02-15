@@ -154,6 +154,8 @@ public class PlayerStats : NetworkBehaviour {
                 speed *= 1.15f;
                 // Placeholder visual thing
                 body.GetComponent<MeshRenderer>().material.color = Color.red;
+                abilities[0] = GetComponent<ThrowBoomnana>();
+                abilities[1] = GetComponent<HealSelf>();
                 break;
             case (Role.Supporter):
                 maxHealth *= 1f;
@@ -228,23 +230,42 @@ public class PlayerStats : NetworkBehaviour {
         NetworkServer.Spawn(bullet);
     }
 
-    [Command]
-    public void CmdTakeDmg(float damage) {
+    
+    public void TakeDmg(float amount) { // amount == currSizeMaxHealth
         if (!isServer)
             return;
-        syncHealth -= damage * (1.0f - ((float)resilience / 100.0f));
+        syncHealth -= amount * (1.0f - ((float)resilience / 100.0f));
         if (syncHealth <= 0 && !isDead) {
             isDead = true;
             deathTimer = (float)Network.time;
             syncHealth = 0;
         }
+        RpcTakeDmg(amount * (1.0f - ((float)resilience / 100.0f)));
     }
-    [Command]
-    public void CmdHealing(float healing) {
+    public void Healing(float amount) {
         if (!isServer)
             return;
-        syncHealth += healing;
+        syncHealth += amount;
         if (syncHealth > maxHealth)
             syncHealth = maxHealth;
+        RpcHealing(amount);
+    }
+
+    [Command]
+    public void CmdTakeDmg(float amount) {
+        TakeDmg(amount);
+    }
+    [Command]
+    public void CmdHealing(float amount) {
+        Healing(amount);
+    }
+
+    [ClientRpc]
+    void RpcTakeDmg(float amount) {
+        Debug.Log("Took damage: " + amount);
+    }
+    [ClientRpc]
+    void RpcHealing(float amount) {
+        Debug.Log("Recieved healing: " + amount);
     }
 }
