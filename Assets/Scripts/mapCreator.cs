@@ -35,10 +35,10 @@ public class mapCreator : MonoBehaviour {
 			powCount++;
 		}
 
-		// name=((city.getName()==null)? 'n'" city.getName())
-		rings= ((powCount>1) ? powCount: 1);
 
-		for (int i = (map.transform.childCount / 16) +1;i<=rings;i++)
+		rings= ((powCount>1) ? powCount: 1)-1;
+
+		for (int i = (map.transform.childCount / 16); i<rings;i++)
 		{ 
 			float currentDegree=360f;
 			while (currentDegree>0)
@@ -47,24 +47,18 @@ public class mapCreator : MonoBehaviour {
 				Quaternion mapPartNewRotation=Quaternion.identity;
 				mapPartNewRotation.eulerAngles=new Vector3(0,currentDegree,0);
 
-				//assess its possition considering the number of rings existent
-				Vector3 mapPartPosition=new Vector3(0f,0f,0f);
-				if (rings > 1) {
-					mapPartPosition.x=((currentDegree>90f && currentDegree<=270f) ? -1f : 1f)*(float)(i-1);
-					mapPartPosition.z=((currentDegree>90f && currentDegree<=270f) ? -1f : 1f)*(float)(i-1);
-				}
-			
 
+				Vector3 mapPartPosition=new Vector3(0f,0f,0f);
 				GameObject mapPartTemp=Instantiate(mapPart, mapPartPosition, mapPartNewRotation) as GameObject;
 			
 				//set its parent as the Map GameObject
 				mapPartTemp.transform.parent = map.transform;
-				mapPartTemp.name = "mapPart_" + currentDegree.ToString () + "_ring" + (i).ToString ();
+				mapPartTemp.name = "mapPart_" + currentDegree.ToString () + "_ring" + (i+1).ToString ();
 
 				//set scale according to which ring the part belongs to
 				Vector3 newMapPartScale=new Vector3(1f,1f,1f);
-				newMapPartScale.x *= i;
-				newMapPartScale.z *= i;
+				newMapPartScale.x *= Mathf.Pow(2,i);
+				newMapPartScale.z *= Mathf.Pow(2,i);
 				mapPartTemp.transform.localScale=newMapPartScale;
 
 				currentDegree-=22.5f;
