@@ -69,4 +69,9 @@ public class mapCreator : MonoBehaviour {
 
 
 	}
+
+	void MapSink()
+	{
+		
+	}
 }
