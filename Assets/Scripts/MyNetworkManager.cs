@@ -5,6 +5,8 @@ using UnityEngine.Networking;
 
 public class MyNetworkManager : NetworkManager {
     int playerNumber = 0;
+    int teamOne = 0;
+    int teamTwo = 0;
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId) {
         playerNumber++; // currently determines the team the player is assigned to - unfair if every other player leaves :D
@@ -19,9 +21,17 @@ public class MyNetworkManager : NetworkManager {
         }
         Vector3 position = startPositions[spawn].position;
         var player = (GameObject)GameObject.Instantiate(playerPrefab, position, Quaternion.identity);
-        player.GetComponent<PlayerStats>().team = playerNumber % 2 == 1 ? 1 : 2; //TODO allow players to choose teams
-        //if (playerNumber == 1) { player.GetComponent<PlayerStats>().team = 1; } 
-        //if (playerNumber == 2) { player.GetComponent<PlayerStats>().team = 2; }
+        #region TeamSelection
+        int team = player.GetComponent<PlayerStats>().team;
+        //if (team == 0) { team = playerNumber % 2 == 1 ? 1 : 2; }
+        if (team == 0) {
+            team = teamOne <= teamTwo ? 1 : 2;
+            player.GetComponent<PlayerStats>().team = team;
+        }
+        if (team == 1) { teamOne++; } 
+        if (team == 2) { teamTwo++; }
+        #endregion
+
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
     }
 }

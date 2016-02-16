@@ -46,7 +46,7 @@ public class PlayerStats : NetworkBehaviour {
     double stunTimer;
 
     public GameObject bulletPrefab;
-
+    
     public enum Role {
         Basic, Defender, Attacker, Supporter
     }
@@ -70,21 +70,23 @@ public class PlayerStats : NetworkBehaviour {
             #region Loading attributes and determining Role
             // Load Attributes set before entering game
             attributes = GameObject.Find("NetworkManager").GetComponent<MyNetworkManagerHUD>().getAttributes();
+            /*
             // Check for highest value
             DictionaryEntry max = new DictionaryEntry("s", 0);
             foreach (DictionaryEntry de in attributes) {
                 if ((int)de.Value > (int)max.Value)
                     max = de;
             }
-            // Determine primary role (if near middle he is just set to Basic)
+            //Determine primary role (if near middle he is just set to Basic)
             if ((int)max.Value > (100 / attributes.Count) + 5) {
                 role = determineRole((string)max.Key);
             } else role = Role.Basic;
-            RoleCharacteristics(role);
+            */ //Kept in case other roles are wanted
+            role = Role.Attacker;
+            RoleCharacteristics(role); 
             #endregion
+            CmdTeamSelection(GameObject.Find("NetworkManager").GetComponent<MyNetworkManagerHUD>().team);
         }
-        if (team == 1) body.GetChild(0).gameObject.SetActive(true);
-        if (team == 2) body.GetChild(1).gameObject.SetActive(true);
         syncHealth = maxHealth;
     }
 	
@@ -107,6 +109,7 @@ public class PlayerStats : NetworkBehaviour {
                 isStunned = false;
             }
         }
+        TeamSelect();
         SelectRole();
         ApplyRole();
         StatSync();
@@ -195,6 +198,12 @@ public class PlayerStats : NetworkBehaviour {
         }
     }
 
+    [ClientCallback]
+    void TeamSelect() {
+        body.GetChild(0).gameObject.SetActive(team == 1 ? true : false);
+        body.GetChild(1).gameObject.SetActive(team == 2 ? true : false);
+    }
+
     [Command]
     void CmdProvideStats(int resi) {
         //syncHealth = hp;
@@ -273,5 +282,15 @@ public class PlayerStats : NetworkBehaviour {
     [ClientRpc]
     void RpcStunning(float duration) {
         Debug.Log("Stunned for: " + duration);
+    }
+
+    [Command]
+    void CmdTeamSelection(int team) {
+        this.team = team;
+        RpcTeam(team);
+    }
+    [ClientRpc]
+    void RpcTeam(float team) {
+        Debug.Log("Joined Team: " + team);
     }
 }

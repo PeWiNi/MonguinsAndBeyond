@@ -24,6 +24,7 @@ public class AttributeScript : MonoBehaviour {
         attFields = new Text[attributes.Split(';').Length];
         attPoints = setPoints();
         capsule = Resources.Load("Prefabs/Capsule", typeof(GameObject)) as GameObject;
+        /*
         for (int i = 1; i <= 35; i++) {
             print(i + " = " + compositeHealthFormula(i));
             GameObject Capsule3 = (GameObject)Instantiate(capsule, new Vector3(i, 4, 0), Quaternion.identity);
@@ -48,8 +49,8 @@ public class AttributeScript : MonoBehaviour {
             GameObject Capsule7 = (GameObject)Instantiate(capsule, new Vector3(i, 8, 0), Quaternion.identity);
             size = healthFormula4(i) / 1000;
             Capsule7.transform.localScale = new Vector3(size, size, size);
-            */
         }
+        */
     }
 
     // Update is called once per frame

@@ -7,6 +7,8 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 	[SerializeField] public int offsetX;
 	[SerializeField] public int offsetY;
 
+    public int team = 0;
+
     // Runtime variable
     bool showServer = false;
 
@@ -49,7 +51,14 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 		int spacing = 24;
 
 		if (!NetworkClient.active && !NetworkServer.active && manager.matchMaker == null) {
-			if (GUI.Button(new Rect(xpos, ypos, 200, 20), "LAN Host(H)")) {
+            if (GUI.Button(new Rect(Screen.width - xpos - 100, ypos, 100, 20), "Banana")) {
+                team = 1;
+            }
+            if (GUI.Button(new Rect(Screen.width - xpos - 100, ypos + spacing, 100, 20), "Fish")) {
+                team = 2;
+            }
+
+            if (GUI.Button(new Rect(xpos, ypos, 200, 20), "LAN Host(H)")) {
 				H();
 			}
 			ypos += spacing;
