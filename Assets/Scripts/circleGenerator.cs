@@ -14,6 +14,7 @@ public class circleGenerator : MonoBehaviour {
 	public int Xchange;
 	public int Ychange;
 	public int radiusError;
+	public int multiplier;
 
 	// Use this for initialization
 	void Start () {
@@ -80,12 +81,12 @@ public class circleGenerator : MonoBehaviour {
 		radius = GameObject.FindGameObjectsWithTag ("Player").Length;
 		X = radius;
 		Y = 0;
-		Xchange = 1 - 2 * radius;
+		Xchange = (1 - 2 * radius);
 		Ychange = 1;
 		radiusError = 0;
 		while (X >= Y) {
-			PutPixels2 (X, Y);
-			Y++;
+			PutPixels2 (X*multiplier, Y*multiplier);
+			Y+=1;
 			radiusError += Ychange;
 			Ychange += 2;
 			if (2 * radiusError + Xchange > 0) {
