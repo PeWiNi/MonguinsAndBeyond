@@ -7,7 +7,7 @@ public class EnvironmentPlacement : MonoBehaviour
 
     public GameObject segmentMap;
     public List<GameObject> environmentAssetsPool;
-    [Range(0f, 500f)]
+    [Range(0f, 5000f)]
     public int maxNumberOfAssets;
 
     private Mesh mesh;
@@ -18,38 +18,35 @@ public class EnvironmentPlacement : MonoBehaviour
         RandomizeEnvironment();
     }
 
+    /// <summary>
+    /// Create randomly placed environment assets.
+    /// </summary>
     void RandomizeEnvironment()
     {
-        //Transform vertices from Local Space to World Space.
-        //for (int i = 0; i < mesh.vertices.Length; i++)
-        //{
-        //    Vector3 norm = transform.TransformDirection(mesh.normals[i]);
-        //    Vector3 vert = transform.TransformPoint(mesh.vertices[i]);
-            //Debug.DrawRay(vert, norm * 1, Color.red);
-        //}
-        //Get all the vertices of the mesh.
         Vector3[] vertices = mesh.vertices;
-        //Vector2[] uvs = new Vector2[vertices.Length];
-        //Bounds bounds = mesh.bounds;
-        //int h = 0;
-        //while (h < uvs.Length)
-        //{
-        //    uvs[h] = new Vector2(vertices[h].x / bounds.size.x, vertices[h].z / bounds.size.x);
-        //    h++;
-        //}
-        //mesh.uv = uvs;
-        //print("Number of vertices = " + h);
-
-        for (int i = 0; i < maxNumberOfAssets; i++)
+        int amountWeNeed = 0;
+        //for (int i = 0; i < maxNumberOfAssets; i++)
+        while (amountWeNeed < maxNumberOfAssets)
         {
             //Get a random object from the environmentAssetsPool and assign it to the 'go' GameObject.
             GameObject go = environmentAssetsPool[(int)Random.Range(0f, environmentAssetsPool.Count)];
-            //Place the 'go' GameObject at a random location within the bounds of the segment.
-            Vector3 goPosition = vertices[Random.Range(0, vertices.Length)];
-            //Randomize the rotation to diversify the environment.
-            Quaternion goRotation = Quaternion.EulerAngles(0f, Random.Range(-180f, 180f), 0f);
-            //Instantiate the 'go' GameObject
-            Instantiate(go, goPosition, goRotation);
+            //Access a random vertex from the vertices of the mesh.
+            Vector3 randomVertex = vertices[Random.Range(0, vertices.Length)];
+            //Get a point from the Random.onUnitSphere and apply a distance from the origin of that point (this is where the Ray later will have its origin).
+            Vector3 direction = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
+            //Ensures that we do not have a direction thats below the 'surface' area.
+            while (direction.y <= 5f)
+            {
+                direction = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
+            }
+            //Debug.DrawLine(direction, randomVertex, Color.magenta, 15, false);
+            RaycastHit hit;
+            if (Physics.Raycast(direction, randomVertex, out hit))
+            {
+                //Instantiate the 'go' GameObject.
+                Instantiate(go, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
+                amountWeNeed++;
+            }
         }
     }
 }
