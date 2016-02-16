@@ -42,7 +42,7 @@ public class Boomnana : NetworkBehaviour {
     }
 
     void OnCollisionEnter(Collision _collision) {
-        if (_collision.gameObject == owner && movingBack)
+        if ((_collision.gameObject == owner && movingBack) || _collision.collider.GetComponentInParent<PlayerStats>().team == ownerTeam)
             _collision.transform.GetComponentInParent<PlayerStats>().TakeDmg(damage * selfDamage); // Nana is spawned and is on server, trigger on client
         else {
             if (_collision.collider.tag == "Player" && _collision.collider.GetComponentInParent<PlayerStats>().team != ownerTeam) {
