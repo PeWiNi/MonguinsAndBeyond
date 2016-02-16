@@ -21,24 +21,24 @@ public class EnvironmentPlacement : MonoBehaviour
     void RandomizeEnvironment()
     {
         //Transform vertices from Local Space to World Space.
-        for (int i = 0; i < mesh.vertices.Length; i++)
-        {
-            Vector3 norm = transform.TransformDirection(mesh.normals[i]);
-            Vector3 vert = transform.TransformPoint(mesh.vertices[i]);
+        //for (int i = 0; i < mesh.vertices.Length; i++)
+        //{
+        //    Vector3 norm = transform.TransformDirection(mesh.normals[i]);
+        //    Vector3 vert = transform.TransformPoint(mesh.vertices[i]);
             //Debug.DrawRay(vert, norm * 1, Color.red);
-        }
+        //}
         //Get all the vertices of the mesh.
         Vector3[] vertices = mesh.vertices;
-        Vector2[] uvs = new Vector2[vertices.Length];
-        Bounds bounds = mesh.bounds;
-        int h = 0;
-        while (h < uvs.Length)
-        {
-            uvs[h] = new Vector2(vertices[h].x / bounds.size.x, vertices[h].z / bounds.size.x);
-            h++;
-        }
-        mesh.uv = uvs;
-        print("Number of vertices = " + h);
+        //Vector2[] uvs = new Vector2[vertices.Length];
+        //Bounds bounds = mesh.bounds;
+        //int h = 0;
+        //while (h < uvs.Length)
+        //{
+        //    uvs[h] = new Vector2(vertices[h].x / bounds.size.x, vertices[h].z / bounds.size.x);
+        //    h++;
+        //}
+        //mesh.uv = uvs;
+        //print("Number of vertices = " + h);
 
         for (int i = 0; i < maxNumberOfAssets; i++)
         {
