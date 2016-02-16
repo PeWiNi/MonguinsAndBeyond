@@ -6,7 +6,7 @@ public class circleGenerator : MonoBehaviour {
 	public int z;
 	public int radius;
 	public GameObject cube;
-	public GameObject cubePlayer;
+	public GameObject players;
 	public int centerX = 0;
 	public int centerY = 0;
 	public int X;
@@ -77,7 +77,7 @@ public class circleGenerator : MonoBehaviour {
 	//bresenham algorithm for drawing circles
 	public void circleDrawing2()
 	{	
-		Instantiate (cubePlayer, transform.position, Quaternion.identity);
+		//Instantiate (players, transform.position, Quaternion.identity);
 		radius = GameObject.FindGameObjectsWithTag ("Player").Length;
 		X = radius;
 		Y = 0;
