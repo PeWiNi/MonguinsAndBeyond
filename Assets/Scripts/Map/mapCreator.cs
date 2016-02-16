@@ -22,7 +22,7 @@ public class mapCreator : MonoBehaviour {
 	//public GameObject players;
 	public int centerX = 0;
 	public int centerY = 0;
-	public int multiplier;
+	public int multiplier; //correlates with the cube size 
 
 	List <ringHandler> rings = new List<ringHandler> ();
 
@@ -37,10 +37,10 @@ public class mapCreator : MonoBehaviour {
 		radius = 10;
 		thickness = 8f;
 		multiplier = 8;
-		ringHandler temp = new ringHandler ();
+/*		ringHandler temp = new ringHandler ();
 		temp.ringParts.Add (GameObject.Find ("arena"));
 		temp.ringNumber = ringsSpawned;
-		rings.Add (temp);
+		rings.Add (temp);*/
 	}
 
 	// Use this for initialization
@@ -61,18 +61,24 @@ public class mapCreator : MonoBehaviour {
 		powCount=0;
 		while(Mathf.Pow (2, powCount) <= players.Length) 
 			powCount++;
-		powCount--;
-		//ringsSpawned= ((powCount>1) ? powCount: 1)-1;
-		//radius = 5*((powCount>1) ? powCount: 1)+(int)(16f/ Mathf.Pow (2, powCount));
-		//radius = radius+(int)(16f/ Mathf.Pow (2, powCount));
-		thickness = 16f/ Mathf.Pow (2, powCount-1);
+		
+		powCount--;//need to go one step back as the loop above will stop when one step further in the calculation of the pow count 
 
-		ringsSpawned++;
-		GameObject ringNo = new GameObject ();
-		ringNo.transform.parent = map.transform;
-		ringNo.transform.name = ringsSpawned.ToString ();
-		ringDrawing ((int)thickness, ringNo); // need to deal with a float thickness to account for smaller rings. 
+		// if the number of players requires more map rings than already present, generate them.
+		if (powCount>map.transform.childCount-1) 
+		{
+			//thickness represents how many extra ring components will the new map ring contain, based on the number of players
+			thickness = 8f/ Mathf.Pow (2, powCount-1);
 
+			ringsSpawned++; //increase the number of rings Spawned
+			GameObject ringNo = new GameObject (); //create a new Ring parent for the the map parts to be spawned
+			ringNo.transform.parent = map.transform;
+			ringNo.transform.name = ringsSpawned.ToString ();
+			ringNo.transform.tag = "Ring";
+			ringDrawing ((int)thickness, ringNo); // need to deal with a float thickness to account for smaller rings. 
+		}
+
+		fillCheck ();
 
 		/*if (!sinkingARing)
 			for (int i = (map.transform.childCount / 16); i < ringsSpawned - ringsSunk; i++)
@@ -119,12 +125,7 @@ public class mapCreator : MonoBehaviour {
 		Vector3 position = new Vector3 ((float)x, 0f, (float)z);
 		GameObject mapPartTemp=Instantiate (cube, position, Quaternion.identity) as GameObject;
 		mapPartTemp.transform.parent = ringNo.transform;
-		mapPartTemp.name = "mapPart_(" + x.ToString() + "," + z.ToString()+")_ring" + ringNo.ToString ();
-
-		/*ringHandler temp = new ringHandler ();
-		temp.ringParts.Add (mapPartTemp);
-		temp.ringNumber = ringsSpawned;
-		rings.Add (temp);*/
+		mapPartTemp.name = "mapPart_(" + x.ToString() + "," + z.ToString()+")";
 
 	}
 
@@ -142,31 +143,15 @@ public class mapCreator : MonoBehaviour {
 		PutPixel (centerX - y, centerY - x, ringNo);
 		PutPixel (centerX + y, centerY - x, ringNo);
 
-
 	}
-
-	/// <summary>
-	/// Calculates the radius, starts from 0 = center and outwards to the ring for which the radius is needed. 
-	/// </summary>
-	/// <returns>The radius of the current ring.</returns>
-	/// <param name="currentRing">Current ring.</param>
-	/// <param name="endRing">End ring.</param>
-	float calculateRadius(int currentRing, int endRing)
-	{
-		Debug.Log (currentRing + "currRing");
-		if ((currentRing > 0) &&(currentRing < endRing))
-	
-				return (10 / (currentRing + 1)) + calculateRadius (currentRing--, endRing);
-		else
-			return 2f;
-	}
-
+		
 	//start sinking timer
 	IEnumerator sink(){
 		sinkingARing = false;
 		yield return new WaitForSeconds (timeToNextSink);
-		if ((ringsSunk <= ringsSpawned) && (map.transform.childCount >= 17)) {
+		if ((ringsSunk <= ringsSpawned) && (map.transform.childCount >=2)) {
 			MapSunk ();
+			Debug.Log ("sinking");
 			sinkingARing = true;
 		}
 	}
@@ -177,19 +162,26 @@ public class mapCreator : MonoBehaviour {
 	/// </summary>
 	void MapSunk()
 	{	
-		//sink the outer ring
-		int mapPartslength = map.transform.childCount;
-
-		mapPartBehavior[] parts = map.GetComponentsInChildren<mapPartBehavior> ();
-		for (int i =(mapPartslength - 17); i < mapPartslength-1; i++) {
-			
-			parts [i].MoveBelowWater ();
-
+		int mapRingsNo= map.transform.childCount;
+		Transform temp = map.transform.GetChild (mapRingsNo - 1);
+	
+		mapPartBehavior[] partsToSink =temp.GetComponentsInChildren<mapPartBehavior>();
+		for (int i =0; i < partsToSink.Length; i++) {
+			partsToSink [i].MoveBelowWater ();
 		}
-
+		Destroy (temp.gameObject,10f);
 		ringsSunk++;
 
 		//start timer for next sink
 		StartCoroutine (sink ());
+	}
+
+	void fillCheck()
+	{
+		for (int i = 8; i < radius * 8; i = i + 8) {
+			for (int j = 8; j < radius * 8; j = j + 8)
+				if (!GameObject.Find ("mapPart_(" + i.ToString () + "," + j.ToString () + ")"))
+					Debug.Log ("found empty spot at: " + i + " ," + j);	
+		}
 	}
 }
