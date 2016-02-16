@@ -69,7 +69,8 @@ public class PlayerStats : NetworkBehaviour {
         if (isLocalPlayer) {
             #region Loading attributes and determining Role
             // Load Attributes set before entering game
-            attributes = GameObject.Find("NetworkManager").GetComponent<MyNetworkManagerHUD>().getAttributes();
+            MyNetworkManagerHUD NM = GameObject.Find("NetworkManager").GetComponent<MyNetworkManagerHUD>();
+            attributes = NM.getAttributes();
             /*
             // Check for highest value
             DictionaryEntry max = new DictionaryEntry("s", 0);
@@ -85,7 +86,7 @@ public class PlayerStats : NetworkBehaviour {
             role = Role.Attacker;
             RoleCharacteristics(role); 
             #endregion
-            CmdTeamSelection(GameObject.Find("NetworkManager").GetComponent<MyNetworkManagerHUD>().team);
+            CmdTeamSelection(NM.team > 0 ? NM.team : team);
         }
         syncHealth = maxHealth;
     }
@@ -132,7 +133,6 @@ public class PlayerStats : NetworkBehaviour {
                 maxHealth *= 1.3f;
                 if (isLocalPlayer && attributes.ContainsKey("DEF")) //increased resilience based on STR
                     resilience = (int)Mathf.Ceil(0.2f * (int)attributes["DEF"]);
-                // Add abilities: - and determine how they are set
                 //  Taunt (Roar/Growl/WTV) - taunts enemies (locks their target on him for 3 sec) CD:6 sec
                 //  Smash (deals 1% of enemy health and stuns 1 sec) - no CD, should take 1sec to fully cast anyway
                 //  Fortify - temporarily increase health and resilience of the defender with 20% for 10 sec. CD:20sec
@@ -145,22 +145,20 @@ public class PlayerStats : NetworkBehaviour {
                 maxHealth *= 0.85f;
                 //if (attributes.ContainsKey("DEF")) //increased resilience based on STR
                 //    resilience = (int)Mathf.Ceil(0.2f * (int)attributes["DEF"]); // Do damage according to ATT aswell?
-                // Add abilities: - and determine how they are set
                 //  Boomnana - (yup, same one) deals 80% of current health on enemy target in damage; of no targets are hit it return to the caster and deals 35% of current health damage. CD: 3sec
+                abilities[0] = GetComponent<ThrowBoomnana>();
                 //  Tail Slap - (yup, same one) deals 2% of current health on enemy target; melee; no CD; 1 sec to "cast"
+                abilities[1] = GetComponent<TailSlap>();
                 //  Punch Dance - deals a stronger tail slap (3% of current health damage) that if it hits stuns the enemy for 2 sec and it's followed by 2 more tail slaps of 4% and 5% damage*current health. CD:20 sec
+                abilities[2] = GetComponent<PunchDance>();
                 sizeModifier *= 0.85f;
                 speed *= 1.15f;
                 // Placeholder visual thing
                 body.GetComponent<MeshRenderer>().material.color = Color.red;
-                abilities[0] = GetComponent<ThrowBoomnana>();
-                abilities[1] = GetComponent<TailSlap>();
-                abilities[2] = GetComponent<PunchDance>();
                 break;
             case (Role.Supporter):
                 maxHealth *= 1f;
                 // Do something according to SUP? Do Resilience? Do ATT?
-                // Add abilities: - and determine how they are set
                 //  Puke - (the old puke, does the same thing) stuns all enemies in range, has about 2 units distance units in range. Channeled 3 sec; CD:5 sec
                 //  Throw poison - ranged ability, slows the enemy at 0,5*speed and deals 0.5% damage*max health over 3 sec (1.5% in total). Range from 5 to 30 distance units. No CD; takes 1 sec to cast and requires poisonous herbs
                 //  Heal force - ability targets only friendly characters. Heals 50-250 HP over 3 sec depending on skill and herbs used in the ability. Max range 20 units. 1 herb heals instantly for 50HP, 2->4 herb heal over time (50 at first and 50 more for each 'tic'). No CD; instant application; requires herbs to cast
@@ -242,6 +240,9 @@ public class PlayerStats : NetworkBehaviour {
             return;
         syncHealth -= amount * (1.0f - ((float)resilience / 100.0f));
         if (syncHealth <= 0 && !isDead) {
+            MyNetworkManager MnM = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>();
+            MnM.CountDeaths(team);
+            RpcDeathCount(MnM.teamOneDeathCount, MnM.teamTwoDeathCount);
             isDead = true;
             deathTimer = (float)Network.time;
             syncHealth = 0;
@@ -263,13 +264,9 @@ public class PlayerStats : NetworkBehaviour {
     }
 
     [Command]
-    public void CmdTakeDmg(float amount) {
-        TakeDmg(amount);
-    }
+    public void CmdTakeDmg(float amount) { TakeDmg(amount); }
     [Command]
-    public void CmdHealing(float amount) {
-        Healing(amount);
-    }
+    public void CmdHealing(float amount) { Healing(amount); }
 
     [ClientRpc]
     void RpcTakeDmg(float amount) {
@@ -283,14 +280,18 @@ public class PlayerStats : NetworkBehaviour {
     void RpcStunning(float duration) {
         Debug.Log("Stunned for: " + duration);
     }
+    [ClientRpc]
+    void RpcDeathCount(float one, float two) {
+        Debug.Log(string.Format("Team Banana has been killed: {0} \nTeam Fish has been killed: {1}", one, two));
+    }
 
     [Command]
-    void CmdTeamSelection(int team) {
+    public void CmdTeamSelection(int team) {
         this.team = team;
         RpcTeam(team);
     }
     [ClientRpc]
-    void RpcTeam(float team) {
+    void RpcTeam(int team) {
         Debug.Log("Joined Team: " + team);
     }
 }

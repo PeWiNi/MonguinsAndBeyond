@@ -14,20 +14,20 @@ public class PunchDance : Ability {
     public float thirdDmg = .05f;
 
     public override double Trigger() {
-        StartCoroutine("Attack");
+        Vector3 PointOfImpact = transform.position + (transform.forward * distance);
+        Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
+        if (hitColliders.Length > 0) 
+            if (hitColliders[0].GetComponentInParent<PlayerStats>().team != team)
+                StartCoroutine(Attack(hitColliders));
         return castTime;
     }
 
-    IEnumerator Attack() {
-        Vector3 PointOfImpact = transform.position + (transform.forward * distance);
-        Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
-        if(hitColliders.Length > 0) {
-            CmdStunPlayer(hitColliders[0].gameObject, stunDuration);
-            CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * firstDmg);
-            yield return new WaitForSeconds(timeBetweenAttacks);
-            CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * secondDmg);
-            yield return new WaitForSeconds(timeBetweenAttacks);
-            CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * thirdDmg);
-        }
+    IEnumerator Attack(Collider[] hitColliders) {
+        CmdStunPlayer(hitColliders[0].gameObject, stunDuration);
+        CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * firstDmg);
+        yield return new WaitForSeconds(timeBetweenAttacks);
+        CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * secondDmg);
+        yield return new WaitForSeconds(timeBetweenAttacks);
+        CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * thirdDmg);
     }
 }

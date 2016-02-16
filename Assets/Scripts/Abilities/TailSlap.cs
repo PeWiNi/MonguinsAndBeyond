@@ -12,8 +12,8 @@ public class TailSlap : Ability {
         Vector3 PointOfImpact = transform.position + (transform.forward * distance);
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
         if (hitColliders.Length > 0)
-            print(hitColliders[0].name);
-        CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
+            if (hitColliders[0].GetComponentInParent<PlayerStats>().team != team)
+                CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
         //hitColliders[0].GetComponent<PlayerStats>().CmdTakeDmg(gameObject.GetComponent<PlayerStats>().maxHealth * damage);
         return castTime;
     }
