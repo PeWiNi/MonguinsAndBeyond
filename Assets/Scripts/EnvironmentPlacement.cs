@@ -19,12 +19,14 @@ public class EnvironmentPlacement : MonoBehaviour
     }
 
     /// <summary>
-    /// Based on the bounds of the mesh, create randomly placed environment assets.
+    /// Create randomly placed environment assets.
     /// </summary>
     void RandomizeEnvironment()
     {
         Vector3[] vertices = mesh.vertices;
-        for (int i = 0; i < maxNumberOfAssets; i++)
+        int amountWeNeed = 0;
+        //for (int i = 0; i < maxNumberOfAssets; i++)
+        while (amountWeNeed < maxNumberOfAssets)
         {
             //Get a random object from the environmentAssetsPool and assign it to the 'go' GameObject.
             GameObject go = environmentAssetsPool[(int)Random.Range(0f, environmentAssetsPool.Count)];
@@ -37,15 +39,13 @@ public class EnvironmentPlacement : MonoBehaviour
             {
                 direction = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
             }
-            Debug.DrawLine(direction, randomVertex, Color.magenta, 15, false);
+            //Debug.DrawLine(direction, randomVertex, Color.magenta, 15, false);
             RaycastHit hit;
             if (Physics.Raycast(direction, randomVertex, out hit))
             {
-                //Debug.DrawLine(hit.point, hit.point + hit.point.normalized, Color.blue, 100, false);
-                //Debug.DrawLine(hit.point, direction, Color.blue, 100, false);
-                //Debug.DrawLine(hit.point, hit.normal, Color.green, 100, false);
-                //Instantiate the 'go' GameObject
+                //Instantiate the 'go' GameObject.
                 Instantiate(go, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
+                amountWeNeed++;
             }
         }
     }
