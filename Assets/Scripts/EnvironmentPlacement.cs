@@ -7,7 +7,7 @@ public class EnvironmentPlacement : MonoBehaviour
 
     public GameObject segmentMap;
     public List<GameObject> environmentAssetsPool;
-    [Range(0f, 500f)]
+    [Range(0f, 5000f)]
     public int maxNumberOfAssets;
 
     private Mesh mesh;
@@ -20,36 +20,30 @@ public class EnvironmentPlacement : MonoBehaviour
 
     void RandomizeEnvironment()
     {
-        //Transform vertices from Local Space to World Space.
-        //for (int i = 0; i < mesh.vertices.Length; i++)
-        //{
-        //    Vector3 norm = transform.TransformDirection(mesh.normals[i]);
-        //    Vector3 vert = transform.TransformPoint(mesh.vertices[i]);
-            //Debug.DrawRay(vert, norm * 1, Color.red);
-        //}
-        //Get all the vertices of the mesh.
         Vector3[] vertices = mesh.vertices;
-        //Vector2[] uvs = new Vector2[vertices.Length];
-        //Bounds bounds = mesh.bounds;
-        //int h = 0;
-        //while (h < uvs.Length)
-        //{
-        //    uvs[h] = new Vector2(vertices[h].x / bounds.size.x, vertices[h].z / bounds.size.x);
-        //    h++;
-        //}
-        //mesh.uv = uvs;
-        //print("Number of vertices = " + h);
-
         for (int i = 0; i < maxNumberOfAssets; i++)
         {
             //Get a random object from the environmentAssetsPool and assign it to the 'go' GameObject.
             GameObject go = environmentAssetsPool[(int)Random.Range(0f, environmentAssetsPool.Count)];
-            //Place the 'go' GameObject at a random location within the bounds of the segment.
-            Vector3 goPosition = vertices[Random.Range(0, vertices.Length)];
+            //Place the 'go' GameObject at a random location within the bounds of the segment, using Random.UnitSphere as starting position with direction towards the Island mesh.
+            Vector3 randomVertice = vertices[Random.Range(0, vertices.Length)];
+            Vector3 direction = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
+            //Ensures that we do not have a direction thats below the 'surface' area.
+            while (direction.y <= 5f)
+            {
+                direction = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
+            }
             //Randomize the rotation to diversify the environment.
             Quaternion goRotation = Quaternion.EulerAngles(0f, Random.Range(-180f, 180f), 0f);
-            //Instantiate the 'go' GameObject
-            Instantiate(go, goPosition, goRotation);
+            Debug.DrawLine(direction, randomVertice, Color.magenta, 5, false);
+            RaycastHit hit;
+            if (Physics.Raycast(direction, randomVertice, out hit))
+            {
+                //Debug.DrawLine(hit.point, hit.point + hit.point.normalized, Color.blue, 100, false);
+                Debug.DrawLine(hit.point, direction, Color.blue, 100, false);
+                //Instantiate the 'go' GameObject
+                Instantiate(go, hit.point, goRotation);
+            }
         }
     }
 }
