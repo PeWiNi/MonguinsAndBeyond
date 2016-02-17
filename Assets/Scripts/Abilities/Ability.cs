@@ -6,39 +6,22 @@ public class Ability : NetworkBehaviour {
     public float cooldown = 0.0f;
     [HideInInspector]
     public float timer = 0.0f;
-    [SyncVar]
-    int syncTeam;
     internal int team;
     public double castTime;
 
     // Use this for initialization
-    void Start () {
-        team = GetComponent<PlayerStats>().team;
-    }
+    void Start () { }
 	
 	// Update is called once per frame
 	void Update () {
         SelectTeam();
     }
 
-    void ApplyTeam() {
-        if (!isLocalPlayer) {
-            if (team != syncTeam) {
-                team = syncTeam;
-            }
-        }
-    }
-
     [ClientCallback]
     void SelectTeam() {
         if (isLocalPlayer) {
-            CmdProvideTeam(team);
+            team = GetComponent<PlayerStats>().team;
         }
-    }
-
-    [Command]
-    void CmdProvideTeam(int team) {
-        syncTeam = team;
     }
 
     public virtual double Trigger() { return castTime; }

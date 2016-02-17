@@ -7,7 +7,7 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     float syncHealth;
     [SyncVar]
-    int syncResilience;
+    int resilience; // Recieved damage modifier, 100 means 100% dmg reduction
     [SyncVar]
     Role syncRole = Role.Basic;
 
@@ -19,19 +19,17 @@ public class PlayerStats : NetworkBehaviour {
     public float deathCooldown = 15f;
     #endregion
 
-    [SerializeField]
+    [SyncVar(hook = "SyncMaxHealth")]
     public float maxHealth = 1000f; // Full amount of health
     [SerializeField]
     public float health; // Reach 0 and you die
-    [Range(0, 100)] [SerializeField]
-    int resilience = 0; // Recieved damage modifier, 100 means 100% dmg reduction
     [SerializeField]
     private Hashtable attributes; // Strength, Agility, Wisdom, etc. and their respective values // SYNCVAR?
     [SerializeField]
     Role role = Role.Basic; // Current primary Role to determine abilities
-    [Range(0.2f, 2.5f)] [SerializeField]
+    [Range(0.2f, 2.5f)] [SyncVar]
     public float sizeModifier = 1f;
-    [Range(0.5f, 10f)] [SerializeField]
+    [Range(0.5f, 10f)] [SyncVar]
     public float speed = 5f; // Movement (and jumping) speed (see PlayerLogic.cs)
     [SerializeField]
     Transform body;
@@ -84,8 +82,9 @@ public class PlayerStats : NetworkBehaviour {
             } else role = Role.Basic;
             */ //Kept in case other roles are wanted
             role = Role.Attacker;
-            RoleCharacteristics(role); 
+            RoleCharacteristics(role);
             #endregion
+            //CmdTeamSelection(NM.team);
             CmdTeamSelection(NM.team > 0 ? NM.team : team);
         }
         syncHealth = maxHealth;
@@ -142,7 +141,12 @@ public class PlayerStats : NetworkBehaviour {
                 body.GetComponent<MeshRenderer>().material.color = Color.blue;
                 break;
             case (Role.Attacker):
-                maxHealth *= 0.85f;
+                if(isLocalPlayer) {
+                    int resi = 0;
+                    float spd = 1.15f;
+                    CmdProvideStats(0.85f, resi, spd);
+                    SetStats(resi, spd);
+                }
                 //if (attributes.ContainsKey("DEF")) //increased resilience based on STR
                 //    resilience = (int)Mathf.Ceil(0.2f * (int)attributes["DEF"]); // Do damage according to ATT aswell?
                 //  Boomnana - (yup, same one) deals 80% of current health on enemy target in damage; of no targets are hit it return to the caster and deals 35% of current health damage. CD: 3sec
@@ -151,8 +155,6 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[1] = GetComponent<TailSlap>();
                 //  Punch Dance - deals a stronger tail slap (3% of current health damage) that if it hits stuns the enemy for 2 sec and it's followed by 2 more tail slaps of 4% and 5% damage*current health. CD:20 sec
                 abilities[2] = GetComponent<PunchDance>();
-                sizeModifier *= 0.85f;
-                speed *= 1.15f;
                 // Placeholder visual thing
                 body.GetComponent<MeshRenderer>().material.color = Color.red;
                 break;
@@ -173,7 +175,7 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[1] = GetComponent<HealSelf>();
                 break;
         }
-        gameObject.GetComponent<Rigidbody>().transform.localScale *= sizeModifier;
+        gameObject.GetComponent<Rigidbody>().transform.localScale *= sizeModifier; // Applies on others
         health = maxHealth;
         syncHealth = maxHealth;
     }
@@ -188,12 +190,6 @@ public class PlayerStats : NetworkBehaviour {
     [ClientCallback]
     void StatSync() {
         health = syncHealth;
-        if (isLocalPlayer) {
-            CmdProvideStats(resilience);
-        }
-        if (!isLocalPlayer) {
-            resilience = syncResilience;
-        }
     }
 
     [ClientCallback]
@@ -203,9 +199,15 @@ public class PlayerStats : NetworkBehaviour {
     }
 
     [Command]
-    void CmdProvideStats(int resi) {
-        //syncHealth = hp;
-        syncResilience = resi;
+    void CmdProvideStats(float maxHp, int resi, float spd) {
+        ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+        maxHealth = SM.compositeHealthFormula(team == 1 ? SM.teamOne : SM.teamTwo) * maxHp;
+        SetStats(resi, spd);
+    }
+    void SetStats(int resi, float spd) {
+        resilience = 0 + resi;
+        sizeModifier = (maxHealth / 1000);
+        speed = 5f * spd;
     }
 
     [Command]
@@ -240,9 +242,9 @@ public class PlayerStats : NetworkBehaviour {
             return;
         syncHealth -= amount * (1.0f - ((float)resilience / 100.0f));
         if (syncHealth <= 0 && !isDead) {
-            MyNetworkManager MnM = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>();
-            MnM.CountDeaths(team);
-            RpcDeathCount(MnM.teamOneDeathCount, MnM.teamTwoDeathCount);
+            ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+            SM.CountDeaths(team);
+            RpcDeathCount(SM.teamOneDeathCount, SM.teamTwoDeathCount);
             isDead = true;
             deathTimer = (float)Network.time;
             syncHealth = 0;
@@ -288,10 +290,19 @@ public class PlayerStats : NetworkBehaviour {
     [Command]
     public void CmdTeamSelection(int team) {
         this.team = team;
+        GameObject.Find("ScoreManager").GetComponent<ScoreManager>().TeamSelection(this);
         RpcTeam(team);
     }
     [ClientRpc]
     void RpcTeam(int team) {
         Debug.Log("Joined Team: " + team);
+    }
+    
+    public void SyncMaxHealth(float health) {
+        maxHealth = health;
+        if (isLocalPlayer) {
+            sizeModifier = (maxHealth / 1000);
+            gameObject.GetComponent<Rigidbody>().transform.localScale = new Vector3(sizeModifier, sizeModifier, sizeModifier); // Applies twice
+        }
     }
 }
