@@ -88,7 +88,7 @@ public class Camouflage : MonoBehaviour
             Color colorOrigin = gameObject.GetComponent<Renderer>().material.color;
             Color newColor = new Color(colorOrigin.r, colorOrigin.g, colorOrigin.b, partlySpottedValue);
             gameObject.GetComponent<Renderer>().material.color = newColor;
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.1f);
             partlySpottedValue -= 0.1f;
         }
     }
@@ -127,6 +127,7 @@ public class Camouflage : MonoBehaviour
                 else if (hitColliders[i].transform.name == "SomeEnemy" && Vector3.Distance(playerCurrentPosition, hitColliders[i].transform.position) > visibilityRangeRadius / 2)
                 {
                     isPartlySpotted = false;
+                    StopCoroutine(PartlySpotted());
                     Hide();
                 }
             }
