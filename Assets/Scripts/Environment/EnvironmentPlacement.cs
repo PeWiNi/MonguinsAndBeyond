@@ -36,15 +36,6 @@ public class EnvironmentPlacement : MonoBehaviour
     void RandomizeEnvironment()
     {
         Vector3[] vertices = mesh.vertices;
-        //Convert vertices to correct scaling.
-        for (var i = 0; i < vertices.Length; i++)
-        {
-            Vector3 vertex = mesh.vertices[i];
-            vertex.x = vertex.x * transform.localScale.x;
-            vertex.y = vertex.y * transform.localScale.y;
-            vertex.z = vertex.z * transform.localScale.z;
-            vertices[i] = vertex;
-        }
         int amountWeNeed = 0;
         while (amountWeNeed < maxNumberOfAssets)
         {
@@ -86,28 +77,6 @@ public class EnvironmentPlacement : MonoBehaviour
          * Mesh, is the mesh of the hitColliders GameObjects, Vector3[] will be the vertices that's within the radius on the mesh.
          */
         Dictionary<Mesh, Vector3[]> dictionary = new Dictionary<Mesh, Vector3[]>();
-        #region RecalcVerticesScale
-        for (int h = 0; h < hitColliders.Length; h++)
-        {
-            Mesh hitColliderMesh = hitColliders[h].gameObject.GetComponent<MeshFilter>().mesh;
-            List<Vector3> vertices = new List<Vector3>();
-            print("Before = " + vertices.Count);
-            //Convert vertices to correct scaling.
-            for (var i = 0; i < hitColliderMesh.vertexCount; i++)
-            {
-                Vector3 vertex = hitColliderMesh.vertices[i];
-                //We only want to add the vertices that are within the radius.
-                if (Vector3.Distance(hitColliderMesh.bounds.center, vertex) > radius)
-                    continue;
-                vertex.x = vertex.x * transform.localScale.x;
-                vertex.y = vertex.y * transform.localScale.y;
-                vertex.z = vertex.z * transform.localScale.z;
-                vertices.Add(vertex);
-            }
-            dictionary.Add(hitColliderMesh, vertices.ToArray());
-            print("After = " + vertices.Count);
-        }
-        #endregion
         //Get the environment asset you want to fill this area with.
         GameObject go = environmentAssetsPool[assetID];
         int amountWeNeed = 0;
