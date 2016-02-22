@@ -9,7 +9,7 @@ public class mapCreator : MonoBehaviour {
 	public int ringsSpawned=1;
 	public int powCount;
 	public GameObject map;
-	float startTime;
+	//float startTime;
 	public float timeToNextSink;
 	int ringsSunk;
 	Vector3 center=new Vector3(0f,0f,0f);
@@ -19,28 +19,28 @@ public class mapCreator : MonoBehaviour {
 	public float thickness;
 
 	public GameObject cube;
-	//public GameObject players;
+//	public ringHandler[] rings;
+	public int[,] ringPartsint=new int[1000,1000];
+	int centerOffset;
+
 	public int centerX = 0;
 	public int centerY = 0;
 	public int multiplier; //correlates with the cube size 
 
-	List <ringHandler> rings = new List<ringHandler> ();
 
 	void Awake(){
 		players=GameObject.FindGameObjectsWithTag("Player");
 		ringsSpawned = 0;
+	//	rings = new ringHandler[8];
 		map=GameObject.FindGameObjectWithTag("Map");
-		startTime = Time.realtimeSinceStartup;
+	//	startTime = Time.realtimeSinceStartup;
 		timeToNextSink = 15f;
 
 		ringsSunk = 0;
 		radius = 10;
 		thickness = 8f;
 		multiplier = 8;
-/*		ringHandler temp = new ringHandler ();
-		temp.ringParts.Add (GameObject.Find ("arena"));
-		temp.ringNumber = ringsSpawned;
-		rings.Add (temp);*/
+
 	}
 
 	// Use this for initialization
@@ -75,10 +75,14 @@ public class mapCreator : MonoBehaviour {
 			ringNo.transform.parent = map.transform;
 			ringNo.transform.name = ringsSpawned.ToString ();
 			ringNo.transform.tag = "Ring";
+			centerOffset=(int)(thickness+radius)*multiplier;
+			Debug.Log("centerOffset:" +centerOffset); 
+			//rings[ringsSpawned].createVectorArray(centerOffset*2);
+
 			ringDrawing ((int)thickness, ringNo); // need to deal with a float thickness to account for smaller rings. 
 		}
 
-		fillCheck ();
+	//	fillCheck ();
 
 		/*if (!sinkingARing)
 			for (int i = (map.transform.childCount / 16); i < ringsSpawned - ringsSunk; i++)
@@ -96,8 +100,8 @@ public class mapCreator : MonoBehaviour {
 
 
 	public void ringDrawing(int thickness, GameObject ring)
-	{	int startRadius=radius;
-
+	{	
+		int startRadius=radius;
 		while (thickness+startRadius >radius) {
 			int	X = radius;
 			int	Y = 0;
@@ -110,6 +114,7 @@ public class mapCreator : MonoBehaviour {
 				radiusError += Ychange;
 				Ychange += 2;
 				if (2 * radiusError + Xchange > 0) {
+					PutPixelsOnAllOctagonals (X * multiplier, Y * multiplier, ring);
 					X--;
 					radiusError += Xchange;
 					Xchange += 2;
@@ -122,15 +127,21 @@ public class mapCreator : MonoBehaviour {
 	void PutPixel(int x, int z, GameObject ringNo)
 	{
 		//Debug.Log (x + "," + z);
-		Vector3 position = new Vector3 ((float)x, 0f, (float)z);
-		GameObject mapPartTemp=Instantiate (cube, position, Quaternion.identity) as GameObject;
-		mapPartTemp.transform.parent = ringNo.transform;
-		mapPartTemp.name = "mapPart_(" + x.ToString() + "," + z.ToString()+")";
+		if (ringPartsint [x + centerOffset, z + centerOffset] < ringsSpawned*2) {
+			ringPartsint [x + centerOffset, z + centerOffset] += ringsSpawned;
+			Vector3 position = new Vector3 ((float)x, 0f, (float)z);
+			GameObject mapPartTemp = Instantiate (cube, position, Quaternion.identity) as GameObject;
+			mapPartTemp.transform.parent = ringNo.transform;
+			mapPartTemp.name = "mapPart_(" + x.ToString () + "," + z.ToString () + ")";
 
+			//rings[ringsSpawned].ringParts[x+centerOffset, z+centerOffset]=new Vector3(x+centerOffset, z+centerOffset,ringsSpawned);
+
+		}
 	}
 
 
 	void PutPixelsOnAllOctagonals(int x,int y, GameObject ringNo){
+
 		PutPixel (centerX + x, centerY + y, ringNo);
 		PutPixel (centerX - x, centerY + y, ringNo);
 
