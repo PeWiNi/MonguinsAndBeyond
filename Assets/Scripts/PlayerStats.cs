@@ -35,6 +35,8 @@ public class PlayerStats : NetworkBehaviour {
     Transform body;
     [SyncVar]
     public int team;
+    [SyncVar]
+    public bool shouldChange = false;
 
     public Ability[] abilities;
 
@@ -82,10 +84,10 @@ public class PlayerStats : NetworkBehaviour {
             } else role = Role.Basic;
             */ //Kept in case other roles are wanted
             role = Role.Attacker;
-            RoleCharacteristics(role);
             #endregion
             //CmdTeamSelection(NM.team);
             CmdTeamSelection(NM.team > 0 ? NM.team : team);
+            RoleCharacteristics(role);
         }
         syncHealth = maxHealth;
     }
@@ -113,6 +115,8 @@ public class PlayerStats : NetworkBehaviour {
         SelectRole();
         ApplyRole();
         StatSync();
+
+        if(shouldChange) { NewPlayerJoinedTeam(); }
     }
 
     void ApplyRole() {
@@ -175,7 +179,8 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[1] = GetComponent<HealSelf>();
                 break;
         }
-        gameObject.GetComponent<Rigidbody>().transform.localScale *= sizeModifier; // Applies on others
+        gameObject.GetComponent<Rigidbody>().transform.localScale = new Vector3(sizeModifier, sizeModifier, sizeModifier);
+        //gameObject.GetComponent<Rigidbody>().transform.localScale *= sizeModifier; // Applies on others
         health = maxHealth;
         syncHealth = maxHealth;
     }
@@ -244,7 +249,6 @@ public class PlayerStats : NetworkBehaviour {
         if (syncHealth <= 0 && !isDead) {
             ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
             SM.CountDeaths(team);
-            RpcDeathCount(SM.teamOneDeathCount, SM.teamTwoDeathCount);
             isDead = true;
             deathTimer = (float)Network.time;
             syncHealth = 0;
@@ -282,24 +286,42 @@ public class PlayerStats : NetworkBehaviour {
     void RpcStunning(float duration) {
         Debug.Log("Stunned for: " + duration);
     }
-    [ClientRpc]
-    void RpcDeathCount(float one, float two) {
-        Debug.Log(string.Format("Team Banana has been killed: {0} \nTeam Fish has been killed: {1}", one, two));
-    }
 
     [Command]
-    public void CmdTeamSelection(int team) {
-        this.team = team;
+    public void CmdTeamSelection(int joinedTeam) {
+        team = joinedTeam;
         GameObject.Find("ScoreManager").GetComponent<ScoreManager>().TeamSelection(this);
-        RpcTeam(team);
+        Debug.Log(gameObject.name + " joined team " + joinedTeam);
+        foreach(PlayerStats ps in FindObjectsOfType<PlayerStats>())
+            ps.shouldChange = ps.team == joinedTeam ? true : ps.team == joinedTeam ? true : false;
+        RpcTeam(team, gameObject.name);
     }
+    /*
+    [Command]
+    public bool CmdCheckTeamSize(int currentTeamSize) {
+        ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
+        return team == 1 ? SM.teamOne == currentTeamSize : team == 2 ? SM.teamTwo == currentTeamSize : true;
+        //NewPlayerJoinedTeam(joinedTeam);
+    }
+    */
     [ClientRpc]
-    void RpcTeam(int team) {
-        Debug.Log("Joined Team: " + team);
+    void RpcTeam(int joinedTeam, string name) {
+        Debug.Log(name + " joined team " + joinedTeam);
+    }
+    [ClientCallback]
+    void NewPlayerJoinedTeam() {
+        RoleCharacteristics(role);
+        if (isLocalPlayer)
+            CmdChangeChange(false);
+    }
+    [Command]
+    void CmdChangeChange(bool change) {
+        shouldChange = change;
     }
     
-    public void SyncMaxHealth(float health) {
-        maxHealth = health;
+    public void SyncMaxHealth(float hp) {
+        maxHealth = hp;
+        syncHealth *= maxHealth / 1000; // Applied twice
         if (isLocalPlayer) {
             sizeModifier = (maxHealth / 1000);
             gameObject.GetComponent<Rigidbody>().transform.localScale = new Vector3(sizeModifier, sizeModifier, sizeModifier); // Applies twice

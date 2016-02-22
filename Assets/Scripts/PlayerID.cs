@@ -50,7 +50,7 @@ public class PlayerID : NetworkBehaviour {
 
 	string MakeUniqueIdentity()
 	{
-		string uniqueName = "Player " + playerNetID.ToString();
+		string uniqueName = "Player " + (playerNetID.Value - 1).ToString();
 		return uniqueName;
 	}
 

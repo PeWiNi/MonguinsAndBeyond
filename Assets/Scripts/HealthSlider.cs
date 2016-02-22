@@ -21,7 +21,7 @@ public class HealthSlider : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        healthText.text = (int)System.Math.Ceiling(ps.health) + "/" + ps.maxHealth;
+        healthText.text = (int)System.Math.Ceiling(ps.health) + "/" + System.Math.Ceiling(ps.maxHealth);
         healthSlider.value = (int)((float)(ps.health / ps.maxHealth) * 100);
         if(cam != null) canv.transform.LookAt(cam.transform);
         canv.transform.Rotate(new Vector3(0f, 180f, 0f));

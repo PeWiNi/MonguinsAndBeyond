@@ -43,7 +43,8 @@ public class ScoreManager : NetworkBehaviour {
             health += (numberOfPlayers - 7) * 100;
             health /= numberOfPlayers - 8;
         }
-
+        print("Number of players is: " + numberOfPlayers);
+        print("Calculated Health is: " + health);
         return health;
     }
 
