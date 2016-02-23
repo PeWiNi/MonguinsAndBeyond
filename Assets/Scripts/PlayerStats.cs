@@ -4,6 +4,8 @@ using UnityEngine.Networking;
 
 public class PlayerStats : NetworkBehaviour {
 
+    [SyncVar(hook = "SyncMaxHealth")]
+    float syncMaxHealth = 1000f;
     [SyncVar]
     float syncHealth;
     [SyncVar]
@@ -19,8 +21,8 @@ public class PlayerStats : NetworkBehaviour {
     public float deathCooldown = 15f;
     #endregion
 
-    [SyncVar(hook = "SyncMaxHealth")]
-    public float maxHealth = 1000f; // Full amount of health
+    [SerializeField]
+    public float maxHealth; // Full amount of health
     [SerializeField]
     public float health; // Reach 0 and you die
     [SerializeField]
@@ -40,6 +42,8 @@ public class PlayerStats : NetworkBehaviour {
 
     public Ability[] abilities;
 
+    RoleStats roleStats;
+
     [SyncVar]
     public bool isStunned = false;
     [SyncVar]
@@ -49,6 +53,18 @@ public class PlayerStats : NetworkBehaviour {
     
     public enum Role {
         Basic, Defender, Attacker, Supporter
+    }
+
+    public struct RoleStats {
+        public float maxHealth;
+        public int resilience;
+        public float speed;
+
+        public RoleStats(float mHp, int resi, float spd) {
+            maxHealth = mHp;
+            resilience = resi;
+            speed = spd;
+        }
     }
 
     Role determineRole(string s) {
@@ -88,8 +104,9 @@ public class PlayerStats : NetworkBehaviour {
             //CmdTeamSelection(NM.team);
             CmdTeamSelection(NM.team > 0 ? NM.team : team);
             RoleCharacteristics(role);
+            SelectRole();
         }
-        syncHealth = maxHealth;
+        syncHealth = syncMaxHealth;
     }
 	
 	// Update is called once per frame
@@ -112,7 +129,6 @@ public class PlayerStats : NetworkBehaviour {
             }
         }
         TeamSelect();
-        SelectRole();
         ApplyRole();
         StatSync();
 
@@ -133,23 +149,22 @@ public class PlayerStats : NetworkBehaviour {
         abilities = new Ability[3];
         switch (role) {
             case (Role.Defender):
-                maxHealth *= 1.3f;
+                roleStats = new RoleStats(1.3f, (int)Mathf.Ceil(0.2f * (int)attributes["DEF"]), 0.80f);
+                syncMaxHealth *= 1.3f;
                 if (isLocalPlayer && attributes.ContainsKey("DEF")) //increased resilience based on STR
                     resilience = (int)Mathf.Ceil(0.2f * (int)attributes["DEF"]);
                 //  Taunt (Roar/Growl/WTV) - taunts enemies (locks their target on him for 3 sec) CD:6 sec
                 //  Smash (deals 1% of enemy health and stuns 1 sec) - no CD, should take 1sec to fully cast anyway
                 //  Fortify - temporarily increase health and resilience of the defender with 20% for 10 sec. CD:20sec
-                sizeModifier *= 1.5f;
                 speed *= 0.80f;
                 // Placeholder visual thing
                 body.GetComponent<MeshRenderer>().material.color = Color.blue;
                 break;
             case (Role.Attacker):
-                if(isLocalPlayer) {
-                    int resi = 0;
-                    float spd = 1.15f;
-                    CmdProvideStats(0.85f, resi, spd);
-                    SetStats(resi, spd);
+                roleStats = new RoleStats(0.85f, 0, 1.15f);
+                if (isLocalPlayer) {
+                    CmdProvideStats(roleStats.maxHealth, roleStats.resilience, roleStats.speed);
+                    SetStats(roleStats.resilience, roleStats.speed);
                 }
                 //if (attributes.ContainsKey("DEF")) //increased resilience based on STR
                 //    resilience = (int)Mathf.Ceil(0.2f * (int)attributes["DEF"]); // Do damage according to ATT aswell?
@@ -163,12 +178,12 @@ public class PlayerStats : NetworkBehaviour {
                 body.GetComponent<MeshRenderer>().material.color = Color.red;
                 break;
             case (Role.Supporter):
-                maxHealth *= 1f;
+                roleStats = new RoleStats(1f, 0, 1f);
+                syncMaxHealth *= 1f;
                 // Do something according to SUP? Do Resilience? Do ATT?
                 //  Puke - (the old puke, does the same thing) stuns all enemies in range, has about 2 units distance units in range. Channeled 3 sec; CD:5 sec
                 //  Throw poison - ranged ability, slows the enemy at 0,5*speed and deals 0.5% damage*max health over 3 sec (1.5% in total). Range from 5 to 30 distance units. No CD; takes 1 sec to cast and requires poisonous herbs
                 //  Heal force - ability targets only friendly characters. Heals 50-250 HP over 3 sec depending on skill and herbs used in the ability. Max range 20 units. 1 herb heals instantly for 50HP, 2->4 herb heal over time (50 at first and 50 more for each 'tic'). No CD; instant application; requires herbs to cast
-                sizeModifier *= 1f;
                 speed *= 1f;
                 // Placeholder visual thing
                 body.GetComponent<MeshRenderer>().material.color = Color.green;
@@ -181,8 +196,8 @@ public class PlayerStats : NetworkBehaviour {
         }
         gameObject.GetComponent<Rigidbody>().transform.localScale = new Vector3(sizeModifier, sizeModifier, sizeModifier);
         //gameObject.GetComponent<Rigidbody>().transform.localScale *= sizeModifier; // Applies on others
+        maxHealth = syncMaxHealth;
         health = maxHealth;
-        syncHealth = maxHealth;
     }
 
     [ClientCallback]
@@ -194,7 +209,16 @@ public class PlayerStats : NetworkBehaviour {
 
     [ClientCallback]
     void StatSync() {
+        if(maxHealth != syncMaxHealth && isLocalPlayer) {
+            CmdChangeHealth((syncMaxHealth / (1000 * roleStats.maxHealth)));
+        }
+        maxHealth = syncMaxHealth;
         health = syncHealth;
+    }
+
+    [Command]
+    void CmdChangeHealth(float hp) {
+        syncHealth = (1000 * roleStats.maxHealth) * hp;
     }
 
     [ClientCallback]
@@ -206,7 +230,8 @@ public class PlayerStats : NetworkBehaviour {
     [Command]
     void CmdProvideStats(float maxHp, int resi, float spd) {
         ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
-        maxHealth = SM.compositeHealthFormula(team == 1 ? SM.teamOne : SM.teamTwo) * maxHp;
+        syncMaxHealth = SM.compositeHealthFormula(team == 1 ? SM.teamOne : team == 2 ? SM.teamTwo : 0) * maxHp;
+        maxHealth = syncMaxHealth;
         SetStats(resi, spd);
     }
     void SetStats(int resi, float spd) {
@@ -310,9 +335,11 @@ public class PlayerStats : NetworkBehaviour {
     }
     [ClientCallback]
     void NewPlayerJoinedTeam() {
-        RoleCharacteristics(role);
-        if (isLocalPlayer)
+        if (isLocalPlayer) {
+            RoleCharacteristics(role);
+            shouldChange = false;
             CmdChangeChange(false);
+        }
     }
     [Command]
     void CmdChangeChange(bool change) {
@@ -320,11 +347,8 @@ public class PlayerStats : NetworkBehaviour {
     }
     
     public void SyncMaxHealth(float hp) {
-        maxHealth = hp;
-        syncHealth *= maxHealth / 1000; // Applied twice
-        if (isLocalPlayer) {
-            sizeModifier = (maxHealth / 1000);
-            gameObject.GetComponent<Rigidbody>().transform.localScale = new Vector3(sizeModifier, sizeModifier, sizeModifier); // Applies twice
-        }
+        syncMaxHealth = hp;
+        sizeModifier = (syncMaxHealth / 1000);
+        gameObject.GetComponent<Rigidbody>().transform.localScale = new Vector3(sizeModifier, sizeModifier, sizeModifier); // Applies twice
     }
 }

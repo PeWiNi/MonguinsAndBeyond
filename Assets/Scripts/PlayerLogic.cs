@@ -79,6 +79,10 @@ public class PlayerLogic : NetworkBehaviour {
             vertAxis = 0;
             jumpAxis = 0;
         }
+        if (transform.position.y < -100) {
+            transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetRespawnPosition();
+            GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+        }
     }
 
     public void Simulate() {
@@ -98,13 +102,5 @@ public class PlayerLogic : NetworkBehaviour {
     void SetSpeed(out float speed) {
         isWalking = !Input.GetKey(KeyCode.LeftShift);
         speed = isWalking ? Speed : Speed * 2;
-    }
-
-    void OnCollisionEnter(Collision _collision) {
-        //Ignore collisions with other players
-        if (_collision.collider.tag == "Player") {
-            collidedPlayer = _collision;
-            Physics.IgnoreCollision(_collision.collider, GetComponent<Collider>());
-        }
     }
 }

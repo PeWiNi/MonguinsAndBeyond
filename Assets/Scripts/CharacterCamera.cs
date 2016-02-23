@@ -65,8 +65,9 @@ public class CharacterCamera : MonoBehaviour {
         RaycastHit hitInfo;
         Vector3 cameraTargetPosition = new Vector3(target.position.x, target.position.y + parentHeight, target.position.z);
         isCorrected = false;
-        if (Physics.Linecast(cameraTargetPosition, position, out hitInfo)) {
+        if (Physics.Linecast(cameraTargetPosition, position, out hitInfo, ~(1 << 8))) { // Bit Values of doom! (1 << 8) means only '8th layer', ~ means 'ignore', | is 'and'
             position = hitInfo.point;
+            //Debug.DrawLine(cameraTargetPosition, position, Color.blue, 100f);
             correctedDistance = Vector3.Distance(cameraTargetPosition, position);
             isCorrected = true;
         }
