@@ -13,13 +13,16 @@ public class EnvironmentPlacement : MonoBehaviour
         None
     };
     public Placement placementState = Placement.None;//Default None.
-    public List<GameObject> environmentAssetsPool;
-    [Range(0f, 5000f)]
-    public int maxNumberOfAssets;
+    public List<GameObject> assets;
+    [Range(0, 5000)]
+    public int maxNumberOfAssets = 2500;
+    [Tooltip("The GameObject which is the center point for spawning.\nRelated to PlacementState [Area]")]
     public GameObject startingPoint;
-    public int radius;
+    [Tooltip("The radius around the 'startingPoint' to spawn assets")]
+    [Range(0, 50)]
+    public int radius = 25;
+    [Tooltip("Required for PlacementState [Area, Random]")]
     public int assetID;
-    public GameObject assetToPlaceRandomly;
 
     private Mesh mesh;
 
@@ -27,7 +30,7 @@ public class EnvironmentPlacement : MonoBehaviour
     {
         mesh = GetComponent<MeshFilter>().mesh;
         if (placementState == Placement.Random)
-            RandomPlacement(assetToPlaceRandomly);
+            RandomPlacement(this.assetID);
         if (placementState == Placement.Area)
             AreaPlacement(this.startingPoint, this.radius, this.maxNumberOfAssets, this.assetID);
         if (placementState == Placement.Fill)
@@ -54,7 +57,7 @@ public class EnvironmentPlacement : MonoBehaviour
         while (amountWeNeed < maxNumberOfAssets)
         {
             //Get a random object from the environmentAssetsPool and assign it to the 'go' GameObject.
-            GameObject go = environmentAssetsPool[(int)Random.Range(0f, environmentAssetsPool.Count)];
+            GameObject go = assets[(int)Random.Range(0f, assets.Count)];
             //Access a random vertex from the vertices of the mesh.
             Vector3 randomVertex = verticesList[Random.Range(0, verticesList.Count - 1)];
             //Get a point from the Random.onUnitSphere and apply a distance from the origin of that point (this is where the Ray later will have its origin).
@@ -75,7 +78,7 @@ public class EnvironmentPlacement : MonoBehaviour
     /// <summary>
     /// Based on the following; 
     /// 1) GameObject Starting Point (this will be the main focus and spawning point for the assets). 
-    /// 2) Radius (the boundary around the spawning point, using a sphere). 
+    /// 2) Radius (the boundary around the Starting Point, using a OverlapSphere). 
     /// 3) Amount Of Assets to spawn within this Radius boundary.
     /// 4) The Asset ID to spawn at random locations within the Radius boundary.
     /// The map will be filled with environmental assets at the geiven Location based on values.
@@ -83,41 +86,43 @@ public class EnvironmentPlacement : MonoBehaviour
     /// <param name="environmentAsset"></param>
     void AreaPlacement(GameObject startingPoint, float radius, int amountOfAssets, int assetID)
     {
-        //Get a collection of all colliers touched, because we only want to spawn assets on those.
-        Collider[] hitColliders = Physics.OverlapSphere(startingPoint.GetComponent<MeshFilter>().mesh.bounds.center, radius);
-        /* 
-         * We create a Dictionary<Mesh, Vector3[]> to receive the vertices that will be within the Radius to later acces them randomly.
-         * Mesh, is the mesh of the hitColliders GameObjects, Vector3[] will be the vertices that's within the radius on the mesh.
-         */
-        Dictionary<Mesh, Vector3[]> dictionary = new Dictionary<Mesh, Vector3[]>();
+        int groundLayerMask = (1 << 9);//The 'Ground' Layers we want to check.
+        //Get a collection of all colliders touched or within the sphere.
+        Collider[] hitColliders = Physics.OverlapSphere(startingPoint.transform.position, radius, groundLayerMask);
         //Get the environment asset you want to fill this area with.
-        GameObject go = environmentAssetsPool[assetID];
+        GameObject go = assets[assetID];
         int amountWeNeed = 0;
         while (amountWeNeed < amountOfAssets)
         {
-            //Select a random mesh GameObject between the ones that resides in the 'dictionary' variable, to spawn assets on.
-            List<Mesh> keyList = new List<Mesh>(dictionary.Keys);
-            Mesh mesh = keyList[Random.Range(0, keyList.Count - 1)];
-            //Get the vertices of the 'mesh' GameObject.
-            Vector3[] vertices = mesh.vertices;
-            //Set the origin Vector3 to be the Center of the 'mesh' GameObject.
-            Vector3 origin = mesh.bounds.center;
-            //Get a random vertex.
-            Vector3 randomVertex = vertices[Random.Range(0, vertices.Length)];
-            RaycastHit hit;
-            if (Physics.Raycast(randomVertex, randomVertex, out hit))//***Should ignore all other layers but the ground***. 
+            int randomHitCollider = Random.Range(0, hitColliders.Length);
+            Mesh mesh = hitColliders[randomHitCollider].transform.GetComponent<MeshFilter>().sharedMesh;
+            Vector3[] vertices = hitColliders[randomHitCollider].transform.GetComponent<MeshFilter>().sharedMesh.vertices;
+            List<Vector3> verticesWithinRadius = new List<Vector3>();
+            List<Vector3> normalsWithinRadius = new List<Vector3>();
+            for (int i = 0; i < vertices.Length; i++)
             {
-                //Debug.DrawRay(randomVertex, origin, Color.magenta, 100f);
-                Instantiate(go, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
-                amountWeNeed++;
+                Vector3 vertex = vertices[i];
+                vertex.x *= hitColliders[randomHitCollider].transform.localScale.x;
+                vertex.y *= hitColliders[randomHitCollider].transform.localScale.y;
+                vertex.z *= hitColliders[randomHitCollider].transform.localScale.z;
+                if (Vector3.Distance(startingPoint.transform.position, vertex) < radius)
+                {
+                    verticesWithinRadius.Add(vertex);
+                    normalsWithinRadius.Add(mesh.normals[i]);
+                }
             }
+            int randomVerticesWithinRadius = Random.Range(0, verticesWithinRadius.Count - 1);
+            Vector3 randomVertex = verticesWithinRadius[randomVerticesWithinRadius];
+            Vector3 randomNormal = normalsWithinRadius[randomVerticesWithinRadius];
+            Instantiate(go, randomVertex, Quaternion.FromToRotation(Vector3.up, randomNormal));//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
+            amountWeNeed++;
         }
     }
 
     /// <summary>
     /// Create randomly placed environment asset.
     /// </summary>
-    void RandomPlacement(GameObject assetToPlaceRandomly)
+    void RandomPlacement(int assetID)
     {
         Vector3[] vertices = mesh.vertices;
         for (int i = 0; i < mesh.vertices.Length; i++)
@@ -136,7 +141,7 @@ public class EnvironmentPlacement : MonoBehaviour
             if (Physics.Raycast(randomVertex, vertex, out hit))
             {
                 //Debug.DrawLine(randomVertex, vertex, Color.cyan, 100f);//CAUTION: Giant web of DOOM appears beware!
-                Instantiate(assetToPlaceRandomly, hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
+                Instantiate(assets[assetID], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
             }
         }
     }
