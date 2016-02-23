@@ -10,11 +10,14 @@ public class mapPartBehavior : MonoBehaviour {
 	float speed =0.75f;
 	float journeyLength;
 	bool shouldSink=false;
+	Material material;
+	Material initialMaterial;
 	// Use this for initialization
 	void Start () {
 		startPos = transform.position;
 		endPos=new Vector3(startPos.x, -10f, startPos.z);
 		journeyLength = Mathf.Abs (endPos.y - startPos.y);
+		material = Resources.Load ("Materials/TransparencyShader") as Material;
 	}
 	
 	// Update is called once per frame
@@ -32,7 +35,9 @@ public class mapPartBehavior : MonoBehaviour {
 	public void MoveBelowWater()
 	{	
 		sinking = true;
-		startTime = Time.time;			
+		startTime = Time.time;
+		initialMaterial = gameObject.GetComponent<MeshRenderer> ().material;
+		gameObject.GetComponent<MeshRenderer> ().material = material;
 		Color c = gameObject.GetComponent<MeshRenderer>().material.color;
 		gameObject.GetComponent<MeshRenderer>().material.color = new Color(c.r, c.g, c.b, 0.25f);
 		StartCoroutine(DestroyAfterSink ());
@@ -46,8 +51,9 @@ public class mapPartBehavior : MonoBehaviour {
 	public void stopSinking()
 	{
 		sinking = false;
-		Color c = gameObject.GetComponent<MeshRenderer>().material.color;
-		gameObject.GetComponent<MeshRenderer>().material.color = new Color(c.r, c.g, c.b, 1f);
+
+		//Color c = gameObject.GetComponent<MeshRenderer>().material.color;
+		gameObject.GetComponent<MeshRenderer>().material=initialMaterial;
 		transform.position = startPos;
 	}
 }
