@@ -23,6 +23,11 @@ public class MyNetworkManager : NetworkManager {
 
         var player = (GameObject)GameObject.Instantiate(playerPrefab, position, Quaternion.identity); //Default implementation
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId); //Default implementation
+        if(onlineScene.Equals("'stinaScene_foolingaroundwithCircles")) {
+            GameObject.Find("mapHandler").GetComponent<mapCreator>().playerConnected();
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+                go.GetComponent<PlayerStats>().GenerateTerrain();
+        }
     }
 
     public Vector3 GetRespawnPosition() {

@@ -49,6 +49,9 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     double stunTimer;
 
+    [SyncVar]
+    bool makeMap = false;
+
     public GameObject bulletPrefab;
     
     public enum Role {
@@ -133,6 +136,7 @@ public class PlayerStats : NetworkBehaviour {
         StatSync();
 
         if(shouldChange) { NewPlayerJoinedTeam(); }
+        if(makeMap) { GenerateTerrain(); }
     }
 
     void ApplyRole() {
@@ -350,5 +354,22 @@ public class PlayerStats : NetworkBehaviour {
         syncMaxHealth = hp;
         sizeModifier = (syncMaxHealth / 1000);
         gameObject.GetComponent<Rigidbody>().transform.localScale = new Vector3(sizeModifier, sizeModifier, sizeModifier); // Applies twice
+    }
+
+    public void GenerateTerrain() {
+        if (isServer) {
+            makeMap = true;
+            return;
+        }
+        if(isLocalPlayer) {
+            GameObject.Find("mapHandler").GetComponent<mapCreator>().playerConnected();
+            makeMap = false;
+            CmdChangeMakeMap(false);
+        }
+    }
+
+    [Command]
+    void CmdChangeMakeMap(bool change) {
+        makeMap = change;
     }
 }
