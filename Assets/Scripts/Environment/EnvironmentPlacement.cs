@@ -57,12 +57,34 @@ public class EnvironmentPlacement : MonoBehaviour
     {
         Vector3[] vertices = mesh.vertices;
         int amountWeNeed = 0;
+        List<Vector3> verticesWithinBoundaries = new List<Vector3>();
+        for (int x = 0; x < vertices.Length; x++)
+        {
+            Vector3 vertex = vertices[x];
+            vertex.x *= transform.localScale.x;
+            vertex.y *= transform.localScale.y;
+            vertex.z *= transform.localScale.z;
+            if (isBetween && (vertex.y > heightMin && vertex.y < heightMax))
+            {
+                Debug.DrawLine(vertex, vertex + Vector3.up, Color.blue, 100f);
+                verticesWithinBoundaries.Add(vertices[x]);
+            }
+            else if (!isBetween && (vertex.y < heightMin || vertex.y > heightMax))
+            {
+                Debug.DrawLine(vertex, vertex + Vector3.up, Color.blue, 100f);
+                verticesWithinBoundaries.Add(vertex);
+            }
+            else
+            {
+                Debug.DrawLine(vertex, vertex + Vector3.up, Color.red, 100f);
+            }
+        }
         while (amountWeNeed < maxNumberOfAssets)
         {
             //Get a random object from the environmentAssetsPool and assign it to the 'go' GameObject.
-            GameObject go = assets[(int)Random.Range(0f, assets.Count)];
+            GameObject go = assets[Random.Range(0, assets.Count)];
             //Access a random vertex from the vertices of the mesh.
-            Vector3 randomVertex = vertices[Random.Range(0, vertices.Length)];
+            Vector3 randomVertex = verticesWithinBoundaries[Random.Range(0, verticesWithinBoundaries.Count)];
             //Get a point from the Random.onUnitSphere and apply a distance from the origin of that point (this is where the Ray later will have its origin).
             Vector3 origin = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
             if (isBetween)
@@ -82,19 +104,22 @@ public class EnvironmentPlacement : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(origin, randomVertex, out hit))
             {
-                if (isBetween && hit.point.y > heightMin && hit.point.y < heightMax)
+                if (isBetween && (hit.point.y > heightMin && hit.point.y < heightMax))
                 {
                     //Debug.DrawRay(origin, randomVertex, Color.yellow, 150f);
                     Instantiate(go, hit.point, Quaternion.identity);//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
                     amountWeNeed++;
                 }
-                if (!isBetween && hit.point.y < heightMin || hit.point.y > heightMax)
+                if (!isBetween && (hit.point.y < heightMin || hit.point.y > heightMax))
                 {
-                    //Debug.DrawRay(origin, randomVertex, Color.yellow, 150f);
+                    //Debug.DrawRay(origin, randomVertex, Color.blue, 150f);
                     Instantiate(go, hit.point, Quaternion.identity);//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
                     amountWeNeed++;
                 }
             }
+
+            //Instantiate(go, randomVertex, Quaternion.identity);
+            //amountWeNeed++;
         }
     }
 
