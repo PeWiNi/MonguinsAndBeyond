@@ -14,22 +14,22 @@ public class EnvironmentPlacement : MonoBehaviour
     };
     public Placement placementState = Placement.None;//Default None.
     public List<GameObject> assets;
+    [Tooltip("Required for PlacementState [Area, Fill]")]
     [Range(0, 5000)]
     public int maxNumberOfAssets = 2500;
-    [Tooltip("The GameObject which is the center point for spawning.\nRelated to PlacementState [Area]")]
+    [Tooltip("This GameObject will be the center point for spawning assets.\nRequired for PlacementState [Area]")]
     public GameObject startingPoint;
-    [Tooltip("The radius around the 'startingPoint' to spawn assets")]
+    [Tooltip("Required for PlacementState [Area]\nThis value will be the radius around the 'startingPoint' to spawn assets")]
     [Range(0, 50)]
-    public int radius = 25;
+    public int areaRadius = 25;
     [Tooltip("Required for PlacementState [Area, Random]")]
     public int assetID;
-
     [Tooltip("Required for PlacementState [Fill]")]
     [Range(0, 100)]
-    public float betweenMin = 25f;
+    public float heightMin = 25f;
     [Tooltip("Required for PlacementState [Fill]")]
     [Range(0, 100)]
-    public float betweenMax = 75;
+    public float heightMax = 75;
     [Tooltip("Required for PlacementState [Fill]")]
     public bool isBetween;
 
@@ -43,15 +43,17 @@ public class EnvironmentPlacement : MonoBehaviour
         if (placementState == Placement.Random)
             RandomPlacement(this.assetID);
         if (placementState == Placement.Area)
-            AreaPlacement(this.startingPoint, this.radius, this.maxNumberOfAssets, this.assetID);
+            AreaPlacement(this.startingPoint, this.areaRadius, this.maxNumberOfAssets, this.assetID);
         if (placementState == Placement.Fill)
-            FillPlacement(betweenMin, betweenMax, isBetween);
+            FillPlacement(this.heightMin, this.heightMax, this.isBetween, this.maxNumberOfAssets);
     }
 
     /// <summary>
     /// Fill environment with assets between 2 height values.
+    /// Based on the values and the boolean expression the method will either add assets in-between the ranges or outside the ranges.
+    /// Takes random assets in the 'Assets' GameObject List.
     /// </summary>
-    void FillPlacement(float betweenMin, float betweenMax, bool isBetween)
+    void FillPlacement(float heightMin, float heightMax, bool isBetween, int maxNumberOfAssets)
     {
         Vector3[] vertices = mesh.vertices;
         int amountWeNeed = 0;
@@ -65,14 +67,14 @@ public class EnvironmentPlacement : MonoBehaviour
             Vector3 origin = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
             if (isBetween)
             {
-                while (origin.y < betweenMin || origin.y > betweenMax)
+                while (origin.y < heightMin || origin.y > heightMax)
                 {
                     origin = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
                 }
             }
             if (!isBetween)
             {
-                while (origin.y > betweenMin && origin.y < betweenMax)
+                while (origin.y > heightMin && origin.y < heightMax)
                 {
                     origin = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
                 }
@@ -80,15 +82,15 @@ public class EnvironmentPlacement : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(origin, randomVertex, out hit))
             {
-                if (isBetween && hit.point.y > betweenMin && hit.point.y < betweenMax)
+                if (isBetween && hit.point.y > heightMin && hit.point.y < heightMax)
                 {
-                    Debug.DrawRay(origin, randomVertex, Color.yellow, 150f);
+                    //Debug.DrawRay(origin, randomVertex, Color.yellow, 150f);
                     Instantiate(go, hit.point, Quaternion.identity);//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
                     amountWeNeed++;
                 }
-                if (!isBetween && hit.point.y < betweenMin || hit.point.y > betweenMax)
+                if (!isBetween && hit.point.y < heightMin || hit.point.y > heightMax)
                 {
-                    Debug.DrawRay(origin, randomVertex, Color.yellow, 150f);
+                    //Debug.DrawRay(origin, randomVertex, Color.yellow, 150f);
                     Instantiate(go, hit.point, Quaternion.identity);//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
                     amountWeNeed++;
                 }
@@ -105,7 +107,7 @@ public class EnvironmentPlacement : MonoBehaviour
     /// The map will be filled with environmental assets at the geiven Location based on values.
     /// </summary>
     /// <param name="environmentAsset"></param>
-    void AreaPlacement(GameObject startingPoint, float radius, int amountOfAssets, int assetID)
+    void AreaPlacement(GameObject startingPoint, float radius, int maxNumberOfAssets, int assetID)
     {
         int groundLayerMask = (1 << 9);//The 'Ground' Layers we want to check.
         //Get a collection of all colliders touched or within the sphere.
@@ -113,7 +115,7 @@ public class EnvironmentPlacement : MonoBehaviour
         //Get the environment asset you want to fill this area with.
         GameObject go = assets[assetID];
         int amountWeNeed = 0;
-        while (amountWeNeed < amountOfAssets)
+        while (amountWeNeed < maxNumberOfAssets)
         {
             int randomHitCollider = Random.Range(0, hitColliders.Length);
             Mesh mesh = hitColliders[randomHitCollider].transform.GetComponent<MeshFilter>().sharedMesh;
@@ -148,21 +150,7 @@ public class EnvironmentPlacement : MonoBehaviour
     {
         for (int i = 0; i < meshFilters.Length; i++)
         {
-            //Vector3[] vertices = mesh.vertices;
             Vector3[] vertices = meshFilters[i].mesh.vertices;
-            //if (meshFilters[i].name == "mapHandler")
-            //    continue;
-            //print("MeshFilter name = " + meshFilters[i].name);
-            //Mesh mesh = meshFilters[i].mesh;
-            //Vector3[] vertices = mesh.vertices;
-            //Vector3[] normals = mesh.normals;
-            //int x = 0;
-            //while (x < vertices.Length)
-            //{
-            //    vertices[x] += normals[x] * Mathf.Sin(Time.time);
-            //    x++;
-            //}
-            //mesh.vertices = vertices;
             for (int j = 0; j < vertices.Length; j++)
             {
                 Vector3 randomVertex = mesh.vertices[Random.Range(0, vertices.Length)];
@@ -177,7 +165,7 @@ public class EnvironmentPlacement : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(randomVertex, vertex, out hit))
                 {
-                    Debug.DrawLine(randomVertex, vertex, Color.cyan, 100f);//CAUTION: Giant web of DOOM appears beware!
+                    //Debug.DrawLine(randomVertex, vertex, Color.cyan, 100f);//CAUTION: Giant web of DOOM appears beware!
                     Instantiate(assets[assetID], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
                 }
             }
