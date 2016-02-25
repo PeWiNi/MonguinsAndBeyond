@@ -24,53 +24,74 @@ public class EnvironmentPlacement : MonoBehaviour
     [Tooltip("Required for PlacementState [Area, Random]")]
     public int assetID;
 
+    [Tooltip("Required for PlacementState [Fill]")]
+    [Range(0, 100)]
+    public float betweenMin = 25f;
+    [Tooltip("Required for PlacementState [Fill]")]
+    [Range(0, 100)]
+    public float betweenMax = 75;
+    [Tooltip("Required for PlacementState [Fill]")]
+    public bool isBetween;
+
+    private MeshFilter[] meshFilters;
     private Mesh mesh;
 
     void Start()
     {
+        meshFilters = GetComponentsInChildren<MeshFilter>();
         mesh = GetComponent<MeshFilter>().mesh;
         if (placementState == Placement.Random)
             RandomPlacement(this.assetID);
         if (placementState == Placement.Area)
             AreaPlacement(this.startingPoint, this.radius, this.maxNumberOfAssets, this.assetID);
         if (placementState == Placement.Fill)
-            FillPlacement();
+            FillPlacement(betweenMin, betweenMax, isBetween);
     }
 
     /// <summary>
-    /// Fill environment with assets based on a certain angle.
+    /// Fill environment with assets between 2 height values.
     /// </summary>
-    void FillPlacement()
+    void FillPlacement(float betweenMin, float betweenMax, bool isBetween)
     {
         Vector3[] vertices = mesh.vertices;
-        List<Vector3> verticesList = new List<Vector3>();//Contains normals only with a certain angle.
-        float angle = 0f;
-        for (int i = 0; i < mesh.normals.Length; i++)
-        {
-            Vector3 normal = mesh.normals[i];
-            if (Vector3.Angle(Vector3.up, normal) <= angle)
-            {
-                verticesList.Add(vertices[i]);
-            }
-        }
         int amountWeNeed = 0;
         while (amountWeNeed < maxNumberOfAssets)
         {
             //Get a random object from the environmentAssetsPool and assign it to the 'go' GameObject.
             GameObject go = assets[(int)Random.Range(0f, assets.Count)];
             //Access a random vertex from the vertices of the mesh.
-            Vector3 randomVertex = verticesList[Random.Range(0, verticesList.Count - 1)];
+            Vector3 randomVertex = vertices[Random.Range(0, vertices.Length)];
             //Get a point from the Random.onUnitSphere and apply a distance from the origin of that point (this is where the Ray later will have its origin).
             Vector3 origin = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
-            while (origin.y <= 5f || origin.y >= 15f)
+            if (isBetween)
             {
-                origin = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
+                while (origin.y < betweenMin || origin.y > betweenMax)
+                {
+                    origin = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
+                }
+            }
+            if (!isBetween)
+            {
+                while (origin.y > betweenMin && origin.y < betweenMax)
+                {
+                    origin = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max * 2);
+                }
             }
             RaycastHit hit;
             if (Physics.Raycast(origin, randomVertex, out hit))
             {
-                Instantiate(go, hit.point, Quaternion.identity);//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
-                amountWeNeed++;
+                if (isBetween && hit.point.y > betweenMin && hit.point.y < betweenMax)
+                {
+                    Debug.DrawRay(origin, randomVertex, Color.yellow, 150f);
+                    Instantiate(go, hit.point, Quaternion.identity);//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
+                    amountWeNeed++;
+                }
+                if (!isBetween && hit.point.y < betweenMin || hit.point.y > betweenMax)
+                {
+                    Debug.DrawRay(origin, randomVertex, Color.yellow, 150f);
+                    Instantiate(go, hit.point, Quaternion.identity);//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
+                    amountWeNeed++;
+                }
             }
         }
     }
@@ -121,27 +142,44 @@ public class EnvironmentPlacement : MonoBehaviour
 
     /// <summary>
     /// Create randomly placed environment asset.
+    /// Based on two vertices, a raycast will be perfomred between those two and spawn the asset on hit point.
     /// </summary>
     void RandomPlacement(int assetID)
     {
-        Vector3[] vertices = mesh.vertices;
-        for (int i = 0; i < mesh.vertices.Length; i++)
+        for (int i = 0; i < meshFilters.Length; i++)
         {
-            Vector3 vertex = mesh.vertices[i];
-            vertex.x *= transform.localScale.x;
-            vertex.y *= transform.localScale.y;
-            vertex.z *= transform.localScale.z;
-            vertices[i] = vertex;
-        }
-        for (int j = 0; j < vertices.Length; j++)
-        {
-            Vector3 randomVertex = vertices[Random.Range(0, vertices.Length)];
-            Vector3 vertex = vertices[j];
-            RaycastHit hit;
-            if (Physics.Raycast(randomVertex, vertex, out hit))
+            //Vector3[] vertices = mesh.vertices;
+            Vector3[] vertices = meshFilters[i].mesh.vertices;
+            //if (meshFilters[i].name == "mapHandler")
+            //    continue;
+            //print("MeshFilter name = " + meshFilters[i].name);
+            //Mesh mesh = meshFilters[i].mesh;
+            //Vector3[] vertices = mesh.vertices;
+            //Vector3[] normals = mesh.normals;
+            //int x = 0;
+            //while (x < vertices.Length)
+            //{
+            //    vertices[x] += normals[x] * Mathf.Sin(Time.time);
+            //    x++;
+            //}
+            //mesh.vertices = vertices;
+            for (int j = 0; j < vertices.Length; j++)
             {
-                //Debug.DrawLine(randomVertex, vertex, Color.cyan, 100f);//CAUTION: Giant web of DOOM appears beware!
-                Instantiate(assets[assetID], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
+                Vector3 randomVertex = mesh.vertices[Random.Range(0, vertices.Length)];
+                Vector3 vertex = mesh.vertices[j];
+                randomVertex.x *= transform.lossyScale.x;
+                randomVertex.y *= transform.lossyScale.y;
+                randomVertex.z *= transform.lossyScale.z;
+                vertex.x *= transform.lossyScale.x;
+                vertex.y *= transform.lossyScale.y;
+                vertex.z *= transform.lossyScale.z;
+                //Debug.DrawRay(mesh.vertices[j], Vector3.up, Color.cyan, 50f);
+                RaycastHit hit;
+                if (Physics.Raycast(randomVertex, vertex, out hit))
+                {
+                    Debug.DrawLine(randomVertex, vertex, Color.cyan, 100f);//CAUTION: Giant web of DOOM appears beware!
+                    Instantiate(assets[assetID], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal));//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
+                }
             }
         }
     }
