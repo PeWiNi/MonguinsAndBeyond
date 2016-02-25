@@ -34,7 +34,7 @@ public class PlayerStats : NetworkBehaviour {
     [Range(0.5f, 10f)] [SyncVar]
     public float speed = 5f; // Movement (and jumping) speed (see PlayerLogic.cs)
     [SerializeField]
-    Transform body;
+    public Transform body;
     [SyncVar]
     public int team;
     [SyncVar]
@@ -114,7 +114,7 @@ public class PlayerStats : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (isDead) {
+        if (isDead) { // Send to co-routine?
             Color c = body.GetComponent<MeshRenderer>().material.color;
             if (((float)Network.time - deathTimer) > deathCooldown) {
                 body.GetComponent<MeshRenderer>().material.color = new Color(c.r, c.g, c.b, 1f);
