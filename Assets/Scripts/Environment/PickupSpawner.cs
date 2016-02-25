@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class PickupSpawner : MonoBehaviour {
+public class PickupSpawner : NetworkBehaviour {
     public GameObject prefab;
     public float repeatTime = 5f;
 

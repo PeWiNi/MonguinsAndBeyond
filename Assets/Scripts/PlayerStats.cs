@@ -274,6 +274,7 @@ public class PlayerStats : NetworkBehaviour {
     public void TakeDmg(float amount) { // amount == currSizeMaxHealth
         if (!isServer)
             return;
+        GetComponent<Camouflage>().brokeStealth = true;
         syncHealth -= amount * (1.0f - ((float)resilience / 100.0f));
         if (syncHealth <= 0 && !isDead) {
             ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
