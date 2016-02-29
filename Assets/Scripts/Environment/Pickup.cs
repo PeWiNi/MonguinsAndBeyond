@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.Networking;
 
+/// <summary>
+/// Dummy placeholder object for future pickup'ables
+/// </summary>
 public class Pickup : NetworkBehaviour {
 
 	// Use this for initialization

@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.Networking;
 
+/// <summary>
+/// Class in charge of parsing user input
+/// </summary>
 public class PlayerLogic : NetworkBehaviour {
 
     PlayerStats stats;
@@ -19,8 +22,6 @@ public class PlayerLogic : NetworkBehaviour {
     Ability[] abilities;
     double castTime;
 
-    public Collision collidedPlayer;
-
     bool isWalking;
 
     //[SerializeField]
@@ -32,6 +33,7 @@ public class PlayerLogic : NetworkBehaviour {
     AudioListener audioListener;
 
     void Start() {
+        // Only enable sound and camera for player if it's the local player
         if (isLocalPlayer) {
             // Disable and Enable Cameras / AudioListener
             GameObject.Find("Main Camera").SetActive(false);
@@ -42,7 +44,7 @@ public class PlayerLogic : NetworkBehaviour {
         }
         cam = characterCam.GetComponent<CharacterCamera>();
         stats = GetComponent<PlayerStats>();
-        Speed = stats? stats.speed : Speed;
+        Speed = stats? stats.speed : Speed; // Only use speed from playerStats if it is not null
     }
 
     void Update() {
@@ -55,7 +57,7 @@ public class PlayerLogic : NetworkBehaviour {
             vertAxis = Input.GetAxis("Vertical");
             jumpAxis = Input.GetAxis("Jump");
             // Don't do this all the time ._. but only when new peeps connect
-            foreach (HealthSlider hs in FindObjectsOfType<HealthSlider>())
+            foreach (HealthSlider hs in FindObjectsOfType<HealthSlider>()) // Find HealthSliders of all players and make them point towards you
                 hs.setCamera(characterCam);
 
             #region abilities
@@ -79,12 +81,15 @@ public class PlayerLogic : NetworkBehaviour {
             vertAxis = 0;
             jumpAxis = 0;
         }
-        if (transform.position.y < -100) {
-            transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetRespawnPosition();
+        if (transform.position.y < -100) { // Reset player position when they are below y-threshold
+            transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
             GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
         }
     }
 
+    /// <summary>
+    /// Method in which the transform/player is actually moved
+    /// </summary>
     public void Simulate() {
         float speed;
         SetSpeed(out speed);
@@ -93,12 +98,16 @@ public class PlayerLogic : NetworkBehaviour {
         // Jumping
         transform.Translate(new Vector3(0f, jumpAxis, 0f) * Speed * Time.fixedDeltaTime);
 
-        if (Input.GetMouseButton(1) && !stats.isDead && !stats.isStunned) { // if dead they cannot turn their char around
+        if (Input.GetMouseButton(1) && !stats.isDead && !stats.isStunned) { // if dead they cannot turn their char around (but they can still look around with their camera)
             transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
         }
-        //transform.transform.Find("Cube").rotation = Quaternion.Euler(cam.rotate);
+        //transform.transform.Find("Cube").rotation = Quaternion.Euler(cam.rotate); // Nose stuff
     }
 
+    /// <summary>
+    /// Sprint if shift is held
+    /// </summary>
+    /// <param name="speed">The speed at which the player will move</param>
     void SetSpeed(out float speed) {
         isWalking = !Input.GetKey(KeyCode.LeftShift);
         speed = isWalking ? Speed : Speed * 2;

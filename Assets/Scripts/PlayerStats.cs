@@ -38,7 +38,7 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     public int team;
     [SyncVar]
-    public bool shouldChange = false;
+    public bool changeMaxHealth = false;
 
     public Ability[] abilities;
 
@@ -135,7 +135,7 @@ public class PlayerStats : NetworkBehaviour {
         ApplyRole();
         StatSync();
 
-        if(shouldChange) { NewPlayerJoinedTeam(); }
+        if(changeMaxHealth) { NewPlayerJoinedTeam(); }
         if(makeMap) { GenerateTerrain(); }
     }
 
@@ -147,8 +147,11 @@ public class PlayerStats : NetworkBehaviour {
             }
         }
     }
-
-    // Apply characteristics of Role - Taken from Wikia, last updated: 24th of November 2015
+    /// <summary>
+    /// Apply characteristics of Role
+    /// Taken from Wikia, last updated: 24th of November 2015
+    /// </summary>
+    /// <param name="role">The player Role</param>
     void RoleCharacteristics(Role role) {
         abilities = new Ability[3];
         switch (role) {
@@ -316,47 +319,55 @@ public class PlayerStats : NetworkBehaviour {
     void RpcStunning(float duration) {
         Debug.Log("Stunned for: " + duration);
     }
+    [ClientRpc]
+    void RpcTeam(int joinedTeam, string name) {
+        Debug.Log(name + " joined team " + joinedTeam);
+    }
 
+    /// <summary>
+    /// Logic for when the player has connected and team stuff happens
+    /// 
+    /// Assigns the team to the current Player, Updates the ScoreManager and
+    /// Updates the changeMaxHealth for all players on the same team
+    /// </summary>
+    /// <param name="joinedTeam">The team that the player joined</param>
     [Command]
     public void CmdTeamSelection(int joinedTeam) {
         team = joinedTeam;
         GameObject.Find("ScoreManager").GetComponent<ScoreManager>().TeamSelection(this);
         Debug.Log(gameObject.name + " joined team " + joinedTeam);
         foreach(PlayerStats ps in FindObjectsOfType<PlayerStats>())
-            ps.shouldChange = ps.team == joinedTeam ? true : ps.team == joinedTeam ? true : false;
+            ps.changeMaxHealth = ps.team == joinedTeam ? true : ps.team == joinedTeam ? true : false;
         RpcTeam(team, gameObject.name);
     }
-    /*
-    [Command]
-    public bool CmdCheckTeamSize(int currentTeamSize) {
-        ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
-        return team == 1 ? SM.teamOne == currentTeamSize : team == 2 ? SM.teamTwo == currentTeamSize : true;
-        //NewPlayerJoinedTeam(joinedTeam);
-    }
-    */
-    [ClientRpc]
-    void RpcTeam(int joinedTeam, string name) {
-        Debug.Log(name + " joined team " + joinedTeam);
-    }
+
+    /// <summary>
+    /// LocalPlayer function re-calculates the RoleCharacteristics and 
+    /// assigns the changeMaxHealth to false (because it was just changed)
+    /// </summary>
     [ClientCallback]
     void NewPlayerJoinedTeam() {
         if (isLocalPlayer) {
             RoleCharacteristics(role);
-            shouldChange = false;
-            CmdChangeChange(false);
+            changeMaxHealth = false;
+            CmdChangeMaxHealth(false);
         }
     }
-    [Command]
-    void CmdChangeChange(bool change) {
-        shouldChange = change;
-    }
     
+    /// <summary>
+    /// Hook Function for when syncMaxHealth changes
+    /// Updates size and re-assigns syncMaxHealth
+    /// </summary>
+    /// <param name="hp"></param>
     public void SyncMaxHealth(float hp) {
         syncMaxHealth = hp;
         sizeModifier = (syncMaxHealth / 1000);
         gameObject.GetComponent<Rigidbody>().transform.localScale = new Vector3(sizeModifier, sizeModifier, sizeModifier); // Applies twice
     }
 
+    /// <summary>
+    /// Trigger a change of Terrain for the local player
+    /// </summary>
     public void GenerateTerrain() {
         if (isServer) {
             makeMap = true;
@@ -369,6 +380,19 @@ public class PlayerStats : NetworkBehaviour {
         }
     }
 
+    /// <summary>
+    /// Command for changing the SyncVar changeMaxHealth
+    /// </summary>
+    /// <param name="change"></param>
+    [Command]
+    void CmdChangeMaxHealth(bool change) {
+        changeMaxHealth = change;
+    }
+
+    /// <summary>
+    /// Update the SyncVar tied to adding rings in 'stinaScene_foolingaroundwithcircles
+    /// </summary>
+    /// <param name="change"></param>
     [Command]
     void CmdChangeMakeMap(bool change) {
         makeMap = change;

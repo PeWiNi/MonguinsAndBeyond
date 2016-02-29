@@ -43,6 +43,8 @@ public class Camouflage : NetworkBehaviour
 
     // Update is called once per frame
     void Update() {
+        if (isServer)
+            return;
         //Check whether the Player wants to become camouflaged or not.
         if (isCamouflaged && !isStealthed) { // Hide / Vanish / Disappear
             Hide();
@@ -76,9 +78,10 @@ public class Camouflage : NetworkBehaviour
     /// <summary>
     /// Camouflage the Player.
     /// </summary>
-    [Command]
-    public void CmdBeginCamouflage()
+    public void BeginCamouflage()
     {
+        if (!isServer)
+            return;
         brokeStealth = false;
         isCamouflaged = true; //The Player is now camouflaged.
         camouflagePosition = gameObject.transform.position; //Set the current player position to be the camouflage position.
@@ -158,13 +161,13 @@ public class Camouflage : NetworkBehaviour
                 if (_collider.tag != "Player")
                     continue;
                 if (!isPartlySpotted && _collider.transform.GetComponent<PlayerStats>().team != GetComponent<PlayerStats>().team && 
-                    Vector3.Distance(gameObject.transform.position, _collider.transform.position) <= visibru / 2) {
+                    Vector3.Distance(gameObject.transform.position, _collider.transform.position) <= visibru) {
                     print("Enemy is wthin spot range! GET AWAY OR YOU WILL BE SPOTTED!!!");
                     isPartlySpotted = true;
                     StartCoroutine(PartlySpotted());
                 }
                 else if (_collider.transform.GetComponent<PlayerStats>().team != GetComponent<PlayerStats>().team 
-                    && Vector3.Distance(gameObject.transform.position, _collider.transform.position) > visibru / 2) {
+                    && Vector3.Distance(gameObject.transform.position, _collider.transform.position) > visibru) {
                     isPartlySpotted = false;
                     StopCoroutine(PartlySpotted());
                     Hide();
