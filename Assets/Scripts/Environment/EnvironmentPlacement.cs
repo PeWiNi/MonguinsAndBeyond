@@ -40,12 +40,12 @@ public class EnvironmentPlacement : MonoBehaviour
     {
         meshFilters = GetComponentsInChildren<MeshFilter>();
         mesh = GetComponent<MeshFilter>().mesh;
-        if (placementState == Placement.Random)
-            RandomPlacement(this.assetID);
-        if (placementState == Placement.Area)
-            AreaPlacement(this.startingPoint, this.areaRadius, this.maxNumberOfAssets, this.assetID);
-        if (placementState == Placement.Fill)
-            FillPlacement(this.heightMin, this.heightMax, this.isBetween, this.maxNumberOfAssets);
+        //if (placementState == Placement.Random)
+        //    RandomPlacement(this.assetID);
+        //if (placementState == Placement.Area)
+        //    AreaPlacement(this.startingPoint, this.areaRadius, this.maxNumberOfAssets, this.assetID);
+        //if (placementState == Placement.Fill)
+        //    FillPlacement(this.heightMin, this.heightMax, this.isBetween, this.maxNumberOfAssets);
     }
 
     /// <summary>
@@ -53,7 +53,7 @@ public class EnvironmentPlacement : MonoBehaviour
     /// Based on the values and the boolean expression the method will either add assets in-between the ranges or outside the ranges.
     /// Takes random assets in the 'Assets' GameObject List.
     /// </summary>
-    void FillPlacement(float heightMin, float heightMax, bool isBetween, int maxNumberOfAssets)
+    public void FillPlacement(float heightMin, float heightMax, bool isBetween, int maxNumberOfAssets)
     {
         Vector3[] vertices = mesh.vertices;
         int amountWeNeed = 0;
@@ -132,7 +132,7 @@ public class EnvironmentPlacement : MonoBehaviour
     /// The map will be filled with environmental assets at the geiven Location based on values.
     /// </summary>
     /// <param name="environmentAsset"></param>
-    void AreaPlacement(GameObject startingPoint, float radius, int maxNumberOfAssets, int assetID)
+    public void AreaPlacement(GameObject startingPoint, float radius, int maxNumberOfAssets, int assetID)
     {
         int groundLayerMask = (1 << 9);//The 'Ground' Layers we want to check.
         //Get a collection of all colliders touched or within the sphere.
@@ -171,7 +171,7 @@ public class EnvironmentPlacement : MonoBehaviour
     /// Create randomly placed environment asset.
     /// Based on two vertices, a raycast will be perfomred between those two and spawn the asset on hit point.
     /// </summary>
-    void RandomPlacement(int assetID)
+    public void RandomPlacement(int assetID)
     {
         for (int i = 0; i < meshFilters.Length; i++)
         {

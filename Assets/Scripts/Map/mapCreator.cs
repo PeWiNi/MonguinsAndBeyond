@@ -85,6 +85,10 @@ public class mapCreator : NetworkBehaviour {
 
                 mapPartBehavior mapPart = ringNo.AddComponent<mapPartBehavior>() as mapPartBehavior;
 
+                //EnvironmentalPlacement Section
+                EnvironmentPlacement envP = ringNo.AddComponent<EnvironmentPlacement>();
+                envP.startingPoint = ringNo.transform.parent.gameObject;
+
                 mapData = ringNo.AddComponent<MeshGenerator>() as MeshGenerator;
                 mapData.AlocateMeshData((int)(thickness + radius) * 2, (int)(thickness + radius) * 2);
 
