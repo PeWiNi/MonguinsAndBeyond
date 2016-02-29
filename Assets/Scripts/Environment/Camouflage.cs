@@ -31,6 +31,7 @@ public class Camouflage : NetworkBehaviour
     public bool brokeStealth = false;
     float pickUpDelay = 1f;
     bool isStealthed = false;
+    [SyncVar]
     public bool hasMovedFromCamouflagePoint = false;
     public bool isPartlySpotted = false;
     
@@ -48,7 +49,7 @@ public class Camouflage : NetworkBehaviour
         }
         if((!isCamouflaged && isStealthed) || brokeStealth) { // Appear / isVisibru
             Appear();
-            isCamouflaged = false;
+            CmdChangeIsCamouflaged(false);
         }
         //Should Check whether the Player has moved or used and Ability.
         if (!movementLeeway() && !hasMovedFromCamouflagePoint && pickedUpTime + pickUpDelay < Network.time) {
@@ -65,6 +66,11 @@ public class Camouflage : NetworkBehaviour
             if (_collider.gameObject == gameObject)
                 return true;
         return camouflagePosition == gameObject.transform.position;
+    }
+
+    [Command]
+    void CmdChangeIsCamouflaged(bool value) {
+        isCamouflaged = value;
     }
 
     /// <summary>
@@ -138,13 +144,13 @@ public class Camouflage : NetworkBehaviour
                 yield break;
         }
         Appear();
-        isCamouflaged = false;
+        CmdChangeIsCamouflaged(false);
         yield return null;
     }
 
     void UpdateVisibilityState() //mayhaps optimize with while loops
     {
-        if (isCamouflaged)
+        if (isCamouflaged && !isLocalPlayer) // If you want it WoW-stealth-like the player themselves shouldn't have the visibru effect when enemies are near
         {
             float visibru = visibilityRangeRadius * GetComponent<PlayerStats>().sizeModifier; // Scaling according to player size
             Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, visibru);
