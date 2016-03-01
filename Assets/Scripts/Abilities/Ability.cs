@@ -32,7 +32,10 @@ public class Ability : NetworkBehaviour {
     /// Method issued when using the ability
     /// </summary>
     /// <returns>The time in which the player is unable to move while casting the ability</returns>
-    public virtual double Trigger() { return castTime; }
+    public virtual double Trigger() {
+        GetComponent<Camouflage>().brokeStealth = true;
+        return castTime;
+    }
 
     /// <summary>
     /// Method for dealing damage directly to players
@@ -52,5 +55,13 @@ public class Ability : NetworkBehaviour {
     [Command]
     internal void CmdStunPlayer(GameObject player, float duration) {
         player.GetComponent<PlayerStats>().Stun(duration);
+    }
+
+    public bool OnCooldown() {
+        return ((float)Network.time - timer) < cooldown;
+    }
+
+    public float CooldownRemaining() {
+        return (1.0f / cooldown * ((float)Network.time - timer));
     }
 }

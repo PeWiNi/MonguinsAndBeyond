@@ -72,6 +72,7 @@ public class Camouflage : NetworkBehaviour
 
     [Command]
     void CmdChangeIsCamouflaged(bool value) {
+        brokeStealth = value;
         isCamouflaged = value;
     }
 
@@ -114,7 +115,7 @@ public class Camouflage : NetworkBehaviour
         Color c = GetComponent<PlayerStats>().body.GetComponent<MeshRenderer>().material.color;
         GetComponent<PlayerStats>().body.GetComponent<MeshRenderer>().material.color = new Color(c.r, c.g, c.b, 1f);
         isStealthed = false;
-        GetComponentInChildren<Canvas>().enabled = true;
+        if (!isLocalPlayer) GetComponentInChildren<Canvas>().enabled = true;
     }
 
     /// <summary>

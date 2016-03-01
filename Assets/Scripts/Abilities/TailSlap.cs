@@ -15,6 +15,6 @@ public class TailSlap : Ability {
             if (hitColliders[0].GetComponentInParent<PlayerStats>().team != team)
                 CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
         //hitColliders[0].GetComponent<PlayerStats>().CmdTakeDmg(gameObject.GetComponent<PlayerStats>().maxHealth * damage);
-        return castTime;
+        return base.Trigger();
     }
 }

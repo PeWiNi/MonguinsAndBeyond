@@ -19,7 +19,7 @@ public class PunchDance : Ability {
         if (hitColliders.Length > 0) 
             if (hitColliders[0].GetComponentInParent<PlayerStats>().team != team)
                 StartCoroutine(Attack(hitColliders));
-        return castTime;
+        return base.Trigger();
     }
 
     IEnumerator Attack(Collider[] hitColliders) {

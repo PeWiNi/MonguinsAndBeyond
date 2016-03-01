@@ -47,7 +47,7 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 			return;
 
 		int xpos = 10 + offsetX;
-		int ypos = 40 + offsetY;
+		int ypos = 100 + offsetY;
 		int spacing = 24;
 
 		if (!NetworkClient.active && !NetworkServer.active && manager.matchMaker == null) {
@@ -108,6 +108,7 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 			ypos += spacing;
 		}
         #region Matchmaking stuff
+        /*
         if (!NetworkServer.active && !NetworkClient.active) {
 			ypos += 10;
 
@@ -179,7 +180,7 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 				}
 				ypos += spacing;
 			}
-		}
+		} */
         #endregion
     }
 

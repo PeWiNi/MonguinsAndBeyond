@@ -108,6 +108,7 @@ public class PlayerStats : NetworkBehaviour {
             CmdTeamSelection(NM.team > 0 ? NM.team : team);
             RoleCharacteristics(role);
             SelectRole();
+            try { GameObject.Find("HUD").GetComponent<HUDScript>().SetPlayerStats(this); } catch { }
         }
         syncHealth = syncMaxHealth;
     }
@@ -215,20 +216,6 @@ public class PlayerStats : NetworkBehaviour {
     }
 
     [ClientCallback]
-    void StatSync() {
-        if(maxHealth != syncMaxHealth && isLocalPlayer) {
-            CmdChangeHealth((syncMaxHealth / (1000 * roleStats.maxHealth)));
-        }
-        maxHealth = syncMaxHealth;
-        health = syncHealth;
-    }
-
-    [Command]
-    void CmdChangeHealth(float hp) {
-        syncHealth = (1000 * roleStats.maxHealth) * hp;
-    }
-
-    [ClientCallback]
     void TeamSelect() {
         body.GetChild(0).gameObject.SetActive(team == 1 ? true : false);
         body.GetChild(1).gameObject.SetActive(team == 2 ? true : false);
@@ -247,6 +234,20 @@ public class PlayerStats : NetworkBehaviour {
         speed = 5f * spd;
     }
 
+    [ClientCallback]
+    void StatSync() {
+        if (maxHealth != syncMaxHealth && isLocalPlayer) {
+            CmdChangeHealth((syncMaxHealth / (1000 * roleStats.maxHealth)));
+        }
+        maxHealth = syncMaxHealth;
+        health = syncHealth;
+    }
+
+    [Command]
+    void CmdChangeHealth(float hp) {
+        syncHealth = (1000 * roleStats.maxHealth) * hp;
+    }
+
     [Command]
     void CmdRespawn() {
         isDead = false;
@@ -258,22 +259,12 @@ public class PlayerStats : NetworkBehaviour {
         syncRole = role;
     }
 
-    [Command]
-    public void CmdDoFire(float lifeTime) {
-        GameObject bullet = (GameObject)Instantiate(
-            bulletPrefab, transform.position + (transform.localScale.x * transform.forward),
-            Quaternion.identity);
-
-        bullet.GetComponent<Bullet>().setOwner(team);
-        
-        var bullet3D = bullet.GetComponent<Rigidbody>();
-        bullet3D.velocity = transform.forward * 5f;
-        Destroy(bullet, lifeTime);
-
-        NetworkServer.Spawn(bullet);
-    }
-
-    
+    /// <summary>
+    /// ONLY USE THIS ON SERVER - CmdTakeDmg if you are anything else
+    /// Logic function for taking damage
+    /// Sets players to being dead (if they are at 0 or less health) and updates the ScoreManager
+    /// </summary>
+    /// <param name="amount"></param>
     public void TakeDmg(float amount) { // amount == currSizeMaxHealth
         if (!isServer)
             return;
@@ -288,6 +279,12 @@ public class PlayerStats : NetworkBehaviour {
         }
         RpcTakeDmg(amount * (1.0f - ((float)resilience / 100.0f)));
     }
+    /// <summary>
+    /// ONLY USE THIS ON SERVER - CmdHealing if you are anything else
+    /// Logic function for regenerating/recieving health
+    /// Also caps health at maxHealth
+    /// </summary>
+    /// <param name="amount"></param>
     public void Healing(float amount) {
         if (!isServer)
             return;
@@ -296,33 +293,33 @@ public class PlayerStats : NetworkBehaviour {
             syncHealth = maxHealth;
         RpcHealing(amount);
     }
+    /// <summary>
+    /// ONLY USE THIS ON SERVER
+    /// Incapacitate the player - rendering them unable to move/control their character
+    /// </summary>
+    /// <param name="duration"></param>
     public void Stun(float duration) {
+        if (!isServer)
+            return;
         isStunned = true;
         stunTimer = Network.time + duration;
         RpcStunning(duration);
     }
 
+    /// <summary>
+    /// Issue a command to the server to deal damage to the player
+    /// See the TakeDmg function for more details
+    /// </summary>
+    /// <param name="amount"></param>
     [Command]
     public void CmdTakeDmg(float amount) { TakeDmg(amount); }
+    /// <summary>
+    /// Issue a command to hte server to heal the player
+    /// See the Healing function for more details
+    /// </summary>
+    /// <param name="amount"></param>
     [Command]
     public void CmdHealing(float amount) { Healing(amount); }
-
-    [ClientRpc]
-    void RpcTakeDmg(float amount) {
-        Debug.Log("Took damage: " + amount);
-    }
-    [ClientRpc]
-    void RpcHealing(float amount) {
-        Debug.Log("Recieved healing: " + amount);
-    }
-    [ClientRpc]
-    void RpcStunning(float duration) {
-        Debug.Log("Stunned for: " + duration);
-    }
-    [ClientRpc]
-    void RpcTeam(int joinedTeam, string name) {
-        Debug.Log(name + " joined team " + joinedTeam);
-    }
 
     /// <summary>
     /// Logic for when the player has connected and team stuff happens
@@ -396,5 +393,22 @@ public class PlayerStats : NetworkBehaviour {
     [Command]
     void CmdChangeMakeMap(bool change) {
         makeMap = change;
+    }
+
+    [ClientRpc]
+    void RpcTakeDmg(float amount) {
+        Debug.Log("Took damage: " + amount);
+    }
+    [ClientRpc]
+    void RpcHealing(float amount) {
+        Debug.Log("Recieved healing: " + amount);
+    }
+    [ClientRpc]
+    void RpcStunning(float duration) {
+        Debug.Log("Stunned for: " + duration);
+    }
+    [ClientRpc]
+    void RpcTeam(int joinedTeam, string name) {
+        Debug.Log(name + " joined team " + joinedTeam);
     }
 }
