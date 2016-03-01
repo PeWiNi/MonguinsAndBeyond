@@ -36,16 +36,24 @@ public class EnvironmentPlacement : MonoBehaviour
     private MeshFilter[] meshFilters;
     private Mesh mesh;
 
+    private List<GameObject> sections = new List<GameObject>();
+
     void Start()
     {
         meshFilters = GetComponentsInChildren<MeshFilter>();
         mesh = GetComponent<MeshFilter>().mesh;
-        //if (placementState == Placement.Random)
-        //    RandomPlacement(this.assetID);
-        //if (placementState == Placement.Area)
-        //    AreaPlacement(this.startingPoint, this.areaRadius, this.maxNumberOfAssets, this.assetID);
-        //if (placementState == Placement.Fill)
-        //    FillPlacement(this.heightMin, this.heightMax, this.isBetween, this.maxNumberOfAssets);
+        if (placementState == Placement.Random)
+            RandomPlacement(this.assetID);
+        if (placementState == Placement.Area)
+            AreaPlacement(this.startingPoint, this.areaRadius, this.maxNumberOfAssets, this.assetID);
+        if (placementState == Placement.Fill)
+            FillPlacement(this.heightMin, this.heightMax, this.isBetween, this.maxNumberOfAssets);
+    }
+
+    public void AddSection(GameObject newSection)
+    {
+        sections.Add(newSection);
+        FillPlacement(heightMin, heightMax, isBetween, maxNumberOfAssets);
     }
 
     /// <summary>
