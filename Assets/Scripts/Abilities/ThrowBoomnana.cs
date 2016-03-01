@@ -32,7 +32,7 @@ public class ThrowBoomnana : Ability {
     void CmdDoFire() {
         // Initiate GameObject using prefab, position and a rotation
         GameObject bullet = (GameObject)Instantiate(
-            prefab, transform.position + (transform.localScale.x * transform.forward),
+            prefab, transform.position + transform.localScale.x * transform.forward + GetComponent<Rigidbody>().velocity.magnitude * transform.forward,
             Quaternion.identity);
 
         // Pass correct parameters from the Player Prefab

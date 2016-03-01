@@ -18,7 +18,7 @@ public class HUDScript : MonoBehaviour {
         healthText = playerUI.GetComponentInChildren<Text>();
         healthSlider = playerUI.gameObject.GetComponentInChildren<Slider>();
         actionBar = transform.FindChild("ActionBar").gameObject;
-        ability1 = actionBar.GetComponentsInChildren<Image>()[1];
+        ability1 = actionBar.GetComponentsInChildren<Image>()[1]; // index 0 is the picture behind index 1
         ability2 = actionBar.GetComponentsInChildren<Image>()[3];
         ability3 = actionBar.GetComponentsInChildren<Image>()[5];
     }

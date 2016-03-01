@@ -50,15 +50,37 @@ public class Boomnana : NetworkBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (transform.position == endpoint) {
+        if (CloseEnough(transform.position, endpoint, .0025f)) {
             movingBack = true;
         }
         if (movingBack) {
             GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-            transform.position = Vector3.MoveTowards(transform.position, owner.gameObject.transform.position, speed);
+            transform.position = doNotTouchTerrain(Vector3.MoveTowards(transform.position, owner.gameObject.transform.position, speed));
         } else {
-            transform.position = Vector3.MoveTowards(transform.position, endpoint, speed);
+            transform.position = doNotTouchTerrain(Vector3.MoveTowards(transform.position, endpoint, speed));
         }
+    }
+
+    bool CloseEnough(Vector3 here, Vector3 there, float threshold) {
+        bool ret = false;
+        if ((transform.position.x + threshold >= endpoint.x && 
+            transform.position.x - threshold <= endpoint.x) &&
+            (transform.position.z + threshold >= endpoint.z &&
+            transform.position.z - threshold <= endpoint.z))
+            ret = true;
+        return ret;
+    }
+
+    Vector3 doNotTouchTerrain(Vector3 pos) {
+        Vector3 hoverPos = pos;
+        RaycastHit hit;
+        if (Physics.Raycast(pos, -Vector3.up, out hit)) {
+            var distancetoground = hit.distance;
+            var heightToAdd = transform.localScale.y + .5f;
+            hoverPos.y = pos.y - distancetoground + heightToAdd;
+        }
+        pos = Vector3.Lerp(pos, hoverPos, Time.deltaTime * 5);
+        return pos;
     }
 
     /// <summary>
