@@ -25,7 +25,7 @@ public class ThrowBoomnana : Ability {
     public override double Trigger() {
         //GetComponentInParent<PlayerStats>().CmdDoFire(3.0f);
         CmdDoFire();
-        return castTime;
+        return base.Trigger();
     }
 
     [Command]

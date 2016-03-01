@@ -70,15 +70,18 @@ public class Boomnana : NetworkBehaviour {
     /// </summary>
     /// <param name="_collision"></param>
     void OnCollisionEnter(Collision _collision) {
-        bool me = (_collision.gameObject == owner && movingBack);
-        if (me || _collision.collider.GetComponentInParent<PlayerStats>().team == ownerTeam && _collision.gameObject != owner)
-            _collision.transform.GetComponentInParent<PlayerStats>().TakeDmg(damage * selfDamage); // Nana is spawned and is on server, trigger on client
-        else {
-            if (_collision.collider.tag == "Player" && _collision.collider.GetComponentInParent<PlayerStats>().team != ownerTeam) {
-                _collision.transform.GetComponentInParent<PlayerStats>().TakeDmg(damage * fullDamage); // Nana is spawned and is on server, trigger on client
+        bool me = _collision.gameObject == owner;
+        PlayerStats targetPS = _collision.transform.GetComponentInParent<PlayerStats>();
+        if(targetPS != null) {
+            if ((me && movingBack) || (targetPS.team == ownerTeam && _collision.gameObject != owner))
+                targetPS.TakeDmg(damage * selfDamage); // Nana is spawned and is on server, trigger on client
+            else {
+                if (_collision.collider.tag == "Player" && targetPS.team != ownerTeam) {
+                    targetPS.TakeDmg(damage * fullDamage); // Nana is spawned and is on server, trigger on client
+                }
             }
         }
-        if (_collision.collider.tag != "Ability" || !me)
+        if (_collision.collider.tag != "Ability")
             Destroy(gameObject);
         Physics.IgnoreCollision(_collision.collider, GetComponent<Collider>());
     }

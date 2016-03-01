@@ -89,6 +89,11 @@ public class mapCreator : NetworkBehaviour {
                 mapData.AlocateMeshData((int)(thickness + radius) * 2, (int)(thickness + radius) * 2);
 
                 ringDrawing((int)thickness, ringNo);  // need to deal with a float thickness to account for smaller rings.
+
+                //Add the ring to the 'Ground' LayerMask.
+                ringNo.layer = 9;
+                //Add the new ring to the List of the map.
+                map.GetComponent<EnvironmentPlacement>().AddSection(ringNo);
             } else {
                 int mapRingsNo = map.transform.childCount;
                 Transform temp = map.transform.GetChild(mapRingsNo - 1);

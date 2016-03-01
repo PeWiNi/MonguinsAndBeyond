@@ -17,9 +17,7 @@ public class EnvironmentPlacement : MonoBehaviour
     [Tooltip("Required for PlacementState [Area, Fill]")]
     [Range(0, 5000)]
     public int maxNumberOfAssets = 2500;
-    [Tooltip("This GameObject will be the center point for spawning assets.\nRequired for PlacementState [Area]")]
-    public GameObject startingPoint;
-    [Tooltip("Required for PlacementState [Area]\nThis value will be the radius around the 'startingPoint' to spawn assets")]
+    [Tooltip("Required for PlacementState [Area]\nThis value will be the radius around the 'startingPoint' to spagameObjectn assets")]
     [Range(0, 50)]
     public int areaRadius = 25;
     [Tooltip("Required for PlacementState [Area, Random]")]
@@ -34,18 +32,24 @@ public class EnvironmentPlacement : MonoBehaviour
     public bool isBetween;
 
     private MeshFilter[] meshFilters;
-    private Mesh mesh;
+
+    private List<GameObject> sections = new List<GameObject>();
 
     void Start()
     {
-        meshFilters = GetComponentsInChildren<MeshFilter>();
-        mesh = GetComponent<MeshFilter>().mesh;
         if (placementState == Placement.Random)
             RandomPlacement(this.assetID);
         if (placementState == Placement.Area)
-            AreaPlacement(this.startingPoint, this.areaRadius, this.maxNumberOfAssets, this.assetID);
+            AreaPlacement(this.gameObject, this.areaRadius, this.maxNumberOfAssets, this.assetID);
         if (placementState == Placement.Fill)
-            FillPlacement(this.heightMin, this.heightMax, this.isBetween, this.maxNumberOfAssets);
+            FillPlacement(this.gameObject, this.heightMin, this.heightMax, this.isBetween, this.maxNumberOfAssets);
+    }
+
+    public void AddSection(GameObject newSection)
+    {
+        sections.Add(newSection);
+        RandomPlacement(Random.Range(0, assets.Count));
+        //FillPlacement(newSection, heightMin, heightMax, isBetween, maxNumberOfAssets);
     }
 
     /// <summary>
@@ -53,8 +57,9 @@ public class EnvironmentPlacement : MonoBehaviour
     /// Based on the values and the boolean expression the method will either add assets in-between the ranges or outside the ranges.
     /// Takes random assets in the 'Assets' GameObject List.
     /// </summary>
-    void FillPlacement(float heightMin, float heightMax, bool isBetween, int maxNumberOfAssets)
+    public void FillPlacement(GameObject section, float heightMin, float heightMax, bool isBetween, int maxNumberOfAssets)
     {
+        Mesh mesh = section.GetComponent<MeshFilter>().sharedMesh;
         Vector3[] vertices = mesh.vertices;
         int amountWeNeed = 0;
         List<Vector3> verticesWithinBoundaries = new List<Vector3>();
@@ -132,11 +137,11 @@ public class EnvironmentPlacement : MonoBehaviour
     /// The map will be filled with environmental assets at the geiven Location based on values.
     /// </summary>
     /// <param name="environmentAsset"></param>
-    void AreaPlacement(GameObject startingPoint, float radius, int maxNumberOfAssets, int assetID)
+    public void AreaPlacement(GameObject section, float radius, int maxNumberOfAssets, int assetID)
     {
         int groundLayerMask = (1 << 9);//The 'Ground' Layers we want to check.
         //Get a collection of all colliders touched or within the sphere.
-        Collider[] hitColliders = Physics.OverlapSphere(startingPoint.transform.position, radius, groundLayerMask);
+        Collider[] hitColliders = Physics.OverlapSphere(section.transform.position, radius, groundLayerMask);
         //Get the environment asset you want to fill this area with.
         GameObject go = assets[assetID];
         int amountWeNeed = 0;
@@ -153,7 +158,7 @@ public class EnvironmentPlacement : MonoBehaviour
                 vertex.x *= hitColliders[randomHitCollider].transform.localScale.x;
                 vertex.y *= hitColliders[randomHitCollider].transform.localScale.y;
                 vertex.z *= hitColliders[randomHitCollider].transform.localScale.z;
-                if (Vector3.Distance(startingPoint.transform.position, vertex) < radius)
+                if (Vector3.Distance(section.transform.position, vertex) < radius)
                 {
                     verticesWithinRadius.Add(vertex);
                     normalsWithinRadius.Add(mesh.normals[i]);
@@ -171,15 +176,16 @@ public class EnvironmentPlacement : MonoBehaviour
     /// Create randomly placed environment asset.
     /// Based on two vertices, a raycast will be perfomred between those two and spawn the asset on hit point.
     /// </summary>
-    void RandomPlacement(int assetID)
+    public void RandomPlacement(int assetID)
     {
+        meshFilters = GetComponentsInChildren<MeshFilter>();
         for (int i = 0; i < meshFilters.Length; i++)
         {
             Vector3[] vertices = meshFilters[i].mesh.vertices;
             for (int j = 0; j < vertices.Length; j++)
             {
-                Vector3 randomVertex = mesh.vertices[Random.Range(0, vertices.Length)];
-                Vector3 vertex = mesh.vertices[j];
+                Vector3 randomVertex = vertices[Random.Range(0, vertices.Length)];
+                Vector3 vertex = vertices[j];
                 randomVertex.x *= transform.lossyScale.x;
                 randomVertex.y *= transform.lossyScale.y;
                 randomVertex.z *= transform.lossyScale.z;
