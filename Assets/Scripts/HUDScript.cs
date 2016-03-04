@@ -46,7 +46,9 @@ public class HUDScript : MonoBehaviour {
     public void ActionBarUpdate(ref Image overlayImage, Ability ability) {
         if (ability.OnCooldown() == true) {
             overlayImage.fillAmount = ability.CooldownRemaining();
-        } 
+        } else if (overlayImage.fillAmount < 1) {
+            overlayImage.fillAmount = 1;
+        }
     }
 
     /// <summary>
