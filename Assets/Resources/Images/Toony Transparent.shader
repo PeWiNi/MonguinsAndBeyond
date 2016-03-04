@@ -6,10 +6,8 @@
 // http://www.jeanmoreno.com/toonycolorspro/
 
 
-Shader "Custom/Toony Transparent"
-{
-	Properties
-	{
+Shader "Custom/Toony Transparent" {
+	Properties {
 		//TOONY COLORS
 		_Color("Color", Color) = (0.5,0.5,0.5,1.0)
 		_HColor("Highlight Color", Color) = (0.6,0.6,0.6,1.0)
@@ -24,8 +22,7 @@ Shader "Custom/Toony Transparent"
 
 	}
 
-	SubShader
-	{
+	SubShader {
 		//Tags { "RenderType"="Opaque" }
 		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
 
@@ -48,8 +45,7 @@ Shader "Custom/Toony Transparent"
 		sampler2D _MainTex;
 
 
-		struct Input
-		{
+		struct Input {
 			half2 uv_MainTex;
 		};
 
@@ -57,6 +53,20 @@ Shader "Custom/Toony Transparent"
 		// CUSTOM LIGHTING
 
 		//Lighting-related variables
+		fixed4 _HColor;
+		fixed4 _SColor;
+		sampler2D _Ramp;
+
+		//Custom SurfaceOutput
+		struct SurfaceOutputCustom {
+			fixed3 Albedo;
+			fixed3 Normal;
+			fixed3 Emission;
+			half Specular;
+			fixed Alpha;
+		};
+
+		inline half4 LightingToonyColorsCustom(SurfaceOutputCustom s, half3 lightDir, half3 viewDir, half atten) {
 			s.Normal = normalize(s.Normal);
 			fixed ndl = max(0, dot(s.Normal, lightDir)*0.5 + 0.5);
 
@@ -87,7 +97,8 @@ Shader "Custom/Toony Transparent"
 			o.Alpha = mainTex.a * _Color.a;
 
 		}
-		ENDCG
+
+	ENDCG
 	}
 
 	Fallback "Diffuse"
