@@ -120,9 +120,9 @@ public class PlayerStats : NetworkBehaviour {
             if (((float)Network.time - deathTimer) > deathCooldown) {
                 foreach (Material m in body.GetComponent<MeshRenderer>().materials)
                     m.color = new Color(c.r, c.g, c.b, 1f);
-                if (isLocalPlayer) {
+                //if (isLocalPlayer) {
                     Respawn();
-                }
+                //}
                 return;
             }
             health = 0;
@@ -254,14 +254,15 @@ public class PlayerStats : NetworkBehaviour {
 
     [Command]
     void CmdRespawn() {
+        isDead = false;
+        syncHealth = syncMaxHealth;
         Respawn();
     }
 
     void Respawn() {
         if (isLocalPlayer)
             CmdRespawn();
-        isDead = false;
-        syncHealth = syncMaxHealth;
+        health = maxHealth;
         transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
         GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
     }

@@ -89,7 +89,8 @@ public class PlayerLogic : NetworkBehaviour {
         if (transform.position.y < -100) { // Reset player position when they are below y-threshold
             transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
             GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-            stats.CmdTakeDmg(100000);
+            if(isLocalPlayer)
+                stats.CmdTakeDmg(100000);
         }
     }
 
