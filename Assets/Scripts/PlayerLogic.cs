@@ -10,6 +10,7 @@ public class PlayerLogic : NetworkBehaviour {
     PlayerStats stats;
     CharacterCamera cam;
     private float Speed = 5f; // Should JumpSpeed be a constant?
+    private float jumpSpeed = 5f; // Should JumpSpeed be a constant?
     [System.NonSerialized]
     public float horizAxis = 0f;
     [System.NonSerialized]
@@ -74,6 +75,10 @@ public class PlayerLogic : NetworkBehaviour {
                 castTime = abilities[2].Trigger() + Network.time;
                 abilities[2].timer = (float)Network.time;
             }
+
+            if(Input.GetMouseButton(0) && Input.GetMouseButton(1)) {
+                vertAxis = 1;
+            }
             #endregion
         }
         if (stats.isDead || castTime > Network.time || stats.isStunned) { // Don't keep moving when dead~
@@ -95,7 +100,7 @@ public class PlayerLogic : NetworkBehaviour {
         // Movement
         transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
         // Jumping
-        transform.Translate(new Vector3(0f, jumpAxis, 0f) * Speed * Time.fixedDeltaTime);
+        transform.Translate(new Vector3(0f, jumpAxis, 0f) * jumpSpeed * Time.fixedDeltaTime);
 
         if (Input.GetMouseButton(1) && !stats.isDead && !stats.isStunned) { // if dead they cannot turn their char around (but they can still look around with their camera)
             transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
