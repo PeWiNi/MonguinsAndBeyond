@@ -183,7 +183,8 @@ public class PlayerStats : NetworkBehaviour {
                 //  Punch Dance - deals a stronger tail slap (3% of current health damage) that if it hits stuns the enemy for 2 sec and it's followed by 2 more tail slaps of 4% and 5% damage*current health. CD:20 sec
                 abilities[2] = GetComponent<PunchDance>();
                 // Placeholder visual thing
-                body.GetComponent<MeshRenderer>().material.color = Color.red;
+                //body.GetComponent<MeshRenderer>().material.color = Color.red;
+                body.GetComponent<MeshRenderer>().material.color = team == 1 ? Color.yellow : Color.blue;
                 break;
             case (Role.Supporter):
                 roleStats = new RoleStats(1f, 0, 1f);
