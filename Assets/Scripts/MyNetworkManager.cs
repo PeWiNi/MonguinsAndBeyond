@@ -82,4 +82,28 @@ public class MyNetworkManager : NetworkManager {
 
         base.OnServerDisconnect(conn);
     }
+
+    public void CheckTeamSizes() {
+        ScoreManager SM = GetComponentInChildren<ScoreManager>();
+        int teamOne = 0;
+        int teamTwo = 0;
+        int players = 0;
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
+            PlayerStats ps = go.GetComponent<PlayerStats>();
+            if (ps.team == 1) teamOne++;
+            if (ps.team == 2) teamTwo++;
+            players++;
+        }
+        Debug.Log("Previous T1: " + SM.teamOne + ", Updated T1: " + teamOne);
+        Debug.Log("Previous T2: " + SM.teamTwo + ", Updated T2: " + teamTwo);
+        // Update the maxHealth on players on the team that changed sizes
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
+            int team = (SM.teamOne != teamOne ? 1 : 2);
+            PlayerStats ps = go.GetComponent<PlayerStats>();
+            ps.changeMaxHealth = ps.team == team ? true : false;
+        }
+
+        SM.teamOne = teamOne;
+        SM.teamTwo = teamTwo;
+    }
 }

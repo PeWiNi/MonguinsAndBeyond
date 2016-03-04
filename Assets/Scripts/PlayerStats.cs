@@ -121,7 +121,7 @@ public class PlayerStats : NetworkBehaviour {
                 foreach (Material m in body.GetComponent<MeshRenderer>().materials)
                     m.color = new Color(c.r, c.g, c.b, 1f);
                 if (isLocalPlayer) {
-                    Respawn();
+                    //Respawn();
                     CmdRespawn();
                 }
                 return;
@@ -255,7 +255,12 @@ public class PlayerStats : NetworkBehaviour {
 
     [Command]
     void CmdRespawn() {
-        Respawn();
+        NetworkServer.Destroy(this.gameObject);
+        var spawn = NetworkManager.singleton.GetStartPosition();
+        var newPlayer = (GameObject)Instantiate(NetworkManager.singleton.playerPrefab, spawn.position, spawn.rotation);
+        MyNetworkManager MNM = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>();
+        MNM.CheckTeamSizes();
+        NetworkServer.ReplacePlayerForConnection(this.connectionToClient, newPlayer, this.playerControllerId);
     }
 
     void Respawn() {

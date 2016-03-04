@@ -37,7 +37,7 @@ public class PlayerLogic : NetworkBehaviour {
         // Only enable sound and camera for player if it's the local player
         if (isLocalPlayer) {
             // Disable and Enable Cameras / AudioListener
-            GameObject.Find("Main Camera").SetActive(false);
+            try { GameObject.Find("Main Camera").SetActive(false); } catch { }
             characterCam.enabled = true;
             audioListener.enabled = true;
 
@@ -87,6 +87,8 @@ public class PlayerLogic : NetworkBehaviour {
             jumpAxis = 0;
         }
         if (transform.position.y < -100) { // Reset player position when they are below y-threshold
+            transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
+            GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
             stats.CmdTakeDmg(100000);
         }
     }
