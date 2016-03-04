@@ -87,7 +87,8 @@ public class mapCreator : NetworkBehaviour
                 ringDrawing((int)thickness, ringNo);  // need to deal with a float thickness to account for smaller rings.
 
                 //Set the Layer to Ground.
-                ringNo.layer = LayerMask.NameToLayer("Ground");
+                ringNo.transform.gameObject.layer = LayerMask.NameToLayer("Ground");
+                print("RngNo Layer = " + ringNo.transform.gameObject.layer);
                 //Remove redundant vertices.
                 HashSet<Vector3> noDuplicateVertices = new HashSet<Vector3>();
                 Vector3[] vertices = ringNo.GetComponent<MeshFilter>().mesh.vertices;

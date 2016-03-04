@@ -15,7 +15,8 @@ public class MyNetworkManager : NetworkManager {
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId); //Default implementation
 
         // Do the mapHandler code only when on the correct scene
-        if(onlineScene.Equals("'stinaScene_foolingaroundwithCircles")) {
+        //if (onlineScene.Equals("'stinaScene_foolingaroundwithCircles")) {
+        if(onlineScene.Equals("HenrikScene")) {
             GameObject.Find("mapHandler").GetComponent<mapCreator>().playerConnected();
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
                 go.GetComponent<PlayerStats>().GenerateTerrain();

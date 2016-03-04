@@ -43,6 +43,8 @@ public class PlayerMovementSync : NetworkBehaviour {
 
     void LerpTransform() {
         if (!isLocalPlayer) {
+            if (Vector3.Distance(syncPosition, playerTransform.position) > 5)
+                playerTransform.position = syncPosition;
             playerTransform.position = Vector3.Lerp(playerTransform.position, syncPosition, Time.deltaTime * lerpRate);
             playerTransform.rotation = Quaternion.Lerp(playerTransform.rotation, Quaternion.Euler(new Vector3(0, syncPlayerRotation,0)), Time.deltaTime * lerpRate);
         }
