@@ -263,7 +263,7 @@ public class PlayerStats : NetworkBehaviour {
         if (isLocalPlayer)
             CmdRespawn();
         isDead = false;
-        health = maxHealth;
+        syncHealth = syncMaxHealth;
         transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
         GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
     }
