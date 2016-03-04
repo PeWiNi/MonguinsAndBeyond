@@ -82,8 +82,7 @@ public class PlayerLogic : NetworkBehaviour {
             jumpAxis = 0;
         }
         if (transform.position.y < -100) { // Reset player position when they are below y-threshold
-            transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
-            GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+            stats.CmdTakeDmg(100000);
         }
     }
 
@@ -91,10 +90,10 @@ public class PlayerLogic : NetworkBehaviour {
     /// Method in which the transform/player is actually moved
     /// </summary>
     public void Simulate() {
-        float speed;
-        SetSpeed(out speed);
+        //float speed;
+        //SetSpeed(out speed);
         // Movement
-        transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * speed * Time.fixedDeltaTime);
+        transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
         // Jumping
         transform.Translate(new Vector3(0f, jumpAxis, 0f) * Speed * Time.fixedDeltaTime);
 
