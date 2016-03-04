@@ -102,8 +102,7 @@ public class Camouflage : NetworkBehaviour
     void Hide() {
         float transity = .0f;
         if (isLocalPlayer) transity = .4f;
-        Color c = GetComponent<PlayerStats>().body.GetComponent<MeshRenderer>().material.color;
-        foreach (Material m in GetComponent<MeshRenderer>().materials)m.color = new Color(c.r, c.g, c.b, transity);
+        changeColor(transity);
         if (!isLocalPlayer) GetComponentInChildren<Canvas>().enabled = false;
         isStealthed = true;
     }
@@ -112,8 +111,7 @@ public class Camouflage : NetworkBehaviour
     /// Make the Player appear again.
     /// </summary>
     void Appear() {
-        Color c = GetComponent<PlayerStats>().body.GetComponent<MeshRenderer>().material.color;
-        foreach (Material m in GetComponent<MeshRenderer>().materials) m.color = new Color(c.r, c.g, c.b, 1f);
+        changeColor(1f);
         isStealthed = false;
         if (!isLocalPlayer) GetComponentInChildren<Canvas>().enabled = true;
     }
@@ -127,11 +125,15 @@ public class Camouflage : NetworkBehaviour
         float partlySpottedValue = 0.8f;
         float visibilityValue = 0.2f;
         while (partlySpottedValue > visibilityValue) {
-            Color c = GetComponent<PlayerStats>().body.GetComponent<MeshRenderer>().material.color;
-            foreach (Material m in GetComponent<MeshRenderer>().materials) m.color = new Color(c.r, c.g, c.b, partlySpottedValue);
+            changeColor(partlySpottedValue);
             yield return new WaitForSeconds(0.1f);
             partlySpottedValue -= 0.1f;
         }
+    }
+
+    void changeColor(float alpha) {
+        Color c = GetComponent<PlayerStats>().body.GetComponent<MeshRenderer>().material.color;
+        foreach (Material m in GetComponent<PlayerStats>().body.GetComponent<MeshRenderer>().materials) m.color = new Color(c.r, c.g, c.b, alpha);
     }
     #endregion
 
