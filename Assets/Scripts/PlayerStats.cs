@@ -118,14 +118,16 @@ public class PlayerStats : NetworkBehaviour {
         if (isDead) { // Send to co-routine?
             Color c = body.GetComponent<MeshRenderer>().material.color;
             if (((float)Network.time - deathTimer) > deathCooldown) {
-                body.GetComponent<MeshRenderer>().material.color = new Color(c.r, c.g, c.b, 1f);
+                foreach (Material m in body.GetComponent<MeshRenderer>().materials)
+                    m.color = new Color(c.r, c.g, c.b, 1f);
                 if (isLocalPlayer) {
                     CmdRespawn();
                 }
                 return;
             }
             health = 0;
-            body.GetComponent<MeshRenderer>().material.color = new Color(c.r, c.g, c.b, .2f);
+
+            foreach (Material m in body.GetComponent<MeshRenderer>().materials)m.color = new Color(c.r, c.g, c.b, .2f);
             return;
         } if (isStunned) {
             if (stunTimer < Network.time) {
@@ -184,7 +186,8 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[2] = GetComponent<PunchDance>();
                 // Placeholder visual thing
                 //body.GetComponent<MeshRenderer>().material.color = Color.red;
-                body.GetComponent<MeshRenderer>().material.color = team == 1 ? Color.yellow : Color.blue;
+                foreach(Material m in body.GetComponent<MeshRenderer>().materials)
+                    m.color = team == 1 ? Color.yellow : Color.blue;
                 break;
             case (Role.Supporter):
                 roleStats = new RoleStats(1f, 0, 1f);

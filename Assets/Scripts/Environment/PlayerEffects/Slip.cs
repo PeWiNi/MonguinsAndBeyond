@@ -48,16 +48,18 @@ public class Slip : NetworkBehaviour
         }
     }
 
-
-    IEnumerator Slipping(int effectDuration, float thrust, float anglesPerSecond)
-    {
+    IEnumerator Slipping(int effectDuration, float thrust, float anglesPerSecond) {
         isSlipping = true;
-        transform.GetComponent<PlayerStats>().Stun(effectDuration);
-        while (effectDuration > 0)
-        {
+        CmdStun(effectDuration);
+        while (effectDuration > 0) {
             yield return new WaitForSeconds(1f);
             effectDuration--;
         }
         isSlipping = false;
+    }
+
+    [Command]
+    void CmdStun(int effectDuration) {
+        transform.GetComponent<PlayerStats>().Stun(effectDuration);
     }
 }
