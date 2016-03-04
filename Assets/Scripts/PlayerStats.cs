@@ -121,6 +121,7 @@ public class PlayerStats : NetworkBehaviour {
                 foreach (Material m in body.GetComponent<MeshRenderer>().materials)
                     m.color = new Color(c.r, c.g, c.b, 1f);
                 if (isLocalPlayer) {
+                    Respawn();
                     CmdRespawn();
                 }
                 return;
@@ -254,6 +255,10 @@ public class PlayerStats : NetworkBehaviour {
 
     [Command]
     void CmdRespawn() {
+        Respawn();
+    }
+
+    void Respawn() {
         isDead = false;
         syncHealth = syncMaxHealth;
         transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();

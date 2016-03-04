@@ -9,8 +9,8 @@ public class PlayerLogic : NetworkBehaviour {
 
     PlayerStats stats;
     CharacterCamera cam;
-    private float Speed = 5f; // Should JumpSpeed be a constant?
-    private float jumpSpeed = 5f; // Should JumpSpeed be a constant?
+    private float Speed = 5f;
+    private float jumpSpeed = 5f; 
     [System.NonSerialized]
     public float horizAxis = 0f;
     [System.NonSerialized]
