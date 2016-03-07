@@ -11,6 +11,7 @@ public class TailSlap : Ability {
     public override double Trigger() {
         Vector3 PointOfImpact = transform.position + (transform.forward * distance);
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
+        try { StartCoroutine(GetComponentInChildren<SlashEffect>().TailSlap()); } catch { }
         if (hitColliders.Length > 0)
             if (hitColliders[0].GetComponentInParent<PlayerStats>().team != team)
                 CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
