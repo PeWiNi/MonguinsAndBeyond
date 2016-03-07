@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour {
     [SerializeField]
@@ -29,5 +30,6 @@ public class Inventory : MonoBehaviour {
 
     public void pickupBanana(int count = 1) {
         bananas += count;
+        transform.FindChild("Banana").GetComponentInChildren<Text>().text = bananaCount();
     }
 }

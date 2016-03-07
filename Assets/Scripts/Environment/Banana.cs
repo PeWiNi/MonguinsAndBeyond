@@ -7,7 +7,7 @@ public class Banana : Pickup {
 	void OnTriggerEnter(Collider _collider) {
         if(_collider.tag == "Player") {
             _collider.GetComponent<SyncInventory>().pickupBanana(bananas);
-            Destroy(this);
+            Destroy(gameObject);
         }
     }
 }
