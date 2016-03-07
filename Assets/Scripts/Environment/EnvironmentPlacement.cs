@@ -32,11 +32,12 @@ public class EnvironmentPlacement : MonoBehaviour
     public bool isBetween;
 
     private MeshFilter[] meshFilters;
-
     private Dictionary<GameObject, Vector3[]> sections = new Dictionary<GameObject, Vector3[]>();
+    int randomSeedValue = 42;
 
     void Start()
     {
+        Random.seed = randomSeedValue;//Sets the seed value of the Random class.
         if (placementState == Placement.Random)
             RandomPlacement(null, null, maxNumberOfAssets, assets);
         if (placementState == Placement.Area)
