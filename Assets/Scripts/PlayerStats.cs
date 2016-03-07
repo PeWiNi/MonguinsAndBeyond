@@ -11,6 +11,10 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     int resilience; // Recieved damage modifier, 100 means 100% dmg reduction
     [SyncVar]
+    float RNGeezuz; // Wisdom, increases the chance of good stuff happening <Threshold stuff: above certain # you can tell the difference between good and bad berries> @'stina 07-03
+    [SyncVar]
+    float agility; // Modifies movementSpeed (and possibly casttime/cooldown) <Threshold stuff: above certain # you get attacker speed> @'stina 07-03
+    [SyncVar]
     Role syncRole = Role.Basic;
 
     #region Death
@@ -108,7 +112,11 @@ public class PlayerStats : NetworkBehaviour {
             CmdTeamSelection(NM.team > 0 ? NM.team : team);
             RoleCharacteristics(role);
             SelectRole();
-            try { GameObject.Find("HUD").GetComponent<HUDScript>().SetPlayerStats(this); } catch { }
+            try {
+                HUDScript hud = GameObject.Find("HUD").GetComponent<HUDScript>();
+                hud.SetPlayerStats(this);
+                GetComponent<SyncInventory>().setInventory(hud.inventory);
+            } catch { }
         }
         syncHealth = syncMaxHealth;
     }
@@ -179,11 +187,11 @@ public class PlayerStats : NetworkBehaviour {
                 //if (attributes.ContainsKey("DEF")) //increased resilience based on STR
                 //    resilience = (int)Mathf.Ceil(0.2f * (int)attributes["DEF"]); // Do damage according to ATT aswell?
                 //  Boomnana - (yup, same one) deals 80% of current health on enemy target in damage; of no targets are hit it return to the caster and deals 35% of current health damage. CD: 3sec
-                abilities[0] = GetComponent<ThrowBoomnana>();
+                abilities[2] = GetComponent<ThrowBoomnana>();
                 //  Tail Slap - (yup, same one) deals 2% of current health on enemy target; melee; no CD; 1 sec to "cast"
-                abilities[1] = GetComponent<TailSlap>();
+                abilities[0] = GetComponent<TailSlap>();
                 //  Punch Dance - deals a stronger tail slap (3% of current health damage) that if it hits stuns the enemy for 2 sec and it's followed by 2 more tail slaps of 4% and 5% damage*current health. CD:20 sec
-                abilities[2] = GetComponent<PunchDance>();
+                abilities[1] = GetComponent<PunchDance>();
                 // Placeholder visual thing
                 //body.GetComponent<MeshRenderer>().material.color = Color.red;
                 foreach(Material m in body.GetComponent<MeshRenderer>().materials)

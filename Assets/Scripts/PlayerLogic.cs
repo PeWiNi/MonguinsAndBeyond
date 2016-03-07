@@ -62,12 +62,12 @@ public class PlayerLogic : NetworkBehaviour {
                 hs.setCamera(characterCam);
 
             #region abilities
-            if (Input.GetKeyDown(KeyCode.E) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
+            if (Input.GetKeyDown(KeyCode.Q) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
                 //CmdDoFire(3.0f); // Dummy ability shooting bullets
                 castTime = abilities[0].Trigger() + Network.time;
                 abilities[0].timer = (float)Network.time;
             }
-            if (Input.GetKeyDown(KeyCode.Q) && !abilities[1].OnCooldown()) { //TODO make use of inputManager 
+            if (Input.GetKeyDown(KeyCode.E) && !abilities[1].OnCooldown()) { //TODO make use of inputManager 
                 castTime = abilities[1].Trigger() + Network.time;
                 abilities[1].timer = (float)Network.time;
             }

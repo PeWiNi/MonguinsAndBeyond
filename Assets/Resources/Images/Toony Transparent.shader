@@ -16,6 +16,7 @@ Shader "Custom/Toony Transparent" {
 		//DIFFUSE
 		//_MainTex ("Main Texture (RGB)", 2D) = "white" {}
 		_MainTex("Color (RGB) Alpha (A)", 2D) = "white" {}
+		_BumpMap("Bumpmap", 2D) = "bump" {}
 
 		//TOONY COLORS RAMP
 		_Ramp("Toon Ramp (RGB)", 2D) = "gray" {}
@@ -43,10 +44,12 @@ Shader "Custom/Toony Transparent" {
 
 		fixed4 _Color;
 		sampler2D _MainTex;
+		sampler2D _BumpMap;
 
 
 		struct Input {
 			half2 uv_MainTex;
+			float2 uv_BumpMap;
 		};
 
 		//================================================================
@@ -94,6 +97,7 @@ Shader "Custom/Toony Transparent" {
 			fixed4 mainTex = tex2D(_MainTex, IN.uv_MainTex);
 
 			o.Albedo = mainTex.rgb * _Color.rgb;
+			o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
 			o.Alpha = mainTex.a * _Color.a;
 
 		}

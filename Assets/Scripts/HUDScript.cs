@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class HUDScript : MonoBehaviour {
     GameObject playerUI;
+    public Inventory inventory;
     GameObject actionBar;
     Image ability1;
     Image ability2;
@@ -21,6 +22,7 @@ public class HUDScript : MonoBehaviour {
         ability1 = actionBar.GetComponentsInChildren<Image>()[1]; // index 0 is the picture behind index 1
         ability2 = actionBar.GetComponentsInChildren<Image>()[3];
         ability3 = actionBar.GetComponentsInChildren<Image>()[5];
+        inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
     }
 	
 	// Update is called once per frame
@@ -57,7 +59,22 @@ public class HUDScript : MonoBehaviour {
     /// <param name="playerStats"></param>
     public void SetPlayerStats(PlayerStats playerStats) {
         ps = playerStats;
+        // Turn off world-space healthBar
         ps.GetComponentInChildren<Canvas>().enabled = false;
+        #region Inventory
+        //Activate Inventory GO
+        inventory.gameObject.SetActive(true);
+        //Set Banana-count text
+        inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = inventory.GetComponent<Inventory>().bananaCount();
+        //TODO: Make Inventory a component on player or make the player aware of banana-count (to allow for pickup etc.)
+        #endregion
+
         // TODO: Do stuff with setting up correct ability images
+    }
+
+    public void SpawnBananaTrap() {
+        if (inventory.useBanana())
+            ps.GetComponentInChildren<SpawnTraps>().Slippery();
+        inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = inventory.GetComponent<Inventory>().bananaCount();
     }
 }
