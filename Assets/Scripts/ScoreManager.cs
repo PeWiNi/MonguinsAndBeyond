@@ -12,6 +12,8 @@ public class ScoreManager : NetworkBehaviour {
     public float teamOneDeathCount = 0;
     public float teamTwoDeathCount = 0;
 
+    public float sinkTimer;
+
     /// <summary>
     /// Tallies the count of players for each team, also assigns a team-number if you did not select one yourself
     /// </summary>

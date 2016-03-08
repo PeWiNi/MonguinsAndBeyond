@@ -182,10 +182,18 @@ public class mapCreator : NetworkBehaviour
         PutPixel(centerX + y, centerY - x, ringNo);
     }
 
+
+    [Command]
+    void CmdSinkingSyncing() {
+        sinkInit = (float)Network.time;
+    }
+
     public void startSinking()
     {
-        if (!startedSinking)
+        if (!startedSinking) {
+
             StartCoroutine(sink());
+        }
         startedSinking = true;
     }
 
@@ -194,7 +202,6 @@ public class mapCreator : NetworkBehaviour
     /// </summary>
     IEnumerator sink()
     {
-        sinkInit = (float)Network.time;
         sinkingARing = false;
         yield return new WaitForSeconds(((float)Network.time - sinkInit) + timeToNextSink);
         if ((ringsSunk <= ringsSpawned) && (map.transform.childCount >= 2))
