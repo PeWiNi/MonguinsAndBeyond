@@ -8,6 +8,8 @@ public class PlayerStats : NetworkBehaviour {
     float syncMaxHealth = 1000f;
     [SyncVar]
     float syncHealth;
+    [SerializeField]
+    float resilienceValue = 40;
     [SyncVar]
     int resilience; // Recieved damage modifier, 100 means 100% dmg reduction
     [SyncVar]
@@ -55,6 +57,8 @@ public class PlayerStats : NetworkBehaviour {
 
     [SyncVar]
     bool makeMap = false;
+    //[SyncVar]
+    //float initSinking;
 
     public GameObject bulletPrefab;
     
@@ -147,7 +151,8 @@ public class PlayerStats : NetworkBehaviour {
         StatSync();
 
         if(changeMaxHealth) { NewPlayerJoinedTeam(); }
-        if(makeMap) { GenerateTerrain(); }
+        //if(makeMap) { GenerateTerrain(initSinking); }
+        if (makeMap) { GenerateTerrain(); }
     }
 
     void ApplyRole() {
@@ -387,13 +392,17 @@ public class PlayerStats : NetworkBehaviour {
     /// <summary>
     /// Trigger a change of Terrain for the local player
     /// </summary>
+    //public void GenerateTerrain(float initTime) {
     public void GenerateTerrain() {
         if (isServer) {
+            //initSinking = initTime;
             makeMap = true;
             return;
         }
         if(isLocalPlayer) {
-            GameObject.Find("mapHandler").GetComponent<mapCreator>().playerConnected();
+            mapCreator MC = GameObject.Find("mapHandler").GetComponent<mapCreator>();
+            MC.playerConnected();
+            //MC.SetSinkTime(initTime);
             makeMap = false;
             CmdChangeMakeMap(false);
         }

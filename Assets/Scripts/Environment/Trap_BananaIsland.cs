@@ -12,7 +12,8 @@ public class Trap_BananaIsland : Trap
     // Use this for initialization
     void Start()
     {
-
+        //TODO: Possibly optimize by fixing server rotation issues
+        transform.rotation = Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z));
     }
 
     void OnTriggerEnter(Collider _collider)
