@@ -20,8 +20,8 @@ public class CharacterCamera : MonoBehaviour {
     float rotationDampening = 3f;
 
     // Vertical restictions on camera movement
-    public float yMax = 10;
-    public float yMin = -30;
+    public float yMax = 30;
+    public float yMin = -10;
 
     int zoomRate = 30;
 
