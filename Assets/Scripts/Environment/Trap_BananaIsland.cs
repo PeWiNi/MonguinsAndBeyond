@@ -6,6 +6,8 @@ public class Trap_BananaIsland : Trap
     [Tooltip("The amount we want to rotate around oneself")]
     [Range(0f, 180f)]
     public float anglesPerSecond = 25f;
+    [Tooltip("The thrust force applied to the Player")]
+    public float thrust = 10f;
 
     // Use this for initialization
     void Start()
@@ -17,14 +19,7 @@ public class Trap_BananaIsland : Trap
     {
         if (_collider.transform.tag == "Player")
         {
-            print("Yay!");
             _collider.gameObject.GetComponent<Slip>().PlayerSlipped(this.effectDuration, this.thrust, this.anglesPerSecond);
         }
     }
-
-    //[Command]
-    //void PlayerSlipped()
-    //{
-
-    //}
 }
