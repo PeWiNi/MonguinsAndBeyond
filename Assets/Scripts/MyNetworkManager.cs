@@ -17,9 +17,15 @@ public class MyNetworkManager : NetworkManager {
         // Do the mapHandler code only when on the correct scene
         //if (onlineScene.Equals("'stinaScene_foolingaroundwithCircles")) {
         if(onlineScene.Equals("HenrikScene")) {
-            GameObject.Find("mapHandler").GetComponent<mapCreator>().playerConnected();
+            mapCreator MC = GameObject.Find("mapHandler").GetComponent<mapCreator>();
+            if (playerNumber == 2) {
+                GetComponentInChildren<ScoreManager>().sinkTimer = (float)Network.time; // Only to be done once
+                MC.SinkingSyncing(GetComponentInChildren<ScoreManager>().sinkTimer);
+            }
+            MC.playerConnected();
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
                 go.GetComponent<PlayerStats>().GenerateTerrain();
+                //go.GetComponent<PlayerStats>().GenerateTerrain(GetComponentInChildren<ScoreManager>().sinkTimer);
         }
     }
 

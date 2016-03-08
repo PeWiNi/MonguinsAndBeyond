@@ -18,8 +18,11 @@ public class mapCreator : NetworkBehaviour
 
     [SyncVar]
     float sinkInit;
+    [SyncVar]
+    int layersSunk;
     bool startedSinking = false;
     public float timeToNextSink;
+    [SyncVar]
     int ringsSunk;
     Vector3 center = new Vector3(0f, 0f, 0f);
     float RingRadius;
@@ -52,7 +55,7 @@ public class mapCreator : NetworkBehaviour
     /// <summary>
     /// Modifies the map according to the number players connected.
     /// </summary>
-    public void playerConnected()
+    public bool playerConnected()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
         powCount = 0;
@@ -62,6 +65,7 @@ public class mapCreator : NetworkBehaviour
         powCount--;//need to go one step back, as the loop above will stop when one step further in the calculation of the pow count 
 
         //if any of the map rings have sunked previously and we need to spawn new ones. 
+        //if (powCount > map.transform.childCount - 1 && powCount > ringsSpawned - ringsSunk)
         if (powCount > map.transform.childCount - 1)
         {
             startSinking();
@@ -103,13 +107,17 @@ public class mapCreator : NetworkBehaviour
             }
             else
             {
+                sinkingARing = false;
                 int mapRingsNo = map.transform.childCount;
                 Transform temp = map.transform.GetChild(mapRingsNo - 1);
 
                 mapPartBehavior partsToSink = temp.GetComponent<mapPartBehavior>();
-                partsToSink.stopSinking();
+                if (partsToSink != null)
+                    partsToSink.stopSinking();
             }
+            return true;
         }
+        return false;
     }
 
 
@@ -182,10 +190,28 @@ public class mapCreator : NetworkBehaviour
         PutPixel(centerX + y, centerY - x, ringNo);
     }
 
+    public void somethingSunk() {
+        if(isLocalPlayer) {
+            layersSunk++;
+            if (!isServer)
+                CmdSomethingSunk(layersSunk);
+        }
+    }
 
     [Command]
-    void CmdSinkingSyncing() {
-        sinkInit = (float)Network.time;
+    void CmdSomethingSunk(int sunkCount) {
+        layersSunk = sunkCount;
+    }
+    
+    public void SinkingSyncing(float time) {
+        sinkInit = time;
+        if(!isServer)
+            CmdSinkingSyncing(time);
+    }
+
+    [Command]
+    void CmdSinkingSyncing(float time) {
+        sinkInit = time;
     }
 
     public void startSinking()
@@ -203,7 +229,8 @@ public class mapCreator : NetworkBehaviour
     IEnumerator sink()
     {
         sinkingARing = false;
-        yield return new WaitForSeconds(((float)Network.time - sinkInit) + timeToNextSink);
+        print("init = " + sinkInit + ", sink-time = " + (sinkInit - (float)Network.time));
+        yield return new WaitForSeconds((sinkInit - (float)Network.time) + timeToNextSink);
         if ((ringsSunk <= ringsSpawned) && (map.transform.childCount >= 2))
         {
             MapSunk();
@@ -218,6 +245,8 @@ public class mapCreator : NetworkBehaviour
     /// </summary>
     void MapSunk()
     {
+        SinkingSyncing((float)Network.time);
+        //somethingSunk();
         int mapRingsNo = map.transform.childCount;
         Transform temp = map.transform.GetChild(mapRingsNo - 1);
 
