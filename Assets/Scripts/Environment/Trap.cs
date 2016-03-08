@@ -11,8 +11,6 @@ public class Trap : NetworkBehaviour
     public int effectDuration = 30;
     [Tooltip("The state of the Trap - Sprung or not")]
     public bool isTriggered = false;
-    [Tooltip("The thrust force applied to the Player")]
-    public float thrust = 10f;
 
     // Use this for initialization
     void Start()
