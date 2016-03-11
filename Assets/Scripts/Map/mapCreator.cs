@@ -60,7 +60,7 @@ public class mapCreator : NetworkBehaviour
         players = GameObject.FindGameObjectsWithTag("Player");
         powCount = 0;
         while (Mathf.Pow(2, powCount) <= players.Length)
-            powCount++;
+            powCount++; // THOUGHT: Maybe have a look at Mathf.Log()
 
         powCount--;//need to go one step back, as the loop above will stop when one step further in the calculation of the pow count 
 

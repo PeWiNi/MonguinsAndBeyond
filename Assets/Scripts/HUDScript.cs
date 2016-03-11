@@ -74,7 +74,7 @@ public class HUDScript : MonoBehaviour {
 
     public void SpawnBananaTrap() {
         if (inventory.useBanana())
-            ps.GetComponentInChildren<SpawnTraps>().Slippery();
+            StartCoroutine(ps.GetComponentInChildren<SpawnTraps>().Slippery());
         inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = inventory.GetComponent<Inventory>().bananaCount();
     }
 }

@@ -12,10 +12,13 @@ public class TailSlap : Ability {
         Vector3 PointOfImpact = transform.position + (transform.forward * distance);
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
         try { StartCoroutine(GetComponentInChildren<SlashEffect>().TailSlap()); } catch { }
-        if (hitColliders.Length > 0)
-            if (hitColliders[0].GetComponentInParent<PlayerStats>().team != team)
-                CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
-        //hitColliders[0].GetComponent<PlayerStats>().CmdTakeDmg(gameObject.GetComponent<PlayerStats>().maxHealth * damage);
+        foreach(Collider hit in hitColliders) {
+            if(hit.tag == "Player")
+                if (hit.GetComponentInParent<PlayerStats>().team != team) {
+                    CmdDamagePlayer(hit.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
+                    break;
+                }
+        }
         return base.Trigger();
     }
 }

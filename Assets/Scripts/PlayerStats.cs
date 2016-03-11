@@ -37,8 +37,10 @@ public class PlayerStats : NetworkBehaviour {
     Role role = Role.Basic; // Current primary Role to determine abilities
     [Range(0.2f, 2.5f)] [SyncVar]
     public float sizeModifier = 1f;
-    [Range(0.5f, 10f)] [SyncVar]
+    [Range(0.5f, 10f)]
     public float speed = 5f; // Movement (and jumping) speed (see PlayerLogic.cs)
+    [SyncVar]
+    public float syncSpeed;
     [SerializeField]
     public Transform body;
     [SyncVar]
@@ -93,6 +95,7 @@ public class PlayerStats : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        syncSpeed = speed;
         if (isLocalPlayer) {
             #region Loading attributes and determining Role
             // Load Attributes set before entering game
@@ -179,7 +182,7 @@ public class PlayerStats : NetworkBehaviour {
                 //  Taunt (Roar/Growl/WTV) - taunts enemies (locks their target on him for 3 sec) CD:6 sec
                 //  Smash (deals 1% of enemy health and stuns 1 sec) - no CD, should take 1sec to fully cast anyway
                 //  Fortify - temporarily increase health and resilience of the defender with 20% for 10 sec. CD:20sec
-                speed *= 0.80f;
+                syncSpeed *= 0.80f;
                 // Placeholder visual thing
                 body.GetComponent<MeshRenderer>().material.color = Color.blue;
                 break;
@@ -209,7 +212,7 @@ public class PlayerStats : NetworkBehaviour {
                 //  Puke - (the old puke, does the same thing) stuns all enemies in range, has about 2 units distance units in range. Channeled 3 sec; CD:5 sec
                 //  Throw poison - ranged ability, slows the enemy at 0,5*speed and deals 0.5% damage*max health over 3 sec (1.5% in total). Range from 5 to 30 distance units. No CD; takes 1 sec to cast and requires poisonous herbs
                 //  Heal force - ability targets only friendly characters. Heals 50-250 HP over 3 sec depending on skill and herbs used in the ability. Max range 20 units. 1 herb heals instantly for 50HP, 2->4 herb heal over time (50 at first and 50 more for each 'tic'). No CD; instant application; requires herbs to cast
-                speed *= 1f;
+                syncSpeed *= 1f;
                 // Placeholder visual thing
                 body.GetComponent<MeshRenderer>().material.color = Color.green;
                 break;
@@ -248,7 +251,7 @@ public class PlayerStats : NetworkBehaviour {
     void SetStats(int resi, float spd) {
         resilience = 0 + resi;
         sizeModifier = (maxHealth / 1000);
-        speed = 5f * spd;
+        syncSpeed = speed * spd;
     }
 
     [ClientCallback]
