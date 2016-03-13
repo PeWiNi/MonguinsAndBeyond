@@ -27,6 +27,12 @@ public class OuterAreaPlacement : MonoBehaviour
         v3Extents = bounds.extents;
         CalcPositons();
         ConfinedArea();
+        StartCoroutine(ExecuteAfterTime(1));
+    }
+
+    IEnumerator ExecuteAfterTime(float time) {
+        yield return new WaitForSeconds(time);
+
         OuterArea();
     }
 
@@ -148,13 +154,14 @@ public class OuterAreaPlacement : MonoBehaviour
         {
             Vector3 newVector = new Vector3(Random.Range(straightLeft.x, force2.x), transform.position.y, Random.Range(straightLeft.z, betweenForces.z));
             RaycastHit hit;
-            if (Physics.Raycast(Vector3.up + newVector, -Vector3.up + newVector, out hit))
-            {
+            Ray ray = new Ray(Vector3.up + newVector, -Vector3.up);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value)) {
+                Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow);
                 print("V: Hit name = " + hit.transform.name);
-                Debug.DrawLine(Vector3.up + newVector, -Vector3.up + newVector, Color.blue, 100f);
-            }
+                //Debug.DrawLine(Vector3.up + newVector, -Vector3.up + newVector, Color.blue, 100f);
             GameObject go = GameObject.Instantiate(asset, newVector, Quaternion.identity) as GameObject;
             go.transform.parent = allOuterAreas.transform;
+            } else Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.red, 100f);
             amountV--;
         }
 
@@ -164,13 +171,14 @@ public class OuterAreaPlacement : MonoBehaviour
         {
             Vector3 newVector = new Vector3(Random.Range(straightDown.x, betweenForces.x), transform.position.y, Random.Range(straightDown.z, force.z));
             RaycastHit hit;
-            if (Physics.Raycast(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, out hit))
-            {
+            Ray ray = new Ray(Vector3.up + newVector, -Vector3.up);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value)) {
+                Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow);
                 print("H: Hit name = " + hit.transform.name);
-                Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.blue, 100f);
-            }
+                //Debug.DrawLine(Vector3.up + newVector, -Vector3.up + newVector, Color.blue, 100f);
             GameObject go = GameObject.Instantiate(asset, newVector, Quaternion.identity) as GameObject;
             go.transform.parent = allOuterAreas.transform;
+            } else Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.red, 100f);
             amountH--;
         }
 
