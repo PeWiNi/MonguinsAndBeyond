@@ -41,7 +41,7 @@ public class EnvironmentPlacement : MonoBehaviour
         if (placementState == Placement.Random)
             RandomPlacement(null, null, maxNumberOfAssets, assets);
         if (placementState == Placement.Area)
-            AreaPlacement(null, this.areaRadius, this.maxNumberOfAssets, this.assetID);
+            AreaPlacement(gameObject, this.areaRadius, this.maxNumberOfAssets, this.assetID);
         if (placementState == Placement.Fill)
             FillPlacement(null, null, this.heightMin, this.heightMax, this.isBetween, this.maxNumberOfAssets);
     }
@@ -49,8 +49,8 @@ public class EnvironmentPlacement : MonoBehaviour
     public void AddSection(GameObject newSection, Vector3[] newVertices)
     {
         sections.Add(newSection, newVertices);
-        RandomPlacement(newSection, newVertices, this.maxNumberOfAssets, this.assets);
-        //AreaPlacement(newSection, 100f, maxNumberOfAssets, 0);
+        //RandomPlacement(newSection, newVertices, this.maxNumberOfAssets, this.assets);
+        AreaPlacement(newSection, 100f, maxNumberOfAssets, 0);
         //FillPlacement(newSection, newVertices, heightMin, heightMax, isBetween, maxNumberOfAssets);
     }
 
@@ -162,13 +162,14 @@ public class EnvironmentPlacement : MonoBehaviour
             if (newSection == null && hitColliders.Length == 0)
             {
                 hitColliders = Physics.OverlapSphere(gameObject.transform.position, radius, groundLayerMask);
-                print("HitColliders = " + hitColliders.Length);
             }
             else
             {
                 randomHitCollider = Random.Range(0, hitColliders.Length);
                 mesh = hitColliders[randomHitCollider].transform.GetComponent<MeshFilter>().sharedMesh;
                 vertices = hitColliders[randomHitCollider].transform.GetComponent<MeshFilter>().sharedMesh.vertices;
+
+                Debug.DrawRay(mesh.bounds.max, mesh.bounds.max + Vector3.up * 10, Color.red, 100f);
             }
             List<Vector3> verticesWithinRadius = new List<Vector3>();
             List<Vector3> normalsWithinRadius = new List<Vector3>();
@@ -248,5 +249,13 @@ public class EnvironmentPlacement : MonoBehaviour
                 }
             }
         }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Vector3 center = gameObject.GetComponent<MeshRenderer>().bounds.center;
+        float radius = gameObject.GetComponent<MeshRenderer>().bounds.extents.magnitude;
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(center, radius);
     }
 }
