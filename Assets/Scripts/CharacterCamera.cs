@@ -41,11 +41,11 @@ public class CharacterCamera : MonoBehaviour {
     }
 
     void LateUpdate() {
-        //if (!GetComponentInParent<SpawnTraps>().Placing) { // Move camera
+        if (!GetComponentInParent<SpawnTraps>().isPlacing) { // Move camera
         //if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) { // Move camera
             x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
             y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
-        //}
+        }
         /*} else if (Input.GetAxis("Vertical") != 0f || Input.GetAxis("Horizontal") != 0f) // Reset rotation when moving
             if (!GetComponentInParent<PlayerStats>().isStunned) { // No more spinny spinny camera
                 var targetRotationAngle = target.eulerAngles.y;

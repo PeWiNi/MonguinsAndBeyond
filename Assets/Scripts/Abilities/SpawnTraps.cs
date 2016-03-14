@@ -10,11 +10,15 @@ public class SpawnTraps : NetworkBehaviour {
     GameObject projector;
 
     bool active = false;
-    public bool Placing {
+    public bool isPlacing {
         get {
             return active;
         }
     }
+    public float range = 10f;
+    public float playerOffset = 1.5f;
+    [Range(0, 1)]
+    public float castAngles = 0f;
 
 	// Use this for initialization
 	void Start () {
@@ -25,28 +29,55 @@ public class SpawnTraps : NetworkBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if (Placing) {
+	    if (isPlacing) {
             projector.transform.position = PlaceStuff();
         }
 	}
 
     Vector3 PlaceStuff() {
-        Vector3 pos = new Vector3();
+        Vector3 pos = transform.forward * -100;
         Camera camera = GetComponentInChildren<Camera>();
-        //pos = camera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, camera.nearClipPlane * camera.GetComponent<CharacterCamera>().currentDistance));
         RaycastHit hit;
         Ray ray = camera.ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
-        Debug.DrawRay(ray.origin, ray.direction * 100, Color.yellow);
+        //Debug.DrawRay(ray.origin, ray.direction * 100, Color.yellow);
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << 8))) {
             pos = hit.point;
         }
-        pos = Limiter(doNotTouchTerrain(pos, 2));
-        Debug.DrawLine(pos, new Vector3(pos.x, 5, pos.z), Color.blue);
+        pos = doNotTouchTerrain(Limiter(pos, range), 2);
+        // Check if behind player - and distable projector if it is
+        Vector3 toOther = pos - transform.position;
+        if (isBehind(toOther))
+            projector.gameObject.SetActive(false);
+        else if (!projector.gameObject.activeSelf)
+            projector.gameObject.SetActive(true);
+        //Debug.DrawLine(pos, new Vector3(pos.x, 5, pos.z), Color.blue);
         return pos;
     }
 
-    Vector3 Limiter(Vector3 pos) {
-        return pos;
+    /// <summary>
+    /// Limit the space in which the Trap can be placed
+    /// </summary>
+    /// <param name="pos">The position that is to be constrained</param>
+    /// <param name="distance">The distance from the player that the trap can be set</param>
+    /// <returns>The position Clamped inside the available space</returns>
+    Vector3 Limiter(Vector3 pos, float distance) {
+        Vector3 position = pos;
+        // Check if within distance
+        if (Vector3.Distance(transform.position, pos) > distance)
+            position = Vector3.MoveTowards(transform.position, pos, distance);
+        return position;
+    }
+
+    /// <summary>
+    /// Is this point behind the player (+ offset)
+    /// Using castAngles (-1 to 1): 1 if they point in exactly the same direction, -1 if they point in completely opposite directions and 0 if the vectors are perpendicular.
+    /// </summary>
+    /// <param name="point">Point to be checked against</param>
+    /// <returns>True if the point is in front of (and inside of the castAngles)</returns>
+    bool isBehind(Vector3 point) {
+        Vector3 forward = transform.TransformDirection(Vector3.forward) + transform.forward * playerOffset;
+        Vector3 toOther = projector.transform.position - transform.position;
+        return Vector3.Dot(forward.normalized, toOther.normalized) < castAngles;
     }
 
     void Activate(bool activate) {
@@ -59,8 +90,11 @@ public class SpawnTraps : NetworkBehaviour {
         projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/BananaSplat_Decal") as Texture;
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
-        if(Input.GetMouseButtonDown(0))
-            CmdDoFire(bananaTrap, projector.transform.position);
+        if(Input.GetMouseButtonDown(0)) {
+            if (isBehind(projector.transform.position - transform.position))
+                GetComponent<SyncInventory>().pickupBanana();
+            else CmdDoFire(bananaTrap, projector.transform.position);
+        }
         else 
             GetComponent<SyncInventory>().pickupBanana(); // Mayhaps this requires a Command...
         Activate(false);

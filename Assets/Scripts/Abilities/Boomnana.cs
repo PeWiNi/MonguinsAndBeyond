@@ -132,9 +132,26 @@ public class Boomnana : NetworkBehaviour {
                 }
             }
         }
-        if (_collision.collider.tag != "Ability")
+        if (_collision.collider.tag != "Ability") {
+            BOOM();
             Destroy(gameObject);
+        }
         Physics.IgnoreCollision(_collision.collider, GetComponent<Collider>());
+    }
+
+    /// <summary>
+    /// BOOMnana VFXs
+    /// </summary>
+    void BOOM() {
+        GameObject projector = (GameObject)Instantiate(
+            Resources.Load("Prefabs/BOOM_Projector") as GameObject, transform.position,
+            Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
+
+        projector.GetComponent<Projector>().orthographicSize = maxArea * owner.GetComponent<PlayerStats>().sizeModifier;
+        // THOUGHT: Maybe do a alpha dropoff script to allow the projector to fade over time (and then destroy when alpha == 0)
+        Destroy(projector, 10);
+
+        NetworkServer.Spawn(projector);
     }
 
     void AoE() {
@@ -153,5 +170,12 @@ public class Boomnana : NetworkBehaviour {
                 targetPS.TakeDmg(dmg);
             }
         }
+        /*
+        Debug.DrawLine(transform.position, transform.position + transform.up * maxDist, Color.yellow, 10);
+        Debug.DrawLine(transform.position, transform.position + transform.right * maxDist, Color.yellow, 10);
+        Debug.DrawLine(transform.position, transform.position + -transform.right * maxDist, Color.yellow, 10);
+        Debug.DrawLine(transform.position, transform.position + transform.forward * maxDist, Color.yellow, 10);
+        Debug.DrawLine(transform.position, transform.position + -transform.forward * maxDist, Color.yellow, 10);
+        */
     }
 }
