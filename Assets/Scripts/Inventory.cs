@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class Inventory : MonoBehaviour {
     [SerializeField]
     int bananas = 10;
+    public int bananaCount { get { return bananas; } }
     //THOUGHT: Cap/Duration/whatever?
 
 	// Use this for initialization
@@ -17,10 +18,6 @@ public class Inventory : MonoBehaviour {
 	
 	}
 
-    public string bananaCount() {
-        return "" + bananas;
-    }
-
     public bool useBanana(int count = 1) {
         if (bananas == 0)
             return false;
@@ -30,6 +27,6 @@ public class Inventory : MonoBehaviour {
 
     public void pickupBanana(int count = 1) {
         bananas += count;
-        transform.FindChild("Banana").GetComponentInChildren<Text>().text = bananaCount();
+        transform.FindChild("Banana").GetComponentInChildren<Text>().text = "" + bananaCount;
     }
 }

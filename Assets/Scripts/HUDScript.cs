@@ -12,6 +12,9 @@ public class HUDScript : MonoBehaviour {
     Slider healthSlider;
     Text healthText;
     PlayerStats ps;
+    Image trap1;
+    public float trap1Cooldown = 10f;
+    float trap1Timer;
 
     // Use this for initialization
     void Start () {
@@ -22,6 +25,8 @@ public class HUDScript : MonoBehaviour {
         ability1 = actionBar.GetComponentsInChildren<Image>()[1]; // index 0 is the picture behind index 1
         ability2 = actionBar.GetComponentsInChildren<Image>()[3];
         ability3 = actionBar.GetComponentsInChildren<Image>()[5];
+
+        trap1 = actionBar.GetComponentsInChildren<Image>()[7];
         inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
     }
 	
@@ -37,6 +42,12 @@ public class HUDScript : MonoBehaviour {
             ActionBarUpdate(ref ability2, ps.abilities[1]);
             ActionBarUpdate(ref ability3, ps.abilities[2]);
             #endregion
+            #region Trap Bar
+            if (Input.GetKeyDown(KeyCode.Alpha1) && !ps.GetComponentInChildren<SpawnTraps>().isPlacing && !OnCooldown(trap1Cooldown, trap1Timer)) {
+                SpawnBananaTrap();
+            }
+            ActionBarUpdate(ref trap1, trap1Cooldown, trap1Timer);
+            #endregion
         }
     }
 
@@ -46,11 +57,22 @@ public class HUDScript : MonoBehaviour {
     /// <param name="overlayImage">Image for visualizing cooldown</param>
     /// <param name="ability">The ability corresponding to the action bar slot</param>
     public void ActionBarUpdate(ref Image overlayImage, Ability ability) {
-        if (ability.OnCooldown() == true) {
+        if (ability.OnCooldown()) {
             overlayImage.fillAmount = ability.CooldownRemaining();
         } else if (overlayImage.fillAmount < 1) {
             overlayImage.fillAmount = 1;
         }
+    }
+
+    public void ActionBarUpdate(ref Image overlayImage, float cooldown, float time) {
+        if (OnCooldown(cooldown, time))
+            overlayImage.fillAmount = (1.0f / cooldown * (Time.time - time));
+        else if (overlayImage.fillAmount < 1) 
+            overlayImage.fillAmount = 1;
+    }
+
+    bool OnCooldown(float cooldown, float timer) {
+        return (Time.time - timer < cooldown);
     }
 
     /// <summary>
@@ -65,16 +87,24 @@ public class HUDScript : MonoBehaviour {
         //Activate Inventory GO
         inventory.gameObject.SetActive(true);
         //Set Banana-count text
-        inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = inventory.GetComponent<Inventory>().bananaCount();
-        //TODO: Make Inventory a component on player or make the player aware of banana-count (to allow for pickup etc.)
+        inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().bananaCount;
         #endregion
 
         // TODO: Do stuff with setting up correct ability images
     }
 
     public void SpawnBananaTrap() {
-        if (inventory.useBanana())
-            StartCoroutine(ps.GetComponentInChildren<SpawnTraps>().Slippery());
-        inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = inventory.GetComponent<Inventory>().bananaCount();
+        if (inventory.useBanana()) 
+            StartCoroutine(PlaceBananaTrap());
+        inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().bananaCount;
+    }
+
+    IEnumerator PlaceBananaTrap() {
+        SpawnTraps waitFor = ps.GetComponentInChildren<SpawnTraps>();
+        int bananaCount = inventory.bananaCount;
+        yield return StartCoroutine(waitFor.Slippery());
+        if(bananaCount == inventory.bananaCount) // Rogue codez!
+            trap1Timer = Time.time;
+        yield return null;
     }
 }

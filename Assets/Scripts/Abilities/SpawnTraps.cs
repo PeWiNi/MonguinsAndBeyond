@@ -3,8 +3,8 @@ using System.Collections;
 using UnityEngine.Networking;
 
 public class SpawnTraps : NetworkBehaviour {
-    // ADD PREVIEWS of traps
     // Interconnectivity with CharacterCamera (disable while putting traps so you can properly place the trap)
+    // THOUGHT: Accumulate traps so you can throw multiple banana-peels at the same time (not on top of itself)
     string bananaTrap;
 
     GameObject projector;
@@ -19,6 +19,8 @@ public class SpawnTraps : NetworkBehaviour {
     public float playerOffset = 1.5f;
     [Range(0, 1)]
     public float castAngles = 0f;
+
+    public float bananaTrapDuration = 60f; // Update to use the Trap class duration
 
 	// Use this for initialization
 	void Start () {
@@ -93,7 +95,7 @@ public class SpawnTraps : NetworkBehaviour {
         if(Input.GetMouseButtonDown(0)) {
             if (isBehind(projector.transform.position - transform.position))
                 GetComponent<SyncInventory>().pickupBanana();
-            else CmdDoFire(bananaTrap, projector.transform.position);
+            else CmdDoFire(bananaTrap, projector.transform.position, bananaTrapDuration);
         }
         else 
             GetComponent<SyncInventory>().pickupBanana(); // Mayhaps this requires a Command...
@@ -101,7 +103,7 @@ public class SpawnTraps : NetworkBehaviour {
     }
 
     [Command]
-    void CmdDoFire(string go, Vector3 position) {
+    void CmdDoFire(string go, Vector3 position, float duration) {
         Vector3 spawnPos = transform.position + ((transform.localScale.x + 10) * transform.forward);
         if (position != new Vector3())
             spawnPos = position;
@@ -109,6 +111,9 @@ public class SpawnTraps : NetworkBehaviour {
         GameObject banana = (GameObject)Instantiate(
             Resources.Load(go) as GameObject, spawnPos,
             Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
+
+        if (duration > 0)
+            Destroy(banana, duration);
 
         NetworkServer.Spawn(banana);
     }
