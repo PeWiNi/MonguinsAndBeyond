@@ -27,12 +27,6 @@ public class OuterAreaPlacement : MonoBehaviour
         v3Extents = bounds.extents;
         CalcPositons();
         ConfinedArea();
-        StartCoroutine(ExecuteAfterTime(1));
-    }
-
-    IEnumerator ExecuteAfterTime(float time) {
-        yield return new WaitForSeconds(time);
-
         OuterArea();
     }
 
@@ -155,13 +149,18 @@ public class OuterAreaPlacement : MonoBehaviour
             Vector3 newVector = new Vector3(Random.Range(straightLeft.x, force2.x), transform.position.y, Random.Range(straightLeft.z, betweenForces.z));
             RaycastHit hit;
             Ray ray = new Ray(Vector3.up + newVector, -Vector3.up);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value)) {
-                Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))
+            {
+                Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow, 100f);
                 print("V: Hit name = " + hit.transform.name);
                 //Debug.DrawLine(Vector3.up + newVector, -Vector3.up + newVector, Color.blue, 100f);
-            GameObject go = GameObject.Instantiate(asset, newVector, Quaternion.identity) as GameObject;
-            go.transform.parent = allOuterAreas.transform;
-            } else Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.red, 100f);
+                GameObject go = GameObject.Instantiate(asset, newVector, Quaternion.Euler(new Vector3(0f, Random.Range(0f, 180f), 0f))) as GameObject;
+                float height = Random.Range(go.transform.localScale.y, go.transform.localScale.y * 1.25f);
+                float width = go.transform.localScale.x * height;
+                go.transform.localScale = new Vector3(width, height, width);
+                go.transform.parent = allOuterAreas.transform;
+            }
+            else Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.red, 100f);
             amountV--;
         }
 
@@ -172,13 +171,18 @@ public class OuterAreaPlacement : MonoBehaviour
             Vector3 newVector = new Vector3(Random.Range(straightDown.x, betweenForces.x), transform.position.y, Random.Range(straightDown.z, force.z));
             RaycastHit hit;
             Ray ray = new Ray(Vector3.up + newVector, -Vector3.up);
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value)) {
-                Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))
+            {
+                Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow, 100f);
                 print("H: Hit name = " + hit.transform.name);
                 //Debug.DrawLine(Vector3.up + newVector, -Vector3.up + newVector, Color.blue, 100f);
-            GameObject go = GameObject.Instantiate(asset, newVector, Quaternion.identity) as GameObject;
-            go.transform.parent = allOuterAreas.transform;
-            } else Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.red, 100f);
+                GameObject go = GameObject.Instantiate(asset, newVector, Quaternion.Euler(new Vector3(0f, Random.Range(0f, 180f), 0f))) as GameObject;
+                float height = Random.Range(go.transform.localScale.y, go.transform.localScale.y * 1.25f);
+                float width = go.transform.localScale.x / height;
+                go.transform.localScale = new Vector3(width, height, width); 
+                go.transform.parent = allOuterAreas.transform;
+            }
+            else Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.red, 100f);
             amountH--;
         }
 
