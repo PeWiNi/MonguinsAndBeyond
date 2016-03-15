@@ -56,7 +56,7 @@ public class Boomnana : NetworkBehaviour {
         speed = spd;
         fullDamage = fullDmg;
         selfDamage = selfDmg;
-        endpoint = owner.transform.position + (owner.transform.forward * distance);
+        endpoint = doNotTouchTerrain(owner.transform.position + (owner.transform.forward * distance), false);
         movingBack = false;
     }
 
@@ -96,7 +96,7 @@ public class Boomnana : NetworkBehaviour {
     /// </summary>
     /// <param name="pos">Current position of the object</param>
     /// <returns>Position away from the terrain</returns>
-    Vector3 doNotTouchTerrain(Vector3 pos) {
+    Vector3 doNotTouchTerrain(Vector3 pos, bool lerp = true) {
         Vector3 hoverPos = pos;
         RaycastHit hit;
         if (Physics.Raycast(pos, -Vector3.up, out hit)) {
@@ -104,8 +104,8 @@ public class Boomnana : NetworkBehaviour {
             var heightToAdd = transform.localScale.y + .5f;
             hoverPos.y = pos.y - distancetoground + heightToAdd;
         }
-        pos = Vector3.Lerp(pos, hoverPos, Time.deltaTime * 5);
-        return pos;
+        if (lerp) return Vector3.Lerp(pos, hoverPos, Time.deltaTime * 5);
+        else return hoverPos;
     }
 
     /// <summary>

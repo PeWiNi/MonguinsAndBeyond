@@ -53,7 +53,7 @@ public class HealthCondition : MonoBehaviour
         while (countDown > 0f)
         {
             yield return new WaitForSeconds(1.0f);
-            playerStats.CmdTakeDmg((degenerationAmount / duration));
+            playerStats.TakeDmg((degenerationAmount / duration));
             countDown--;
         }
     }
@@ -69,7 +69,7 @@ public class HealthCondition : MonoBehaviour
         while (countDown > 0f)
         {
             yield return new WaitForSeconds(1.0f);
-            playerStats.CmdHealing((regenerationAmount / duration));
+            playerStats.Healing((regenerationAmount / duration));
             countDown--;
         }
     }
