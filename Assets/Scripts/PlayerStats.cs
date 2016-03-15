@@ -158,6 +158,9 @@ public class PlayerStats : NetworkBehaviour {
         if (makeMap) { GenerateTerrain(); }
     }
 
+    /// <summary>
+    /// Set the characteristics of your selected role on other clients
+    /// </summary>
     void ApplyRole() {
         if (!isLocalPlayer) {
             if (role != syncRole) {
@@ -225,9 +228,13 @@ public class PlayerStats : NetworkBehaviour {
         gameObject.GetComponent<Rigidbody>().transform.localScale = new Vector3(sizeModifier, sizeModifier, sizeModifier);
         //gameObject.GetComponent<Rigidbody>().transform.localScale *= sizeModifier; // Applies on others
         maxHealth = syncMaxHealth;
-        health = maxHealth;
+        if(health > maxHealth)
+            health = maxHealth;
     }
 
+    /// <summary>
+    /// Tell your role to the server
+    /// </summary>
     [ClientCallback]
     void SelectRole() {
         if (isLocalPlayer) {
@@ -235,12 +242,21 @@ public class PlayerStats : NetworkBehaviour {
         }
     }
 
+    /// <summary>
+    /// Enable/disable banana/fish on forehead based on team
+    /// </summary>
     [ClientCallback]
     void TeamSelect() {
         body.GetChild(0).gameObject.SetActive(team == 1 ? true : false);
         body.GetChild(1).gameObject.SetActive(team == 2 ? true : false);
     }
 
+    /// <summary>
+    /// Let the server determine your health along with setting other stats
+    /// </summary>
+    /// <param name="maxHp">The maximum health of your selected role</param>
+    /// <param name="resi">The resilience from your attributes</param>
+    /// <param name="spd">The speed modifer from your role</param>
     [Command]
     void CmdProvideStats(float maxHp, int resi, float spd) {
         ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
@@ -248,12 +264,21 @@ public class PlayerStats : NetworkBehaviour {
         maxHealth = syncMaxHealth;
         SetStats(resi, spd);
     }
+    /// <summary>
+    /// Set the current stats locally
+    /// Currently updates resilience, size and speed
+    /// </summary>
+    /// <param name="resi">The modifier which determines dmg reduction</param>
+    /// <param name="spd">Movement speed of the character</param>
     void SetStats(int resi, float spd) {
         resilience = 0 + resi;
         sizeModifier = (maxHealth / 1000);
         syncSpeed = speed * spd;
     }
 
+    /// <summary>
+    /// Syncronize health (and maxHealth) and tell the server to update your health
+    /// </summary>
     [ClientCallback]
     void StatSync() {
         if (maxHealth != syncMaxHealth && isLocalPlayer) {
@@ -263,11 +288,23 @@ public class PlayerStats : NetworkBehaviour {
         health = syncHealth;
     }
 
+    /// <summary>
+    /// Tell the server your current health and make it update your syncHealth
+    /// This is also where the health is determined whenever someone connects/disconnects
+    /// TODO: Update based on previous maxHealth rather than the new one
+    /// </summary>
+    /// <param name="hp">Health modifier to be updated with</param>
     [Command]
     void CmdChangeHealth(float hp) {
-        syncHealth = (1000 * roleStats.maxHealth) * hp;
+        if(syncHealth < (1000 * roleStats.maxHealth) * hp) {
+            float miniMe = syncHealth / syncMaxHealth;
+            syncHealth = miniMe * (1000 * roleStats.maxHealth) * hp;
+        } else syncHealth = (1000 * roleStats.maxHealth) * hp;
     }
 
+    /// <summary>
+    /// Tell the server that you are about to respawn
+    /// </summary>
     [Command]
     void CmdRespawn() {
         isDead = false;
@@ -275,6 +312,13 @@ public class PlayerStats : NetworkBehaviour {
         Respawn();
     }
 
+    /// <summary>
+    /// Logic for respawning the player
+    /// As the local player, tell the server that you are about to respawn
+    /// Update the variables connected to coming back to life
+    /// 
+    /// Also for some reason you need to tell everybody your new position
+    /// </summary>
     void Respawn() {
         if (isLocalPlayer)
             CmdRespawn();
@@ -284,6 +328,10 @@ public class PlayerStats : NetworkBehaviour {
         GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
     }
 
+    /// <summary>
+    /// Update the SyncVar by telling your role to the server
+    /// </summary>
+    /// <param name="role">Your currently selected role</param>
     [Command]
     void CmdProvideRole(Role role) {
         syncRole = role;

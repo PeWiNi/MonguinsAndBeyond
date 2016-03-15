@@ -103,7 +103,7 @@ public class mapCreator : NetworkBehaviour
                 Vector3[] newVertices = new Vector3[noDuplicateVertices.Count];
                 noDuplicateVertices.CopyTo(newVertices);
                 //Add the new ring to the List of the map.
-                map.GetComponent<EnvironmentPlacement>().AddSection(ringNo, newVertices);
+                //map.GetComponent<EnvironmentPlacement>().AddSection(ringNo, newVertices);
             }
             else
             {

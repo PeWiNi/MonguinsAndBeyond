@@ -36,6 +36,10 @@ public class SpawnTraps : NetworkBehaviour {
         }
 	}
 
+    /// <summary>
+    /// Returns the position of the user's cursor in worldspace possibly limited by Limiter()
+    /// </summary>
+    /// <returns>Position of the user's cursor in worldspace</returns>
     Vector3 PlaceStuff() {
         Vector3 pos = transform.forward * -100;
         Camera camera = GetComponentInChildren<Camera>();
@@ -82,11 +86,21 @@ public class SpawnTraps : NetworkBehaviour {
         return Vector3.Dot(forward.normalized, toOther.normalized) < castAngles;
     }
 
+    /// <summary>
+    /// Set the state of whether the user is placing or not (for logic with other classes)
+    /// Also enables/disables the projector, projecting the trap placement
+    /// </summary>
+    /// <param name="activate">State of activation (isPlacing)</param>
     void Activate(bool activate) {
         active = activate;
         projector.gameObject.SetActive(activate);
     }
 
+    /// <summary>
+    /// Spawn the bananaTrap and wait for input (from the user on where to place it)
+    /// Left clicking outside the valid area will cancel placement of the trap
+    /// Right clicking will cancel placement right away
+    /// </summary>
     public IEnumerator Slippery() {
         Activate(true);
         projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/BananaSplat_Decal") as Texture;
@@ -102,6 +116,12 @@ public class SpawnTraps : NetworkBehaviour {
         Activate(false);
     }
 
+    /// <summary>
+    /// Spawn object on server
+    /// </summary>
+    /// <param name="go">String to position of GameObject in Resources</param>
+    /// <param name="position">The position at which the object is to be spawned</param>
+    /// <param name="duration">Time before object is destoryed (0 means never)</param>
     [Command]
     void CmdDoFire(string go, Vector3 position, float duration) {
         Vector3 spawnPos = transform.position + ((transform.localScale.x + 10) * transform.forward);
