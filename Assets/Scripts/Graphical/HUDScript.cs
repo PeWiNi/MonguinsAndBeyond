@@ -12,9 +12,15 @@ public class HUDScript : MonoBehaviour {
     Slider healthSlider;
     Text healthText;
     PlayerStats ps;
+
+    #region Trap action bar fields
     Image trap1;
     public float trap1Cooldown = 10f;
     float trap1Timer;
+    Image trap2;
+    public float trap2Cooldown = 25f;
+    float trap2Timer;
+    #endregion
 
     // Use this for initialization
     void Start () {
@@ -27,6 +33,7 @@ public class HUDScript : MonoBehaviour {
         ability3 = actionBar.GetComponentsInChildren<Image>()[5];
 
         trap1 = actionBar.GetComponentsInChildren<Image>()[7];
+        trap2 = actionBar.GetComponentsInChildren<Image>()[9];
         inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
     }
 	
@@ -47,6 +54,11 @@ public class HUDScript : MonoBehaviour {
                 SpawnBananaTrap();
             }
             ActionBarUpdate(ref trap1, trap1Cooldown, trap1Timer);
+
+            if (Input.GetKeyDown(KeyCode.Alpha2) && !ps.GetComponentInChildren<SpawnTraps>().isPlacing && !OnCooldown(trap2Cooldown, trap2Timer)) {
+                SpawnSpikeTrap();
+            }
+            ActionBarUpdate(ref trap2, trap2Cooldown, trap2Timer);
             #endregion
         }
     }
@@ -86,8 +98,9 @@ public class HUDScript : MonoBehaviour {
         #region Inventory
         //Activate Inventory GO
         inventory.gameObject.SetActive(true);
-        //Set Banana-count text
+        //Set count status text
         inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().bananaCount;
+        inventory.transform.FindChild("Sticks").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
         #endregion
 
         // TODO: Do stuff with setting up correct ability images
@@ -99,12 +112,36 @@ public class HUDScript : MonoBehaviour {
         inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().bananaCount;
     }
 
+    public void SpawnSpikeTrap() {
+        if (inventory.useSticks())
+            StartCoroutine(PlaceSpikeTrap());
+        inventory.transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
+    }
+
     IEnumerator PlaceBananaTrap() {
         SpawnTraps waitFor = ps.GetComponentInChildren<SpawnTraps>();
         int bananaCount = inventory.bananaCount;
         yield return StartCoroutine(waitFor.Slippery());
-        if(bananaCount == inventory.bananaCount) // Rogue codez!
+        // If the counter is unchanged, this means that the coroutine has not refunded the banana
+        if(bananaCount == inventory.bananaCount) // Not entirely correct to not start timer; this is due to the player being able to pick up bananas while placing
             trap1Timer = Time.time;
         yield return null;
+    }
+
+    IEnumerator PlaceSpikeTrap() {
+        SpawnTraps waitFor = ps.GetComponentInChildren<SpawnTraps>();
+        int stickCount = inventory.stickCount;
+        yield return StartCoroutine(waitFor.Spikey());
+        if (stickCount == inventory.stickCount) // Rogue Codez!
+            trap2Timer = Time.time;
+        yield return null;
+    }
+
+    public void DropItem(string item) {
+        if(item == "Sticks" ? inventory.useSticks() : item == "Banana" ? inventory.useBanana() : false)
+            ps.GetComponent<SyncInventory>().CmdSpawnItem("Prefabs/" + item, new Vector3(), 0);
+        inventory.transform.FindChild(item).GetComponentInChildren<Text>().text = 
+            item == "Sticks" ? "" + inventory.GetComponent<Inventory>().stickCount :
+            item == "Banana" ? "" + inventory.GetComponent<Inventory>().bananaCount : "";
     }
 }

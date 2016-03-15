@@ -34,8 +34,6 @@ public class ThrowBoomnana : Ability {
         GameObject bullet = (GameObject)Instantiate(
             prefab, transform.position + (transform.localScale.x + .5f) * transform.forward,
             Quaternion.identity);
-        print("X speed: " + GetComponent<Rigidbody>().velocity.x);
-        print("Z speed: " + GetComponent<Rigidbody>().velocity.z);
         // Pass correct parameters from the Player Prefab
         bullet.GetComponent<Boomnana>().setup(gameObject, distance, speed, fullDamage, selfDamage);
 

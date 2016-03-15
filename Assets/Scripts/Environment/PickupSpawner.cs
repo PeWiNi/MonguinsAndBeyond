@@ -33,7 +33,7 @@ public class PickupSpawner : NetworkBehaviour {
         if (hitColliders.Length > 0)
             return;
         GameObject go = (GameObject)Instantiate(
-            prefab, pos, Quaternion.identity);
+            prefab, pos, prefab.transform.rotation);
         //Destroy(go, repeatTime);
         NetworkServer.Spawn(go);
     }

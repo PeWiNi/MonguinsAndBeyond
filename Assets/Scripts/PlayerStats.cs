@@ -119,11 +119,11 @@ public class PlayerStats : NetworkBehaviour {
             CmdTeamSelection(NM.team > 0 ? NM.team : team);
             RoleCharacteristics(role);
             SelectRole();
-            try {
-                HUDScript hud = GameObject.Find("HUD").GetComponent<HUDScript>();
-                hud.SetPlayerStats(this);
-                GetComponent<SyncInventory>().setInventory(hud.inventory);
-            } catch { }
+            //try {
+            HUDScript hud = GameObject.Find("HUD").GetComponent<HUDScript>();
+            hud.SetPlayerStats(this);
+            GetComponent<SyncInventory>().setInventory(hud.inventory);
+            //} catch { }
         }
         syncHealth = syncMaxHealth;
     }

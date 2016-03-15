@@ -95,6 +95,7 @@ public class Boomnana : NetworkBehaviour {
     /// Keeps the y from hitting the terrain (except in extreme conditions)
     /// </summary>
     /// <param name="pos">Current position of the object</param>
+    /// <param name="lerp">Whether or not the returned position should be lerped between desired and current position</param>
     /// <returns>Position away from the terrain</returns>
     Vector3 doNotTouchTerrain(Vector3 pos, bool lerp = true) {
         Vector3 hoverPos = pos;

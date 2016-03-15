@@ -60,23 +60,22 @@ public class PlayerLogic : NetworkBehaviour {
             // Don't do this all the time ._. but only when new peeps connect
             foreach (HealthSlider hs in FindObjectsOfType<HealthSlider>()) // Find HealthSliders of all players and make them point towards you
                 hs.setCamera(characterCam);
-
-            #region abilities
-            if (Input.GetKeyDown(KeyCode.Q) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
-                //CmdDoFire(3.0f); // Dummy ability shooting bullets
-                castTime = abilities[0].Trigger() + Network.time;
-                abilities[0].timer = (float)Network.time;
-            }
-            if (Input.GetKeyDown(KeyCode.E) && !abilities[1].OnCooldown()) { //TODO make use of inputManager 
-                castTime = abilities[1].Trigger() + Network.time;
-                abilities[1].timer = (float)Network.time;
-            }
-            if (Input.GetKeyDown(KeyCode.F) && !abilities[2].OnCooldown()) { //TODO make use of inputManager 
-                castTime = abilities[2].Trigger() + Network.time;
-                abilities[2].timer = (float)Network.time;
-            }
-
-            if(Input.GetMouseButton(0) && Input.GetMouseButton(1)) {
+            if (transform.position.y < 25) {
+                #region abilities
+                if (Input.GetKeyDown(KeyCode.Q) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
+                    //CmdDoFire(3.0f); // Dummy ability shooting bullets
+                    castTime = abilities[0].Trigger() + Network.time;
+                    abilities[0].timer = (float)Network.time;
+                }
+                if (Input.GetKeyDown(KeyCode.E) && !abilities[1].OnCooldown()) { //TODO make use of inputManager 
+                    castTime = abilities[1].Trigger() + Network.time;
+                    abilities[1].timer = (float)Network.time;
+                }
+                if (Input.GetKeyDown(KeyCode.F) && !abilities[2].OnCooldown()) { //TODO make use of inputManager 
+                    castTime = abilities[2].Trigger() + Network.time;
+                    abilities[2].timer = (float)Network.time;
+                }
+            } if(Input.GetMouseButton(0) && Input.GetMouseButton(1)) {
                 vertAxis = 1;
             }
             #endregion

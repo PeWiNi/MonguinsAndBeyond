@@ -6,6 +6,7 @@ public class SpawnTraps : NetworkBehaviour {
     // Interconnectivity with CharacterCamera (disable while putting traps so you can properly place the trap)
     // THOUGHT: Accumulate traps so you can throw multiple banana-peels at the same time (not on top of itself)
     string bananaTrap;
+    string spikeTrap;
 
     GameObject projector;
 
@@ -21,12 +22,14 @@ public class SpawnTraps : NetworkBehaviour {
     public float castAngles = 0f;
 
     public float bananaTrapDuration = 60f; // Update to use the Trap class duration
+    public float spikeTrapDuration = 120f; // Update to use the Trap class duration
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         projector = (GameObject)Instantiate(Resources.Load("Prefabs/Trap_Projector") as GameObject, transform.position,
             Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
         bananaTrap = "Prefabs/Trap_BananaIsland";
+        spikeTrap = "Prefabs/Trap_SpikeIsland";
     }
 	
 	// Update is called once per frame
@@ -113,6 +116,20 @@ public class SpawnTraps : NetworkBehaviour {
         }
         else 
             GetComponent<SyncInventory>().pickupBanana(); // Mayhaps this requires a Command...
+        Activate(false);
+    }
+
+    public IEnumerator Spikey() {
+        Activate(true);
+        projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/Spikes") as Texture;
+        while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
+            yield return new WaitForFixedUpdate();
+        if (Input.GetMouseButtonDown(0)) {
+            if (isBehind(projector.transform.position - transform.position))
+                GetComponent<SyncInventory>().pickupSticks();
+            else CmdDoFire(spikeTrap, projector.transform.position, spikeTrapDuration);
+        } else
+            GetComponent<SyncInventory>().pickupSticks(); // Mayhaps this requires a Command...
         Activate(false);
     }
 
