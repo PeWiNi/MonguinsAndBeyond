@@ -26,15 +26,14 @@ public class OuterAreaPlacement : MonoBehaviour
         v3Center = bounds.center;
         v3Extents = bounds.extents;
         CalcPositons();
-        ConfinedArea();
         OuterArea();
     }
 
-    void Update()
-    {
-        CalcPositons();
-        DrawBox();
-    }
+    //void Update()
+    //{
+    //    CalcPositons();
+    //    DrawBox();
+    //}
 
     /// <summary>
     /// Create a triangle shaped relation between the rubber trees.
@@ -84,28 +83,18 @@ public class OuterAreaPlacement : MonoBehaviour
         Debug.DrawLine(v3Center, (vTopLeft + vBottomLeft) / 2, Color.red);
         Debug.DrawLine(v3Center, (vTopRight + vBottomRight) / 2, Color.red);
 
-        Debug.DrawRay(v3Center, (vBottomRight + vBottomLeft) / 2 + (vBottomLeft + vTopLeft) / 2, Color.green);
-        Debug.DrawRay(v3Center, (((vBottomRight + vBottomLeft) / 2 + (vBottomLeft + vTopLeft) / 2) * Mathf.Sqrt(2)) / 4, Color.blue);
-
         //Cube Bounds (box).
         Vector3 force = Vector3.Project((((vBottomLeft + vBottomRight) / 2) * (Mathf.Sqrt(2)) / 2), (vBottomLeft + vBottomRight) / 2);//Vector3 projection - to the left side.
         Vector3 force2 = Vector3.Project((((vBottomLeft + vTopLeft) / 2) * (Mathf.Sqrt(2)) / 2), (vBottomLeft + vTopLeft) / 2);//Vector3 projection - to the bottom side.
-        Vector3 center = (((vBottomRight + vBottomLeft) / 2 + (vBottomLeft + vTopLeft) / 2) * Mathf.Sqrt(2)) / 4;//Vector3 projection - Center.
+        Vector3 center = (force + force2);//Vector3 projection - Center.
         Debug.DrawRay(v3Center, force, Color.yellow);
         Debug.DrawRay(v3Center, force2, Color.yellow);
-        Debug.DrawRay(force, force2, Color.yellow);
+        Debug.DrawRay(force, force2, Color.magenta);
         Debug.DrawRay(force2, force, Color.cyan);
 
         //Leftover parts.
         Debug.DrawRay((vBottomLeft + vBottomRight) / 2, (vBottomLeft + vTopLeft) / 2, Color.magenta);
         Debug.DrawRay((vBottomLeft + vTopLeft) / 2, (vBottomLeft + vBottomRight) / 2, Color.cyan);
-
-        Debug.DrawLine(force2, (vBottomLeft + vTopLeft) / 2, Color.blue);//Distance from force 2 toward the left side.
-
-        //Debug.DrawRay(v3Center, vTopLeft, Color.cyan);
-        //Debug.DrawRay(v3Center, vTopRight, Color.yellow);
-        //Debug.DrawRay(v3Center, vBottomLeft, Color.magenta);
-        //Debug.DrawRay(v3Center, vBottomRight, Color.blue);
     }
 
     /// <summary>
@@ -113,15 +102,31 @@ public class OuterAreaPlacement : MonoBehaviour
     /// </summary>
     public void ConfinedArea()
     {
-        Vector3 force = Vector3.Project((((vBottomLeft + vBottomRight) / 2 + (vBottomLeft + vTopLeft) / 2) * Mathf.Sqrt(2)) / 2, (vBottomLeft + vBottomRight) / 2);
-        Vector3 force2 = Vector3.Project((((vBottomLeft + vBottomRight) / 2 + (vBottomLeft + vTopLeft) / 2) * Mathf.Sqrt(2)) / 2, (vBottomLeft + vTopLeft) / 2);
-        Vector3 force3 = Vector3.Project((((vTopLeft + vTopRight) / 2 + (vBottomRight + vTopRight) / 2) * Mathf.Sqrt(2)) / 2, (vTopLeft + vTopRight) / 2);
-        Vector3 center = (((vBottomRight + vBottomLeft) / 2 + (vBottomLeft + vTopLeft) / 2) * Mathf.Sqrt(2)) / 4;//Center - Half length diagonal.
-        //for (int i = 0; i < 24; i++)
-        //{
-        //    AddRubberTreeSection_TriangleShape(this.asset, this.numberOfAsset, center);
-        //    center = Quaternion.AngleAxis(-22.5f, Vector3.up) * center;//Rotate vector 45 degrees.
-        //}
+        Vector3 force = Vector3.Project((((vBottomLeft + vBottomRight) / 2 + (vBottomLeft + vTopLeft) / 2) * Mathf.Sqrt(2)) / 2, (vBottomLeft + vBottomRight) / 2);//Towards Bottom.
+        Vector3 force2 = Vector3.Project((((vBottomLeft + vBottomRight) / 2 + (vBottomLeft + vTopLeft) / 2) * Mathf.Sqrt(2)) / 2, (vBottomLeft + vTopLeft) / 2);//Towards Left.
+        Vector3 force3 = Vector3.Project((((vTopLeft + vTopRight) / 2 + (vBottomRight + vTopRight) / 2) * Mathf.Sqrt(2)) / 2, (vTopLeft + vTopRight) / 2);//Towards Top.
+        Vector3 center = ((force + force2) + v3Center) / 2;//Center - Half length diagonal within square.
+
+        #region Corner Sphere Areas
+        //Create Spheres
+        GameObject go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        go.transform.localScale *= Vector3.Distance(force, force2) / 4;
+        //go.transform.position = ((force + force2) - center);
+        go.transform.position = (center + (force + force2)) / 2;
+
+        Vector3 point = v3Center + -Vector3.right * (Vector3.Distance(v3Center, force2) / 4) * 3f;
+        Debug.DrawLine(go.transform.position + -Vector3.right * go.transform.localScale.x / 2, point, Color.red, 100f);
+        Debug.DrawLine(go.transform.position + Vector3.right * go.transform.localScale.x / 2, point, Color.red, 100f);
+
+        //Create 3 other Sphere areas all identical but with different placements.
+        GameObject nextSphere = go;
+        Vector3 newSpherePosition = nextSphere.transform.position;
+        for (int i = 0; i < 3; i++)
+        {
+            newSpherePosition = new Vector3(newSpherePosition.z, newSpherePosition.y, -newSpherePosition.x);//Set the positions perpendicular to the previous location.
+            GameObject.Instantiate(nextSphere, newSpherePosition, Quaternion.identity);
+        }
+        #endregion
     }
 
     /// <summary>
@@ -134,9 +139,6 @@ public class OuterAreaPlacement : MonoBehaviour
         Vector3 betweenForces = force + force2;
         Vector3 straightLeft = (vBottomLeft + vTopLeft) / 2;
         Vector3 straightDown = (vBottomLeft + vBottomRight) / 2;
-        //float xScale = Vector3.Distance(force2, (vBottomLeft + vTopLeft) / 2);//Width.
-        //float yScale = 1f;//Height.
-        //float zScale = Vector3.Distance(force2, (force2 + force));//Length.
 
         GameObject allOuterAreas = new GameObject();
         allOuterAreas.transform.localScale = new Vector3(Vector3.Distance(v3Center, straightLeft), 10f, Vector3.Distance(v3Center, straightDown));//The size of the squares.
@@ -179,7 +181,7 @@ public class OuterAreaPlacement : MonoBehaviour
                 GameObject go = GameObject.Instantiate(asset, newVector, Quaternion.Euler(new Vector3(0f, Random.Range(0f, 180f), 0f))) as GameObject;
                 float height = Random.Range(go.transform.localScale.y, go.transform.localScale.y * 1.25f);
                 float width = go.transform.localScale.x / height;
-                go.transform.localScale = new Vector3(width, height, width); 
+                go.transform.localScale = new Vector3(width, height, width);
                 go.transform.parent = allOuterAreas.transform;
             }
             else Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.red, 100f);
@@ -195,12 +197,6 @@ public class OuterAreaPlacement : MonoBehaviour
             newPiecePosition = new Vector3(newPiecePosition.z, newPiecePosition.y, -newPiecePosition.x);//Set the positions perpendicular to the previous location.
             rotation *= Quaternion.Euler(0, 90, 0);//Turn the rotations 90 Degrees for each new section.
             GameObject.Instantiate(nextPiece, newPiecePosition, rotation);
-        }
-
-        RaycastHit hitInfo;
-        if (Physics.Raycast(Vector3.up * 10 + new Vector3(10f, 0f, 10f), -Vector3.up * 10 + new Vector3(10f, 0f, 10f), out hitInfo))
-        {
-            print("hitinfo name = " + hitInfo.transform.name);
         }
     }
 }
