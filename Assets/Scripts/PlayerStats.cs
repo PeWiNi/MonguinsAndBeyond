@@ -19,6 +19,8 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     Role syncRole = Role.Basic;
 
+    public float wisdom { get { return RNGeezuz; } }
+
     #region Death
     [SyncVar]
     public bool isDead = false;
@@ -492,5 +494,40 @@ public class PlayerStats : NetworkBehaviour {
     [ClientRpc]
     void RpcTeam(int joinedTeam, string name) {
         Debug.Log(name + " joined team " + joinedTeam);
+    }
+
+    /// <summary>
+    /// Degenrate health over time.
+    /// </summary>
+    /// <param name="degenerationAmount"></param>
+    /// <param name="duration"></param>
+    IEnumerator Degenerate(float degenerationAmount, float duration) {
+        float countDown = duration;
+        while (countDown > 0f) {
+            //print("Auch! - tick of damage occured");
+            yield return new WaitForSeconds(1.0f);
+            TakeDmg((degenerationAmount / duration));
+            countDown--;
+        }
+    }
+    public void BadBerry(float amount, float duration) {
+        StartCoroutine(Degenerate(amount, duration));
+    }
+    /// <summary>
+    /// Regenrate health over time.
+    /// </summary>
+    /// <param name="regenerationAmount"></param>
+    /// <param name="duration"></param>
+    IEnumerator Regenerate(float regenerationAmount, float duration) {
+        float countDown = duration;
+        while (countDown > 0f) {
+            //print("Soothing healing! :D");
+            yield return new WaitForSeconds(1.0f);
+            Healing((regenerationAmount / duration));
+            countDown--;
+        }
+    }
+    public void GoodBerry(float amount, float duration) {
+        StartCoroutine(Regenerate(amount, duration));
     }
 }

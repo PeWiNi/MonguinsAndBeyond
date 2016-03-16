@@ -101,6 +101,9 @@ public class HUDScript : MonoBehaviour {
         //Set count status text
         inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().bananaCount;
         inventory.transform.FindChild("Sticks").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
+        inventory.transform.FindChild("BerryR").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryRCount;
+        inventory.transform.FindChild("BerryG").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryGCount;
+        inventory.transform.FindChild("BerryB").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryBCount;
         #endregion
 
         // TODO: Do stuff with setting up correct ability images
@@ -138,10 +141,14 @@ public class HUDScript : MonoBehaviour {
     }
 
     public void DropItem(string item) {
-        if(item == "Sticks" ? inventory.useSticks() : item == "Banana" ? inventory.useBanana() : false)
-            ps.GetComponent<SyncInventory>().CmdSpawnItem("Prefabs/" + item, new Vector3(), 0);
+        if(item == "Sticks" ? inventory.useSticks() : item == "Banana" ? inventory.useBanana() : item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false)
+            ps.GetComponent<SyncInventory>().CmdSpawnItem(item, new Vector3(), 0);
         inventory.transform.FindChild(item).GetComponentInChildren<Text>().text = 
             item == "Sticks" ? "" + inventory.GetComponent<Inventory>().stickCount :
-            item == "Banana" ? "" + inventory.GetComponent<Inventory>().bananaCount : "";
+            item == "Banana" ? "" + inventory.GetComponent<Inventory>().bananaCount :
+            item == "BerryR" ? "" + inventory.GetComponent<Inventory>().berryRCount :
+            item == "BerryG" ? "" + inventory.GetComponent<Inventory>().berryGCount :
+            item == "BerryB" ? "" + inventory.GetComponent<Inventory>().berryBCount :
+            "";
     }
 }
