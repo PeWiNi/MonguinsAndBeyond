@@ -176,7 +176,7 @@ public class AttributeScript : MonoBehaviour {
         int[] distribution = new int[attLength];
         double[] dist = new double[attLength];
         double total = 0;
-        for (int i = 0; i < distribution.Length; i++) {
+        for (int i = 0; i < distribution.Length; i++) { //Following line needs reverse-engineering for the sake of mapping values to the wheel
             dist[i] = System.Math.Sqrt(System.Math.Pow((attPoints[i].x - position.x), 2) + System.Math.Pow((attPoints[i].y - position.y), 2));
             total += dist[i];
         }

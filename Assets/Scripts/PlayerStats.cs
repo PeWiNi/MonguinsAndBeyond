@@ -102,8 +102,8 @@ public class PlayerStats : NetworkBehaviour {
             #region Loading attributes and determining Role
             // Load Attributes set before entering game
             MyNetworkManagerHUD NM = GameObject.Find("NetworkManager").GetComponent<MyNetworkManagerHUD>();
-            attributes = NM.getAttributes();
             /*
+            attributes = NM.getAttributes();
             // Check for highest value
             DictionaryEntry max = new DictionaryEntry("s", 0);
             foreach (DictionaryEntry de in attributes) {
@@ -192,7 +192,7 @@ public class PlayerStats : NetworkBehaviour {
                 body.GetComponent<MeshRenderer>().material.color = Color.blue;
                 break;
             case (Role.Attacker):
-                roleStats = new RoleStats(0.85f, 0, 1.15f);
+                roleStats = new RoleStats(0.85f, 0, 1.15f); //TODO: Calculate speed using the charts
                 if (isLocalPlayer) {
                     CmdProvideStats(roleStats.maxHealth, roleStats.resilience, roleStats.speed);
                     SetStats(roleStats.resilience, roleStats.speed);
@@ -349,7 +349,7 @@ public class PlayerStats : NetworkBehaviour {
         if (!isServer)
             return;
         GetComponent<Camouflage>().brokeStealth = true;
-        syncHealth -= amount * (1.0f - ((float)resilience / 100.0f));
+        syncHealth -= amount * (1.0f - ((float)resilience / 100.0f)); //TODO: New RESI math from role chart
         if (syncHealth <= 0 && !isDead) {
             ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
             SM.CountDeaths(team);

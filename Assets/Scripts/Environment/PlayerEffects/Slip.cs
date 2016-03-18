@@ -5,51 +5,27 @@ using System.Collections;
 public class Slip : NetworkBehaviour
 {
     public bool isSlipping = false;
-    float anglesPerSecond = 0f;
     float thrust = 0f;
-
-    // Use this for initialization
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-        if (isSlipping)
-        {
-            transform.Rotate(Vector3.up, anglesPerSecond);
-        }
-    }
-
-    void FixedUpdate()
-    {
-        if (isSlipping)
-        {
-            transform.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * thrust);
-        }
-    }
 
     /// <summary>
     /// Player slipped
     /// </summary>
     /// <param name="effectDuration"></param>
     /// <param name="thrust"></param>
-    /// <param name="anglesPerSecond"></param>
-    public void PlayerSlipped(int effectDuration, float thrust, float anglesPerSecond)
+    public void PlayerSlipped(int effectDuration, float thrust)
     {
         if (!isLocalPlayer || isServer)
             return;
         if (!isSlipping)
         {
             this.thrust = thrust;
-            this.anglesPerSecond = anglesPerSecond;
-            StartCoroutine(Slipping(effectDuration, thrust, anglesPerSecond));
+            StartCoroutine(Slipping(effectDuration, thrust));
         }
     }
 
-    IEnumerator Slipping(int effectDuration, float thrust, float anglesPerSecond) {
+    IEnumerator Slipping(int effectDuration, float thrust) {
         isSlipping = true;
+        transform.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * thrust, ForceMode.Impulse);
         CmdStun(effectDuration);
         while (effectDuration > 0) {
             yield return new WaitForSeconds(1f);

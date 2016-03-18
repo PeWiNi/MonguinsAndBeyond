@@ -39,7 +39,7 @@ public class SyncInventory : NetworkBehaviour {
             banana, spawnPos, banana.transform.rotation);
 
         if (go == "BerryR" || go == "BerryG" || go == "BerryB") 
-            bananaNfunzies.GetComponent<Herb>().ChangeProperties(go);
+            bananaNfunzies.GetComponent<Herb>().ChangeProperties(go, GetComponent<PlayerStats>().team);
 
         if (duration > 0)
             Destroy(bananaNfunzies, duration);

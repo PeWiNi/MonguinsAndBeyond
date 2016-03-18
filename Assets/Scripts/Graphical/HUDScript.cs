@@ -109,6 +109,10 @@ public class HUDScript : MonoBehaviour {
         // TODO: Do stuff with setting up correct ability images
     }
 
+    public PlayerStats GetPlayerStats() {
+        return ps;
+    }
+
     public void SpawnBananaTrap() {
         if (inventory.useBanana()) 
             StartCoroutine(PlaceBananaTrap());

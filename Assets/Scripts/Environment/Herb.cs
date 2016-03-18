@@ -11,6 +11,8 @@ public class Herb : Pickup {
     };
 
     [SyncVar]
+    int teamOwner;
+    [SyncVar]
     public Condition conditionState = Condition.None;//Default None.
     [SyncVar]
     string mat;
@@ -25,13 +27,21 @@ public class Herb : Pickup {
 
     // Use this for initialization
     void Start() {
-        transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load(mat) as Material;
+        try { if (!isServer) {
+                PlayerStats ps = GameObject.Find("NetworkManager").GetComponentInChildren<HUDScript>().GetPlayerStats();
+                if (ps.team != teamOwner)
+                    transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load("Materials/Herb") as Material;
+                else
+                    transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load(mat) as Material;
+            }
+        } catch { transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load(mat) as Material; }
     }
 
-    public void ChangeProperties(string type) {
+    public void ChangeProperties(string type, int team) {
         mat = "Materials/Herb" + (type == "BerryG" ? " Good" : type == "BerryB" ? " Bad" : "");
         conditionState = type == "BerryG" ? Condition.Regeneration :
             type == "BerryB" ? Condition.Degenration : Condition.Random;
+        teamOwner = team;
     }
 
     /// <summary>

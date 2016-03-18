@@ -52,7 +52,7 @@ public class Boomnana : NetworkBehaviour {
     public void setup(GameObject owner, float distance, float spd, float fullDmg, float selfDmg) {
         this.owner = owner;
         ownerTeam = owner.GetComponent<PlayerStats>().team;
-        damage = owner.GetComponent<PlayerStats>().maxHealth;
+        damage = owner.GetComponent<PlayerStats>().maxHealth; //TODO: Get AGI and calculate DMG modifier -- do for all Abilities
         speed = spd;
         fullDamage = fullDmg;
         selfDamage = selfDmg;

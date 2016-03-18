@@ -199,7 +199,7 @@ public class MyNetworkManagerHUD : MonoBehaviour {
     }
 
     void fetchAttributes() {
-        attributes = GameObject.Find("attributeWheel").GetComponent<AttributeScript>().getAttributes();
+        try { attributes = GameObject.Find("attributeWheel").GetComponent<AttributeScript>().getAttributes(); } catch { }
     }
     public System.Collections.Hashtable getAttributes() {
         return attributes;

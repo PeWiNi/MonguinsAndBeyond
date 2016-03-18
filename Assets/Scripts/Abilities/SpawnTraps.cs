@@ -116,6 +116,7 @@ public class SpawnTraps : NetworkBehaviour {
         }
         else 
             GetComponent<SyncInventory>().pickupBanana(); // Mayhaps this requires a Command...
+        yield return new WaitForFixedUpdate();
         Activate(false);
     }
 
