@@ -154,7 +154,6 @@ public class OuterAreaPlacement : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))
             {
                 Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow, 100f);
-                print("V: Hit name = " + hit.transform.name);
                 //Debug.DrawLine(Vector3.up + newVector, -Vector3.up + newVector, Color.blue, 100f);
                 GameObject go = GameObject.Instantiate(asset, newVector, Quaternion.Euler(new Vector3(0f, Random.Range(0f, 180f), 0f))) as GameObject;
                 float height = Random.Range(go.transform.localScale.y, go.transform.localScale.y * 1.25f);
@@ -176,7 +175,6 @@ public class OuterAreaPlacement : MonoBehaviour
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))
             {
                 Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow, 100f);
-                print("H: Hit name = " + hit.transform.name);
                 //Debug.DrawLine(Vector3.up + newVector, -Vector3.up + newVector, Color.blue, 100f);
                 GameObject go = GameObject.Instantiate(asset, newVector, Quaternion.Euler(new Vector3(0f, Random.Range(0f, 180f), 0f))) as GameObject;
                 float height = Random.Range(go.transform.localScale.y, go.transform.localScale.y * 1.25f);
