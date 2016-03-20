@@ -23,19 +23,30 @@ public class ThrowBoomnana : Ability {
     public float selfDamage = 0.35f;
 
     public override double Trigger() {
-        //GetComponentInParent<PlayerStats>().CmdDoFire(3.0f);
-        CmdDoFire();
+        StartCoroutine(GetComponent<Aim>().Boomy(this));
+        //CmdDoFire(new Vector3());
         return base.Trigger();
     }
 
+    public void Throw(Vector3 pos) {
+        CmdDoFire(pos);
+        timer = (float)Network.time;
+    }
+
+    public void Cancel() {
+
+    }
+
     [Command]
-    void CmdDoFire() {
+    void CmdDoFire(Vector3 endPos) {
         // Initiate GameObject using prefab, position and a rotation
         GameObject bullet = (GameObject)Instantiate(
             prefab, transform.position + (transform.localScale.x + .5f) * transform.forward,
             Quaternion.identity);
+        // Determine end-position of BOOMnana
+        Vector3 pos = endPos == new Vector3() ? (transform.position + (transform.forward * distance)) : endPos;
         // Pass correct parameters from the Player Prefab
-        bullet.GetComponent<Boomnana>().setup(gameObject, distance, speed, fullDamage, selfDamage);
+        bullet.GetComponent<Boomnana>().setup(gameObject, pos, speed, fullDamage, selfDamage);
 
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);

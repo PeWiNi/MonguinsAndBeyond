@@ -60,11 +60,10 @@ public class PlayerLogic : NetworkBehaviour {
             // Don't do this all the time ._. but only when new peeps connect
             foreach (HealthSlider hs in FindObjectsOfType<HealthSlider>()) // Find HealthSliders of all players and make them point towards you
                 hs.setCamera(characterCam);
-            if (transform.position.y < 25 && !GetComponent<SpawnTraps>().isPlacing) {
+            if (transform.position.y < 25 && !GetComponent<SpawnTraps>().isPlacing && !GetComponent<Aim>().aiming) {
                 #region abilities
-                //if (Input.GetKeyDown(KeyCode.Q) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
-                if (Input.GetMouseButtonDown(0) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
-                    //CmdDoFire(3.0f); // Dummy ability shooting bullets
+                if (Input.GetKeyDown(KeyCode.Q) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
+                //if (Input.GetMouseButtonDown(0) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
                     castTime = abilities[0].Trigger() + Network.time;
                     abilities[0].timer = (float)Network.time;
                 }
@@ -72,12 +71,13 @@ public class PlayerLogic : NetworkBehaviour {
                     castTime = abilities[1].Trigger() + Network.time;
                     abilities[1].timer = (float)Network.time;
                 }
-                //if (Input.GetKeyDown(KeyCode.F) && !abilities[2].OnCooldown()) { //TODO make use of inputManager 
-                if (Input.GetMouseButtonDown(1) && !abilities[2].OnCooldown()) { //TODO make use of inputManager 
-                    castTime = abilities[2].Trigger() + Network.time;
-                    abilities[2].timer = (float)Network.time;
+                if (Input.GetKeyDown(KeyCode.F) && !abilities[2].OnCooldown()) { //TODO make use of inputManager 
+                //if (Input.GetMouseButtonDown(1) && !abilities[2].OnCooldown()) { //TODO make use of inputManager 
+                    //castTime = abilities[2].Trigger() + Network.time;
+                    //abilities[2].timer = (float)Network.time;
+                    abilities[2].Trigger();
                 }
-            } //if(Input.GetMouseButton(0) && Input.GetMouseButton(1)) { vertAxis = 1; }
+            } if(Input.GetMouseButton(0) && Input.GetMouseButton(1)) { vertAxis = 1; }
             #endregion
         }
         if (stats.isDead || castTime > Network.time || stats.isStunned) { // Don't keep moving when dead~
@@ -105,7 +105,7 @@ public class PlayerLogic : NetworkBehaviour {
         // Jumping
         transform.Translate(new Vector3(0f, jumpAxis, 0f) * jumpSpeed * Time.fixedDeltaTime);
 
-        if (/*Input.GetMouseButton(1) &&*/ (!stats.isDead && !stats.isStunned)) {// if dead they cannot turn their char around (but they can still look around with their camera)
+        if (Input.GetMouseButton(1) && (!stats.isDead && !stats.isStunned)) {// if dead they cannot turn their char around (but they can still look around with their camera)
             transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
         }
         //transform.transform.Find("Cube").rotation = Quaternion.Euler(cam.rotate); // Nose stuff

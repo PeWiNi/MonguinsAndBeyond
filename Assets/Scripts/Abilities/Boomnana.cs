@@ -45,18 +45,18 @@ public class Boomnana : NetworkBehaviour {
     /// A seperate Start function, created because the BOOMnana needs to be setup properly
     /// </summary>
     /// <param name="owner">GameObject of the player who threw the BOOMnana</param>
-    /// <param name="distance">The distance that the BOOMnana can fly</param>
+    /// <param name="endPos">The position to which the BOOMnana will fly before returning</param>
     /// <param name="spd">The speed at which the BOOMnana will fly</param>
     /// <param name="fullDmg">The maximum damage dealt to opponent players</param>
     /// <param name="selfDmg">Reduced damage taken if the BOOMnana is unsuccessful and returns to the user</param>
-    public void setup(GameObject owner, float distance, float spd, float fullDmg, float selfDmg) {
+    public void setup(GameObject owner, Vector3 endPos, float spd, float fullDmg, float selfDmg) {
         this.owner = owner;
         ownerTeam = owner.GetComponent<PlayerStats>().team;
         damage = owner.GetComponent<PlayerStats>().maxHealth; //TODO: Get AGI and calculate DMG modifier -- do for all Abilities
         speed = spd;
         fullDamage = fullDmg;
         selfDamage = selfDmg;
-        endpoint = doNotTouchTerrain(owner.transform.position + (owner.transform.forward * distance), false);
+        endpoint = doNotTouchTerrain(endPos, false);
         movingBack = false;
     }
 
