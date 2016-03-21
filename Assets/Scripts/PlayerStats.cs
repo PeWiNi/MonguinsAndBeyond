@@ -276,6 +276,7 @@ public class PlayerStats : NetworkBehaviour {
         resilience = 0 + resi;
         sizeModifier = (maxHealth / 1000);
         syncSpeed = speed * spd;
+        GetComponentInChildren<CharacterCamera>().parentHeight = sizeModifier;
     }
 
     /// <summary>
