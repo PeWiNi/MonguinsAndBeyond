@@ -101,7 +101,13 @@ public class PlayerLogic : NetworkBehaviour {
         //SetSpeed(out speed);
         SetSpeed();
         // Movement
-        transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
+        //transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
+        if(Input.GetMouseButton(1))
+            transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
+        else {
+            transform.Translate(new Vector3(0f, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
+            transform.Rotate(new Vector3(0, horizAxis, 0) * Speed * Time.fixedDeltaTime * 10);
+        }
         // Jumping
         transform.Translate(new Vector3(0f, jumpAxis, 0f) * jumpSpeed * Time.fixedDeltaTime);
 
