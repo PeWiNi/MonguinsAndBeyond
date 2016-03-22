@@ -19,6 +19,7 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     void Start() {
         projector = (GameObject)Instantiate(Resources.Load("Prefabs/Aim_Projector") as GameObject, transform.position,
             Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
+        Activate(false);
     }
 
     // Update is called once per frame

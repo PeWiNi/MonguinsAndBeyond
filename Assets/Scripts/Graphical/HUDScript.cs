@@ -14,6 +14,7 @@ public class HUDScript : MonoBehaviour {
     Slider healthSlider;
     Text healthText;
     PlayerStats ps;
+    PlayerLogic pl;
 
     #region Trap action bar fields
     Image trap1;
@@ -66,16 +67,29 @@ public class HUDScript : MonoBehaviour {
             ActionBarUpdate(ref trap2, trap2Cooldown, trap2Timer);
             #endregion
             if(ps.isDead) {
-                if (!castBar.gameObject.activeSelf)
+                if (!castBar.gameObject.activeSelf) {
                     castBar.gameObject.SetActive(true);
-                try {
-                    //announcementText.text = "You are dead.. Respawning in " + (ps.deathTimeLeft() / ps.deathCooldown) + " seconds";
-                    float value = 1 - (ps.deathTimeLeft() / ps.deathCooldown);
-                    if (value > 0) 
-                        castBar.value = value;
-                    else
-                        castBar.value = 0;
-                } catch { }
+                    castBar.fillRect.GetComponentInChildren<Image>().color = new Color(238f / 255f, 0f, 2f / 255f);
+                    castBar.targetGraphic.GetComponentInChildren<Image>().color = new Color(51f / 255f, 68f / 255f, 34f / 255f);
+                    castBar.GetComponentInChildren<Text>().text = "Respawning";
+                }
+                float value = 1 - (ps.deathTimeLeft() / ps.deathCooldown);
+                if (value > 0) 
+                    castBar.value = value;
+                else
+                    castBar.gameObject.SetActive(false);
+            } else if(pl.isSwimming) {
+                if (!castBar.gameObject.activeSelf) {
+                    castBar.gameObject.SetActive(true);
+                    castBar.fillRect.GetComponentInChildren<Image>().color = new Color(67f / 255f, 112f / 255f, 238f / 255f);
+                    castBar.targetGraphic.GetComponentInChildren<Image>().color = new Color(51f / 255f, 68f / 255f, 255f / 255f);
+                    castBar.GetComponentInChildren<Text>().text = "Drowning";
+                }
+                float value = 1 - pl.drownTimeLeft();
+                if (value > 0)
+                    castBar.value = value;
+                else
+                    castBar.gameObject.SetActive(false);
             } else if (castBar.gameObject.activeSelf) {
                 castBar.gameObject.SetActive(false);
             }
@@ -112,6 +126,7 @@ public class HUDScript : MonoBehaviour {
     /// <param name="playerStats"></param>
     public void SetPlayerStats(PlayerStats playerStats) {
         ps = playerStats;
+        pl = playerStats.GetComponent<PlayerLogic>();
         // Turn off world-space healthBar
         ps.GetComponentInChildren<Canvas>().enabled = false;
         #region Inventory

@@ -26,6 +26,11 @@ public class PlayerLogic : NetworkBehaviour {
     public bool isCamMouse;
     bool isWalking;
 
+    public bool isSwimming;
+    public float drownDepth = 5;
+    float drownTimer;
+    float drownTime = 15f;
+
     //[SerializeField]
     //private UnityStandardAssets.Characters.FirstPerson.MouseLook m_MouseLook;
 
@@ -90,7 +95,7 @@ public class PlayerLogic : NetworkBehaviour {
             transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
             GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
             if(isLocalPlayer)
-                stats.CmdTakeDmg(100000);
+                stats.CmdTakeDmg(10000);
         }
     }
 
@@ -139,6 +144,37 @@ public class PlayerLogic : NetworkBehaviour {
 
     void SetSpeed() {
         Speed = stats ? stats.syncSpeed : Speed; // Only use speed from playerStats if it is not null
+    }
+
+    public void StartSwimming() {
+        if (!isSwimming) {
+            if (Physics.Raycast(transform.position, -Vector3.up, drownDepth, ~(1 << 8))) { return; }
+            isSwimming = true;
+            StartCoroutine(InWater());
+        }
+    }
+
+    IEnumerator InWater() {
+        drownTimer = (float)Network.time;
+        while(isSwimming && (((float)Network.time - drownTimer) < drownTime)) {
+            //if (GetComponent<PlayerStats>().isDead) { isSwimming = false; }
+            if (Physics.Raycast(transform.position, -Vector3.up, drownDepth, ~(1 << 8))) {
+                isSwimming = false;
+                yield return null;
+            }
+            //print(drownTimeLeft());
+            yield return new WaitForSeconds(1);
+        }
+        if (isLocalPlayer && isSwimming)
+            stats.CmdTakeDmg(10000);
+        isSwimming = false;
+        yield return null;
+    }
+
+    public float drownTimeLeft() {
+        if (((float)Network.time - drownTimer) < drownTime)
+            return ((float)Network.time - drownTimer) / drownTime;
+        return 1;
     }
 
     public void SetCameraControl(bool camera) {

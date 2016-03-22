@@ -26,10 +26,11 @@ public class SpawnTraps : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
-        projector = (GameObject)Instantiate(Resources.Load("Prefabs/Trap_Projector") as GameObject, transform.position,
+        projector = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Trap_Projector") as GameObject, transform.position,
             Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
-        bananaTrap = "Prefabs/Trap_BananaIsland";
-        spikeTrap = "Prefabs/Trap_SpikeIsland";
+        bananaTrap = "Prefabs/Environments/Trap_BananaIsland";
+        spikeTrap = "Prefabs/Environments/Trap_SpikeIsland";
+        Activate(false);
     }
 	
 	// Update is called once per frame
