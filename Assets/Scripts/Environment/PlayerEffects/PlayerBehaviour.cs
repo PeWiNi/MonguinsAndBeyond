@@ -40,6 +40,12 @@ public class PlayerBehaviour : NetworkBehaviour
             //transform.GetComponent<Rigidbody>().AddExplosionForce(thrust, origin, radius, thrust / 10, ForceMode.Impulse);//Explosion
             transform.GetComponent<Rigidbody>().AddForce(transform.up * thrust + randomDirection, ForceMode.Impulse);//Force
             isThrown = false;
+
+            //float d = Vector3.Distance(destination, rb.transform.position); //Get distance between the current position and the destination
+            //float tsqr = timeToReach * timeToReach; //Get the time to reach the destination squared
+            //float m = rb.mass; //Get the mass of the object to be tossed
+            //float f = (float)(d / ((.5) * tsqr)) * m; //d = v*t + (1/2)at^2 substituting a for f/m and solving for f
+            //rb.AddForce(f * Vector3.forward); //Apply force to rigidbody
         }
     }
 

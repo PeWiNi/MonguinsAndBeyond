@@ -2,7 +2,9 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class Trap_VineTree : Trap {
+public class Trap_VineTree : Trap
+{
+
     public GameObject player;
     [Tooltip("The force applied to the Player")]
     public float thrust = 50f;
@@ -10,6 +12,8 @@ public class Trap_VineTree : Trap {
     public SphereCollider crownTriggerCollider = null;
     [Tooltip("The Direction which players will be thrown")]
     public Vector3 direction;
+    public float distancePlayersWillBeThrown;
+    public Quaternion originalRotation = Quaternion.identity;
 
     //Mouse Cursors + states
     public Texture2D cursorFreeHand;
@@ -20,24 +24,32 @@ public class Trap_VineTree : Trap {
     public bool isHoldingDownTrap = false;//Holding LMB Down.
 
     // Use this for initialization
-    void Start() {
+    void Start()
+    {
         if (crownTriggerCollider == null)
             crownTriggerCollider = GetComponent<SphereCollider>();
+        originalRotation = transform.rotation;
     }
 
-    void Update() {
+    void Update()
+    {
         TrapDirectionCursorState();
     }
 
-    private void TrapDirectionCursorState() {
-        if (Input.GetKey(KeyCode.Mouse0) && isHoveringTrap && !isHoldingDownTrap) {
+    private void TrapDirectionCursorState()
+    {
+        if (Input.GetKey(KeyCode.Mouse0) && isHoveringTrap && !isHoldingDownTrap)
+        {
             isHoldingDownTrap = true;
             Cursor.SetCursor(cursorGrab, hotSpot, cursorMode);
-        } else if (!(Input.GetKey(KeyCode.Mouse0) && isHoveringTrap)) {
+        }
+        else if (!(Input.GetKey(KeyCode.Mouse0) && isHoveringTrap))
+        {
             isHoldingDownTrap = false;
             Cursor.SetCursor(null, Vector2.zero, cursorMode);
         }
-        if (isHoldingDownTrap) {
+        if (isHoldingDownTrap && player != null)
+        {
             /*
             // Buttom to buttom direction
             Vector3 targetDir = (player.transform.position - new Vector3(0f, player.GetComponentInChildren<CharacterCamera>().parentHeight, 0f)) - transform.position;
@@ -57,6 +69,7 @@ public class Trap_VineTree : Trap {
             transform.rotation = Quaternion.LookRotation(-newDir);
             */
             float dist = Vector3.Distance(player.transform.position, transform.position);
+            distancePlayersWillBeThrown = Mathf.Clamp(dist, 0f, 10f);//This is used for the projection.
             Vector3 circlePos = CircleStuff(transform.position, 10, dist);
             //Debug.DrawLine(circlePos, transform.position, Color.blue); // Does the correct vertical angle, but doesn't follow player direction ._.
 
@@ -66,10 +79,25 @@ public class Trap_VineTree : Trap {
             Vector3 newTDir = Vector3.RotateTowards(transform.forward, targetDir, 2 * Time.deltaTime, 0.0F); // Rotates the thing correctly in the Y-axis (following player)
             transform.rotation = Quaternion.Euler(Quaternion.LookRotation(newCDir).eulerAngles.x, Quaternion.LookRotation(newTDir).eulerAngles.y, 0f);
             //transform.rotation = Quaternion.LookRotation(newCDir, newTDir);
+
+            this.isUnderConstruction = true;
+            /*Set state of the trap to Assemble*/
+            if (Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                isHoldingDownTrap = false;
+                this.isAssembled = true;
+                print("Assembled!");
+            }
+        }
+        else if (!this.isAssembled)
+        {
+            this.isUnderConstruction = false;
+            transform.rotation = originalRotation;
         }
     }
 
-    Vector3 CircleStuff(Vector3 center, float radius, float distance, float min = 0, float max = 10) {
+    Vector3 CircleStuff(Vector3 center, float radius, float distance, float min = 0, float max = 10)
+    {
         var ang = Mathf.Clamp(distance, 0, 10) / 10 * -90;
         //ang += 90;
         Vector3 pos;
@@ -81,19 +109,31 @@ public class Trap_VineTree : Trap {
 
     void OnTriggerEnter(Collider _collider)
     {
-        if (_collider.transform.tag == "Player" && this.isAssembled && !this.isTriggered && !this.isUnderConstruction)
+        if (_collider.tag == "Player" && !this.isAssembled && !this.isTriggered && !this.isUnderConstruction)
+            player = _collider.gameObject;
+        if (_collider.tag == "Player" && this.isAssembled)
         {
             this.isTriggered = true;
             this.isAssembled = false;
             //We search for all Players in the triggerRadius to determine who should be thrown.
-            Collider[] playersWithinRange = Physics.OverlapSphere(transform.position, 2f);
+            Collider[] playersWithinRange = Physics.OverlapSphere(crownTriggerCollider.gameObject.transform.position, 10f);
             foreach (Collider col in playersWithinRange)
             {
-                if (col.transform.tag == "Player")
+                print("! col.name = " + col.name);
+                if (col.tag == "Player")
                 {
                     _collider.gameObject.GetComponent<PlayerBehaviour>().PlayerThrown(thrust);
                 }
             }
+        }
+    }
+
+    void OnTriggerExit(Collider _collider)
+    {
+        /*If the player that was player would leave, set it to null so another can take possesion of it*/
+        if (_collider.gameObject == player)
+        {
+            player = null;
         }
     }
 
@@ -117,7 +157,7 @@ public class Trap_VineTree : Trap {
         if (crownTriggerCollider != null)
         {
             Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(crownTriggerCollider.bounds.center, 2f);
+            Gizmos.DrawWireSphere(crownTriggerCollider.bounds.center, 5f);
         }
     }
 }
