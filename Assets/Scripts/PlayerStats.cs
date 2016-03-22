@@ -160,6 +160,12 @@ public class PlayerStats : NetworkBehaviour {
         if (makeMap) { GenerateTerrain(); }
     }
 
+    public float deathTimeLeft() {
+        if (((float)Network.time - deathTimer) < deathCooldown)
+            return (float)Network.time - deathTimer;
+        return 1;
+    }
+
     /// <summary>
     /// Set the characteristics of your selected role on other clients
     /// </summary>

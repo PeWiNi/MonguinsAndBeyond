@@ -6,6 +6,7 @@ public class HUDScript : MonoBehaviour {
     GameObject playerUI;
     public Inventory inventory;
     Toggle CamMouse;
+    Slider castBar;
     GameObject actionBar;
     Image ability1;
     Image ability2;
@@ -37,6 +38,8 @@ public class HUDScript : MonoBehaviour {
         trap2 = actionBar.GetComponentsInChildren<Image>()[9];
         inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
         CamMouse = transform.FindChild("Toggle CamMouse").GetComponent<Toggle>();
+        castBar = transform.FindChild("CastBar").GetComponent<Slider>();
+        castBar.gameObject.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -62,6 +65,20 @@ public class HUDScript : MonoBehaviour {
             }
             ActionBarUpdate(ref trap2, trap2Cooldown, trap2Timer);
             #endregion
+            if(ps.isDead) {
+                if (!castBar.gameObject.activeSelf)
+                    castBar.gameObject.SetActive(true);
+                try {
+                    //announcementText.text = "You are dead.. Respawning in " + (ps.deathTimeLeft() / ps.deathCooldown) + " seconds";
+                    float value = 1 - (ps.deathTimeLeft() / ps.deathCooldown);
+                    if (value > 0) 
+                        castBar.value = value;
+                    else
+                        castBar.value = 0;
+                } catch { }
+            } else if (castBar.gameObject.activeSelf) {
+                castBar.gameObject.SetActive(false);
+            }
         }
     }
 
