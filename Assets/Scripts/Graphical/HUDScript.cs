@@ -163,4 +163,19 @@ public class HUDScript : MonoBehaviour {
             item == "BerryB" ? "" + inventory.GetComponent<Inventory>().berryBCount :
             "";
     }
+
+    void OnEnable() {
+        EventManager.EventScoreChange += UpdateColor;
+    }
+
+
+    void OnDisable() {
+        EventManager.EventScoreChange -= UpdateColor;
+    }
+
+    void UpdateColor(float team1, float team2) {
+        Text[] textiez = transform.FindChild("ScoreBoard").GetComponentsInChildren<Text>();
+        textiez[1].text = "Team 1: " + team1 + " deaths";
+        textiez[2].text = "Team 2: " + team2 + " deaths";
+    }
 }

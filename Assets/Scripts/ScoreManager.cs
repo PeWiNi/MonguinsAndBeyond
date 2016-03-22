@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 /// Class for keeping track of teamsizes 
 /// </summary>
 public class ScoreManager : NetworkBehaviour {
+
     public float initialHealthPool = 1000;
     public int teamOne = 0;
     public int teamTwo = 0;
@@ -45,6 +46,9 @@ public class ScoreManager : NetworkBehaviour {
                 break;
         }
         RpcDeathCount();
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+            go.GetComponent<EventManager>().RpcSendScoreEvent(teamOneDeathCount, teamTwoDeathCount);
+        //RpcSendScoreEvent(teamOneDeathCount, teamTwoDeathCount);
     }
 
     /// <summary>

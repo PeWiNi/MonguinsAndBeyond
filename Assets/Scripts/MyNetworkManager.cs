@@ -7,6 +7,7 @@ using UnityEngine.Networking;
 /// An extended NetworkManager to allow increased control of how the server behaves
 /// </summary>
 public class MyNetworkManager : NetworkManager {
+
     int playerNumber = 0;
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId) {
@@ -17,14 +18,17 @@ public class MyNetworkManager : NetworkManager {
         // Do the mapHandler code only when on the correct scene
         //if (onlineScene.Equals("'stinaScene_foolingaroundwithCircles")) {
         if(onlineScene.Equals("HenrikScene")) {
+            ScoreManager SM = GetComponentInChildren<ScoreManager>();
             mapCreator MC = GameObject.Find("mapHandler").GetComponent<mapCreator>();
             if (playerNumber == 2) {
                 GetComponentInChildren<ScoreManager>().sinkTimer = (float)Network.time; // Only to be done once
                 MC.SinkingSyncing(GetComponentInChildren<ScoreManager>().sinkTimer);
             }
             MC.playerConnected();
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
                 go.GetComponent<PlayerStats>().GenerateTerrain();
+                go.GetComponent<EventManager>().RpcSendScoreEvent(SM.teamOneDeathCount, SM.teamTwoDeathCount);
+            }
                 //go.GetComponent<PlayerStats>().GenerateTerrain(GetComponentInChildren<ScoreManager>().sinkTimer);
         }
     }
