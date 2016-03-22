@@ -30,7 +30,7 @@ public class Herb : Pickup {
         try { if (!isServer) {
                 PlayerStats ps = GameObject.Find("NetworkManager").GetComponentInChildren<HUDScript>().GetPlayerStats();
                 if (ps.team != teamOwner)
-                    transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load("Materials/Berry") as Material;
+                    transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load("Materials/Berry_neutral") as Material;
                 else
                     transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load(mat) as Material;
             }
@@ -38,7 +38,7 @@ public class Herb : Pickup {
     }
 
     public void ChangeProperties(string type, int team) {
-        mat = "Materials/Berry" + (type == "BerryG" ? " Good" : type == "BerryB" ? " Bad" : "");
+        mat = "Materials/Berry" + (type == "BerryG" ? "_good" : type == "BerryB" ? "_bad" : "");
         conditionState = type == "BerryG" ? Condition.Regeneration :
             type == "BerryB" ? Condition.Degenration : Condition.Random;
         teamOwner = team;
