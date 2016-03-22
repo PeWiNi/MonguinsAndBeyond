@@ -56,9 +56,9 @@ public class OuterAreaPlacement : MonoBehaviour
             GameObject go = Instantiate(asset, pos, Quaternion.identity) as GameObject;
             points[i] = go.transform.position;
         }
-        Debug.DrawLine(points[0], points[1], Color.blue, 100f);
-        Debug.DrawLine(points[1], points[2], Color.blue, 100f);
-        Debug.DrawLine(points[2], points[0], Color.blue, 100f);
+        //Debug.DrawLine(points[0], points[1], Color.blue, 100f);
+        //Debug.DrawLine(points[1], points[2], Color.blue, 100f);
+        //Debug.DrawLine(points[2], points[0], Color.blue, 100f);
     }
 
     /// <summary>
@@ -115,8 +115,8 @@ public class OuterAreaPlacement : MonoBehaviour
         go.transform.position = (center + (force + force2)) / 2;
 
         Vector3 point = v3Center + -Vector3.right * (Vector3.Distance(v3Center, force2) / 4) * 3f;
-        Debug.DrawLine(go.transform.position + -Vector3.right * go.transform.localScale.x / 2, point, Color.red, 100f);
-        Debug.DrawLine(go.transform.position + Vector3.right * go.transform.localScale.x / 2, point, Color.red, 100f);
+        //Debug.DrawLine(go.transform.position + -Vector3.right * go.transform.localScale.x / 2, point, Color.red, 100f);
+        //Debug.DrawLine(go.transform.position + Vector3.right * go.transform.localScale.x / 2, point, Color.red, 100f);
 
         //Create 3 other Sphere areas all identical but with different placements.
         GameObject nextSphere = go;
@@ -153,15 +153,14 @@ public class OuterAreaPlacement : MonoBehaviour
             Ray ray = new Ray(Vector3.up + newVector, -Vector3.up);
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))
             {
-                Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow, 100f);
-                //Debug.DrawLine(Vector3.up + newVector, -Vector3.up + newVector, Color.blue, 100f);
+                //Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow, 100f);
                 GameObject go = GameObject.Instantiate(asset, newVector, Quaternion.Euler(new Vector3(0f, Random.Range(0f, 180f), 0f))) as GameObject;
                 float height = Random.Range(go.transform.localScale.y, go.transform.localScale.y * 1.25f);
                 float width = go.transform.localScale.x * height;
                 go.transform.localScale = new Vector3(width, height, width);
                 go.transform.parent = allOuterAreas.transform;
             }
-            else Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.red, 100f);
+            //else Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.red, 100f);
             amountV--;
         }
 
@@ -174,15 +173,14 @@ public class OuterAreaPlacement : MonoBehaviour
             Ray ray = new Ray(Vector3.up + newVector, -Vector3.up);
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, mask.value))
             {
-                Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow, 100f);
-                //Debug.DrawLine(Vector3.up + newVector, -Vector3.up + newVector, Color.blue, 100f);
+                //Debug.DrawRay(ray.origin, ray.direction * 10000, Color.yellow, 100f);
                 GameObject go = GameObject.Instantiate(asset, newVector, Quaternion.Euler(new Vector3(0f, Random.Range(0f, 180f), 0f))) as GameObject;
                 float height = Random.Range(go.transform.localScale.y, go.transform.localScale.y * 1.25f);
                 float width = go.transform.localScale.x / height;
                 go.transform.localScale = new Vector3(width, height, width);
                 go.transform.parent = allOuterAreas.transform;
             }
-            else Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.red, 100f);
+            //else Debug.DrawLine(Vector3.up * 10 + newVector, -Vector3.up * 10 + newVector, Color.red, 100f);
             amountH--;
         }
 

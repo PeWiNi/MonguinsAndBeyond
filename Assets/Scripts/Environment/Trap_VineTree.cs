@@ -4,16 +4,19 @@ using System.Collections;
 
 public class Trap_VineTree : Trap
 {
-
     public GameObject player;
     [Tooltip("The force applied to the Player")]
     public float thrust = 50f;
     [Tooltip("The SphereCollider used for determine the triggerRadius area")]
     public SphereCollider crownTriggerCollider = null;
-    [Tooltip("The Direction which players will be thrown")]
-    public Vector3 direction;
+    [Tooltip("The landing spot which players will be thrown towards")]
+    public Vector3 theLandingSpotposition;
+    [Tooltip("The distance between the landing spot and the rubber tree")]
     public float distancePlayersWillBeThrown;
+    [Tooltip("The original rotation of the rubber tree\nUsed when the player no longer interacts with the tree")]
     public Quaternion originalRotation = Quaternion.identity;
+    [Tooltip("The xMarksTheSpot projector")]
+    public GameObject landingspotProjector;
 
     //Mouse Cursors + states
     public Texture2D cursorFreeHand;
@@ -69,7 +72,7 @@ public class Trap_VineTree : Trap
             transform.rotation = Quaternion.LookRotation(-newDir);
             */
             float dist = Vector3.Distance(player.transform.position, transform.position);
-            distancePlayersWillBeThrown = Mathf.Clamp(dist, 0f, 10f);//This is used for the projection.
+            distancePlayersWillBeThrown = Mathf.Clamp(dist, 0f, 10f) / 10;//This is used for the projection.
             Vector3 circlePos = CircleStuff(transform.position, 10, dist);
             //Debug.DrawLine(circlePos, transform.position, Color.blue); // Does the correct vertical angle, but doesn't follow player direction ._.
 
@@ -87,6 +90,13 @@ public class Trap_VineTree : Trap
                 isHoldingDownTrap = false;
                 this.isAssembled = true;
                 print("Assembled!");
+                theLandingSpotposition = -targetDir * distancePlayersWillBeThrown;
+                GameObject go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                go.transform.position = theLandingSpotposition;
+                Debug.DrawRay(transform.position, theLandingSpotposition, Color.yellow, 100f);
+                landingspotProjector = (GameObject)Instantiate(Resources.Load("Prefabs/XMarksTheSpot_Projector") as GameObject, theLandingSpotposition,
+                    Quaternion.Euler(new Vector3(90, 1f, 0f)));
+                    //Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
             }
         }
         else if (!this.isAssembled)
