@@ -41,7 +41,7 @@ public class EnvironmentPlacement : MonoBehaviour
         if (placementState == Placement.Random)
             RandomPlacement(null, null, maxNumberOfAssets, assets);
         if (placementState == Placement.Area)
-            AreaPlacement(gameObject, this.areaRadius, this.maxNumberOfAssets, this.assetID);
+            AreaPlacement(gameObject, this.areaRadius, this.maxNumberOfAssets, this.assetID, true);
         if (placementState == Placement.Fill)
             FillPlacement(null, null, this.heightMin, this.heightMax, this.isBetween, this.maxNumberOfAssets);
     }
@@ -50,7 +50,7 @@ public class EnvironmentPlacement : MonoBehaviour
     {
         sections.Add(newSection, newVertices);
         //RandomPlacement(newSection, newVertices, this.maxNumberOfAssets, this.assets);
-        AreaPlacement(newSection, 100f, maxNumberOfAssets, 0);
+        AreaPlacement(newSection, 100f, maxNumberOfAssets, 0, false);
         //FillPlacement(newSection, newVertices, heightMin, heightMax, isBetween, maxNumberOfAssets);
     }
 
@@ -146,7 +146,7 @@ public class EnvironmentPlacement : MonoBehaviour
     /// <param name="radius"></param>
     /// <param name="maxNumberOfAssets"></param>
     /// <param name="assetID"></param>
-    public void AreaPlacement(GameObject newSection, float radius, int maxNumberOfAssets, int assetID)
+    public void AreaPlacement(GameObject newSection, float radius, int maxNumberOfAssets, int assetID, bool randomAssets)
     {
         int groundLayerMask = (1 << 9);//The 'Ground' Layers we want to check.
         //Get a collection of all colliders touched or within the sphere.
@@ -188,6 +188,10 @@ public class EnvironmentPlacement : MonoBehaviour
             int randomVerticesWithinRadius = Random.Range(0, verticesWithinRadius.Count);
             Vector3 randomVertex = verticesWithinRadius[randomVerticesWithinRadius];
             Vector3 randomNormal = normalsWithinRadius[randomVerticesWithinRadius];
+            if (randomAssets)
+            {
+                assetGameObject = assets[Random.Range(0, assets.Count)];
+            }
             GameObject go = Instantiate(assetGameObject, randomVertex, Quaternion.FromToRotation(Vector3.up, randomNormal)) as GameObject;//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
             go.transform.parent = newSection.transform;
             amountWeNeed++;
@@ -251,11 +255,11 @@ public class EnvironmentPlacement : MonoBehaviour
         }
     }
 
-    void OnDrawGizmosSelected()
-    {
-        Vector3 center = gameObject.GetComponent<MeshRenderer>().bounds.center;
-        float radius = gameObject.GetComponent<MeshRenderer>().bounds.extents.magnitude;
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(center, radius);
-    }
+    //void OnDrawGizmosSelected()
+    //{
+    //    Vector3 center = gameObject.GetComponent<MeshRenderer>().bounds.center;
+    //    float radius = gameObject.GetComponent<MeshRenderer>().bounds.extents.magnitude;
+    //    Gizmos.color = Color.white;
+    //    Gizmos.DrawWireSphere(center, radius);
+    //}
 }

@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-public class RestrictPickupNumber : MonoBehaviour
+public class RestrictPickupNumber : NetworkBehaviour
 {
     public PickupSpawner[] pickupsSpawner;
     public List<GameObject> pickupsGameObjects;
@@ -18,7 +19,6 @@ public class RestrictPickupNumber : MonoBehaviour
             pickupsGameObjects.Add(pickSpawn.gameObject);
         }
         ReducePickupNumber(4);
-
     }
 
     /// <summary>
@@ -30,13 +30,17 @@ public class RestrictPickupNumber : MonoBehaviour
         if (amount < pickupsSpawner.Length)
         {
             int value = Random.Range(0, pickupsSpawner.Length);
-            List<GameObject> leftOverList = pickupsGameObjects;
+            List<GameObject> toBeRemovedList = pickupsGameObjects;
             for (int i = 0; i < amount; i++)
             {
-                leftOverList.RemoveAt(value);
-                value = Random.Range(0, leftOverList.Count);
+                toBeRemovedList.RemoveAt(value);
+                value = Random.Range(0, toBeRemovedList.Count);
             }
-            print("leftOverList Count = " + leftOverList.Count);
+            print("toBeRemovedList Count = " + toBeRemovedList.Count);
+            foreach (GameObject go in toBeRemovedList)
+            {
+                Destroy(go);
+            }
         }
     }
 }
