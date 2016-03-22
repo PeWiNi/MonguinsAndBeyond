@@ -57,6 +57,12 @@ public class CharacterCamera : MonoBehaviour {
                     x = Mathf.LerpAngle(currentRotationAngle, targetRotationAngle, Time.deltaTime * rotationDampening);
             }
         }
+        //} else if (Input.GetAxis("Vertical") != 0f || Input.GetAxis("Horizontal") != 0f) // Reset rotation when moving
+        //    if (!GetComponentInParent<PlayerStats>().isStunned) { // No more spinny spinny camera
+        //        var targetRotationAngle = target.eulerAngles.y;
+        //        var currentRotationAngle = transform.eulerAngles.y;
+        //        x = Mathf.LerpAngle(currentRotationAngle, targetRotationAngle, Time.deltaTime * rotationDampening);
+        //}
 
         y = Mathf.Clamp(y, yMin, yMax);//Restrain 'Y' between MAX and MIN values.
 

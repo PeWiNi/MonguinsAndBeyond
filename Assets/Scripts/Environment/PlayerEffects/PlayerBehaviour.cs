@@ -14,10 +14,15 @@ public class PlayerBehaviour : NetworkBehaviour
     public bool isSlipping = false;
     //float thrust = 0f;
 
+    //Spike variables
+    public bool isMoving = false;
+    public Vector3 lastPosition;
+    public float distanceTravelled = 0f;
+
     // Use this for initialization
     void Start()
     {
-
+        lastPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -84,6 +89,38 @@ public class PlayerBehaviour : NetworkBehaviour
             effectDuration--;
         }
         isSlipping = false;
+    }
+
+    /// <summary>
+    /// The player will take damage while moving inside a Spike Trap.
+    /// </summary>
+    /// <param name="player"></param>
+    public void TakeDamageWhileMoving(float dotDamage)
+    {
+        distanceTravelled = Vector3.Distance(transform.position, lastPosition);
+        if (distanceTravelled >= 0.1f)
+        {
+            lastPosition = transform.position;
+            print("Moved!");
+            GetComponent<PlayerStats>().TakeDmg(dotDamage);
+        }
+    }
+
+    /// <summary>
+    /// Checks whether or not the player has moved from their origin point using a threshold value.
+    /// </summary>
+    /// <param name="here"></param>
+    /// <param name="threshold"></param>
+    /// <returns></returns>
+    bool HasMoved(Vector3 here, float threshold)
+    {
+        bool ret = false;
+        if ((lastPosition.x + threshold >= here.x &&
+            lastPosition.x - threshold <= here.x) &&
+            (lastPosition.z + threshold >= here.z &&
+            lastPosition.z - threshold <= here.z))
+            ret = true;
+        return ret;
     }
 
     [Command]
