@@ -2,7 +2,11 @@
 // (c) 2012,2016 Jean Moreno
 
 
-Shader "Custom/Toony Transparent" {
+// Want more features ? Check out Toony Colors Pro+Mobile 2 !
+// http://www.jeanmoreno.com/toonycolorspro/
+
+
+Shader "Custom/Toony Transparent wNormal" {
 	Properties {
 		//TOONY COLORS
 		_Color("Color", Color) = (0.5,0.5,0.5,1.0)
@@ -12,6 +16,7 @@ Shader "Custom/Toony Transparent" {
 		//DIFFUSE
 		//_MainTex ("Main Texture (RGB)", 2D) = "white" {}
 		_MainTex("Color (RGB) Alpha (A)", 2D) = "white" {}
+		_BumpMap("Bumpmap", 2D) = "bump" {}
 
 		//TOONY COLORS RAMP
 		_Ramp("Toon Ramp (RGB)", 2D) = "gray" {}
@@ -21,6 +26,11 @@ Shader "Custom/Toony Transparent" {
 	SubShader {
 		//Tags { "RenderType"="Opaque" }
 		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
+
+		// extra pass that renders to depth buffer only
+		Pass {
+			ColorMask 0
+		}
 
 		CGPROGRAM
 
@@ -34,10 +44,12 @@ Shader "Custom/Toony Transparent" {
 
 		fixed4 _Color;
 		sampler2D _MainTex;
+		sampler2D _BumpMap;
 
 
 		struct Input {
 			half2 uv_MainTex;
+			float2 uv_BumpMap;
 		};
 
 		//================================================================
@@ -85,6 +97,7 @@ Shader "Custom/Toony Transparent" {
 			fixed4 mainTex = tex2D(_MainTex, IN.uv_MainTex);
 
 			o.Albedo = mainTex.rgb * _Color.rgb;
+			o.Normal = UnpackNormal(tex2D(_BumpMap, IN.uv_BumpMap));
 			o.Alpha = mainTex.a * _Color.a;
 
 		}
@@ -93,4 +106,5 @@ Shader "Custom/Toony Transparent" {
 	}
 
 	Fallback "Diffuse"
+	CustomEditor "TCF_MaterialInspector"
 }

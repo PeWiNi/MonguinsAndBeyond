@@ -2,7 +2,7 @@
 // (c) 2012,2016 Jean Moreno
 
 
-Shader "Custom/Toony Transparent" {
+Shader "Custom/Toony Transparent Bits" {
 	Properties {
 		//TOONY COLORS
 		_Color("Color", Color) = (0.5,0.5,0.5,1.0)
