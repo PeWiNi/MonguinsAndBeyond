@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class HUDScript : MonoBehaviour {
     GameObject playerUI;
     public Inventory inventory;
+    Toggle CamMouse;
     GameObject actionBar;
     Image ability1;
     Image ability2;
@@ -35,6 +36,7 @@ public class HUDScript : MonoBehaviour {
         trap1 = actionBar.GetComponentsInChildren<Image>()[7];
         trap2 = actionBar.GetComponentsInChildren<Image>()[9];
         inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
+        CamMouse = transform.FindChild("Toggle CamMouse").GetComponent<Toggle>();
     }
 	
 	// Update is called once per frame
@@ -105,8 +107,14 @@ public class HUDScript : MonoBehaviour {
         inventory.transform.FindChild("BerryG").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryGCount;
         inventory.transform.FindChild("BerryB").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryBCount;
         #endregion
-
+        ps.GetComponent<PlayerLogic>().SetCameraControl(CamMouse.isOn);
         // TODO: Do stuff with setting up correct ability images
+    }
+
+    public void eventValueChanged() {
+        if(ps != null)
+            ps.GetComponent<PlayerLogic>().SetCameraControl(CamMouse.isOn);
+        Debug.Log("Toggle is " + CamMouse.isOn); //check isOn state
     }
 
     public PlayerStats GetPlayerStats() {

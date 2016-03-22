@@ -23,6 +23,7 @@ public class PlayerLogic : NetworkBehaviour {
     Ability[] abilities;
     double castTime;
 
+    public bool isCamMouse;
     bool isWalking;
 
     //[SerializeField]
@@ -100,21 +101,29 @@ public class PlayerLogic : NetworkBehaviour {
         //float speed;
         //SetSpeed(out speed);
         SetSpeed();
-        // Movement
-        //transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
-        if(Input.GetMouseButton(1))
+        if(isCamMouse) {
+            // Movement
             transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
-        else {
-            transform.Translate(new Vector3(0f, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
-            transform.Rotate(new Vector3(0, horizAxis, 0) * Speed * Time.fixedDeltaTime * 10);
+
+            // Rotation
+            if((!stats.isDead && !stats.isStunned))
+                transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
+        } else {
+            // Movement
+            if (Input.GetMouseButton(1))
+                transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
+            else {
+                transform.Translate(new Vector3(0f, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
+                transform.Rotate(new Vector3(0, horizAxis, 0) * Speed * Time.fixedDeltaTime * 10);
+            }
+
+            //Rotation
+            if (Input.GetMouseButton(1) && (!stats.isDead && !stats.isStunned)) {// if dead they cannot turn their char around (but they can still look around with their camera)
+                transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
+            }
         }
         // Jumping
         transform.Translate(new Vector3(0f, jumpAxis, 0f) * jumpSpeed * Time.fixedDeltaTime);
-
-        if (Input.GetMouseButton(1) && (!stats.isDead && !stats.isStunned)) {// if dead they cannot turn their char around (but they can still look around with their camera)
-            transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
-        }
-        //transform.transform.Find("Cube").rotation = Quaternion.Euler(cam.rotate); // Nose stuff
     }
 
     /// <summary>
@@ -130,5 +139,9 @@ public class PlayerLogic : NetworkBehaviour {
 
     void SetSpeed() {
         Speed = stats ? stats.syncSpeed : Speed; // Only use speed from playerStats if it is not null
+    }
+
+    public void SetCameraControl(bool camera) {
+        isCamMouse = camera;
     }
 }
