@@ -72,7 +72,6 @@ public class Trap_VineTree : Trap
             transform.rotation = Quaternion.LookRotation(-newDir);
             */
             float dist = Vector3.Distance(player.transform.position, transform.position);
-            distancePlayersWillBeThrown = Mathf.Clamp(dist, 0f, 10f) / 10;//This is used for the projection.
             Vector3 circlePos = CircleStuff(transform.position, 10, dist);
             //Debug.DrawLine(circlePos, transform.position, Color.blue); // Does the correct vertical angle, but doesn't follow player direction ._.
 
@@ -90,13 +89,12 @@ public class Trap_VineTree : Trap
                 isHoldingDownTrap = false;
                 this.isAssembled = true;
                 print("Assembled!");
-                theLandingSpotposition = -targetDir * distancePlayersWillBeThrown;
-                GameObject go = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                go.transform.position = theLandingSpotposition;
-                Debug.DrawRay(transform.position, theLandingSpotposition, Color.yellow, 100f);
+                distancePlayersWillBeThrown = Mathf.Clamp(dist, 0f, 10f) / 10;//This is used for the projection.
+                theLandingSpotposition = transform.position + (-transform.up * DistanceMapping(distancePlayersWillBeThrown));
+                Debug.DrawLine(transform.position, theLandingSpotposition, Color.yellow, 100f);
                 landingspotProjector = (GameObject)Instantiate(Resources.Load("Prefabs/XMarksTheSpot_Projector") as GameObject, theLandingSpotposition,
-                    Quaternion.Euler(new Vector3(90, 1f, 0f)));
-                    //Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
+                    Quaternion.Euler(new Vector3(90, 0f, 0f)));
+                //Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
             }
         }
         else if (!this.isAssembled)
@@ -115,6 +113,15 @@ public class Trap_VineTree : Trap
         pos.y = center.y + radius * Mathf.Sin(ang * Mathf.Deg2Rad);
         pos.z = center.z;
         return pos;
+    }
+
+    float DistanceMapping(float angle)
+    {
+        float max = 0.8f;
+        float min = 1f;
+        float minDistance = 6f;
+        float maxDistance = 30f;
+        return (angle - min) / (minDistance - min) * (maxDistance - max) + max;
     }
 
     void OnTriggerEnter(Collider _collider)
