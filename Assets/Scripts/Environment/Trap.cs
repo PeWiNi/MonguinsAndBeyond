@@ -24,6 +24,6 @@ public class Trap : NetworkBehaviour
     // Use this for initialization
     void Start()
     {
-
+        transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
     }
 }

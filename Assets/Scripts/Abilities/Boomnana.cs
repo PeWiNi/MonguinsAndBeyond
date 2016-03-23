@@ -61,7 +61,9 @@ public class Boomnana : NetworkBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void FixedUpdate() {
+        if (!isServer)
+            return;
         if (CloseEnough(transform.position, endpoint, .0025f)) {
             movingBack = true;
         }

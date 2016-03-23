@@ -162,7 +162,7 @@ public class HUDScript : MonoBehaviour {
     public void SpawnSpikeTrap() {
         if (inventory.useSticks())
             StartCoroutine(PlaceSpikeTrap());
-        inventory.transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
+        inventory.transform.FindChild("Sticks").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
     }
 
     IEnumerator PlaceBananaTrap() {

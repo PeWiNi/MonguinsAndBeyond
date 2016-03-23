@@ -16,7 +16,7 @@ using UnityEngine.Networking;
 public class ThrowBoomnana : Ability {
     public GameObject prefab; //= Resources.Load("Prefabs/Bullet") as GameObject;
     public float distance = 12f;
-    public float speed = 1f;
+    public float speed = 2f;
     [Range(0, 1)]
     public float fullDamage = 0.8f;
     [Range(0, 1)]
