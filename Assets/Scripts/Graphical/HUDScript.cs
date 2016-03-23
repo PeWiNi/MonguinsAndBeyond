@@ -94,6 +94,11 @@ public class HUDScript : MonoBehaviour {
                 castBar.gameObject.SetActive(false);
             }
         }
+        /*if (Input.GetKeyDown(KeyCode.LeftAlt)) {
+            if (Cursor.lockState.Equals(CursorLockMode.Locked))
+                Cursor.lockState = CursorLockMode.Confined;
+            else Cursor.lockState = CursorLockMode.Locked;
+        }*/
     }
 
     /// <summary>
@@ -146,6 +151,10 @@ public class HUDScript : MonoBehaviour {
     public void eventValueChanged() {
         if(ps != null)
             ps.GetComponent<PlayerLogic>().SetCameraControl(CamMouse.isOn);
+        if(CamMouse.isOn)
+            Cursor.lockState = CursorLockMode.Locked;
+        else
+            Cursor.lockState = CursorLockMode.Confined;
         Debug.Log("Toggle is " + CamMouse.isOn); //check isOn state
     }
 

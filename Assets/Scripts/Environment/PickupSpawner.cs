@@ -13,7 +13,8 @@ public class PickupSpawner : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        InvokeRepeating("Spawn", 0f, repeatTime);
+        if(isServer)
+            InvokeRepeating("Spawn", 0f, repeatTime);
 	}
 	
 	// Update is called once per frame

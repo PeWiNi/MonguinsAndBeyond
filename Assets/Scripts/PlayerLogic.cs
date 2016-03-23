@@ -157,7 +157,7 @@ public class PlayerLogic : NetworkBehaviour {
     IEnumerator InWater() {
         drownTimer = (float)Network.time;
         while(isSwimming && (((float)Network.time - drownTimer) < drownTime)) {
-            //if (GetComponent<PlayerStats>().isDead) { isSwimming = false; }
+            if (GetComponent<PlayerStats>().isDead) { isSwimming = false; }
             if (Physics.Raycast(transform.position, -Vector3.up, drownDepth, ~(1 << 8))) {
                 isSwimming = false;
                 yield return null;
