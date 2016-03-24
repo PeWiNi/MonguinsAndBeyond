@@ -7,8 +7,8 @@ public class PlayerBehaviour : NetworkBehaviour
     //Catapult variables.
     public bool isThrown = false;
     float thrust = 0f;
-    Vector3 origin = Vector3.zero;//Angle should between 30-60 Degrees based on player current position.
-    float radius = 0f;
+    float shootingAngle = 0f;
+    Vector3 targetLandingSpot;
 
     //Slip variables.
     public bool isSlipping = false;
@@ -36,34 +36,40 @@ public class PlayerBehaviour : NetworkBehaviour
         if (isThrown)
         {
             print("WHY NOOO!");
-            Vector3 randomDirection = new Vector3(transform.position.x + Random.Range(30f, 60f), transform.position.y, transform.position.z + Random.Range(30f, 60f));
-            //transform.GetComponent<Rigidbody>().AddExplosionForce(thrust, origin, radius, thrust / 10, ForceMode.Impulse);//Explosion
-            transform.GetComponent<Rigidbody>().AddForce(transform.up * thrust + randomDirection, ForceMode.Impulse);//Force
-            isThrown = false;
+            //Vector3 randomDirection = new Vector3(transform.position.x + Random.Range(30f, 60f), transform.position.y, transform.position.z + Random.Range(30f, 60f));
+            //transform.GetComponent<Rigidbody>().AddForce(transform.up * thrust + randomDirection, ForceMode.Impulse);
+            transform.GetComponent<Rigidbody>().velocity = BallisticVel(targetLandingSpot, shootingAngle);
 
-            //float d = Vector3.Distance(destination, rb.transform.position); //Get distance between the current position and the destination
-            //float tsqr = timeToReach * timeToReach; //Get the time to reach the destination squared
-            //float m = rb.mass; //Get the mass of the object to be tossed
-            //float f = (float)(d / ((.5) * tsqr)) * m; //d = v*t + (1/2)at^2 substituting a for f/m and solving for f
-            //rb.AddForce(f * Vector3.forward); //Apply force to rigidbody
+            isThrown = false;
         }
+    }
+
+    public Vector3 BallisticVel(Vector3 target, float angle)
+    {
+        //Vector3 dir = target - transform.position; // get target direction 
+        Vector3 dir = target; // get target direction 
+        float h = dir.y; // get height difference 
+        dir.y = 0; // retain only the horizontal direction 
+        float dist = dir.magnitude; // get horizontal distance 
+        float a = angle * Mathf.Deg2Rad; // convert angle to radians 
+        dir.y = dist * Mathf.Tan(a); // set dir to the elevation angle 
+        dist += h / Mathf.Tan(a); // correct for small height differences 
+        var vel = Mathf.Sqrt(dist * Physics.gravity.magnitude / Mathf.Sin(2 * a));// calculate the velocity magnitude 
+        return vel * dir.normalized;
     }
 
     /// <summary>
     /// Player was thrown #Catapult.
     /// </summary>
     /// <param name="thrust"></param>
-    /// <param name="direction"></param>
-    /// <param name="triggerRadius"></param>
-    //public void PlayerThrown(float thrust, Vector3 origin, float triggerRadius)//Explosion
-    public void PlayerThrown(float thrust)//Force
+    public void PlayerThrown(float thrust, Vector3 landingSpot, float angle)
     {
         if (!isLocalPlayer || isServer)
             return;
         print("Holy cow!");
-        //this.origin = origin;
         this.thrust = thrust;
-        //this.radius = triggerRadius;
+        this.targetLandingSpot = landingSpot;
+        this.shootingAngle = angle;
         isThrown = true;
         CmdStun(1);
     }

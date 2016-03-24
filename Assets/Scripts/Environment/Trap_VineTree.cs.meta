@@ -1,10 +1,15 @@
 fileFormatVersion: 2
 guid: c818505bf1a6c3a40875c222e9fde0fe
-timeCreated: 1457432780
+timeCreated: 1458813656
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - player: {instanceID: 0}
+  - crownTriggerCollider: {instanceID: 0}
+  - landingspotProjector: {instanceID: 0}
+  - cursorFreeHand: {fileID: 2800000, guid: 6f7a25506245a0e4f88d9de7c6369bf1, type: 3}
+  - cursorGrab: {fileID: 2800000, guid: 9495e6485d69bfe41948a67e8f520fc9, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

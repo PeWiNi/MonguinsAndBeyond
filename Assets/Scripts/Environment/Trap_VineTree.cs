@@ -6,13 +6,17 @@ public class Trap_VineTree : Trap
 {
     public GameObject player;
     [Tooltip("The force applied to the Player")]
-    public float thrust = 50f;
+    public float thrust = 0f;
     [Tooltip("The SphereCollider used for determine the triggerRadius area")]
     public SphereCollider crownTriggerCollider = null;
     [Tooltip("The landing spot which players will be thrown towards")]
     public Vector3 theLandingSpotposition;
-    [Tooltip("The distance between the landing spot and the rubber tree")]
-    public float distancePlayersWillBeThrown;
+    [Tooltip("The angle of the rubber tree")]
+    public float shootingAngle;
+    [Tooltip("The range for which players will be thrown")]
+    public float shootingRange;
+    //[Tooltip("The distance between the landing spot and the rubber tree")]
+    //public float distancePlayersWillBeThrown;
     [Tooltip("The original rotation of the rubber tree\nUsed when the player no longer interacts with the tree")]
     public Quaternion originalRotation = Quaternion.identity;
     [Tooltip("The xMarksTheSpot projector")]
@@ -89,8 +93,16 @@ public class Trap_VineTree : Trap
                 isHoldingDownTrap = false;
                 this.isAssembled = true;
                 print("Assembled!");
-                distancePlayersWillBeThrown = Mathf.Clamp(dist, 0f, 10f) / 10;//This is used for the projection.
-                theLandingSpotposition = transform.position + (-transform.up * DistanceMapping(distancePlayersWillBeThrown));
+                //shootingRange = Mathf.Clamp(dist, 0f, 10f) / 10;//This is used for the projection.
+                //theLandingSpotposition = transform.position + (-transform.up * DistanceMapping(shootingRange));
+                //theLandingSpotposition = -transform.position + (-transform.up * DistanceMapping(shootingRange));
+
+                shootingAngle = Vector3.Angle(transform.up, Vector3.up);
+                shootingRange = DistanceMapping(shootingRange);
+                theLandingSpotposition = -transform.up * DistanceMapping(shootingRange);
+                theLandingSpotposition.y = 1f;
+                print("shootingAngle = " + shootingAngle);
+                print("shootingRange = " + shootingRange);
                 Debug.DrawLine(transform.position, theLandingSpotposition, Color.yellow, 100f);
                 landingspotProjector = (GameObject)Instantiate(Resources.Load("Prefabs/XMarksTheSpot_Projector") as GameObject, theLandingSpotposition,
                     Quaternion.Euler(new Vector3(90, 0f, 0f)));
@@ -119,8 +131,8 @@ public class Trap_VineTree : Trap
     {
         float max = 0.8f;
         float min = 1f;
-        float minDistance = 6f;
         float maxDistance = 30f;
+        float minDistance = maxDistance / 5f;// 1/5 of the maxDistance.
         return (angle - min) / (minDistance - min) * (maxDistance - max) + max;
     }
 
@@ -136,10 +148,10 @@ public class Trap_VineTree : Trap
             Collider[] playersWithinRange = Physics.OverlapSphere(crownTriggerCollider.gameObject.transform.position, 10f);
             foreach (Collider col in playersWithinRange)
             {
-                print("! col.name = " + col.name);
                 if (col.tag == "Player")
                 {
-                    _collider.gameObject.GetComponent<PlayerBehaviour>().PlayerThrown(thrust);
+                    thrust = Mathf.Sqrt((shootingRange * Physics.gravity.magnitude) / Mathf.Sin(2f*shootingAngle));//Determine the launch velocity.
+                    _collider.gameObject.GetComponent<PlayerBehaviour>().PlayerThrown(thrust, theLandingSpotposition, shootingAngle);
                 }
             }
         }
