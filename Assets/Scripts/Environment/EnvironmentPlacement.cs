@@ -15,10 +15,9 @@ public class EnvironmentPlacement : MonoBehaviour
     public Placement placementState = Placement.None;//Default None.
     public List<GameObject> assets;
     [Tooltip("Required for PlacementState [Area, Fill]")]
-    [Range(0, 5000)]
-    public int maxNumberOfAssets = 2500;
+    [Range(0, 1000)]
+    public int maxNumberOfAssets = 500;
     [Tooltip("Required for PlacementState [Area]\nThis value will be the radius around the 'startingPoint' to spagameObjectn assets")]
-    [Range(0, 50)]
     public int areaRadius = 25;
     [Tooltip("Required for PlacementState [Area, Random]")]
     public int assetID;
@@ -39,7 +38,8 @@ public class EnvironmentPlacement : MonoBehaviour
     {
         Random.seed = randomSeedValue;//Sets the seed value of the Random class.
         if (placementState == Placement.Random)
-            RandomPlacement(null, null, maxNumberOfAssets, assets);
+            //RandomPlacement(null, null, maxNumberOfAssets, assets);
+            RandomPlacement(this.gameObject, null, maxNumberOfAssets, assets);
         if (placementState == Placement.Area)
             AreaPlacement(gameObject, this.areaRadius, this.maxNumberOfAssets, this.assetID, true);
         if (placementState == Placement.Fill)
@@ -207,7 +207,25 @@ public class EnvironmentPlacement : MonoBehaviour
     /// <param name="assets"></param>
     public void RandomPlacement(GameObject newSection, Vector3[] newVertices, int maxNumberOfAssets, List<GameObject> assets)
     {
-        if (newSection != null && newVertices.Length > 0)
+        if (newSection != null && newVertices == null)
+        {
+            Vector3 middle = new Vector3(250f, 10f, 250f);
+            int amountWeNeed = 0;
+            while (amountWeNeed < maxNumberOfAssets)
+            {
+                Vector3 origin = middle * Random.Range(0f, areaRadius);
+                Vector3 end = middle * Random.Range(0f, areaRadius);
+                RaycastHit hit;
+                if (Physics.Raycast(origin, end, out hit))
+                {
+                    //Debug.DrawLine(origin, end, Color.blue, 100f);//CAUTION: Giant web of DOOM appears beware!
+                    GameObject go = Instantiate(assets[Random.Range(0, assets.Count)], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject;//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
+                    go.transform.parent = hit.transform;
+                    amountWeNeed++;
+                }
+            }
+        }
+        else if (newSection != null && newVertices.Length > 0)
         {
             Mesh mesh = newSection.GetComponent<MeshFilter>().sharedMesh;
             int amountWeNeed = 0;

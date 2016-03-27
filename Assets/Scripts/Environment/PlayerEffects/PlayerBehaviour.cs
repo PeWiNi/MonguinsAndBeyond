@@ -38,16 +38,21 @@ public class PlayerBehaviour : NetworkBehaviour
             print("WHY NOOO!");
             //Vector3 randomDirection = new Vector3(transform.position.x + Random.Range(30f, 60f), transform.position.y, transform.position.z + Random.Range(30f, 60f));
             //transform.GetComponent<Rigidbody>().AddForce(transform.up * thrust + randomDirection, ForceMode.Impulse);
-            transform.GetComponent<Rigidbody>().velocity = BallisticVel(targetLandingSpot, shootingAngle);
-
+            if (!float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).x) && !float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).y) && !float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).z))
+                transform.GetComponent<Rigidbody>().velocity = BallisticVel(targetLandingSpot, shootingAngle);
             isThrown = false;
         }
     }
 
+    /// <summary>
+    /// Creates a balistic velocity for the player.
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="angle"></param>
+    /// <returns></returns>
     public Vector3 BallisticVel(Vector3 target, float angle)
     {
-        //Vector3 dir = target - transform.position; // get target direction 
-        Vector3 dir = target; // get target direction 
+        Vector3 dir = target - transform.position; // get target direction 
         float h = dir.y; // get height difference 
         dir.y = 0; // retain only the horizontal direction 
         float dist = dir.magnitude; // get horizontal distance 

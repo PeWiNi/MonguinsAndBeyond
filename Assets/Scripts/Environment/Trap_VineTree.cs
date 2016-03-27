@@ -53,7 +53,7 @@ public class Trap_VineTree : Trap
         else if (!(Input.GetKey(KeyCode.Mouse0) && isHoveringTrap))
         {
             isHoldingDownTrap = false;
-            Cursor.SetCursor(null, Vector2.zero, cursorMode);
+            //Cursor.SetCursor(null, Vector2.zero, cursorMode);
         }
         if (isHoldingDownTrap && player != null)
         {
@@ -90,22 +90,27 @@ public class Trap_VineTree : Trap
             /*Set state of the trap to Assemble*/
             if (Input.GetKeyDown(KeyCode.Mouse1))
             {
-                isHoldingDownTrap = false;
+                this.isHoldingDownTrap = false;
+                this.isUnderConstruction = false;
                 this.isAssembled = true;
                 print("Assembled!");
                 //shootingRange = Mathf.Clamp(dist, 0f, 10f) / 10;//This is used for the projection.
                 //theLandingSpotposition = transform.position + (-transform.up * DistanceMapping(shootingRange));
-                //theLandingSpotposition = -transform.position + (-transform.up * DistanceMapping(shootingRange));
 
                 shootingAngle = Vector3.Angle(transform.up, Vector3.up);
-                shootingRange = DistanceMapping(shootingRange);
-                theLandingSpotposition = -transform.up * DistanceMapping(shootingRange);
-                theLandingSpotposition.y = 1f;
+
+                print("dist = " + dist);
+                float shootingRangeDistance = Remap(dist, 0f, 10f);//Y = (X-A)/(B-A) * (D-C) + C, Dist = X. A = 0f, B = 10f.
+                shootingRange = shootingRangeDistance;
+                print("shootingRangeDistance = " + shootingRangeDistance);
+                theLandingSpotposition = transform.position + (-transform.up * shootingRangeDistance);
+
+                //theLandingSpotposition = -transform.up * shootingRange;
+                //theLandingSpotposition.y = 1f;
                 print("shootingAngle = " + shootingAngle);
-                print("shootingRange = " + shootingRange);
                 Debug.DrawLine(transform.position, theLandingSpotposition, Color.yellow, 100f);
-                landingspotProjector = (GameObject)Instantiate(Resources.Load("Prefabs/XMarksTheSpot_Projector") as GameObject, theLandingSpotposition,
-                    Quaternion.Euler(new Vector3(90, 0f, 0f)));
+                //landingspotProjector = (GameObject)Instantiate(Resources.Load("Prefabs/XMarksTheSpot_Projector") as GameObject, theLandingSpotposition,
+                //    Quaternion.Euler(new Vector3(90, 0f, 0f)));
                 //Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
             }
         }
@@ -127,14 +132,29 @@ public class Trap_VineTree : Trap
         return pos;
     }
 
-    float DistanceMapping(float angle)
+    //public float Remap(float value, float from1, float to1, float from2, float to2)
+    /// <summary>
+    /// Remap the distance.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <param name="from1"></param>
+    /// <param name="to1"></param>
+    /// <returns></returns>
+    public float Remap(float value, float from1, float to1)
     {
-        float max = 0.8f;
-        float min = 1f;
-        float maxDistance = 30f;
-        float minDistance = maxDistance / 5f;// 1/5 of the maxDistance.
-        return (angle - min) / (minDistance - min) * (maxDistance - max) + max;
+        float from2 = 10f;//C
+        float to2 = 5 * from2;//D
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
+
+    //float DistanceMapping(float angle)
+    //{
+    //    float max = 0.8f;
+    //    float min = 1f;
+    //    float maxDistance = 30f;
+    //    float minDistance = maxDistance / 5f;// 1/5 of the maxDistance.
+    //    return (angle - min) / (minDistance - min) * (maxDistance - max) + max;
+    //}
 
     void OnTriggerEnter(Collider _collider)
     {
@@ -150,10 +170,12 @@ public class Trap_VineTree : Trap
             {
                 if (col.tag == "Player")
                 {
-                    thrust = Mathf.Sqrt((shootingRange * Physics.gravity.magnitude) / Mathf.Sin(2f*shootingAngle));//Determine the launch velocity.
+                    thrust = Mathf.Sqrt((shootingRange * Physics.gravity.magnitude) / Mathf.Sin(2f * shootingAngle * Mathf.Deg2Rad));//Determine the launch velocity.
+                    print("Thrust = " + thrust);
                     _collider.gameObject.GetComponent<PlayerBehaviour>().PlayerThrown(thrust, theLandingSpotposition, shootingAngle);
                 }
             }
+            this.isTriggered = false;
         }
     }
 
