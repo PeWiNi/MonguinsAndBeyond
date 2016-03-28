@@ -98,19 +98,15 @@ public class Trap_VineTree : Trap
                 //theLandingSpotposition = transform.position + (-transform.up * DistanceMapping(shootingRange));
 
                 shootingAngle = Vector3.Angle(transform.up, Vector3.up);
-
                 print("dist = " + dist);
-                float shootingRangeDistance = Remap(dist, 0f, 10f);//Y = (X-A)/(B-A) * (D-C) + C, Dist = X. A = 0f, B = 10f.
-                shootingRange = shootingRangeDistance;
-                print("shootingRangeDistance = " + shootingRangeDistance);
-                theLandingSpotposition = transform.position + (-transform.up * shootingRangeDistance);
-
-                //theLandingSpotposition = -transform.up * shootingRange;
-                //theLandingSpotposition.y = 1f;
                 print("shootingAngle = " + shootingAngle);
+                shootingRange = Remap(dist, 0f, 10f);//Y = (X-A)/(B-A) * (D-C) + C, Dist = X. A = 0f, B = 10f.
+                print("shootingRange = " + shootingRange);
+                theLandingSpotposition = transform.position + (-transform.up * shootingRange);
+                theLandingSpotposition.y = 1f;
                 Debug.DrawLine(transform.position, theLandingSpotposition, Color.yellow, 100f);
-                //landingspotProjector = (GameObject)Instantiate(Resources.Load("Prefabs/XMarksTheSpot_Projector") as GameObject, theLandingSpotposition,
-                //    Quaternion.Euler(new Vector3(90, 0f, 0f)));
+                landingspotProjector = (GameObject)Instantiate(Resources.Load("Prefabs/XMarksTheSpot_Projector") as GameObject, theLandingSpotposition,
+                    Quaternion.Euler(new Vector3(90, 0f, 0f)));
                 //Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
             }
         }
@@ -142,7 +138,7 @@ public class Trap_VineTree : Trap
     /// <returns></returns>
     public float Remap(float value, float from1, float to1)
     {
-        float from2 = 10f;//C
+        float from2 = 2f;//C
         float to2 = 5 * from2;//D
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
@@ -172,6 +168,7 @@ public class Trap_VineTree : Trap
                 {
                     thrust = Mathf.Sqrt((shootingRange * Physics.gravity.magnitude) / Mathf.Sin(2f * shootingAngle * Mathf.Deg2Rad));//Determine the launch velocity.
                     print("Thrust = " + thrust);
+                    Destroy(landingspotProjector);
                     _collider.gameObject.GetComponent<PlayerBehaviour>().PlayerThrown(thrust, theLandingSpotposition, shootingAngle);
                 }
             }
