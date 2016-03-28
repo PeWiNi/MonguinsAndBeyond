@@ -15,20 +15,22 @@ public class MyNetworkManager : NetworkManager {
         var player = (GameObject)GameObject.Instantiate(playerPrefab, GetSpawnPosition(), Quaternion.identity); //Default implementation
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId); //Default implementation
 
+        try { ScoreManager SM = GetComponentInChildren<ScoreManager>();
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) 
+                go.GetComponent<EventManager>().RpcSendScoreEvent(SM.teamOneDeathCount, SM.teamTwoDeathCount);
+        } catch { Debug.Log("No Score Manager found!"); }
+
         // Do the mapHandler code only when on the correct scene
         //if (onlineScene.Equals("'stinaScene_foolingaroundwithCircles")) {
-        if(onlineScene.Equals("HenrikScene")) {
-            ScoreManager SM = GetComponentInChildren<ScoreManager>();
+        if (onlineScene.Equals("HenrikScene")) {
             mapCreator MC = GameObject.Find("mapHandler").GetComponent<mapCreator>();
             if (playerNumber == 2) {
                 GetComponentInChildren<ScoreManager>().sinkTimer = (float)Network.time; // Only to be done once
                 MC.SinkingSyncing(GetComponentInChildren<ScoreManager>().sinkTimer);
             }
             MC.playerConnected();
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) 
                 go.GetComponent<PlayerStats>().GenerateTerrain();
-                go.GetComponent<EventManager>().RpcSendScoreEvent(SM.teamOneDeathCount, SM.teamTwoDeathCount);
-            }
                 //go.GetComponent<PlayerStats>().GenerateTerrain(GetComponentInChildren<ScoreManager>().sinkTimer);
         }
     }

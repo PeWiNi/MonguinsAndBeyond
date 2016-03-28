@@ -25,6 +25,10 @@ public class HUDScript : MonoBehaviour {
     float trap2Timer;
     #endregion
 
+    CursorLockMode wantedMode;
+    // Cast bar reference to ensure the correct bar is showing
+    string currentText = "";
+
     // Use this for initialization
     void Start () {
         playerUI = transform.FindChild("Player").gameObject;
@@ -66,12 +70,14 @@ public class HUDScript : MonoBehaviour {
             }
             ActionBarUpdate(ref trap2, trap2Cooldown, trap2Timer);
             #endregion
-            if(ps.isDead) {
-                if (!castBar.gameObject.activeSelf) {
+            #region Cast Bar (currently working for drowning and respawning)
+            if (ps.isDead) {
+                if (!castBar.gameObject.activeSelf || currentText != "Respawning") { //Reset graphics and text if disabled or using the wrong text
                     castBar.gameObject.SetActive(true);
                     castBar.fillRect.GetComponentInChildren<Image>().color = new Color(238f / 255f, 0f, 2f / 255f);
                     castBar.targetGraphic.GetComponentInChildren<Image>().color = new Color(51f / 255f, 68f / 255f, 34f / 255f);
-                    castBar.GetComponentInChildren<Text>().text = "Respawning";
+                    currentText = "Respawning";
+                    castBar.GetComponentInChildren<Text>().text = currentText;
                 }
                 float value = 1 - (ps.deathTimeLeft() / ps.deathCooldown);
                 if (value > 0) 
@@ -79,14 +85,15 @@ public class HUDScript : MonoBehaviour {
                 else
                     castBar.gameObject.SetActive(false);
             } else if(pl.isSwimming) {
-                if (!castBar.gameObject.activeSelf) {
+                if (!castBar.gameObject.activeSelf || currentText != "Drowning") {
                     castBar.gameObject.SetActive(true);
                     castBar.fillRect.GetComponentInChildren<Image>().color = new Color(67f / 255f, 112f / 255f, 238f / 255f);
                     castBar.targetGraphic.GetComponentInChildren<Image>().color = new Color(51f / 255f, 68f / 255f, 255f / 255f);
-                    castBar.GetComponentInChildren<Text>().text = "Drowning";
+                    currentText = "Drowning";
+                    castBar.GetComponentInChildren<Text>().text = currentText;
                 }
                 float value = 1 - pl.drownTimeLeft();
-                if (value > 0)
+                if (value > 0.01f)
                     castBar.value = value;
                 else
                     castBar.gameObject.SetActive(false);
@@ -94,13 +101,18 @@ public class HUDScript : MonoBehaviour {
                 castBar.gameObject.SetActive(false);
             }
         }
-        /*if (Input.GetKeyDown(KeyCode.LeftAlt)) {
-            if (Cursor.lockState.Equals(CursorLockMode.Locked))
-                Cursor.lockState = CursorLockMode.Confined;
-            else Cursor.lockState = CursorLockMode.Locked;
-        }*/
+        #endregion
+        // When pressing Alt the mouse will be released from whatever state is set
+        if (Input.GetKeyDown(KeyCode.LeftAlt)) {
+            if (wantedMode != CursorLockMode.None) {
+                Cursor.lockState = wantedMode = CursorLockMode.None;
+                SetCursorState();
+            } else
+                SetCursorState(true);
+        }
     }
 
+    #region Action Bar methods
     /// <summary>
     /// Method for changing the fill of the overlay image corresponding to the ability
     /// </summary>
@@ -114,6 +126,13 @@ public class HUDScript : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Extended method for when not using Abilities
+    /// Useful for giving the trap icons the same functionality as the abilities
+    /// </summary>
+    /// <param name="overlayImage">Image for visualizing cooldown</param>
+    /// <param name="cooldown">The time until the ability can be triggered again</param>
+    /// <param name="time">Timer of the ability</param>
     public void ActionBarUpdate(ref Image overlayImage, float cooldown, float time) {
         if (OnCooldown(cooldown, time))
             overlayImage.fillAmount = (1.0f / cooldown * (Time.time - time));
@@ -124,6 +143,7 @@ public class HUDScript : MonoBehaviour {
     bool OnCooldown(float cooldown, float timer) {
         return (Time.time - timer < cooldown);
     }
+    #endregion
 
     /// <summary>
     /// Tie this HUD to a player's PlayerStats.cs script to visualize the correct player
@@ -139,29 +159,58 @@ public class HUDScript : MonoBehaviour {
         inventory.gameObject.SetActive(true);
         //Set count status text
         inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().bananaCount;
-        inventory.transform.FindChild("Sticks").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
+        inventory.transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
+        inventory.transform.FindChild("Sap").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
+        inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
         inventory.transform.FindChild("BerryR").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryRCount;
         inventory.transform.FindChild("BerryG").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryGCount;
         inventory.transform.FindChild("BerryB").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryBCount;
         #endregion
         ps.GetComponent<PlayerLogic>().SetCameraControl(CamMouse.isOn);
         // TODO: Do stuff with setting up correct ability images
-    }
-
-    public void eventValueChanged() {
-        if(ps != null)
-            ps.GetComponent<PlayerLogic>().SetCameraControl(CamMouse.isOn);
-        if(CamMouse.isOn)
-            Cursor.lockState = CursorLockMode.Locked;
-        else
-            Cursor.lockState = CursorLockMode.Confined;
-        Debug.Log("Toggle is " + CamMouse.isOn); //check isOn state
+        SetCursorState(true);
     }
 
     public PlayerStats GetPlayerStats() {
         return ps;
     }
 
+    public void eventValueChanged() {
+        if(ps != null)
+            ps.GetComponent<PlayerLogic>().SetCameraControl(CamMouse.isOn);
+        SetCursorState(true);
+        Debug.Log("Toggle is " + CamMouse.isOn); //check isOn state
+    }
+
+    #region Cursor state methods
+    /// <summary>
+    /// Allow the current camera controls to determine the mouse lock state
+    /// Also possible to simply apply LockState (when false)
+    /// </summary>
+    /// <param name="useStates">Whether or not to let the controls determine the state</param>
+    public void SetCursorState(bool useStates = false) {
+        if (useStates) {
+            if (CamMouse.isOn)
+                wantedMode = CursorLockMode.Locked;
+            else
+                wantedMode = CursorLockMode.Confined;
+        }
+        Cursor.lockState = wantedMode;
+        // Hide cursor when locking
+        Cursor.visible = (CursorLockMode.Locked != wantedMode);
+    }
+
+    /// <summary>
+    /// Set a specific LockMode state
+    /// </summary>
+    /// <param name="lockMode">The requested state</param>
+    public void SetCursorState(CursorLockMode lockMode) {
+        wantedMode = lockMode;
+        SetCursorState();
+    }
+    #endregion
+
+    #region Environment methods
     public void SpawnBananaTrap() {
         if (inventory.useBanana()) 
             StartCoroutine(PlaceBananaTrap());
@@ -169,9 +218,10 @@ public class HUDScript : MonoBehaviour {
     }
 
     public void SpawnSpikeTrap() {
-        if (inventory.useSticks())
+        if (inventory.useForSpikes())
             StartCoroutine(PlaceSpikeTrap());
-        inventory.transform.FindChild("Sticks").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
+        inventory.transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
+        inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
     }
 
     IEnumerator PlaceBananaTrap() {
@@ -193,28 +243,78 @@ public class HUDScript : MonoBehaviour {
         yield return null;
     }
 
+    /// <summary>
+    /// Drop an item in the world from the Inventory
+    /// Only possible if the player has at least 1 of the item
+    /// </summary>
+    /// <param name="item">String representation of the item in question</param>
     public void DropItem(string item) {
-        if(item == "Sticks" ? inventory.useSticks() : item == "Banana" ? inventory.useBanana() : item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false)
+        //Drop items if holding Shift
+        if (Input.GetKey(KeyCode.LeftShift) && (
+            item == "Banana" ? inventory.useBanana() :
+            item == "Stick" ? inventory.useSticks() :
+            item == "Sap" ? inventory.useSap() :
+            item == "Leaf" ? inventory.useLeaf() :
+            item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false))
             ps.GetComponent<SyncInventory>().CmdSpawnItem(item, new Vector3(), 0);
+
+        // Banana Trap
+        else if (!OnCooldown(trap1Cooldown, trap1Timer) && item == "Banana" ? inventory.useBanana() : false) {
+            SpawnTraps st = ps.GetComponentInChildren<SpawnTraps>();
+            st.CmdDoFire(st.bananaTrap, new Vector3(), st.bananaTrapDuration);
+            trap1Timer = Time.time;
+        }
+
+        // Spike Trap
+        else if (!OnCooldown(trap2Cooldown, trap2Timer) && item == "Stick" ? inventory.useForSpikes() : false) {
+            SpawnTraps st = ps.GetComponentInChildren<SpawnTraps>();
+            st.CmdDoFire(st.spikeTrap, new Vector3(), st.spikeTrapDuration);
+            trap2Timer = Time.time;
+            inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
+        }
+
+        // Camouflage
+        else if (item == "Leaf" ? inventory.useLeaf() : false)
+            ps.GetComponent<SyncInventory>().CmdUseLeaf();
+
+        //Throw Sap
+        else if (item == "Sap" ? inventory.useSap() : false)
+            StartCoroutine(ps.GetComponentInChildren<SpawnTraps>().StickySap());
+
+        else if(item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false) {
+            Herb berry = new Herb();
+            berry.ChangeProperties(item, ps.team);
+            berry.EatIt(ps);
+        }
+
+        // Update text field with new values
         inventory.transform.FindChild(item).GetComponentInChildren<Text>().text = 
-            item == "Sticks" ? "" + inventory.GetComponent<Inventory>().stickCount :
             item == "Banana" ? "" + inventory.GetComponent<Inventory>().bananaCount :
+            item == "Stick" ? "" + inventory.GetComponent<Inventory>().stickCount :
+            item == "Sap" ? "" + inventory.GetComponent<Inventory>().sapCount :
+            item == "Leaf" ? "" + inventory.GetComponent<Inventory>().leafCount :
             item == "BerryR" ? "" + inventory.GetComponent<Inventory>().berryRCount :
             item == "BerryG" ? "" + inventory.GetComponent<Inventory>().berryGCount :
             item == "BerryB" ? "" + inventory.GetComponent<Inventory>().berryBCount :
             "";
     }
+    #endregion
 
     void OnEnable() {
-        EventManager.EventScoreChange += UpdateColor;
+        EventManager.EventScoreChange += UpdateDeathScore;
     }
 
-
+    // Just to make sure that we unsubscribe when the object is no longer in use
     void OnDisable() {
-        EventManager.EventScoreChange -= UpdateColor;
+        EventManager.EventScoreChange -= UpdateDeathScore;
     }
 
-    void UpdateColor(float team1, float team2) {
+    /// <summary>
+    /// Method in charge of updating the score
+    /// </summary>
+    /// <param name="team1">Death count for Team 1</param>
+    /// <param name="team2">Death count for Team 2</param>
+    void UpdateDeathScore(float team1, float team2) {
         Text[] textiez = transform.FindChild("ScoreBoard").GetComponentsInChildren<Text>();
         textiez[1].text = "Team 1: " + team1 + " deaths";
         textiez[2].text = "Team 2: " + team2 + " deaths";

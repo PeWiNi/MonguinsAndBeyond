@@ -8,6 +8,10 @@ public class Inventory : MonoBehaviour {
     [SerializeField]
     int sticks = 2;
     [SerializeField]
+    int sap = 2;
+    [SerializeField]
+    int leaves = 2;
+    [SerializeField]
     int berryR = 2;
     [SerializeField]
     int berryG = 2;
@@ -15,20 +19,12 @@ public class Inventory : MonoBehaviour {
     int berryB = 2;
     public int bananaCount { get { return bananas; } }
     public int stickCount  { get { return sticks; } }
+    public int sapCount    { get { return sap; } }
+    public int leafCount   { get { return leaves; } }
     public int berryRCount { get { return berryR; } }
     public int berryGCount { get { return berryG; } }
     public int berryBCount { get { return berryB; } }
     //THOUGHT: Cap/Duration/whatever?
-
-    // Use this for initialization
-    void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     public bool useBanana(int count = 1) {
         if (bananas == 0)
@@ -41,6 +37,28 @@ public class Inventory : MonoBehaviour {
         if (sticks == 0)
             return false;
         sticks -= count;
+        return true;
+    }
+
+    public bool useForSpikes(int count = 1) {
+        if (sticks == 0 || leaves == 0)
+            return false;
+        sticks -= count;
+        leaves -= count;
+        return true;
+    }
+
+    public bool useSap(int count = 1) {
+        if (sap == 0)
+            return false;
+        sap -= count;
+        return true;
+    }
+
+    public bool useLeaf(int count = 1) {
+        if (leaves == 0)
+            return false;
+        leaves -= count;
         return true;
     }
 
@@ -59,7 +77,17 @@ public class Inventory : MonoBehaviour {
 
     public void pickupSticks(int count = 1) {
         sticks += count;
-        transform.FindChild("Sticks").GetComponentInChildren<Text>().text = "" + stickCount;
+        transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + stickCount;
+    }
+
+    public void pickupSap(int count = 1) {
+        sap += count;
+        transform.FindChild("Sap").GetComponentInChildren<Text>().text = "" + sapCount;
+    }
+
+    public void pickupLeaf(int count = 1) {
+        leaves += count;
+        transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + leafCount;
     }
 
     public void pickupBerry(int value, float RNG) {

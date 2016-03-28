@@ -13,6 +13,14 @@ public class SyncInventory : NetworkBehaviour {
         if (isLocalPlayer)
             inventory.pickupSticks(count);
     }
+    public void pickupSap(int count = 1) {
+        if (isLocalPlayer)
+            inventory.pickupSap(count);
+    }
+    public void pickupLeaf(int count = 1) {
+        if (isLocalPlayer)
+            inventory.pickupLeaf(count);
+    }
     public void pickupBerry(int value) {
         if (isLocalPlayer) {
             inventory.pickupBerry(value, GetComponent<PlayerStats>().wisdom);
@@ -24,6 +32,17 @@ public class SyncInventory : NetworkBehaviour {
     }
 
     [Command]
+    public void CmdUseLeaf() {
+        gameObject.GetComponent<Camouflage>().BeginCamouflage();
+
+        GameObject particles = (GameObject)Instantiate(
+            Resources.Load("Prefabs/Environments/ParticleSystems/LeavesPS"),
+            transform.position, Quaternion.Euler(270f, 0, 0));
+        Destroy(particles, 5);
+        NetworkServer.Spawn(particles);
+    }
+
+    [Command]
     public void CmdSpawnItem(string go, Vector3 position, float duration) {
         Vector3 spawnPos = transform.position + ((transform.localScale.x * 2) * transform.forward);
         if (position != new Vector3())
@@ -31,9 +50,9 @@ public class SyncInventory : NetworkBehaviour {
 
         GameObject banana;
         if (go == "BerryR" || go == "BerryG" || go == "BerryB")
-            banana = Resources.Load("Prefabs/Herb") as GameObject;
+            banana = Resources.Load("Prefabs/Environments/Herb") as GameObject;
         else
-            banana = Resources.Load("Prefabs/" + go) as GameObject;
+            banana = Resources.Load("Prefabs/Environments/" + go) as GameObject;
 
         GameObject bananaNfunzies = (GameObject)Instantiate(
             banana, spawnPos, banana.transform.rotation);

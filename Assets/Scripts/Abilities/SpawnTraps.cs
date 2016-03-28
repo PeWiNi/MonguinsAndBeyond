@@ -5,8 +5,9 @@ using UnityEngine.Networking;
 public class SpawnTraps : NetworkBehaviour {
     // Interconnectivity with CharacterCamera (disable while putting traps so you can properly place the trap)
     // THOUGHT: Accumulate traps so you can throw multiple banana-peels at the same time (not on top of itself)
-    string bananaTrap;
-    string spikeTrap;
+    public string bananaTrap;
+    public string spikeTrap;
+    string sap;
 
     GameObject projector;
 
@@ -30,6 +31,7 @@ public class SpawnTraps : NetworkBehaviour {
             Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
         bananaTrap = "Prefabs/Environments/Trap_BananaIsland";
         spikeTrap = "Prefabs/Environments/Trap_SpikeIsland";
+        sap = "Prefabs/Environments/Sap";
         Activate(false);
     }
 	
@@ -127,11 +129,34 @@ public class SpawnTraps : NetworkBehaviour {
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if (Input.GetMouseButtonDown(0)) {
-            if (isBehind(projector.transform.position - transform.position))
+            if (isBehind(projector.transform.position - transform.position)) {
                 GetComponent<SyncInventory>().pickupSticks();
+                GetComponent<SyncInventory>().pickupLeaf();
+            }
             else CmdDoFire(spikeTrap, projector.transform.position, spikeTrapDuration);
+        } else { // Mayhaps this requires a Command...
+            GetComponent<SyncInventory>().pickupSticks();
+            GetComponent<SyncInventory>().pickupLeaf();
+        }
+        Activate(false);
+    }
+
+    /// <summary>
+    /// Throw sap
+    /// TODO: Check for spike trap (for combining) and water (for hardening) 
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator StickySap() {
+        Activate(true);
+        projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/xMarksTheSpot") as Texture;
+        while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
+            yield return new WaitForFixedUpdate();
+        if (Input.GetMouseButtonDown(0)) {
+            if (isBehind(projector.transform.position - transform.position))
+                GetComponent<SyncInventory>().pickupSap();
+            else CmdDoFire(sap, projector.transform.position, 0);
         } else
-            GetComponent<SyncInventory>().pickupSticks(); // Mayhaps this requires a Command...
+            GetComponent<SyncInventory>().pickupSap(); // Mayhaps this requires a Command...
         Activate(false);
     }
 
@@ -142,7 +167,7 @@ public class SpawnTraps : NetworkBehaviour {
     /// <param name="position">The position at which the object is to be spawned</param>
     /// <param name="duration">Time before object is destoryed (0 means never)</param>
     [Command]
-    void CmdDoFire(string go, Vector3 position, float duration) {
+    public void CmdDoFire(string go, Vector3 position, float duration) {
         Vector3 spawnPos = transform.position + ((transform.localScale.x + 10) * transform.forward);
         if (position != new Vector3())
             spawnPos = position;

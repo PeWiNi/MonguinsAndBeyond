@@ -60,6 +60,15 @@ public class Herb : Pickup {
             ps.BadBerry(amount, duration);
     }
 
+    public void EatIt(PlayerStats ps) {
+        if (conditionState == Condition.Regeneration)
+            ps.GoodBerry(amount, duration);
+        else if (conditionState == Condition.Degenration)
+            ps.BadBerry(amount, duration);
+        else //if (conditionState == Condition.Random)
+            RandomCondition(ps);
+    }
+
     void OnTriggerEnter(Collider _collider) {
         if(_collider.tag == "Player") {
             PlayerStats ps = _collider.gameObject.GetComponent<PlayerStats>();
@@ -71,6 +80,13 @@ public class Herb : Pickup {
                 ps.BadBerry(amount, duration);
             else //if (conditionState == Condition.Random)
                 RandomCondition(ps);
+
+            GameObject particles = (GameObject)Instantiate(
+                Resources.Load("Prefabs/Environments/ParticleSystems/BerryPS"), 
+                transform.position, Quaternion.Euler(270f, 0, 0));
+            Destroy(particles, 5);
+            NetworkServer.Spawn(particles);
+
             Destroy(gameObject);
         }
     }
