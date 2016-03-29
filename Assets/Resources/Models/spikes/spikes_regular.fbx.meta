@@ -15,6 +15,15 @@ ModelImporter:
     100014: pCone25
     100016: pCone6
     100018: //RootNode
+    100020: regularSpike
+    100022: regularSpike1
+    100024: regularSpike2
+    100026: regularSpike3
+    100028: regularSpike4
+    100030: regularSpike5
+    100032: regularSpike6
+    100034: regularSpike7
+    100036: regularSpike8
     400000: pasted__pCone11
     400002: pCone11
     400004: pCone15
@@ -25,6 +34,15 @@ ModelImporter:
     400014: pCone25
     400016: pCone6
     400018: //RootNode
+    400020: regularSpike
+    400022: regularSpike1
+    400024: regularSpike2
+    400026: regularSpike3
+    400028: regularSpike4
+    400030: regularSpike5
+    400032: regularSpike6
+    400034: regularSpike7
+    400036: regularSpike8
     2300000: pasted__pCone11
     2300002: pCone11
     2300004: pCone15
@@ -34,6 +52,15 @@ ModelImporter:
     2300012: pCone22
     2300014: pCone25
     2300016: pCone6
+    2300018: regularSpike
+    2300020: regularSpike1
+    2300022: regularSpike2
+    2300024: regularSpike3
+    2300026: regularSpike4
+    2300028: regularSpike5
+    2300030: regularSpike6
+    2300032: regularSpike7
+    2300034: regularSpike8
     3300000: pasted__pCone11
     3300002: pCone11
     3300004: pCone15
@@ -43,6 +70,15 @@ ModelImporter:
     3300012: pCone22
     3300014: pCone25
     3300016: pCone6
+    3300018: regularSpike
+    3300020: regularSpike1
+    3300022: regularSpike2
+    3300024: regularSpike3
+    3300026: regularSpike4
+    3300028: regularSpike5
+    3300030: regularSpike6
+    3300032: regularSpike7
+    3300034: regularSpike8
     4300000: pCone25
     4300002: pCone22
     4300004: pCone21
@@ -52,6 +88,15 @@ ModelImporter:
     4300012: pCone11
     4300014: pCone6
     4300016: pasted__pCone11
+    4300018: regularSpike1
+    4300020: regularSpike2
+    4300022: regularSpike3
+    4300024: regularSpike4
+    4300026: regularSpike5
+    4300028: regularSpike6
+    4300030: regularSpike7
+    4300032: regularSpike8
+    4300034: regularSpike
     9500000: //RootNode
   materials:
     importMaterials: 0

@@ -16,6 +16,15 @@ ModelImporter:
     100016: pasted__pCone25
     100018: pasted__pCone6
     100020: //RootNode
+    100022: fatSpike1
+    100024: fatSpike2
+    100026: fatSpike3
+    100028: fatSpike4
+    100030: fatSpike5
+    100032: fatSpike6
+    100034: fatSpike7
+    100036: fatSpike8
+    100038: fatSpike9
     400000: pasted__group10
     400002: pasted__pasted__pCone11
     400004: pasted__pCone11
@@ -27,6 +36,15 @@ ModelImporter:
     400016: pasted__pCone25
     400018: pasted__pCone6
     400020: //RootNode
+    400022: fatSpike1
+    400024: fatSpike2
+    400026: fatSpike3
+    400028: fatSpike4
+    400030: fatSpike5
+    400032: fatSpike6
+    400034: fatSpike7
+    400036: fatSpike8
+    400038: fatSpike9
     2300000: pasted__pasted__pCone11
     2300002: pasted__pCone11
     2300004: pasted__pCone15
@@ -36,6 +54,15 @@ ModelImporter:
     2300012: pasted__pCone22
     2300014: pasted__pCone25
     2300016: pasted__pCone6
+    2300018: fatSpike1
+    2300020: fatSpike2
+    2300022: fatSpike3
+    2300024: fatSpike4
+    2300026: fatSpike5
+    2300028: fatSpike6
+    2300030: fatSpike7
+    2300032: fatSpike8
+    2300034: fatSpike9
     3300000: pasted__pasted__pCone11
     3300002: pasted__pCone11
     3300004: pasted__pCone15
@@ -45,6 +72,15 @@ ModelImporter:
     3300012: pasted__pCone22
     3300014: pasted__pCone25
     3300016: pasted__pCone6
+    3300018: fatSpike1
+    3300020: fatSpike2
+    3300022: fatSpike3
+    3300024: fatSpike4
+    3300026: fatSpike5
+    3300028: fatSpike6
+    3300030: fatSpike7
+    3300032: fatSpike8
+    3300034: fatSpike9
     4300000: pasted__pCone25
     4300002: pasted__pCone22
     4300004: pasted__pCone21
@@ -54,6 +90,15 @@ ModelImporter:
     4300012: pasted__pCone11
     4300014: pasted__pCone6
     4300016: pasted__pasted__pCone11
+    4300018: fatSpike1
+    4300020: fatSpike2
+    4300022: fatSpike3
+    4300024: fatSpike4
+    4300026: fatSpike5
+    4300028: fatSpike6
+    4300030: fatSpike7
+    4300032: fatSpike8
+    4300034: fatSpike9
     9500000: //RootNode
   materials:
     importMaterials: 0

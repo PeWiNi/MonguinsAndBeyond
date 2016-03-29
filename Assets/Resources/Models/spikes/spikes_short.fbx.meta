@@ -16,6 +16,15 @@ ModelImporter:
     100016: pasted__pCone25
     100018: pasted__pCone6
     100020: //RootNode
+    100022: smallSpike
+    100024: smallSpike1
+    100026: smallSpike2
+    100028: smallSpike3
+    100030: smallSpike4
+    100032: smallSpike5
+    100034: smallSpike6
+    100036: smallSpike7
+    100038: smallSpike8
     400000: pasted__group10
     400002: pasted__pasted__pCone11
     400004: pasted__pCone11
@@ -27,6 +36,15 @@ ModelImporter:
     400016: pasted__pCone25
     400018: pasted__pCone6
     400020: //RootNode
+    400022: smallSpike
+    400024: smallSpike1
+    400026: smallSpike2
+    400028: smallSpike3
+    400030: smallSpike4
+    400032: smallSpike5
+    400034: smallSpike6
+    400036: smallSpike7
+    400038: smallSpike8
     2300000: pasted__pasted__pCone11
     2300002: pasted__pCone11
     2300004: pasted__pCone15
@@ -36,6 +54,15 @@ ModelImporter:
     2300012: pasted__pCone22
     2300014: pasted__pCone25
     2300016: pasted__pCone6
+    2300018: smallSpike
+    2300020: smallSpike1
+    2300022: smallSpike2
+    2300024: smallSpike3
+    2300026: smallSpike4
+    2300028: smallSpike5
+    2300030: smallSpike6
+    2300032: smallSpike7
+    2300034: smallSpike8
     3300000: pasted__pasted__pCone11
     3300002: pasted__pCone11
     3300004: pasted__pCone15
@@ -45,6 +72,15 @@ ModelImporter:
     3300012: pasted__pCone22
     3300014: pasted__pCone25
     3300016: pasted__pCone6
+    3300018: smallSpike
+    3300020: smallSpike1
+    3300022: smallSpike2
+    3300024: smallSpike3
+    3300026: smallSpike4
+    3300028: smallSpike5
+    3300030: smallSpike6
+    3300032: smallSpike7
+    3300034: smallSpike8
     4300000: pasted__pCone25
     4300002: pasted__pCone22
     4300004: pasted__pCone21
@@ -54,6 +90,15 @@ ModelImporter:
     4300012: pasted__pCone11
     4300014: pasted__pCone6
     4300016: pasted__pasted__pCone11
+    4300018: smallSpike
+    4300020: smallSpike1
+    4300022: smallSpike2
+    4300024: smallSpike3
+    4300026: smallSpike4
+    4300028: smallSpike5
+    4300030: smallSpike6
+    4300032: smallSpike7
+    4300034: smallSpike8
     9500000: //RootNode
   materials:
     importMaterials: 0
