@@ -10,13 +10,14 @@ public class PlayerLogic : NetworkBehaviour {
     PlayerStats stats;
     CharacterCamera cam;
     private float Speed = 5f;
-    private float jumpSpeed = 5f; 
+    private float jumpSpeed = 4f; 
     [System.NonSerialized]
     public float horizAxis = 0f;
     [System.NonSerialized]
     public float vertAxis = 0f;
     [System.NonSerialized]
-    public float jumpAxis = 0f;
+    public bool jump;
+    //public float jumpAxis = 0f;
     [System.NonSerialized]
     public float rotateAxis = 0f;
 
@@ -24,6 +25,8 @@ public class PlayerLogic : NetworkBehaviour {
     double castTime;
 
     public bool isCamMouse;
+    bool doubleJumping;
+    bool dblJump = true;
     bool isWalking;
 
     public bool isSwimming;
@@ -62,7 +65,8 @@ public class PlayerLogic : NetworkBehaviour {
             // Send Critical Input
             horizAxis = Input.GetAxis("Horizontal");
             vertAxis = Input.GetAxis("Vertical");
-            jumpAxis = Input.GetAxis("Jump");
+            jump = Input.GetButtonDown("Jump");
+            //jumpAxis = Input.GetAxis("Jump");
             // Don't do this all the time ._. but only when new peeps connect
             foreach (HealthSlider hs in FindObjectsOfType<HealthSlider>()) // Find HealthSliders of all players and make them point towards you
                 hs.setCamera(characterCam);
@@ -89,7 +93,8 @@ public class PlayerLogic : NetworkBehaviour {
         if (stats.isDead || castTime > Network.time || stats.isStunned) { // Don't keep moving when dead~
             horizAxis = 0;
             vertAxis = 0;
-            jumpAxis = 0;
+            jump = false;
+            //jumpAxis = 0;
         }
         if (transform.position.y < -100) { // Reset player position when they are below y-threshold
             transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
@@ -128,7 +133,24 @@ public class PlayerLogic : NetworkBehaviour {
             }
         }
         // Jumping
-        transform.Translate(new Vector3(0f, jumpAxis, 0f) * jumpSpeed * Time.fixedDeltaTime);
+        //if(jumpAxis > 0 && isGrounded()) {
+        if (jump && isGrounded()) {
+            GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
+            //dblJump = true;
+        }
+        // Double Jumping 
+        else if (jump && !isGrounded() && doubleJumping && dblJump) {
+            GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
+            dblJump = false;
+        }
+        //transform.Translate(new Vector3(0f, jumpAxis, 0f) * jumpSpeed * Time.fixedDeltaTime);
+    }
+
+    bool isGrounded() {
+        return Physics.Raycast(transform.position, -Vector3.up, GetComponent<Collider>().bounds.extents.y + 0.1f);
+    }
+    void OnCollisionEnter(Collision hit) {
+        dblJump = true;
     }
 
     /// <summary>
@@ -179,5 +201,9 @@ public class PlayerLogic : NetworkBehaviour {
 
     public void SetCameraControl(bool camera) {
         isCamMouse = camera;
+    }
+
+    public void SetDoubleJump(bool toggle) {
+        doubleJumping = toggle;
     }
 }

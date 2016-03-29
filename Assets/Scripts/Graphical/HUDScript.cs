@@ -6,6 +6,7 @@ public class HUDScript : MonoBehaviour {
     GameObject playerUI;
     public Inventory inventory;
     Toggle CamMouse;
+    Toggle DoubleJumping;
     Slider castBar;
     GameObject actionBar;
     Image ability1;
@@ -42,7 +43,9 @@ public class HUDScript : MonoBehaviour {
         trap1 = actionBar.GetComponentsInChildren<Image>()[7];
         trap2 = actionBar.GetComponentsInChildren<Image>()[9];
         inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
-        CamMouse = transform.FindChild("Toggle CamMouse").GetComponent<Toggle>();
+        Toggle[] debug = transform.FindChild("DEBUG").GetComponentsInChildren<Toggle>();
+        CamMouse = debug[0];
+        DoubleJumping = debug[1];
         castBar = transform.FindChild("CastBar").GetComponent<Slider>();
         castBar.gameObject.SetActive(false);
     }
@@ -166,7 +169,7 @@ public class HUDScript : MonoBehaviour {
         inventory.transform.FindChild("BerryG").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryGCount;
         inventory.transform.FindChild("BerryB").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryBCount;
         #endregion
-        ps.GetComponent<PlayerLogic>().SetCameraControl(CamMouse.isOn);
+        eventValueChanged();
         // TODO: Do stuff with setting up correct ability images
         SetCursorState(true);
     }
@@ -176,10 +179,13 @@ public class HUDScript : MonoBehaviour {
     }
 
     public void eventValueChanged() {
-        if(ps != null)
+        if(ps != null) {
             ps.GetComponent<PlayerLogic>().SetCameraControl(CamMouse.isOn);
+            ps.GetComponent<PlayerLogic>().SetDoubleJump(DoubleJumping.isOn);
+        }
         SetCursorState(true);
-        Debug.Log("Toggle is " + CamMouse.isOn); //check isOn state
+        Debug.Log("Cam Toggle is " + CamMouse.isOn); //check isOn state
+        Debug.Log("Jump Toggle is " + DoubleJumping.isOn); 
     }
 
     #region Cursor state methods
