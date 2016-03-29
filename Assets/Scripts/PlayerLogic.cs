@@ -121,6 +121,7 @@ public class PlayerLogic : NetworkBehaviour {
         } else {
             // Movement
             if (Input.GetMouseButton(1))
+                //GetComponent<Rigidbody>().AddForce((transform.forward * vertAxis + transform.right * horizAxis) * Speed);
                 transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
             else {
                 transform.Translate(new Vector3(0f, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
@@ -166,6 +167,8 @@ public class PlayerLogic : NetworkBehaviour {
 
     void SetSpeed() {
         Speed = stats ? stats.syncSpeed : Speed; // Only use speed from playerStats if it is not null
+        if (stats.isSlowed)
+            Speed *= .3f;
     }
 
     public void StartSwimming() {

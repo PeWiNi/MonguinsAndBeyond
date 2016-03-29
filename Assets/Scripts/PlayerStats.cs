@@ -58,6 +58,10 @@ public class PlayerStats : NetworkBehaviour {
     public bool isStunned = false;
     [SyncVar]
     double stunTimer;
+    [SyncVar]
+    public bool isSlowed = false;
+    [SyncVar]
+    double slowTime;
 
     [SyncVar]
     bool makeMap = false;
@@ -149,6 +153,10 @@ public class PlayerStats : NetworkBehaviour {
         } if (isStunned) {
             if (stunTimer < Network.time) {
                 isStunned = false;
+            }
+        } if (slowTime < Network.time) {
+            if (isSlowed) {
+                Slow(false);
             }
         }
         TeamSelect();
@@ -407,7 +415,14 @@ public class PlayerStats : NetworkBehaviour {
     /// <param name="amount"></param>
     [Command]
     public void CmdHealing(float amount) { Healing(amount); }
-
+    
+    public void Slow(bool slow) {
+        if (!isServer)
+            return;
+        isSlowed = slow;
+        if (slow)
+            slowTime = Network.time + 1;
+    }
     /// <summary>
     /// Logic for when the player has connected and team stuff happens
     /// 

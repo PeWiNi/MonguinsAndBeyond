@@ -8,7 +8,8 @@ public class SpawnTraps : NetworkBehaviour {
     public string bananaTrap;
     public string spikeTrap;
     string sap;
-
+    [SyncVar]
+    float distFromTerrain = 2;
     GameObject projector;
 
     bool active = false;
@@ -27,12 +28,9 @@ public class SpawnTraps : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
-        projector = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Trap_Projector") as GameObject, transform.position,
-            Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
         bananaTrap = "Prefabs/Environments/Trap_BananaIsland";
         spikeTrap = "Prefabs/Environments/Trap_SpikeIsland";
-        sap = "Prefabs/Environments/Sap";
-        Activate(false);
+        sap = "Prefabs/Environments/Trap_Sap";
     }
 	
 	// Update is called once per frame
@@ -55,8 +53,8 @@ public class SpawnTraps : NetworkBehaviour {
         if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << 8))) {
             pos = hit.point;
         }
-        pos = doNotTouchTerrain(Limiter(pos, range), 2);
-        // Check if behind player - and distable projector if it is
+        pos = doNotTouchTerrain(Limiter(pos, range), distFromTerrain);
+        // Check if behind player - and disable projector if it is
         Vector3 toOther = pos - transform.position;
         if (isBehind(toOther))
             projector.gameObject.SetActive(false);
@@ -97,9 +95,26 @@ public class SpawnTraps : NetworkBehaviour {
     /// Also enables/disables the projector, projecting the trap placement
     /// </summary>
     /// <param name="activate">State of activation (isPlacing)</param>
-    void Activate(bool activate) {
+    void Activate(bool activate, bool threeDee = false) {
+        if(activate) {
+            if (threeDee) {
+                projector = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Trap_Sap_Projector") as GameObject, transform.position,
+                    Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
+                distFromTerrain = 0;
+            } else {
+                projector = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Trap_Projector") as GameObject, transform.position,
+                    Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
+                distFromTerrain = 2;
+            }
+            projector.gameObject.SetActive(activate);
+            CmdChangeDist(distFromTerrain);
+        } else { Destroy(projector); }
         active = activate;
-        projector.gameObject.SetActive(activate);
+    }
+
+    [Command]
+    void CmdChangeDist(float dist) {
+        distFromTerrain = dist;
     }
 
     /// <summary>
@@ -147,8 +162,8 @@ public class SpawnTraps : NetworkBehaviour {
     /// </summary>
     /// <returns></returns>
     public IEnumerator StickySap() {
-        Activate(true);
-        projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/xMarksTheSpot") as Texture;
+        Activate(true, true);
+        //projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/xMarksTheSpot") as Texture;
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if (Input.GetMouseButtonDown(0)) {
@@ -171,10 +186,10 @@ public class SpawnTraps : NetworkBehaviour {
         Vector3 spawnPos = transform.position + ((transform.localScale.x + 10) * transform.forward);
         if (position != new Vector3())
             spawnPos = position;
-        spawnPos = doNotTouchTerrain(spawnPos, 2);
+        spawnPos = doNotTouchTerrain(spawnPos, distFromTerrain);
         GameObject banana = (GameObject)Instantiate(
             Resources.Load(go) as GameObject, spawnPos,
-            Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
+            Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
 
         if (duration > 0)
             Destroy(banana, duration);
