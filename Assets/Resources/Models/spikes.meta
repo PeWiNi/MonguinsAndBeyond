@@ -1,4 +1,5 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Models/spikes.meta
 guid: 735d88c6cba08ac429697bb4be358e40
 folderAsset: yes
 timeCreated: 1459243060
@@ -7,3 +8,6 @@ DefaultImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+=======
+guid: a40c1b84cf7fe418bae97a29041b85a4
+>>>>>>> origin/master:Assets/DaQ-GAMES/Low Poly Cartoon Forest Pack/Demo/Standard Assets/Image Effects (Pro Only)/_Sources/Shaders/Contrast Stretch.meta
