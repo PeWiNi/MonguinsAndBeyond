@@ -18,7 +18,7 @@ ModelImporter:
     4300000: BezierCircle
     4300002: NurbsPath
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
