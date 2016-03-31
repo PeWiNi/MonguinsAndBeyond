@@ -1,4 +1,4 @@
-﻿Shader "Cg  shader for billboards" {
+﻿Shader "Custom/QuadBillboards" {
 	Properties{
 		_Color("Color tint", Color) = (1.0, 1.0, 1.0, 1.0)
 		_MainTex("Texture Image", 2D) = "white" {}

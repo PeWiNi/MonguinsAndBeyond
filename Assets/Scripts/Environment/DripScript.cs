@@ -10,12 +10,21 @@ public class DripScript : RotateMe {
 	void FixedUpdate () {
 	    if (host != null) {
             transform.position = host.position + new Vector3(0f, .5f, -0.1f);
-            if (!host.GetComponent<PlayerStats>().isSlowed)
-                Destroy(gameObject);
+            if (!host.GetComponent<PlayerStats>().isSlowed) {
+                var em = GetComponent<ParticleSystem>().emission;
+                em.enabled = false;
+                StartCoroutine(KillMe(5));
+            }
         }
 	}
 
+    IEnumerator KillMe(float countdown) {
+        yield return new WaitForSeconds(countdown);
+        Destroy(gameObject);
+    }
+
     public void SetParent(Transform parent) {
         host = parent;
+        transform.position = host.position + new Vector3(0f, .5f, -0.1f);
     }
 }
