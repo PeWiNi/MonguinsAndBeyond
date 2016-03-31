@@ -13,7 +13,8 @@ public class DripScript : RotateMe {
             if (!host.GetComponent<PlayerStats>().isSlowed) {
                 var em = GetComponent<ParticleSystem>().emission;
                 em.enabled = false;
-                StartCoroutine(KillMe(5));
+                StartCoroutine(KillMe(25));
+                host = null;
             }
         }
 	}

@@ -16,8 +16,12 @@ public class MyNetworkManager : NetworkManager {
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId); //Default implementation
 
         try { ScoreManager SM = GetComponentInChildren<ScoreManager>();
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) 
-                go.GetComponent<EventManager>().RpcSendScoreEvent(SM.teamOneDeathCount, SM.teamTwoDeathCount);
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+                if (conn.clientOwnedObjects.Contains(go.GetComponent<NetworkIdentity>().netId)) {
+                    go.GetComponent<EventManager>().RpcSendScoreEvent(SM.teamOneDeathCount, SM.teamTwoDeathCount);
+                    go.GetComponent<PlayerStats>().SetServerInitTime(SM.initServerTime);
+                    break;
+                }
         } catch { Debug.Log("No Score Manager found!"); }
 
         // Do the mapHandler code only when on the correct scene

@@ -26,6 +26,8 @@ public class HUDScript : MonoBehaviour {
     float trap2Timer;
     #endregion
 
+    double gameTimer;
+
     CursorLockMode wantedMode;
     // Cast bar reference to ensure the correct bar is showing
     string currentText = "";
@@ -324,5 +326,20 @@ public class HUDScript : MonoBehaviour {
         Text[] textiez = transform.FindChild("ScoreBoard").GetComponentsInChildren<Text>();
         textiez[1].text = "Team 1: " + team1 + " deaths";
         textiez[2].text = "Team 2: " + team2 + " deaths";
+    }
+
+    public void SetupTimer(double time) {
+        //gameTimer = time;
+        StartCoroutine(LikeClockWork(time));
+    }
+
+    IEnumerator LikeClockWork(double time) {
+        while(true) {
+            yield return new WaitForSeconds(1);
+            float timez = (float)(Network.time - time);
+            float minute = Mathf.Floor(timez / 60);
+            float seconds = Mathf.Floor(timez % 60);
+            transform.FindChild("ScoreBoard").FindChild("Timer").GetComponent<Text>().text = string.Format("{0:00}:{1:00}", minute, seconds);
+        }
     }
 }

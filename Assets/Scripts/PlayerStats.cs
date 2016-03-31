@@ -65,6 +65,9 @@ public class PlayerStats : NetworkBehaviour {
 
     [SyncVar]
     bool makeMap = false;
+
+    [SyncVar(hook = "SetServerInitTime")]
+    double serverInit;
     //[SyncVar]
     //float initSinking;
 
@@ -551,5 +554,11 @@ public class PlayerStats : NetworkBehaviour {
     }
     public void GoodBerry(float amount, float duration) {
         StartCoroutine(Regenerate(amount, duration));
+    }
+
+    public void SetServerInitTime(double time) {
+        serverInit = time;
+        if (isLocalPlayer)
+            GameObject.Find("HUD").GetComponent<HUDScript>().SetupTimer(serverInit);
     }
 }

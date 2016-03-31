@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 /// Class for keeping track of teamsizes 
 /// </summary>
 public class ScoreManager : NetworkBehaviour {
+    public double initServerTime;
 
     public float initialHealthPool = 1000;
     public int teamOne = 0;
@@ -14,6 +15,10 @@ public class ScoreManager : NetworkBehaviour {
     public float teamTwoDeathCount = 0;
 
     public float sinkTimer;
+
+    void Start() {
+        initServerTime = Network.time;
+    }
 
     /// <summary>
     /// Tallies the count of players for each team, also assigns a team-number if you did not select one yourself
