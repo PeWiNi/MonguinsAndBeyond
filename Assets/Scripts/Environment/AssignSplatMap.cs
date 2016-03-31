@@ -39,18 +39,21 @@ public class AssignSplatMap : MonoBehaviour
                 // CHANGE THE RULES BELOW TO SET THE WEIGHTS OF EACH TEXTURE ON WHATEVER RULES YOU WANT
 
                 // Texture[0] has constant influence
-                splatWeights[0] = 0.5f;
-
+                //splatWeights[0] = 0.2f;
+                float steepFunction = Mathf.Clamp01(steepness * steepness / (terrainData.heightmapHeight / 5.0f));
+                float bareMinimum = 1 - Mathf.Clamp01(terrainData.heightmapHeight * height);
                 // Texture[1] is stronger at lower altitudes
-                splatWeights[1] = Mathf.Clamp01((terrainData.heightmapHeight - height));
+                //splatWeights[0] = Mathf.Clamp01((terrainData.heightmapHeight - height));
+                splatWeights[0] = Mathf.Clamp01((terrainData.heightmapHeight - height)) - steepFunction - bareMinimum;
 
                 // Texture[2] stronger on flatter terrain
                 // Note "steepness" is unbounded, so we "normalise" it by dividing by the extent of heightmap height and scale factor
                 // Subtract result from 1.0 to give greater weighting to flat surfaces
-                splatWeights[2] = 1.0f - Mathf.Clamp01(steepness * steepness / (terrainData.heightmapHeight / 5.0f));
+                splatWeights[1] = steepFunction;
+                splatWeights[2] = bareMinimum;
 
                 // Texture[3] increases with height but only on surfaces facing positive Z axis 
-                splatWeights[3] = height * Mathf.Clamp01(normal.z);
+                //splatWeights[3] = height * Mathf.Clamp01(normal.z);
 
                 // Sum of all textures weights must add to 1, so calculate normalization factor from sum of weights
                 float z = splatWeights.Sum();
