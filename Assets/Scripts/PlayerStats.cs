@@ -561,4 +561,17 @@ public class PlayerStats : NetworkBehaviour {
         if (isLocalPlayer)
             GameObject.Find("HUD").GetComponent<HUDScript>().SetupTimer(serverInit);
     }
+
+    [Command]
+    void CmdEatBerry(string berryType) {
+        EatBerry(berryType);
+    }
+
+    public void EatBerry(string berryType) {
+        if (!isServer)
+            CmdEatBerry(berryType);
+        Herb berry = new Herb();
+        berry.ChangeProperties(berryType, team);
+        berry.EatIt(this);
+    }
 }

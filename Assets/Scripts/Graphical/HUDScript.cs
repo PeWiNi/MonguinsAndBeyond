@@ -290,9 +290,10 @@ public class HUDScript : MonoBehaviour {
             StartCoroutine(ps.GetComponentInChildren<SpawnTraps>().StickySap());
 
         else if(item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false) {
-            Herb berry = new Herb();
-            berry.ChangeProperties(item, ps.team);
-            berry.EatIt(ps);
+            ps.EatBerry(item);
+            //Herb berry = new Herb();
+            //berry.ChangeProperties(item, ps.team);
+            //berry.EatIt(ps);
         }
 
         // Update text field with new values
