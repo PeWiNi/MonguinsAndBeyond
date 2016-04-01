@@ -31,11 +31,12 @@ public class PickupSpawner : NetworkBehaviour {
     void Spawn() {
         Vector3 pos = transform.position + new Vector3(0, .75f, 0);
         Collider[] hitColliders = Physics.OverlapSphere(pos, .25f);
-        if (hitColliders.Length > 0)
-            return;
+        foreach(Collider c in hitColliders)
+            if(!c.isTrigger)
+                return;
         GameObject go = (GameObject)Instantiate(
             prefab, pos, prefab.transform.rotation);
-        //Destroy(go, repeatTime);
+        Destroy(go, repeatTime);
         NetworkServer.Spawn(go);
     }
 }
