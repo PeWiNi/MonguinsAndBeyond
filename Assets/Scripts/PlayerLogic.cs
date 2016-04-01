@@ -137,10 +137,10 @@ public class PlayerLogic : NetworkBehaviour {
         //if(jumpAxis > 0 && isGrounded()) {
         if (jump && isGrounded()) {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
-            //dblJump = true;
+            dblJump = true;
         }
         // Double Jumping 
-        else if (jump && !isGrounded() && doubleJumping && dblJump) {
+        else if (jump && doubleJumping && dblJump) {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = false;
         }
@@ -150,9 +150,7 @@ public class PlayerLogic : NetworkBehaviour {
     bool isGrounded() {
         return Physics.Raycast(transform.position, -Vector3.up, GetComponent<Collider>().bounds.extents.y + 0.1f);
     }
-    void OnCollisionEnter(Collision hit) {
-        dblJump = true;
-    }
+    //void OnCollisionEnter(Collision hit) { dblJump = true; }
 
     /// <summary>
     /// Sprint if shift is held
