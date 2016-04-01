@@ -148,7 +148,7 @@ public class PlayerLogic : NetworkBehaviour {
     }
 
     bool isGrounded() {
-        return Physics.Raycast(transform.position, -Vector3.up, GetComponent<Collider>().bounds.extents.y + 0.1f);
+        return Physics.Raycast(transform.position, -Vector3.up, GetComponent<Collider>().bounds.extents.y * 1.1f);
     }
     //void OnCollisionEnter(Collision hit) { dblJump = true; }
 
@@ -158,7 +158,6 @@ public class PlayerLogic : NetworkBehaviour {
     /// <param name="speed">The speed at which the player will move</param>
     void SetSpeed(out float speed) {
         speed = stats ? stats.syncSpeed : Speed; // Only use speed from playerStats if it is not null
-        print(speed);
         //isWalking = !Input.GetKey(KeyCode.LeftShift);
         //speed = isWalking ? Speed : Speed * 2;
     }
