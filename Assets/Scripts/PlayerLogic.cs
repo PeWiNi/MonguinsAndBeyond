@@ -41,8 +41,6 @@ public class PlayerLogic : NetworkBehaviour {
     Camera characterCam;
     [SerializeField]
     AudioListener audioListener;
-    [SerializeField]
-    Animator monguinAnimator;
 
     void Start() {
         // Only enable sound and camera for player if it's the local player
@@ -53,18 +51,10 @@ public class PlayerLogic : NetworkBehaviour {
             audioListener.enabled = true;
 
             //m_MouseLook.Init(transform, characterCam.transform);
-
-            //Animation Sync Stuff
-            //transform.GetComponent<NetworkAnimator>().GetParameterAutoSend(1);
-            //transform.GetComponent<NetworkAnimator>().GetParameterAutoSend(0);
         }
         cam = characterCam.GetComponent<CharacterCamera>();
         stats = GetComponent<PlayerStats>();
         Speed = stats? stats.speed : Speed; // Only use speed from playerStats if it is not null
-        monguinAnimator = GetComponent<Animator>();
-        //Animation Sync Stuff
-        //transform.GetComponent<NetworkAnimator>().SetParameterAutoSend(1, true);
-        //transform.GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
     }
 
     void Update() {
@@ -124,9 +114,8 @@ public class PlayerLogic : NetworkBehaviour {
         if(isCamMouse) {
             // Movement
             transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
-
             // Rotation
-            if((!stats.isDead && !stats.isStunned))
+            if ((!stats.isDead && !stats.isStunned))
                 transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
         } else {
             // Movement
@@ -149,7 +138,7 @@ public class PlayerLogic : NetworkBehaviour {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = true;
             //Play 'Jump' Animation
-            monguinAnimator.SetBool("IsJumping", true);
+            //GetComponent<Animator>().SetBool("IsJumping", true);
         }
         // Double Jumping 
         else if (jump && doubleJumping && dblJump) {
@@ -177,6 +166,8 @@ public class PlayerLogic : NetworkBehaviour {
 
     void SetSpeed() {
         Speed = stats ? stats.syncSpeed : Speed; // Only use speed from playerStats if it is not null
+        //Play 'Walking' Animation
+        GetComponent<Animator>().SetFloat("Speed", Speed);
         if (stats.isSlowed)
             Speed *= .3f;
     }
