@@ -76,6 +76,15 @@ public class Trap_VineTree : Trap
         }
     }
 
+    /// <summary>
+    /// Method for transforming a distance to 
+    /// </summary>
+    /// <param name="center"></param>
+    /// <param name="radius"></param>
+    /// <param name="distance"></param>
+    /// <param name="min"></param>
+    /// <param name="max"></param>
+    /// <returns></returns>
     Vector3 CircleStuff(Vector3 center, float radius, float distance, float min = 0, float max = 10)
     {
         var ang = Mathf.Clamp(distance, 0, 10) / 10 * -90;
@@ -169,15 +178,9 @@ public class Trap_VineTree : Trap
         }
     }
 
-    void OnMouseEnter()
-    {
-        Cursor.SetCursor(cursorFreeHand, hotSpot, cursorMode);
-        isHoveringTrap = true;
-    }
-
     void OnMouseOver()
     {
-        if (!isHoldingDownTrap)
+        if (!isHoldingDownTrap && player != null)
         {
             isHoveringTrap = true;
             Cursor.SetCursor(cursorFreeHand, hotSpot, cursorMode);
