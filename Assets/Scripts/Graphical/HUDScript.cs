@@ -201,7 +201,8 @@ public class HUDScript : MonoBehaviour {
             if (CamMouse.isOn)
                 wantedMode = CursorLockMode.Locked;
             else
-                wantedMode = CursorLockMode.Confined;
+                //wantedMode = CursorLockMode.Confined;
+                wantedMode = CursorLockMode.None;
         }
         Cursor.lockState = wantedMode;
         // Hide cursor when locking
