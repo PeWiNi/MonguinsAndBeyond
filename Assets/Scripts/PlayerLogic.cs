@@ -41,6 +41,8 @@ public class PlayerLogic : NetworkBehaviour {
     Camera characterCam;
     [SerializeField]
     AudioListener audioListener;
+    [SerializeField]
+    Animator monguinAnimator;
 
     void Start() {
         // Only enable sound and camera for player if it's the local player
@@ -51,10 +53,18 @@ public class PlayerLogic : NetworkBehaviour {
             audioListener.enabled = true;
 
             //m_MouseLook.Init(transform, characterCam.transform);
+
+            //Animation Sync Stuff
+            //transform.GetComponent<NetworkAnimator>().GetParameterAutoSend(1);
+            //transform.GetComponent<NetworkAnimator>().GetParameterAutoSend(0);
         }
         cam = characterCam.GetComponent<CharacterCamera>();
         stats = GetComponent<PlayerStats>();
         Speed = stats? stats.speed : Speed; // Only use speed from playerStats if it is not null
+        monguinAnimator = GetComponent<Animator>();
+        //Animation Sync Stuff
+        //transform.GetComponent<NetworkAnimator>().SetParameterAutoSend(1, true);
+        //transform.GetComponent<NetworkAnimator>().SetParameterAutoSend(0, true);
     }
 
     void Update() {
@@ -138,11 +148,14 @@ public class PlayerLogic : NetworkBehaviour {
         if (jump && isGrounded()) {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = true;
+            //Play 'Jump' Animation
+            monguinAnimator.SetBool("IsJumping", true);
         }
         // Double Jumping 
         else if (jump && doubleJumping && dblJump) {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = false;
+
         }
         //transform.Translate(new Vector3(0f, jumpAxis, 0f) * jumpSpeed * Time.fixedDeltaTime);
     }
