@@ -26,7 +26,7 @@ public class PlayerLogic : NetworkBehaviour {
 
     public bool isCamMouse;
     bool doubleJumping;
-    bool dblJump = true;
+    bool dblJump = false;
     bool isWalking;
 
     public bool isSwimming;

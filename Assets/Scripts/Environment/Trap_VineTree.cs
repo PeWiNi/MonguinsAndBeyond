@@ -169,6 +169,11 @@ public class Trap_VineTree : Trap
             player = _collider.gameObject;
     }
 
+    void OnTriggerStay(Collider _collider) {
+        if (_collider.tag == "Player" && !this.isTriggered && !this.isUnderConstruction && player == null)
+            player = _collider.gameObject;
+    }
+
     void OnTriggerExit(Collider _collider)
     {
         /*If the player that was player would leave or not interact with the trap anymore, set it to null so another can take possesion of it*/
@@ -193,6 +198,7 @@ public class Trap_VineTree : Trap
         {
             Cursor.SetCursor(null, Vector2.zero, cursorMode);
             isHoveringTrap = false;
+            player = null;
         }
     }
 }

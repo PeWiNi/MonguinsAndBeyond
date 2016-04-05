@@ -15,12 +15,12 @@ public class CharacterCamera : MonoBehaviour {
     bool isCorrected = false;
 
     // Camera Speed
-    float xSpeed = 250.0f;
+    float xSpeed = 180.0f;
     float ySpeed = 120.0f;
     float rotationDampening = 3f;
 
     // Vertical restictions on camera movement
-    public float yMax = 30;
+    public float yMax = 70;
     public float yMin = -10;
 
     int zoomRate = 30;
