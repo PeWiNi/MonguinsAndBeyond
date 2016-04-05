@@ -9,9 +9,9 @@ public class TailSlap : Ability {
     public float damage = .02f;
     
     public override double Trigger() {
-        Vector3 PointOfImpact = transform.position + (transform.forward * distance);
+        Vector3 PointOfImpact = transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up;
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
-        try { StartCoroutine(GetComponentInChildren<SlashEffect>().TailSlap()); } catch { }
+        //try { StartCoroutine(GetComponentInChildren<SlashEffect>().TailSlap()); } catch { }
         foreach(Collider hit in hitColliders) {
             if(hit.tag == "Player")
                 if (hit.GetComponentInParent<PlayerStats>().team != team) {

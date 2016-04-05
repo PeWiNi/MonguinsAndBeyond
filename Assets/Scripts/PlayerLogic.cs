@@ -29,6 +29,9 @@ public class PlayerLogic : NetworkBehaviour {
     bool dblJump = false;
     bool isWalking;
 
+    [SyncVar]
+    Vector3 externalForce;
+
     public bool isSwimming;
     public float drownDepth = 5;
     float drownTimer;
@@ -144,9 +147,23 @@ public class PlayerLogic : NetworkBehaviour {
         else if (jump && doubleJumping && dblJump) {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = false;
-
         }
         //transform.Translate(new Vector3(0f, jumpAxis, 0f) * jumpSpeed * Time.fixedDeltaTime);
+
+        if (externalForce != new Vector3()) {
+            GetComponent<Rigidbody>().velocity = externalForce;
+            externalForce = new Vector3();
+            CmdPushMe(new Vector3());
+        }
+    }
+
+    public void PushMe(Vector3 force) {
+        externalForce = force;
+    }
+
+    [Command]
+    void CmdPushMe(Vector3 force) {
+        externalForce = force;
     }
 
     bool isGrounded() {

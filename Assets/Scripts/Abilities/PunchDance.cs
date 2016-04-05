@@ -14,21 +14,37 @@ public class PunchDance : Ability {
     public float thirdDmg = .05f;
 
     public override double Trigger() {
-        Vector3 PointOfImpact = transform.position + (transform.forward * distance);
+        Vector3 PointOfImpact = transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up;
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
-        try { StartCoroutine(GetComponentInChildren<SlashEffect>().PunchDance()); } catch { }
-        if (hitColliders.Length > 0) 
-            if (hitColliders[0].GetComponentInParent<PlayerStats>().team != team)
-                StartCoroutine(Attack(hitColliders));
+        //try { StartCoroutine(GetComponentInChildren<SlashEffect>().PunchDance()); } catch { }
+        if (hitColliders.Length > 0) {
+            if (hitColliders[0].tag == "Ground" && hitColliders.Length == 1) 
+                return 0;
+            StartCoroutine(Attack(hitColliders));
+        } else return 0;
         return base.Trigger();
     }
 
     IEnumerator Attack(Collider[] hitColliders) {
-        CmdStunPlayer(hitColliders[0].gameObject, stunDuration);
-        CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * firstDmg);
-        yield return new WaitForSeconds(timeBetweenAttacks);
-        CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * secondDmg);
-        yield return new WaitForSeconds(timeBetweenAttacks);
-        CmdDamagePlayer(hitColliders[0].gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * thirdDmg);
+        foreach(Collider c in hitColliders) {
+            if (c.tag != "Player") continue;
+            // Push
+            CmdPushPlayer(c.gameObject, (transform.up * 5) + (transform.forward * distance));
+            if (c.GetComponentInParent<PlayerStats>().team != team) {
+                // Stun
+                CmdStunPlayer(c.gameObject, stunDuration);
+                //Damage
+                CmdDamagePlayer(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * firstDmg);
+                yield return new WaitForSeconds(timeBetweenAttacks);
+                CmdDamagePlayer(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * secondDmg);
+                yield return new WaitForSeconds(timeBetweenAttacks);
+                CmdDamagePlayer(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * thirdDmg);
+            }
+        }
+    }
+
+    void OnDrawGizmos() {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up, impactRadius);
     }
 }
