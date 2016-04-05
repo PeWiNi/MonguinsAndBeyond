@@ -57,6 +57,11 @@ public class Ability : NetworkBehaviour {
         player.GetComponent<PlayerStats>().Stun(duration);
     }
 
+    [Command]
+    internal void CmdPushPlayer(GameObject player, Vector3 force) {
+        player.GetComponent<PlayerLogic>().PushMe(force);
+    }
+
     public bool OnCooldown() {
         return ((float)Network.time - timer) < cooldown;
     }
