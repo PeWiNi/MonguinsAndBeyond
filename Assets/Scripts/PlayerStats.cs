@@ -140,9 +140,9 @@ public class PlayerStats : NetworkBehaviour {
 	// Update is called once per frame
 	void Update () {
         if (isDead) { // Send to co-routine?
-            Color c = body.GetComponent<MeshRenderer>().material.color;
+            Color c = body.GetComponent<SkinnedMeshRenderer>().material.color;
             if (((float)Network.time - deathTimer) > deathCooldown) {
-                foreach (Material m in body.GetComponent<MeshRenderer>().materials)
+                foreach (Material m in body.GetComponent<SkinnedMeshRenderer>().materials)
                     m.color = new Color(c.r, c.g, c.b, 1f);
                 //if (isLocalPlayer) {
                     Respawn();
@@ -151,7 +151,7 @@ public class PlayerStats : NetworkBehaviour {
             }
             health = 0;
 
-            foreach (Material m in body.GetComponent<MeshRenderer>().materials)m.color = new Color(c.r, c.g, c.b, .2f);
+            foreach (Material m in body.GetComponent<SkinnedMeshRenderer>().materials)m.color = new Color(c.r, c.g, c.b, .2f);
             return;
         } if (isStunned) {
             if (stunTimer < Network.time) {
@@ -206,7 +206,7 @@ public class PlayerStats : NetworkBehaviour {
                 //  Fortify - temporarily increase health and resilience of the defender with 20% for 10 sec. CD:20sec
                 syncSpeed *= 0.80f;
                 // Placeholder visual thing
-                body.GetComponent<MeshRenderer>().material.color = Color.blue;
+                body.GetComponent<SkinnedMeshRenderer>().material.color = Color.blue;
                 break;
             case (Role.Attacker):
                 roleStats = new RoleStats(0.85f, 0, 1.15f); //TODO: Calculate speed using the charts
@@ -223,8 +223,8 @@ public class PlayerStats : NetworkBehaviour {
                 //  Punch Dance - deals a stronger tail slap (3% of current health damage) that if it hits stuns the enemy for 2 sec and it's followed by 2 more tail slaps of 4% and 5% damage*current health. CD:20 sec
                 abilities[1] = GetComponent<PunchDance>();
                 // Placeholder visual thing
-                //body.GetComponent<MeshRenderer>().material.color = Color.red;
-                foreach(Material m in body.GetComponent<MeshRenderer>().materials)
+                //body.GetComponent<SkinnedMeshRenderer>().material.color = Color.red;
+                foreach(Material m in body.GetComponent<SkinnedMeshRenderer>().materials)
                     m.color = team == 1 ? Color.yellow : Color.blue;
                 break;
             case (Role.Supporter):
@@ -236,10 +236,10 @@ public class PlayerStats : NetworkBehaviour {
                 //  Heal force - ability targets only friendly characters. Heals 50-250 HP over 3 sec depending on skill and herbs used in the ability. Max range 20 units. 1 herb heals instantly for 50HP, 2->4 herb heal over time (50 at first and 50 more for each 'tic'). No CD; instant application; requires herbs to cast
                 syncSpeed *= 1f;
                 // Placeholder visual thing
-                body.GetComponent<MeshRenderer>().material.color = Color.green;
+                body.GetComponent<SkinnedMeshRenderer>().material.color = Color.green;
                 break;
             default:
-                body.GetComponent<MeshRenderer>().material.color = Color.white;
+                body.GetComponent<SkinnedMeshRenderer>().material.color = Color.white;
                 abilities[0] = GetComponent<ShootBullet>();
                 abilities[1] = GetComponent<HealSelf>();
                 break;
@@ -346,6 +346,8 @@ public class PlayerStats : NetworkBehaviour {
         syncHealth = syncMaxHealth;
         transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
         GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+        ////´Stop Die Animation.
+        GetComponent<Animator>().SetBool("IsDead", false);
     }
 
     /// <summary>
@@ -374,6 +376,9 @@ public class PlayerStats : NetworkBehaviour {
             isDead = true;
             deathTimer = (float)Network.time;
             syncHealth = 0;
+            //Play Die Animation.
+            GetComponent<Animator>().SetBool("IsDead", true);
+            GetComponent<Animator>().SetTrigger("IsDying");
         }
         RpcTakeDmg(amount * (1.0f - ((float)resilience / 100.0f)));
     }

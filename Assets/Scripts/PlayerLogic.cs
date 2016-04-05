@@ -138,7 +138,7 @@ public class PlayerLogic : NetworkBehaviour {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = true;
             //Play 'Jump' Animation
-            //GetComponent<Animator>().SetBool("IsJumping", true);
+            GetComponent<Animator>().SetTrigger("IsJumping");
         }
         // Double Jumping 
         else if (jump && doubleJumping && dblJump) {
@@ -167,7 +167,7 @@ public class PlayerLogic : NetworkBehaviour {
     void SetSpeed() {
         Speed = stats ? stats.syncSpeed : Speed; // Only use speed from playerStats if it is not null
         //Play 'Walking' Animation
-        GetComponent<Animator>().SetFloat("Speed", Speed);
+        GetComponent<Animator>().SetFloat("Speed", Speed * vertAxis);
         if (stats.isSlowed)
             Speed *= .3f;
     }

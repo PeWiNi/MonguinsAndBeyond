@@ -24,12 +24,17 @@ public class ThrowBoomnana : Ability {
 
     public override double Trigger() {
         StartCoroutine(GetComponent<Aim>().Boomy(this));
+        //Play AimBOOMnana Animation.
+        GetComponent<Animator>().SetBool("IsAimingBOOMnana", true);
         //CmdDoFire(new Vector3());
         return base.Trigger();
     }
 
     public void Throw(Vector3 pos) {
         CmdDoFire(pos);
+        //Stop AimBOOMnana, Play IsThrowingBOOMnana Animations.
+        GetComponent<Animator>().SetBool("IsAimingBOOMnana", false);
+        GetComponent<Animator>().SetTrigger("IsThrowingBOOMnana");
         timer = (float)Network.time;
     }
 
@@ -41,7 +46,7 @@ public class ThrowBoomnana : Ability {
     void CmdDoFire(Vector3 endPos) {
         // Initiate GameObject using prefab, position and a rotation
         GameObject bullet = (GameObject)Instantiate(
-            prefab, transform.position + (transform.localScale.x + .5f) * transform.forward,
+            prefab, transform.position + (transform.localScale.x + .5f) * transform.forward + (transform.localScale.y + .5f) * transform.up,
             Quaternion.identity);
         // Determine end-position of BOOMnana
         Vector3 pos = endPos == new Vector3() ? (transform.position + (transform.forward * distance)) : endPos;
