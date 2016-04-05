@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 
-public class Trap_Sap : NetworkBehaviour {
+public class Trap_Sap : Trap {
 
     void OnTriggerEnter(Collider _col) {
         if (_col.tag == "Player") {

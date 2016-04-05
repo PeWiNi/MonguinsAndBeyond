@@ -102,7 +102,7 @@ public class SpawnTraps : NetworkBehaviour {
     void Activate(bool activate, bool threeDee = false) {
         if(activate) {
             if (threeDee) {
-                projector = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Trap_Sap_Projector") as GameObject, transform.position,
+                projector = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Trap_Projector_3D") as GameObject, transform.position,
                     Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
                 distFromTerrain = 0;
             } else {
@@ -143,8 +143,8 @@ public class SpawnTraps : NetworkBehaviour {
     }
 
     public IEnumerator Spikey() {
-        Activate(true);
-        projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/Spikes") as Texture;
+        Activate(true, true);
+        //projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/Spikes") as Texture;
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if (Input.GetMouseButtonDown(0)) {

@@ -20,10 +20,4 @@ public class Trap : NetworkBehaviour
     [Tooltip("Determines whether the Trap is fully assembled")]
     [SyncVar]
     public bool isAssembled = false;
-
-    // Use this for initialization
-    void Start()
-    {
-        transform.rotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
-    }
 }
