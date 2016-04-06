@@ -145,7 +145,7 @@ public class PlayerLogic : NetworkBehaviour {
         }
         // Double Jumping 
         else if (jump && doubleJumping && dblJump) {
-            GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
+            GetComponent<Rigidbody>().velocity += new Vector3(0, jumpSpeed, 0);
             dblJump = false;
         }
         //transform.Translate(new Vector3(0f, jumpAxis, 0f) * jumpSpeed * Time.fixedDeltaTime);
@@ -167,7 +167,7 @@ public class PlayerLogic : NetworkBehaviour {
     }
 
     bool isGrounded() {
-        return Physics.Raycast(transform.position, -Vector3.up, GetComponent<Collider>().bounds.extents.y * 1.1f);
+        return Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, GetComponent<Collider>().bounds.extents.y * 1.1f);
     }
     //void OnCollisionEnter(Collision hit) { dblJump = true; }
 
@@ -191,7 +191,7 @@ public class PlayerLogic : NetworkBehaviour {
 
     public void StartSwimming() {
         if (!isSwimming) {
-            if (Physics.Raycast(transform.position, -Vector3.up, drownDepth, ~(1 << 8))) { return; }
+            if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) { return; }
             isSwimming = true;
             StartCoroutine(InWater());
         }
@@ -201,7 +201,7 @@ public class PlayerLogic : NetworkBehaviour {
         drownTimer = (float)Network.time;
         while(isSwimming && (((float)Network.time - drownTimer) < drownTime)) {
             if (GetComponent<PlayerStats>().isDead) { isSwimming = false; }
-            if (Physics.Raycast(transform.position, -Vector3.up, drownDepth, ~(1 << 8))) {
+            if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) {
                 isSwimming = false;
                 yield return null;
             }
