@@ -17,17 +17,13 @@ public class PunchDance : Ability {
         Vector3 PointOfImpact = transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up;
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
         //try { StartCoroutine(GetComponentInChildren<SlashEffect>().PunchDance()); } catch { }
-        if (hitColliders.Length > 0) {
-            if (hitColliders[0].tag == "Ground" && hitColliders.Length == 1) 
-                return 0;
-            StartCoroutine(Attack(hitColliders));
-        } else return 0;
+        StartCoroutine(Attack(hitColliders));
         return base.Trigger();
     }
 
     IEnumerator Attack(Collider[] hitColliders) {
         foreach(Collider c in hitColliders) {
-            if (c.tag != "Player") continue;
+            if (c.tag != "Player" || c.gameObject == gameObject) continue;
             // Push
             CmdPushPlayer(c.gameObject, (transform.up * 5) + (transform.forward * distance));
             if (c.GetComponentInParent<PlayerStats>().team != team) {

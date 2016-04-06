@@ -195,6 +195,8 @@ public class SpawnTraps : NetworkBehaviour {
             Resources.Load(go) as GameObject, spawnPos,
             Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
 
+        banana.GetComponent<Trap>().SetOwner(gameObject);
+
         if (duration > 0)
             Destroy(banana, duration);
 

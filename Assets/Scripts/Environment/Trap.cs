@@ -20,4 +20,11 @@ public class Trap : NetworkBehaviour
     [Tooltip("Determines whether the Trap is fully assembled")]
     [SyncVar]
     public bool isAssembled = false;
+
+    [SyncVar]
+    public GameObject owner;
+
+    public void SetOwner(GameObject player) {
+        owner = player;
+    }
 }
