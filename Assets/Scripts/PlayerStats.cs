@@ -150,7 +150,9 @@ public class PlayerStats : NetworkBehaviour {
                 return;
             }
             health = 0;
-
+            //Play Die Animation.
+            GetComponent<Animator>().SetBool("IsDead", true);
+            GetComponent<Animator>().SetTrigger("IsDying");
             foreach (Material m in body.GetComponent<SkinnedMeshRenderer>().materials)m.color = new Color(c.r, c.g, c.b, .2f);
             return;
         } if (isStunned) {
@@ -341,13 +343,15 @@ public class PlayerStats : NetworkBehaviour {
     /// </summary>
     void Respawn() {
         if (isLocalPlayer)
+        {
             CmdRespawn();
+            ////´Stop Die Animation.
+            GetComponent<Animator>().SetBool("IsDead", false);
+        }
         isDead = false;
         syncHealth = syncMaxHealth;
         transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
         GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-        ////´Stop Die Animation.
-        GetComponent<Animator>().SetBool("IsDead", false);
     }
 
     /// <summary>
@@ -376,12 +380,10 @@ public class PlayerStats : NetworkBehaviour {
             isDead = true;
             deathTimer = (float)Network.time;
             syncHealth = 0;
-            //Play Die Animation.
-            GetComponent<Animator>().SetBool("IsDead", true);
-            GetComponent<Animator>().SetTrigger("IsDying");
         }
         RpcTakeDmg(amount * (1.0f - ((float)resilience / 100.0f)));
     }
+
     /// <summary>
     /// ONLY USE THIS ON SERVER - CmdHealing if you are anything else
     /// Logic function for regenerating/recieving health

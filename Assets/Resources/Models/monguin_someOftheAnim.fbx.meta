@@ -87,6 +87,8 @@ ModelImporter:
     7400012: Die
     7400014: Idle
     7400016: AimingBOOMnana
+    7400018: Dead
+    7400020: Respawn
     9500000: //RootNode
     13700000: monguin
   materials:
@@ -731,7 +733,7 @@ ModelImporter:
       name: Die
       takeName: Take 001
       firstFrame: 168
-      lastFrame: 192
+      lastFrame: 190
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
