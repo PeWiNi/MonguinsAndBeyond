@@ -9,6 +9,7 @@ Shader "Custom/Toon/BumpyLitCutout" {
 
 	SubShader {
 		Tags{ "RenderType" = "Opaque" }
+		Cull Off //draw all faces
 		LOD 200
 		
 		CGPROGRAM

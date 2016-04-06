@@ -26,7 +26,7 @@ public class Waterz : MonoBehaviour {
             _collider.GetComponent<PlayerLogic>().StartSwimming();
             _collider.transform.position = new Vector3(_collider.transform.position.x,
                 Mathf.Lerp(_collider.transform.position.y, transform.position.y + transform.localScale.y, Time.deltaTime),
-                _collider.transform.position.z);
+                _collider.transform.position.z);// - (transform.localScale.y + .5f) * transform.up;
         }
 
     }
