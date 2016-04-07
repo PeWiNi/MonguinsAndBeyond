@@ -5,8 +5,6 @@ using UnityEngine.UI;
 public class HUDScript : MonoBehaviour {
     GameObject playerUI;
     public Inventory inventory;
-    Toggle CamMouse;
-    Toggle DoubleJumping;
     Slider castBar;
     GameObject actionBar;
     Image ability1;
@@ -45,9 +43,6 @@ public class HUDScript : MonoBehaviour {
         trap1 = actionBar.GetComponentsInChildren<Image>()[7];
         trap2 = actionBar.GetComponentsInChildren<Image>()[9];
         inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
-        Toggle[] debug = transform.FindChild("DEBUG").GetComponentsInChildren<Toggle>();
-        CamMouse = debug[0];
-        DoubleJumping = debug[1];
         castBar = transform.FindChild("CastBar").GetComponent<Slider>();
         castBar.gameObject.SetActive(false);
     }
@@ -65,12 +60,12 @@ public class HUDScript : MonoBehaviour {
             ActionBarUpdate(ref ability3, ps.abilities[2]);
             #endregion
             #region Trap Bar
-            if (Input.GetKeyDown(KeyCode.Alpha1) && !ps.GetComponentInChildren<SpawnTraps>().isPlacing && !OnCooldown(trap1Cooldown, trap1Timer)) {
+            if (Input.GetKeyDown(KeyCode.Alpha1) && !ps.GetComponentInChildren<SpawnTraps>().isPlacing && !OnCooldown(trap1Cooldown, trap1Timer) && ps.CanIMove()) {
                 SpawnBananaTrap();
             }
             ActionBarUpdate(ref trap1, trap1Cooldown, trap1Timer);
 
-            if (Input.GetKeyDown(KeyCode.Alpha2) && !ps.GetComponentInChildren<SpawnTraps>().isPlacing && !OnCooldown(trap2Cooldown, trap2Timer)) {
+            if (Input.GetKeyDown(KeyCode.Alpha2) && !ps.GetComponentInChildren<SpawnTraps>().isPlacing && !OnCooldown(trap2Cooldown, trap2Timer) && ps.CanIMove()) {
                 SpawnSpikeTrap();
             }
             ActionBarUpdate(ref trap2, trap2Cooldown, trap2Timer);
@@ -89,19 +84,6 @@ public class HUDScript : MonoBehaviour {
                     castBar.value = value;
                 else
                     castBar.gameObject.SetActive(false);
-            } else if(pl.isSwimming) { // DROWNING
-                if (!castBar.gameObject.activeSelf || currentText != "Drowning") {
-                    castBar.gameObject.SetActive(true);
-                    castBar.fillRect.GetComponentInChildren<Image>().color = new Color(67f / 255f, 112f / 255f, 238f / 255f);
-                    castBar.targetGraphic.GetComponentInChildren<Image>().color = new Color(51f / 255f, 68f / 255f, 255f / 255f);
-                    currentText = "Drowning";
-                    castBar.GetComponentInChildren<Text>().text = currentText;
-                }
-                float value = 1 - pl.drownTimeLeft();
-                if (value > 0.01f)
-                    castBar.value = value;
-                else
-                    castBar.gameObject.SetActive(false);
             } else if (ps.isStunned) { // STUNNED
                 if (!castBar.gameObject.activeSelf || currentText.Substring(0, 7) != "Stunned") {
                     castBar.gameObject.SetActive(true);
@@ -116,7 +98,20 @@ public class HUDScript : MonoBehaviour {
                     castBar.GetComponentInChildren<Text>().text = "Stunned for " + Mathf.Ceil(value) + "s..";
                 else
                     castBar.gameObject.SetActive(false);
-            } else if (castBar.gameObject.activeSelf) {
+            } else if(pl.isSwimming) { // DROWNING
+                if (!castBar.gameObject.activeSelf || currentText != "Drowning") {
+                    castBar.gameObject.SetActive(true);
+                    castBar.fillRect.GetComponentInChildren<Image>().color = new Color(67f / 255f, 112f / 255f, 238f / 255f);
+                    castBar.targetGraphic.GetComponentInChildren<Image>().color = new Color(51f / 255f, 68f / 255f, 255f / 255f);
+                    currentText = "Drowning";
+                    castBar.GetComponentInChildren<Text>().text = currentText;
+                }
+                float value = 1 - pl.drownTimeLeft();
+                if (value > 0.01f)
+                    castBar.value = value;
+                else
+                    castBar.gameObject.SetActive(false);
+            }  else if (castBar.gameObject.activeSelf) {
                 castBar.gameObject.SetActive(false);
             }
         }
@@ -185,23 +180,12 @@ public class HUDScript : MonoBehaviour {
         inventory.transform.FindChild("BerryG").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryGCount;
         inventory.transform.FindChild("BerryB").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().berryBCount;
         #endregion
-        eventValueChanged();
         // TODO: Do stuff with setting up correct ability images
         SetCursorState(true);
     }
 
     public PlayerStats GetPlayerStats() {
         return ps;
-    }
-
-    public void eventValueChanged() {
-        if(ps != null) {
-            ps.GetComponent<PlayerLogic>().SetCameraControl(CamMouse.isOn);
-            ps.GetComponent<PlayerLogic>().SetDoubleJump(DoubleJumping.isOn);
-        }
-        SetCursorState(true);
-        Debug.Log("Cam Toggle is " + CamMouse.isOn); //check isOn state
-        Debug.Log("Jump Toggle is " + DoubleJumping.isOn); 
     }
 
     #region Cursor state methods
@@ -212,11 +196,8 @@ public class HUDScript : MonoBehaviour {
     /// <param name="useStates">Whether or not to let the controls determine the state</param>
     public void SetCursorState(bool useStates = false) {
         if (useStates) {
-            if (CamMouse.isOn)
-                wantedMode = CursorLockMode.Locked;
-            else
-                //wantedMode = CursorLockMode.Confined;
-                wantedMode = CursorLockMode.None;
+            //wantedMode = CursorLockMode.Confined;
+            wantedMode = CursorLockMode.None;
         }
         Cursor.lockState = wantedMode;
         // Hide cursor when locking
@@ -272,57 +253,59 @@ public class HUDScript : MonoBehaviour {
     /// </summary>
     /// <param name="item">String representation of the item in question</param>
     public void DropItem(string item) {
-        //Drop items if holding Shift
-        if (Input.GetKey(KeyCode.LeftShift) && (
-            item == "Banana" ? inventory.useBanana() :
-            item == "Stick" ? inventory.useSticks() :
-            item == "Sap" ? inventory.useSap() :
-            item == "Leaf" ? inventory.useLeaf() :
-            item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false))
-            ps.GetComponent<SyncInventory>().CmdSpawnItem(item, new Vector3(), 0);
+        if (ps.CanIMove()) {
+            //Drop items if holding Shift
+            if (Input.GetKey(KeyCode.LeftShift) && (
+                item == "Banana" ? inventory.useBanana() :
+                item == "Stick" ? inventory.useSticks() :
+                item == "Sap" ? inventory.useSap() :
+                item == "Leaf" ? inventory.useLeaf() :
+                item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false))
+                ps.GetComponent<SyncInventory>().CmdSpawnItem(item, new Vector3(), 0);
 
-        // Banana Trap
-        else if (!OnCooldown(trap1Cooldown, trap1Timer) && item == "Banana" ? inventory.useBanana() : false) {
-            SpawnTraps st = ps.GetComponentInChildren<SpawnTraps>();
-            st.CmdDoDurationTrap(st.bananaTrap, new Vector3(), st.bananaTrapDuration);
-            st.CmdChangeDist(2); // Projector distance
-            trap1Timer = Time.time;
+            // Banana Trap
+            else if (!OnCooldown(trap1Cooldown, trap1Timer) && item == "Banana" ? inventory.useBanana() : false) {
+                SpawnTraps st = ps.GetComponentInChildren<SpawnTraps>();
+                st.CmdDoDurationTrap(st.bananaTrap, new Vector3(), st.bananaTrapDuration);
+                st.CmdChangeDist(2); // Projector distance
+                trap1Timer = Time.time;
+            }
+
+            // Spike Trap
+            else if (!OnCooldown(trap2Cooldown, trap2Timer) && item == "Stick" ? inventory.useForSpikes() : false) {
+                SpawnTraps st = ps.GetComponentInChildren<SpawnTraps>();
+                st.CmdDoTriggerTrap(st.spikeTrap, new Vector3(), st.spikeTrapTriggerCount);
+                st.CmdChangeDist(0);
+                trap2Timer = Time.time;
+                inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
+            }
+
+            // Camouflage
+            else if (item == "Leaf" ? inventory.useLeaf() : false)
+                ps.GetComponent<SyncInventory>().CmdUseLeaf();
+
+            //Throw Sap
+            else if (item == "Sap" ? inventory.useSap() : false)
+                StartCoroutine(ps.GetComponentInChildren<SpawnTraps>().StickySap());
+
+            else if (item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false) {
+                ps.EatBerry(item);
+                //Herb berry = new Herb();
+                //berry.ChangeProperties(item, ps.team);
+                //berry.EatIt(ps);
+            }
+
+            // Update text field with new values
+            inventory.transform.FindChild(item).GetComponentInChildren<Text>().text =
+                item == "Banana" ? "" + inventory.GetComponent<Inventory>().bananaCount :
+                item == "Stick" ? "" + inventory.GetComponent<Inventory>().stickCount :
+                item == "Sap" ? "" + inventory.GetComponent<Inventory>().sapCount :
+                item == "Leaf" ? "" + inventory.GetComponent<Inventory>().leafCount :
+                item == "BerryR" ? "" + inventory.GetComponent<Inventory>().berryRCount :
+                item == "BerryG" ? "" + inventory.GetComponent<Inventory>().berryGCount :
+                item == "BerryB" ? "" + inventory.GetComponent<Inventory>().berryBCount :
+                "";
         }
-
-        // Spike Trap
-        else if (!OnCooldown(trap2Cooldown, trap2Timer) && item == "Stick" ? inventory.useForSpikes() : false) {
-            SpawnTraps st = ps.GetComponentInChildren<SpawnTraps>();
-            st.CmdDoTriggerTrap(st.spikeTrap, new Vector3(), st.spikeTrapTriggerCount);
-            st.CmdChangeDist(0);
-            trap2Timer = Time.time;
-            inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
-        }
-
-        // Camouflage
-        else if (item == "Leaf" ? inventory.useLeaf() : false)
-            ps.GetComponent<SyncInventory>().CmdUseLeaf();
-
-        //Throw Sap
-        else if (item == "Sap" ? inventory.useSap() : false)
-            StartCoroutine(ps.GetComponentInChildren<SpawnTraps>().StickySap());
-
-        else if(item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false) {
-            ps.EatBerry(item);
-            //Herb berry = new Herb();
-            //berry.ChangeProperties(item, ps.team);
-            //berry.EatIt(ps);
-        }
-
-        // Update text field with new values
-        inventory.transform.FindChild(item).GetComponentInChildren<Text>().text = 
-            item == "Banana" ? "" + inventory.GetComponent<Inventory>().bananaCount :
-            item == "Stick" ? "" + inventory.GetComponent<Inventory>().stickCount :
-            item == "Sap" ? "" + inventory.GetComponent<Inventory>().sapCount :
-            item == "Leaf" ? "" + inventory.GetComponent<Inventory>().leafCount :
-            item == "BerryR" ? "" + inventory.GetComponent<Inventory>().berryRCount :
-            item == "BerryG" ? "" + inventory.GetComponent<Inventory>().berryGCount :
-            item == "BerryB" ? "" + inventory.GetComponent<Inventory>().berryBCount :
-            "";
     }
     #endregion
 

@@ -36,6 +36,6 @@ public class Slip : NetworkBehaviour
 
     [Command]
     void CmdStun(int effectDuration) {
-        transform.GetComponent<PlayerStats>().Stun(effectDuration);
+        transform.GetComponent<PlayerStats>().Incapacitate(effectDuration);
     }
 }
