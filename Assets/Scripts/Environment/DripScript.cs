@@ -16,7 +16,8 @@ public class DripScript : RotateMe {
                 em.enabled = false;
                 StartCoroutine(KillMe(25));
                 noMore = true;
-            }
+            } if(host.GetComponent<PlayerStats>().isSlowed && host.GetComponent<PlayerStats>().isStunned)
+                Destroy(gameObject);
         }
 	}
 

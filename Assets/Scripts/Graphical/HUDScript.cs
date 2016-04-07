@@ -22,6 +22,9 @@ public class HUDScript : MonoBehaviour {
     Image trap2;
     public float trap2Cooldown = 25f;
     float trap2Timer;
+    Image trap3;
+    public float trap3Cooldown = 10f;
+    float trap3Timer;
     #endregion
 
     double gameTimer;
@@ -67,6 +70,11 @@ public class HUDScript : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.Alpha2) && !ps.GetComponentInChildren<SpawnTraps>().isPlacing && !OnCooldown(trap2Cooldown, trap2Timer) && ps.CanIMove()) {
                 SpawnSpikeTrap();
+            }
+            ActionBarUpdate(ref trap2, trap2Cooldown, trap2Timer);
+
+            if (Input.GetKeyDown(KeyCode.Alpha3) && !ps.GetComponentInChildren<SpawnTraps>().isPlacing && !OnCooldown(trap3Cooldown, trap3Timer) && ps.CanIMove()) {
+                SpawnSapTrap();
             }
             ActionBarUpdate(ref trap2, trap2Cooldown, trap2Timer);
             #endregion
@@ -228,6 +236,12 @@ public class HUDScript : MonoBehaviour {
         inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
     }
 
+    public void SpawnSapTrap() {
+        if (inventory.useBanana())
+            StartCoroutine(PlaceSapTrap());
+        inventory.transform.FindChild("Sap").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().sapCount;
+    }
+
     IEnumerator PlaceBananaTrap() {
         SpawnTraps waitFor = ps.GetComponentInChildren<SpawnTraps>();
         int bananaCount = inventory.bananaCount;
@@ -244,6 +258,15 @@ public class HUDScript : MonoBehaviour {
         yield return StartCoroutine(waitFor.Spikey());
         if (stickCount == inventory.stickCount) // Rogue Codez!
             trap2Timer = Time.time;
+        yield return null;
+    }
+
+    IEnumerator PlaceSapTrap() {
+        SpawnTraps waitFor = ps.GetComponentInChildren<SpawnTraps>();
+        int sapCount = inventory.sapCount;
+        yield return StartCoroutine(ps.GetComponentInChildren<SpawnTraps>().StickySap());
+        if (sapCount == inventory.sapCount) // Rogue Codez!
+            trap3Timer = Time.time;
         yield return null;
     }
 
@@ -264,29 +287,23 @@ public class HUDScript : MonoBehaviour {
                 ps.GetComponent<SyncInventory>().CmdSpawnItem(item, new Vector3(), 0);
 
             // Banana Trap
-            else if (!OnCooldown(trap1Cooldown, trap1Timer) && item == "Banana" ? inventory.useBanana() : false) {
-                SpawnTraps st = ps.GetComponentInChildren<SpawnTraps>();
-                st.CmdDoDurationTrap(st.bananaTrap, new Vector3(), st.bananaTrapDuration);
-                st.CmdChangeDist(2); // Projector distance
-                trap1Timer = Time.time;
-            }
+            else if (!OnCooldown(trap1Cooldown, trap1Timer) && item == "Banana" ? inventory.useBanana() : false)
+                StartCoroutine(PlaceBananaTrap());
 
             // Spike Trap
             else if (!OnCooldown(trap2Cooldown, trap2Timer) && item == "Stick" ? inventory.useForSpikes() : false) {
-                SpawnTraps st = ps.GetComponentInChildren<SpawnTraps>();
-                st.CmdDoTriggerTrap(st.spikeTrap, new Vector3(), st.spikeTrapTriggerCount);
-                st.CmdChangeDist(0);
-                trap2Timer = Time.time;
+                StartCoroutine(PlaceSpikeTrap());
                 inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
             }
+
+            //Throw Sap
+            else if (!OnCooldown(trap3Cooldown, trap3Timer) && item == "Sap" ? inventory.useSap() : false)
+                StartCoroutine(PlaceSapTrap());
 
             // Camouflage
             else if (item == "Leaf" ? inventory.useLeaf() : false)
                 ps.GetComponent<SyncInventory>().CmdUseLeaf();
 
-            //Throw Sap
-            else if (item == "Sap" ? inventory.useSap() : false)
-                StartCoroutine(ps.GetComponentInChildren<SpawnTraps>().StickySap());
 
             else if (item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false) {
                 ps.EatBerry(item);

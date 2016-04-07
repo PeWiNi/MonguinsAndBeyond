@@ -197,8 +197,10 @@ public class PlayerLogic : NetworkBehaviour {
             }
             //print(drownTimeLeft());
             yield return new WaitForSeconds(1);
-        }
-        if (isLocalPlayer && isSwimming)
+        } if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) {
+            isSwimming = false;
+            yield return null;
+        } if (isLocalPlayer && isSwimming)
             stats.CmdTakeDmg(10000);
         isSwimming = false;
         yield return null;
