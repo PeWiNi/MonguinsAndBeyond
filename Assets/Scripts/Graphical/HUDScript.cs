@@ -76,7 +76,7 @@ public class HUDScript : MonoBehaviour {
             ActionBarUpdate(ref trap2, trap2Cooldown, trap2Timer);
             #endregion
             #region Cast Bar (currently working for drowning and respawning)
-            if (ps.isDead) {
+            if (ps.isDead) { // RESPAWNING
                 if (!castBar.gameObject.activeSelf || currentText != "Respawning") { //Reset graphics and text if disabled or using the wrong text
                     castBar.gameObject.SetActive(true);
                     castBar.fillRect.GetComponentInChildren<Image>().color = new Color(238f / 255f, 0f, 2f / 255f);
@@ -89,7 +89,7 @@ public class HUDScript : MonoBehaviour {
                     castBar.value = value;
                 else
                     castBar.gameObject.SetActive(false);
-            } else if(pl.isSwimming) {
+            } else if(pl.isSwimming) { // DROWNING
                 if (!castBar.gameObject.activeSelf || currentText != "Drowning") {
                     castBar.gameObject.SetActive(true);
                     castBar.fillRect.GetComponentInChildren<Image>().color = new Color(67f / 255f, 112f / 255f, 238f / 255f);
@@ -100,6 +100,20 @@ public class HUDScript : MonoBehaviour {
                 float value = 1 - pl.drownTimeLeft();
                 if (value > 0.01f)
                     castBar.value = value;
+                else
+                    castBar.gameObject.SetActive(false);
+            } else if (ps.isStunned) { // STUNNED
+                if (!castBar.gameObject.activeSelf || currentText.Substring(0, 7) != "Stunned") {
+                    castBar.gameObject.SetActive(true);
+                    castBar.fillRect.GetComponentInChildren<Image>().color = new Color(248f / 255f, 74f / 255f, 2f / 255f);
+                    castBar.targetGraphic.GetComponentInChildren<Image>().color = new Color(255f / 255f, 255f / 255f, 255f / 255f);
+                    currentText = "Stunned";
+                    castBar.GetComponentInChildren<Text>().text = currentText;
+                    castBar.value = 1;
+                }
+                float value = ps.stunTimeLeft();
+                if (value > 0.01f)
+                    castBar.GetComponentInChildren<Text>().text = "Stunned for " + Mathf.Ceil(value) + "s..";
                 else
                     castBar.gameObject.SetActive(false);
             } else if (castBar.gameObject.activeSelf) {
@@ -270,14 +284,16 @@ public class HUDScript : MonoBehaviour {
         // Banana Trap
         else if (!OnCooldown(trap1Cooldown, trap1Timer) && item == "Banana" ? inventory.useBanana() : false) {
             SpawnTraps st = ps.GetComponentInChildren<SpawnTraps>();
-            st.CmdDoFire(st.bananaTrap, new Vector3(), st.bananaTrapDuration);
+            st.CmdDoDurationTrap(st.bananaTrap, new Vector3(), st.bananaTrapDuration);
+            st.CmdChangeDist(2); // Projector distance
             trap1Timer = Time.time;
         }
 
         // Spike Trap
         else if (!OnCooldown(trap2Cooldown, trap2Timer) && item == "Stick" ? inventory.useForSpikes() : false) {
             SpawnTraps st = ps.GetComponentInChildren<SpawnTraps>();
-            st.CmdDoFire(st.spikeTrap, new Vector3(), st.spikeTrapDuration);
+            st.CmdDoTriggerTrap(st.spikeTrap, new Vector3(), st.spikeTrapTriggerCount);
+            st.CmdChangeDist(0);
             trap2Timer = Time.time;
             inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
         }

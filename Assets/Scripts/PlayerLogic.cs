@@ -137,7 +137,7 @@ public class PlayerLogic : NetworkBehaviour {
         }
         // Jumping
         //if(jumpAxis > 0 && isGrounded()) {
-        if (jump && isGrounded()) {
+        if (jump && (isGrounded() || isSwimming)) {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = true;
             //Play 'Jump' Animation
@@ -167,7 +167,7 @@ public class PlayerLogic : NetworkBehaviour {
     }
 
     bool isGrounded() {
-        return Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, GetComponent<Collider>().bounds.extents.y * 1.1f);
+        return Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, GetComponent<Collider>().bounds.extents.y * 1.1f, ~(1 << 8));
     }
     //void OnCollisionEnter(Collision hit) { dblJump = true; }
 

@@ -20,11 +20,33 @@ public class Trap : NetworkBehaviour
     [Tooltip("Determines whether the Trap is fully assembled")]
     [SyncVar]
     public bool isAssembled = false;
+    [SyncVar]
+    public int triggerCount;
+    [SyncVar]
+    public bool trigger = false;
 
     [SyncVar]
     public GameObject owner;
 
+    void Update () {
+        if (trigger && triggerCount == 0)
+            Destroy(gameObject);
+    }
+
     public void SetOwner(GameObject player) {
         owner = player;
+    }
+
+    public void SetTriggerCount(int count) {
+        triggerCount = count;
+        trigger = true;
+    }
+
+    [Command]
+    public void CmdDecrementTrigger(int count) {
+        triggerCount -= count;
+    }
+    public void DecrementTrigger() {
+        triggerCount--;
     }
 }

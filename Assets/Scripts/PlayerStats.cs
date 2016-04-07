@@ -156,6 +156,7 @@ public class PlayerStats : NetworkBehaviour {
             foreach (Material m in body.GetComponent<SkinnedMeshRenderer>().materials)m.color = new Color(c.r, c.g, c.b, .2f);
             return;
         } if (isStunned) {
+            //GetComponent<Rigidbody>().velocity = new Vector3();
             if (stunTimer < Network.time) {
                 isStunned = false;
             }
@@ -176,6 +177,12 @@ public class PlayerStats : NetworkBehaviour {
     public float deathTimeLeft() {
         if (((float)Network.time - deathTimer) < deathCooldown)
             return (float)Network.time - deathTimer;
+        return 1;
+    }
+
+    public float stunTimeLeft() {
+        if (stunTimer > Network.time)
+            return (float)(stunTimer - Network.time);
         return 1;
     }
 

@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class Waterz : MonoBehaviour {
+public class Waterz : NetworkBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -18,6 +19,8 @@ public class Waterz : MonoBehaviour {
         if (_collider.tag == "Player") {
             _collider.GetComponent<Rigidbody>().useGravity = false;
             _collider.GetComponent<Rigidbody>().velocity = new Vector3();
+            if(_collider.GetComponent<PlayerStats>().isSlowed && !_collider.GetComponent<PlayerStats>().isStunned)
+                AmberIt(_collider.GetComponent<PlayerStats>());
         }
     }
 
@@ -40,5 +43,17 @@ public class Waterz : MonoBehaviour {
         if (_collider.tag == "Player") {
             _collider.GetComponent<Rigidbody>().useGravity = true;
         }
+    }
+
+    void AmberIt(PlayerStats ps) {
+        ps.Stun(EventManager.amberStunTime);
+        if (!isServer)
+            return;
+        GameObject bullet = (GameObject)Instantiate(
+            Resources.Load("Prefabs/Environments/Amber"), ps.transform.position,
+            Quaternion.identity);
+        bullet.GetComponent<Amber>().SetParent(ps.transform);
+        Destroy(bullet, EventManager.amberStunTime);
+        NetworkServer.Spawn(bullet);
     }
 }
