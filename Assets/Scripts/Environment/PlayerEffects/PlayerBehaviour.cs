@@ -6,8 +6,9 @@ public class PlayerBehaviour : NetworkBehaviour
 {
     //Catapult variables.
     public bool isThrown = false;
-    float thrust = 0f;
-    float shootingAngle = 0f;
+    float thrust = 0f;//Will be calculated.
+    float shootingRange = 30f;
+    float shootingAngle = 60f;
     Vector3 targetLandingSpot;
 
     //Slip variables.
@@ -28,18 +29,45 @@ public class PlayerBehaviour : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //if (!isLocalPlayer || isServer)
+        //    return;
+        //Interact with RubberTree
+        if (/*isLocalPlayer &&*/ Input.GetKeyDown(KeyCode.V) && !GetComponent<PlayerStats>().isDead)
+        {
+            Collider[] colliders = Physics.OverlapSphere(transform.position, 1f);//Within a 1f radius.
+            foreach (Collider col in colliders)
+            {
+                if (col.tag == "RubberTree" /*&& !col.gameObject.GetComponent<Trap_VineTree>().isTriggered || !col.gameObject.GetComponent<Trap_VineTree>().isUnderConstruction*/)
+                {
+                    //col.gameObject.GetComponent<Trap_VineTree>().isTriggered = true;
+                    //col.gameObject.GetComponent<Trap_VineTree>().isUnderConstruction = true;
+                    col.gameObject.GetComponent<Animator>().SetTrigger("IsTriggered");//The RubberTree is triggered.
+                    targetLandingSpot = transform.position + (transform.forward * shootingRange);
+                    targetLandingSpot.y = 1f;
+                    Debug.DrawLine(transform.position, targetLandingSpot, Color.yellow, 100f);
+                    thrust = Mathf.Sqrt((shootingRange * Physics.gravity.magnitude) / Mathf.Sin(2f * shootingAngle * Mathf.Deg2Rad));//Determine the launch velocity.
+                    print("THRUST! = " + thrust);
+                    thrust = Mathf.Clamp(thrust, 0f, 10f);//We need to clamp the thrust between 0f and 10f, otherwise we will get INSANE LAUNCH VELOCITY because of the angle.
+                    print("thrust.... = " + thrust);
+                    PlayerThrown(thrust, targetLandingSpot, shootingAngle);
+                    break;
+                }
+            }
+        }
     }
 
     void FixedUpdate()
     {
         if (isThrown)
         {
-            print("WHY NOOO!");
-            //Vector3 randomDirection = new Vector3(transform.position.x + Random.Range(30f, 60f), transform.position.y, transform.position.z + Random.Range(30f, 60f));
-            //transform.GetComponent<Rigidbody>().AddForce(transform.up * thrust + randomDirection, ForceMode.Impulse);
             if (!float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).x) && !float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).y) && !float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).z))
+            {
                 transform.GetComponent<Rigidbody>().velocity = BallisticVel(targetLandingSpot, shootingAngle);
+            }
+            else
+            {
+                print("Nope.....");
+            }
             isThrown = false;
         }
     }
@@ -71,12 +99,14 @@ public class PlayerBehaviour : NetworkBehaviour
     {
         if (!isLocalPlayer || isServer)
             return;
-        print("Holy cow!");
         this.thrust = thrust;
         this.targetLandingSpot = landingSpot;
         this.shootingAngle = angle;
         isThrown = true;
-        CmdStun(1);
+        //float timeOfFlight = (Mathf.Sqrt(2f) * this.thrust) / Physics.gravity.magnitude;
+        float timeOfFlight = 2f * thrust;
+        print("Time of flight = " + timeOfFlight);
+        //Incapacitate(1);
     }
 
     /// <summary>
