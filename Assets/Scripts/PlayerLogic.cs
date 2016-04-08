@@ -23,9 +23,7 @@ public class PlayerLogic : NetworkBehaviour {
 
     Ability[] abilities;
     double castTime;
-
-    public bool isCamMouse;
-    bool doubleJumping;
+    
     bool dblJump = false;
     bool isWalking;
 
@@ -64,7 +62,7 @@ public class PlayerLogic : NetworkBehaviour {
         if(abilities == null || abilities.Length <= 0) {
             abilities = stats.abilities;
         }
-        if (isLocalPlayer && !stats.isDead && castTime < Network.time && !stats.isStunned) { // if dead they cannot move
+        if (isLocalPlayer  && castTime < Network.time && stats.CanIMove()) { // if dead they cannot move
             // Send Critical Input
             horizAxis = Input.GetAxis("Horizontal");
             vertAxis = Input.GetAxis("Vertical");
@@ -93,7 +91,7 @@ public class PlayerLogic : NetworkBehaviour {
             } if(Input.GetMouseButton(0) && Input.GetMouseButton(1)) { vertAxis = 1; }
             #endregion
         }
-        if (stats.isDead || castTime > Network.time || stats.isStunned) { // Don't keep moving when dead~
+        if (stats.isDead || castTime > Network.time || stats.isStunned || stats.isIncapacitated) { // Don't keep moving when dead~
             horizAxis = 0;
             vertAxis = 0;
             jump = false;
@@ -114,37 +112,29 @@ public class PlayerLogic : NetworkBehaviour {
         //float speed;
         //SetSpeed(out speed);
         SetSpeed();
-        if(isCamMouse) {
-            // Movement
+        // Movement
+        if (Input.GetMouseButton(1))
+            //GetComponent<Rigidbody>().AddForce((transform.forward * vertAxis + transform.right * horizAxis) * Speed);
             transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
-            // Rotation
-            if ((!stats.isDead && !stats.isStunned))
-                transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
-        } else {
-            // Movement
-            if (Input.GetMouseButton(1))
-                //GetComponent<Rigidbody>().AddForce((transform.forward * vertAxis + transform.right * horizAxis) * Speed);
-                transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
-            else {
-                transform.Translate(new Vector3(0f, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
-                transform.Rotate(new Vector3(0, horizAxis, 0) * Speed * Time.fixedDeltaTime * 10);
-            }
+        else {
+            transform.Translate(new Vector3(0f, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
+            transform.Rotate(new Vector3(0, horizAxis, 0) * Speed * Time.fixedDeltaTime * 10);
+        }
 
-            //Rotation
-            if (Input.GetMouseButton(1) && (!stats.isDead && !stats.isStunned)) {// if dead they cannot turn their char around (but they can still look around with their camera)
-                transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
-            }
+        //Rotation
+        if (Input.GetMouseButton(1) && (!stats.isDead && !stats.isStunned && !stats.isIncapacitated)) {// if dead they cannot turn their char around (but they can still look around with their camera)
+            transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
         }
         // Jumping
         //if(jumpAxis > 0 && isGrounded()) {
-        if (jump && isGrounded()) {
+        if (jump && (isGrounded() || isSwimming)) {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = true;
             //Play 'Jump' Animation
             GetComponent<Animator>().SetTrigger("IsJumping");
         }
         // Double Jumping 
-        else if (jump && doubleJumping && dblJump) {
+        else if (jump && dblJump) {
             GetComponent<Rigidbody>().velocity += new Vector3(0, jumpSpeed, 0);
             dblJump = false;
         }
@@ -167,7 +157,7 @@ public class PlayerLogic : NetworkBehaviour {
     }
 
     bool isGrounded() {
-        return Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, GetComponent<Collider>().bounds.extents.y * 1.1f);
+        return Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, GetComponent<Collider>().bounds.extents.y * 1.1f, ~(1 << 8));
     }
     //void OnCollisionEnter(Collision hit) { dblJump = true; }
 
@@ -207,8 +197,10 @@ public class PlayerLogic : NetworkBehaviour {
             }
             //print(drownTimeLeft());
             yield return new WaitForSeconds(1);
-        }
-        if (isLocalPlayer && isSwimming)
+        } if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) {
+            isSwimming = false;
+            yield return null;
+        } if (isLocalPlayer && isSwimming)
             stats.CmdTakeDmg(10000);
         isSwimming = false;
         yield return null;
@@ -218,13 +210,5 @@ public class PlayerLogic : NetworkBehaviour {
         if (((float)Network.time - drownTimer) < drownTime)
             return ((float)Network.time - drownTimer) / drownTime;
         return 1;
-    }
-
-    public void SetCameraControl(bool camera) {
-        isCamMouse = camera;
-    }
-
-    public void SetDoubleJump(bool toggle) {
-        doubleJumping = toggle;
     }
 }

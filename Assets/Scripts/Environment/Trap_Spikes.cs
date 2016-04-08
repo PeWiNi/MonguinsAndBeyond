@@ -23,4 +23,10 @@ public class Trap_Spikes : Trap
             col.transform.GetComponent<PlayerStats>().TakeDmg(impactDamage);
         }
     }
+
+    void OnTriggerExit(Collider _col) {
+        if (_col.tag == "Player") {
+            DecrementTrigger();
+        }
+    }
 }

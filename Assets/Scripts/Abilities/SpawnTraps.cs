@@ -23,8 +23,9 @@ public class SpawnTraps : NetworkBehaviour {
     [Range(0, 1)]
     public float castAngles = 0f;
 
-    public float bananaTrapDuration = 60f; // Update to use the Trap class duration
-    public float spikeTrapDuration = 120f; // Update to use the Trap class duration
+    public float bananaTrapDuration = 30f; // Update to use the Trap class duration
+    public int spikeTrapTriggerCount = 3; // Update to use the Trap class duration
+    public float sapDuration = 20f; // Update to use the Trap class duration
 
     // Use this for initialization
     void Start () {
@@ -117,7 +118,7 @@ public class SpawnTraps : NetworkBehaviour {
     }
 
     [Command]
-    void CmdChangeDist(float dist) {
+    public void CmdChangeDist(float dist) {
         distFromTerrain = dist;
     }
 
@@ -134,7 +135,7 @@ public class SpawnTraps : NetworkBehaviour {
         if(Input.GetMouseButtonDown(0)) {
             if (isBehind(projector.transform.position - transform.position))
                 GetComponent<SyncInventory>().pickupBanana();
-            else CmdDoFire(bananaTrap, projector.transform.position, bananaTrapDuration);
+            else CmdDoDurationTrap(bananaTrap, projector.transform.position, bananaTrapDuration);
         }
         else 
             GetComponent<SyncInventory>().pickupBanana(); // Mayhaps this requires a Command...
@@ -152,7 +153,7 @@ public class SpawnTraps : NetworkBehaviour {
                 GetComponent<SyncInventory>().pickupSticks();
                 GetComponent<SyncInventory>().pickupLeaf();
             }
-            else CmdDoFire(spikeTrap, projector.transform.position, spikeTrapDuration);
+            else CmdDoTriggerTrap(spikeTrap, projector.transform.position, spikeTrapTriggerCount);
         } else { // Mayhaps this requires a Command...
             GetComponent<SyncInventory>().pickupSticks();
             GetComponent<SyncInventory>().pickupLeaf();
@@ -173,7 +174,7 @@ public class SpawnTraps : NetworkBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             if (isBehind(projector.transform.position - transform.position))
                 GetComponent<SyncInventory>().pickupSap();
-            else CmdDoFire(sap, projector.transform.position, 0);
+            else CmdDoDurationTrap(sap, projector.transform.position, sapDuration);
         } else
             GetComponent<SyncInventory>().pickupSap(); // Mayhaps this requires a Command...
         Activate(false);
@@ -184,9 +185,31 @@ public class SpawnTraps : NetworkBehaviour {
     /// </summary>
     /// <param name="go">String to position of GameObject in Resources</param>
     /// <param name="position">The position at which the object is to be spawned</param>
+    /// <param name="triggerCount">How many times it can trigger before being Destroyed</param>
+    [Command]
+    public void CmdDoTriggerTrap(string go, Vector3 position, int triggerCount) {
+        Vector3 spawnPos = transform.position + ((transform.localScale.x + 10) * transform.forward);
+        if (position != new Vector3())
+            spawnPos = position;
+        spawnPos = doNotTouchTerrain(spawnPos, distFromTerrain);
+        GameObject banana = (GameObject)Instantiate(
+            Resources.Load(go) as GameObject, spawnPos,
+            Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
+
+        banana.GetComponent<Trap>().SetOwner(gameObject);
+        
+        banana.GetComponent<Trap>().SetTriggerCount(triggerCount);
+
+        NetworkServer.Spawn(banana);
+    }
+    /// <summary>
+    /// Spawn object on server
+    /// </summary>
+    /// <param name="go">String to position of GameObject in Resources</param>
+    /// <param name="position">The position at which the object is to be spawned</param>
     /// <param name="duration">Time before object is destoryed (0 means never)</param>
     [Command]
-    public void CmdDoFire(string go, Vector3 position, float duration) {
+    public void CmdDoDurationTrap(string go, Vector3 position, float duration) {
         Vector3 spawnPos = transform.position + ((transform.localScale.x + 10) * transform.forward);
         if (position != new Vector3())
             spawnPos = position;
@@ -197,7 +220,7 @@ public class SpawnTraps : NetworkBehaviour {
 
         banana.GetComponent<Trap>().SetOwner(gameObject);
 
-        if (duration > 0)
+        if (duration > 10)
             Destroy(banana, duration);
 
         NetworkServer.Spawn(banana);

@@ -7,6 +7,8 @@ public class EventManager : NetworkBehaviour {
     [SyncEvent]
     public static event ScoreChange EventScoreChange;
 
+    public static float amberStunTime = 12;
+
     [ClientRpc]
     public void RpcSendScoreEvent(float team1, float team2) {
         if (EventScoreChange != null)

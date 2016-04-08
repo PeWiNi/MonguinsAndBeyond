@@ -2,17 +2,18 @@
 using UnityEngine.Networking;
 
 public class Trap_Sap : Trap {
+    float slowTime = 1f;
 
     void OnTriggerEnter(Collider _col) {
         if (_col.tag == "Player") {
-            _col.transform.GetComponent<PlayerStats>().Slow(true);
-            SpawnDripper(_col.transform);
+            if(!_col.GetComponent<PlayerStats>().isSlowed) SpawnDripper(_col.transform);
+            _col.transform.GetComponent<PlayerStats>().Slow(true, slowTime);
         }
     }
 
     void OnTriggerStay(Collider _col) {
         if (_col.tag == "Player") {
-            _col.transform.GetComponent<PlayerStats>().Slow(true);
+            _col.transform.GetComponent<PlayerStats>().Slow(true, slowTime);
         }
     }
     //void OnDestroy() { }

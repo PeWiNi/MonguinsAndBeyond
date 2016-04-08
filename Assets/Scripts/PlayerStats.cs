@@ -55,6 +55,10 @@ public class PlayerStats : NetworkBehaviour {
     RoleStats roleStats;
 
     [SyncVar]
+    public bool isIncapacitated = false;
+    [SyncVar]
+    double incapacitatedTimer;
+    [SyncVar]
     public bool isStunned = false;
     [SyncVar]
     double stunTimer;
@@ -156,15 +160,21 @@ public class PlayerStats : NetworkBehaviour {
             foreach (Material m in body.GetComponent<SkinnedMeshRenderer>().materials)m.color = new Color(c.r, c.g, c.b, .2f);
             return;
         } if (isStunned) {
+            GetComponent<Rigidbody>().velocity = new Vector3();
             if (stunTimer < Network.time) {
                 isStunned = false;
+            }
+        } if (isIncapacitated) {
+            if (incapacitatedTimer < Network.time) {
+                isIncapacitated = false;
             }
         } if (slowTime < Network.time) {
             if (isSlowed) {
                 Slow(false);
             }
-        }
-        TeamSelect();
+        } 
+        
+       TeamSelect();
         ApplyRole();
         StatSync();
 
@@ -176,6 +186,12 @@ public class PlayerStats : NetworkBehaviour {
     public float deathTimeLeft() {
         if (((float)Network.time - deathTimer) < deathCooldown)
             return (float)Network.time - deathTimer;
+        return 1;
+    }
+
+    public float stunTimeLeft() {
+        if (stunTimer > Network.time)
+            return (float)(stunTimer - Network.time);
         return 1;
     }
 
@@ -400,7 +416,7 @@ public class PlayerStats : NetworkBehaviour {
     }
     /// <summary>
     /// ONLY USE THIS ON SERVER
-    /// Incapacitate the player - rendering them unable to move/control their character
+    /// Stun the player - rendering them unable to move/control their character and stopping them from moving
     /// </summary>
     /// <param name="duration"></param>
     public void Stun(float duration) {
@@ -409,6 +425,19 @@ public class PlayerStats : NetworkBehaviour {
         isStunned = true;
         stunTimer = Network.time + duration;
         RpcStunning(duration);
+    }
+    /// <summary>
+    /// ONLY USE THIS ON SERVER
+    /// Incapacitate the player - rendering them unable to move/control their character
+    /// External forces can still move the player
+    /// </summary>
+    /// <param name="duration"></param>
+    public void Incapacitate(float duration) {
+        if (!isServer)
+            return;
+        isIncapacitated = true;
+        incapacitatedTimer = Network.time + duration;
+        RpcIncapacitating(duration);
     }
 
     /// <summary>
@@ -426,12 +455,13 @@ public class PlayerStats : NetworkBehaviour {
     [Command]
     public void CmdHealing(float amount) { Healing(amount); }
     
-    public void Slow(bool slow) {
+    public void Slow(bool slow, float time = 1) {
         if (!isServer)
             return;
-        isSlowed = slow;
         if (slow)
-            slowTime = Network.time + 1;
+            //slowTime = isSlowed ? Network.time : slowTime + time;
+            slowTime = Network.time + time;
+        isSlowed = slow;
     }
     /// <summary>
     /// Logic for when the player has connected and team stuff happens
@@ -524,6 +554,10 @@ public class PlayerStats : NetworkBehaviour {
         Debug.Log("Stunned for: " + duration);
     }
     [ClientRpc]
+    void RpcIncapacitating(float duration) {
+        Debug.Log("Incapacitated for: " + duration);
+    }
+    [ClientRpc]
     void RpcTeam(int joinedTeam, string name) {
         Debug.Log(name + " joined team " + joinedTeam);
     }
@@ -580,5 +614,9 @@ public class PlayerStats : NetworkBehaviour {
         Herb berry = new Herb();
         berry.ChangeProperties(berryType, team);
         berry.EatIt(this);
+    }
+
+    public bool CanIMove() {
+        return !isDead && !isStunned && !isIncapacitated;
     }
 }
