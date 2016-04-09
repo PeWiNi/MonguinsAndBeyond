@@ -14,8 +14,13 @@ public class SyncInventory : NetworkBehaviour {
             inventory.pickupSticks(count);
     }
     public void pickupSap(int count = 1) {
-        if (isLocalPlayer)
+        if (isLocalPlayer) {
             inventory.pickupSap(count);
+
+            GameObject sap = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Sap"), transform.position, transform.rotation);
+            sap.GetComponent<Sap>().makeMoveGuy(inventory.transform.FindChild("Sap"), GetComponentInChildren<Camera>());
+            print("I WAS HERE");
+        }
     }
     public void pickupLeaf(int count = 1) {
         if (isLocalPlayer)

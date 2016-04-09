@@ -176,6 +176,25 @@ public class HUDScript : MonoBehaviour {
         pl = playerStats.GetComponent<PlayerLogic>();
         // Turn off world-space healthBar
         ps.GetComponentInChildren<Canvas>().enabled = false;
+        #region IconSwapping
+        /*
+        GetComponent<Canvas>().worldCamera = pl.GetComponentInChildren<Camera>();
+        inventory.transform.FindChild("Banana").FindChild("Banana 3D").gameObject.SetActive(true);
+        inventory.transform.FindChild("Banana").FindChild("Icon").GetComponent<Image>().enabled = false;
+        inventory.transform.FindChild("Stick").FindChild("Stick 3D").gameObject.SetActive(true);
+        inventory.transform.FindChild("Stick").FindChild("Icon").GetComponent<Image>().enabled = false;
+        inventory.transform.FindChild("Sap").FindChild("Sap 3D").gameObject.SetActive(true);
+        inventory.transform.FindChild("Sap").FindChild("Icon").GetComponent<Image>().enabled = false;
+        //inventory.transform.FindChild("Leaf").FindChild("Icon 3D").gameObject.SetActive(true);
+        //inventory.transform.FindChild("Leaf").FindChild("Icon").GetComponent<Image>().enabled = false;
+        inventory.transform.FindChild("BerryR").FindChild("Herb 3D").gameObject.SetActive(true);
+        inventory.transform.FindChild("BerryR").FindChild("Icon").GetComponent<Image>().enabled = false;
+        inventory.transform.FindChild("BerryG").FindChild("Herb 3D").gameObject.SetActive(true);
+        inventory.transform.FindChild("BerryG").FindChild("Icon").GetComponent<Image>().enabled = false;
+        inventory.transform.FindChild("BerryB").FindChild("Herb 3D").gameObject.SetActive(true);
+        inventory.transform.FindChild("BerryB").FindChild("Icon").GetComponent<Image>().enabled = false;
+        */
+        #endregion
         #region Inventory
         //Activate Inventory GO
         inventory.gameObject.SetActive(true);
