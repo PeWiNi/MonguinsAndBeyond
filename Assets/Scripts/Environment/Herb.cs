@@ -70,7 +70,9 @@ public class Herb : Pickup {
     }
 
     void OnTriggerEnter(Collider _collider) {
-        if(_collider.tag == "Player") {
+        if (!canCollide)
+            return;
+        if (_collider.tag == "Player") {
             PlayerStats ps = _collider.gameObject.GetComponent<PlayerStats>();
             if (conditionState == Condition.None)
                 ps.GetComponent<SyncInventory>().pickupBerry(Random.Range(0, 100)); // Why they always pick up new regardless?

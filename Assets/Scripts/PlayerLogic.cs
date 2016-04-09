@@ -70,7 +70,7 @@ public class PlayerLogic : NetworkBehaviour {
             //jumpAxis = Input.GetAxis("Jump");
             // Don't do this all the time ._. but only when new peeps connect
             foreach (HealthSlider hs in FindObjectsOfType<HealthSlider>()) // Find HealthSliders of all players and make them point towards you
-                hs.setCamera(characterCam);
+                hs.setCamera(characterCam, stats.team == hs.transform.parent.GetComponentInParent<PlayerStats>().team);
             if (/*transform.position.y < 25 &&*/ !GetComponent<SpawnTraps>().isPlacing && !GetComponent<Aim>().aiming) {
                 #region abilities
                 if (Input.GetKeyDown(KeyCode.Q) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 

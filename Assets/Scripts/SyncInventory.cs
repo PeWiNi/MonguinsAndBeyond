@@ -6,30 +6,42 @@ public class SyncInventory : NetworkBehaviour {
     Inventory inventory;
     
     public void pickupBanana(int count = 1) {
-        if(isLocalPlayer)
+        if(isLocalPlayer) {
             inventory.pickupBanana(count);
+            pickupEffect("Banana");
+        }
     }
     public void pickupSticks(int count = 1) {
-        if (isLocalPlayer)
+        if (isLocalPlayer) { 
             inventory.pickupSticks(count);
+            pickupEffect("Stick");
+        }
     }
     public void pickupSap(int count = 1) {
         if (isLocalPlayer) {
             inventory.pickupSap(count);
-
-            GameObject sap = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Sap"), transform.position, transform.rotation);
-            sap.GetComponent<Sap>().makeMoveGuy(inventory.transform.FindChild("Sap"), GetComponentInChildren<Camera>());
-            print("I WAS HERE");
+            pickupEffect("Sap");
         }
     }
     public void pickupLeaf(int count = 1) {
-        if (isLocalPlayer)
+        if (isLocalPlayer) {
             inventory.pickupLeaf(count);
+            pickupEffect("Leaf");
+        }
     }
     public void pickupBerry(int value) {
         if (isLocalPlayer) {
-            inventory.pickupBerry(value, GetComponent<PlayerStats>().wisdom);
+            int quality = inventory.pickupBerry(value, GetComponent<PlayerStats>().wisdom);
+            print(quality == 2);
+            GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Herb"), transform.position, transform.rotation);
+            pickup.transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load("Materials/berry" + (quality == 1 ? "_good" : quality == 2 ? "_bad" : "_neutral")) as Material;
+            pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(quality == 1 ? "BerryG" : quality == 2 ? "BerryB" : "BerryR"), GetComponentInChildren<Camera>());
         }
+    }
+
+    void pickupEffect(string type) {
+        GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/" + type), transform.position, transform.rotation);
+        pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(type), GetComponentInChildren<Camera>());
     }
 
     public void setInventory(Inventory i) {
