@@ -38,20 +38,11 @@ public class EnvironmentPlacement : MonoBehaviour
     {
         Random.seed = randomSeedValue;//Sets the seed value of the Random class.
         if (placementState == Placement.Random)
-            //RandomPlacement(null, null, maxNumberOfAssets, assets);
-            RandomPlacement(this.gameObject, null, maxNumberOfAssets, assets);
+            RandomPlacement(this.maxNumberOfAssets, this.assets);
         if (placementState == Placement.Area)
-            AreaPlacement(gameObject, this.areaRadius, this.maxNumberOfAssets, this.assetID, true);
+            AreaPlacement(this.areaRadius, this.maxNumberOfAssets, this.assetID, true);
         if (placementState == Placement.Fill)
-            FillPlacement(null, null, this.heightMin, this.heightMax, this.isBetween, this.maxNumberOfAssets);
-    }
-
-    public void AddSection(GameObject newSection, Vector3[] newVertices)
-    {
-        sections.Add(newSection, newVertices);
-        //RandomPlacement(newSection, newVertices, this.maxNumberOfAssets, this.assets);
-        AreaPlacement(newSection, 100f, maxNumberOfAssets, 0, false);
-        //FillPlacement(newSection, newVertices, heightMin, heightMax, isBetween, maxNumberOfAssets);
+            FillPlacement(this.heightMin, this.heightMax, this.isBetween, this.maxNumberOfAssets);
     }
 
     /// <summary>
@@ -59,16 +50,15 @@ public class EnvironmentPlacement : MonoBehaviour
     /// Based on the values and the boolean expression the method will either add assets in-between the ranges or outside the ranges.
     /// Takes random assets in the 'Assets' GameObject List.
     /// </summary>
-    public void FillPlacement(GameObject newSection, Vector3[] newVertices, float heightMin, float heightMax, bool isBetween, int maxNumberOfAssets)
+    /// <param name="heightMin"></param>
+    /// <param name="heightMax"></param>
+    /// <param name="isBetween"></param>
+    /// <param name="maxNumberOfAssets"></param>
+    public void FillPlacement(float heightMin, float heightMax, bool isBetween, int maxNumberOfAssets)
     {
         Mesh mesh = null;
-        if (newSection != null)
-            mesh = newSection.GetComponent<MeshFilter>().sharedMesh;
-        else
-            mesh = this.gameObject.GetComponent<MeshFilter>().sharedMesh;
+        mesh = gameObject.GetComponent<MeshFilter>().sharedMesh;
         Vector3[] allVertices = mesh.vertices;
-        if (newVertices != null)
-            allVertices = newVertices;
         int amountWeNeed = 0;
         List<Vector3> verticesWithinBoundaries = new List<Vector3>();
         for (int x = 0; x < allVertices.Length; x++)
@@ -120,19 +110,19 @@ public class EnvironmentPlacement : MonoBehaviour
                 if (isBetween && (hit.point.y > heightMin && hit.point.y < heightMax))
                 {
                     GameObject go = Instantiate(assetGameObject, hit.point, Quaternion.identity) as GameObject;//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
-                    if (newSection != null)
-                        go.transform.parent = newSection.transform;
-                    else
-                        go.transform.parent = transform;
+                    //if (newSection != null)
+                    //    go.transform.parent = newSection.transform;
+                    //else
+                    go.transform.parent = transform;
                     amountWeNeed++;
                 }
                 if (!isBetween && (hit.point.y < heightMin || hit.point.y > heightMax))
                 {
                     GameObject go = Instantiate(assetGameObject, hit.point, Quaternion.identity) as GameObject;//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
-                    if (newSection != null)
-                        go.transform.parent = newSection.transform;
-                    else
-                        go.transform.parent = transform;
+                    //if (newSection != null)
+                    //    go.transform.parent = newSection.transform;
+                    //else
+                    go.transform.parent = transform;
                     amountWeNeed++;
                 }
             }
@@ -140,17 +130,17 @@ public class EnvironmentPlacement : MonoBehaviour
     }
 
     /// <summary>
-    /// Based on a Radius, the method will spawn randomly placed assets within a circular area.
+    /// Based on a Radius, the method will spawn randomly placed assets within a Spherical area.
     /// </summary>
-    /// <param name="newSection"></param>
     /// <param name="radius"></param>
     /// <param name="maxNumberOfAssets"></param>
     /// <param name="assetID"></param>
-    public void AreaPlacement(GameObject newSection, float radius, int maxNumberOfAssets, int assetID, bool randomAssets)
+    /// <param name="randomAssets"></param>
+    public void AreaPlacement(float radius, int maxNumberOfAssets, int assetID, bool randomAssets)
     {
         int groundLayerMask = (1 << 9);//The 'Ground' Layers we want to check.
         //Get a collection of all colliders touched or within the sphere.
-        Collider[] hitColliders = Physics.OverlapSphere(newSection.transform.position, radius, groundLayerMask);
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, groundLayerMask);
         //Get the environment asset you want to fill this area with.
         GameObject assetGameObject = assets[assetID];
         int amountWeNeed = 0;
@@ -159,18 +149,7 @@ public class EnvironmentPlacement : MonoBehaviour
             int randomHitCollider = 0;
             Mesh mesh = null;
             Vector3[] vertices = null;
-            if (newSection == null && hitColliders.Length == 0)
-            {
-                hitColliders = Physics.OverlapSphere(gameObject.transform.position, radius, groundLayerMask);
-            }
-            else
-            {
-                randomHitCollider = Random.Range(0, hitColliders.Length);
-                mesh = hitColliders[randomHitCollider].transform.GetComponent<MeshFilter>().sharedMesh;
-                vertices = hitColliders[randomHitCollider].transform.GetComponent<MeshFilter>().sharedMesh.vertices;
-
-                Debug.DrawRay(mesh.bounds.max, mesh.bounds.max + Vector3.up * 10, Color.red, 100f);
-            }
+            hitColliders = Physics.OverlapSphere(gameObject.transform.position, radius, groundLayerMask);
             List<Vector3> verticesWithinRadius = new List<Vector3>();
             List<Vector3> normalsWithinRadius = new List<Vector3>();
             for (int i = 0; i < vertices.Length; i++)
@@ -179,7 +158,7 @@ public class EnvironmentPlacement : MonoBehaviour
                 vertex.x *= hitColliders[randomHitCollider].transform.localScale.x;
                 vertex.y *= hitColliders[randomHitCollider].transform.localScale.y;
                 vertex.z *= hitColliders[randomHitCollider].transform.localScale.z;
-                if (Vector3.Distance(newSection.transform.position, vertex) < radius)
+                if (Vector3.Distance(transform.position, vertex) < radius)
                 {
                     verticesWithinRadius.Add(vertex);
                     normalsWithinRadius.Add(mesh.normals[i]);
@@ -193,7 +172,7 @@ public class EnvironmentPlacement : MonoBehaviour
                 assetGameObject = assets[Random.Range(0, assets.Count)];
             }
             GameObject go = Instantiate(assetGameObject, randomVertex, Quaternion.FromToRotation(Vector3.up, randomNormal)) as GameObject;//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
-            go.transform.parent = newSection.transform;
+            go.transform.parent = transform;
             amountWeNeed++;
         }
     }
@@ -205,70 +184,29 @@ public class EnvironmentPlacement : MonoBehaviour
     /// <param name="newVertices"></param>
     /// <param name="maxNumberOfAssets"></param>
     /// <param name="assets"></param>
-    public void RandomPlacement(GameObject newSection, Vector3[] newVertices, int maxNumberOfAssets, List<GameObject> assets)
+    //public void RandomPlacement(GameObject newSection, Vector3[] newVertices, int maxNumberOfAssets, List<GameObject> assets)
+    public void RandomPlacement(int maxNumberOfAssets, List<GameObject> assets)
     {
-        if (newSection != null && newVertices == null)
+        float terrainSize = GetComponent<Terrain>().terrainData.size.magnitude;
+        Collider coll = GetComponent<TerrainCollider>();
+        Vector3 origin = transform.TransformPoint(transform.position);
+        //origin.x += terrainSize;
+        //origin.z += terrainSize;
+        int amountWeNeed = 0;
+        while (amountWeNeed < maxNumberOfAssets)
         {
-            Vector3 middle = new Vector3(250f, 10f, 250f);
-            int amountWeNeed = 0;
-            while (amountWeNeed < maxNumberOfAssets)
+            Vector3 end = new Vector3(Random.Range(0f, terrainSize), (float)GetComponent<Terrain>().terrainData.heightmapHeight, Random.Range(0f, terrainSize));
+            Debug.DrawRay(origin, end, Color.red, 100f);
+            RaycastHit hit;
+            Ray ray = new Ray(origin, end);
+            amountWeNeed++;
+            if (coll.Raycast(ray, out hit, 1000f))
             {
-                Vector3 origin = middle * Random.Range(0f, areaRadius);
-                Vector3 end = middle * Random.Range(0f, areaRadius);
-                RaycastHit hit;
-                if (Physics.Raycast(origin, end, out hit))
-                {
-                    //Debug.DrawLine(origin, end, Color.blue, 100f);//CAUTION: Giant web of DOOM appears beware!
-                    GameObject go = Instantiate(assets[Random.Range(0, assets.Count)], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject;//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
-                    go.transform.parent = hit.transform;
-                    amountWeNeed++;
-                }
-            }
-        }
-        else if (newSection != null && newVertices.Length > 0)
-        {
-            Mesh mesh = newSection.GetComponent<MeshFilter>().sharedMesh;
-            int amountWeNeed = 0;
-            while (amountWeNeed < maxNumberOfAssets)
-            {
-                Vector3 origin = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max);
-                Vector3 end = Random.onUnitSphere * Vector3.Distance(mesh.bounds.center, mesh.bounds.max);
-                RaycastHit hit;
-                if (Physics.Raycast(origin, end, out hit))
-                {
-                    //Debug.DrawLine(origin, end, Color.blue, 100f);//CAUTION: Giant web of DOOM appears beware!
-                    GameObject go = Instantiate(assets[Random.Range(0, assets.Count)], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject;//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
-                    go.transform.parent = hit.transform;
-                    amountWeNeed++;
-                }
-            }
-        }
-        else
-        {
-            meshFilters = GetComponentsInChildren<MeshFilter>();
-            for (int i = 0; i < meshFilters.Length; i++)
-            {
-                Vector3[] vertices = meshFilters[i].mesh.vertices;
-                for (int j = 0; j < vertices.Length; j++)
-                {
-                    Vector3 randomVertex = vertices[Random.Range(0, vertices.Length)];
-                    Vector3 vertex = vertices[j];
-                    randomVertex.x *= transform.lossyScale.x;
-                    randomVertex.y *= transform.lossyScale.y;
-                    randomVertex.z *= transform.lossyScale.z;
-                    vertex.x *= transform.lossyScale.x;
-                    vertex.y *= transform.lossyScale.y;
-                    vertex.z *= transform.lossyScale.z;
-                    //Debug.DrawRay(vertices[j], Vector3.up * 5, Color.cyan, 50f);
-                    //Debug.DrawRay(vertices[j], randomVertex, Color.magenta, 50f);
-                    RaycastHit hit;
-                    if (Physics.Raycast(randomVertex, vertex, out hit))
-                    {
-                        //Debug.DrawLine(randomVertex, vertex, Color.cyan, 100f);//CAUTION: Giant web of DOOM appears beware!
-                        GameObject go = Instantiate(assets[assetID], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject;//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
-                        go.transform.parent = transform;
-                    }
-                }
+                if (hit.transform.gameObject.layer != (1 << 9))
+                    continue;
+                GameObject go = Instantiate(assets[Random.Range(0, assets.Count)], hit.point, Quaternion.FromToRotation(Vector3.up, hit.normal)) as GameObject;//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
+                go.transform.parent = hit.transform;
+                //amountWeNeed++;
             }
         }
     }
