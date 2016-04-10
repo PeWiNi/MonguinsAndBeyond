@@ -33,14 +33,14 @@ public class SyncInventory : NetworkBehaviour {
         if (isLocalPlayer) {
             int quality = inventory.pickupBerry(value, GetComponent<PlayerStats>().wisdom);
             print(quality == 2);
-            GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Herb"), transform.position, transform.rotation);
+            GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Collectables/Herb"), transform.position, transform.rotation);
             pickup.transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load("Materials/berry" + (quality == 1 ? "_good" : quality == 2 ? "_bad" : "_neutral")) as Material;
             pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(quality == 1 ? "BerryG" : quality == 2 ? "BerryB" : "BerryR"), GetComponentInChildren<Camera>());
         }
     }
 
     void pickupEffect(string type) {
-        GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/" + type), transform.position, transform.rotation);
+        GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Collectables/" + type), transform.position, transform.rotation);
         pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(type), GetComponentInChildren<Camera>());
     }
 
@@ -67,9 +67,9 @@ public class SyncInventory : NetworkBehaviour {
 
         GameObject banana;
         if (go == "BerryR" || go == "BerryG" || go == "BerryB")
-            banana = Resources.Load("Prefabs/Environments/Herb") as GameObject;
+            banana = Resources.Load("Prefabs/Environments/Collectables/Herb") as GameObject;
         else
-            banana = Resources.Load("Prefabs/Environments/" + go) as GameObject;
+            banana = Resources.Load("Prefabs/Environments/Collectables/" + go) as GameObject;
 
         GameObject bananaNfunzies = (GameObject)Instantiate(
             banana, spawnPos, banana.transform.rotation);
