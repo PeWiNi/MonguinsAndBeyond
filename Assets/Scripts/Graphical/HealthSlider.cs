@@ -10,6 +10,7 @@ public class HealthSlider : MonoBehaviour {
     Canvas canv;
     [SerializeField]
     Camera cam;
+    Image fill;
 
     // Use this for initialization
     void Start() {
@@ -17,6 +18,7 @@ public class HealthSlider : MonoBehaviour {
         healthText = healthSlider.GetComponentInChildren<Text>();
         ps = gameObject.GetComponentInParent<PlayerStats>();
         canv = gameObject.GetComponentInParent<Canvas>();
+        fill = healthSlider.transform.FindChild("Fill Area").FindChild("Fill").GetComponent<Image>();
     }
 
     // Update is called once per frame
@@ -27,7 +29,9 @@ public class HealthSlider : MonoBehaviour {
         canv.transform.Rotate(new Vector3(0f, 180f, 0f));
     }
 
-    public void setCamera(Camera camera) {
+    public void setCamera(Camera camera, bool team = false) {
         cam = camera;
+        // Placeholder Friend/Foe Colors
+        fill.color = team ? new Color(0, 1, 0) : new Color(1, 0, 0);
     }
 }
