@@ -44,8 +44,8 @@ public class CharacterCamera : MonoBehaviour {
         if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) { // Move camera
             x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
             y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
-        } else if (Input.GetAxis("Vertical") != 0f)// || Input.GetAxis("Horizontal") != 0f) // Reset rotation when moving
-            if (!GetComponentInParent<PlayerStats>().CanIMove()) { // No more spinny spinny camera
+        } else if (Input.GetAxis("Vertical") != 0f || Input.GetAxis("Horizontal") != 0f) // Reset rotation when moving
+            if (GetComponentInParent<PlayerStats>().CanIMove()) { // No more spinny spinny camera
                 var targetRotationAngle = target.eulerAngles.y;
                 var currentRotationAngle = transform.eulerAngles.y;
                 x = Mathf.LerpAngle(currentRotationAngle, targetRotationAngle, Time.deltaTime * rotationDampening);

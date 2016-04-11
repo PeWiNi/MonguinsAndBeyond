@@ -33,7 +33,7 @@ public class Pickup : NetworkBehaviour {
 
             //Don't make it huge and fly in your face
             Ray pos = cam.ScreenPointToRay(screenPoint);
-            Vector3 worldPos = pos.origin + pos.direction * cam.GetComponent<CharacterCamera>().currentDistance;
+            Vector3 worldPos = pos.origin + pos.direction * (cam.GetComponent<CharacterCamera>().currentDistance * .7f);
 
             //Move towards the world space position
             ElapsedTime += Time.deltaTime;
