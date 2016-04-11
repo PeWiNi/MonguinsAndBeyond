@@ -177,7 +177,7 @@ public class HUDScript : MonoBehaviour {
         // Turn off world-space healthBar
         ps.GetComponentInChildren<Canvas>().enabled = false;
         #region IconSwapping
-        
+        /*
         GetComponent<Canvas>().worldCamera = pl.GetComponentInChildren<Camera>().transform.GetChild(0).GetComponent<Camera>();
         inventory.transform.FindChild("Banana").FindChild("Banana 3D").gameObject.SetActive(true);
         inventory.transform.FindChild("Banana").FindChild("Icon").GetComponent<Image>().enabled = false;
@@ -193,7 +193,7 @@ public class HUDScript : MonoBehaviour {
         inventory.transform.FindChild("BerryG").FindChild("Icon").GetComponent<Image>().enabled = false;
         inventory.transform.FindChild("BerryB").FindChild("Herb 3D").gameObject.SetActive(true);
         inventory.transform.FindChild("BerryB").FindChild("Icon").GetComponent<Image>().enabled = false;
-        
+        */
         #endregion
         #region Inventory
         //Activate Inventory GO
