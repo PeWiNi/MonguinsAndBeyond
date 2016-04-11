@@ -50,7 +50,7 @@ public class PlayerLogic : NetworkBehaviour {
             try { GameObject.Find("Main Camera").SetActive(false); } catch { }
             characterCam.enabled = true;
             audioListener.enabled = true;
-
+            characterCam.transform.GetChild(0).GetComponent<Camera>().enabled = true;
             //m_MouseLook.Init(transform, characterCam.transform);
         }
         cam = characterCam.GetComponent<CharacterCamera>();

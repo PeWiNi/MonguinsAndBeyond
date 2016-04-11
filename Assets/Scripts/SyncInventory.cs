@@ -32,7 +32,6 @@ public class SyncInventory : NetworkBehaviour {
     public void pickupBerry(int value) {
         if (isLocalPlayer) {
             int quality = inventory.pickupBerry(value, GetComponent<PlayerStats>().wisdom);
-            print(quality == 2);
             GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Collectables/Herb"), transform.position, transform.rotation);
             pickup.transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load("Materials/berry" + (quality == 1 ? "_good" : quality == 2 ? "_bad" : "_neutral")) as Material;
             pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(quality == 1 ? "BerryG" : quality == 2 ? "BerryB" : "BerryR"), GetComponentInChildren<Camera>());
