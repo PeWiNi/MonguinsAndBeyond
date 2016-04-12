@@ -78,7 +78,7 @@ public class Herb : Pickup {
             if (conditionState == Condition.None)
                 ps.GetComponent<SyncInventory>().pickupBerry(Random.Range(0, 100));
             else if (_collider.GetComponent<PlayerStats>().team == owner.GetComponent<PlayerStats>().team)
-                ps.GetComponent<SyncInventory>().pickupBerry(conditionState == Condition.Regeneration ? 100 : conditionState == Condition.Degenration ? 0 : Random.Range(0, 100));
+                ps.GetComponent<SyncInventory>().pickupBerry(conditionState);
             else if (conditionState == Condition.Regeneration)
                 ps.GoodBerry(amount, duration);
             else if (conditionState == Condition.Degenration)

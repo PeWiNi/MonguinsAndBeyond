@@ -98,22 +98,36 @@ public class Inventory : MonoBehaviour {
     /// <param name="RNG">The Wisdom stat of the player</param>
     /// <returns>0 if unknown, 1 if good, 2 if bad</returns>
     public int pickupBerry(int value, float RNG) {
-        int type = 0;
         if(RNG == 0) {
-            berryR++;
+            return pickupBerry(Herb.Condition.Random);
         } else { // Do useful stuff with RNG (wisdom)
             if (value > 50) {
-                berryG++;
-                type = 1;
+                return pickupBerry(Herb.Condition.Regeneration);
             } else {
-                berryB++;
-                type = 2;
+                return pickupBerry(Herb.Condition.Degenration);
             }
         }
-        transform.FindChild("BerryR").GetComponentInChildren<Text>().text = "" + berryRCount;
-        transform.FindChild("BerryG").GetComponentInChildren<Text>().text = "" + berryGCount;
-        transform.FindChild("BerryB").GetComponentInChildren<Text>().text = "" + berryBCount;
-        Debug.Log("Picked up Berry! " + (value > 50 ? "A GOOD ONE!" : "A bad one ._."));
+        //Debug.Log("Picked up Berry! " + (value > 50 ? "A GOOD ONE!" : "A bad one ._."));
+    }
+
+    public int pickupBerry(Herb.Condition cond) {
+        int type = 0;
+        switch(cond) {
+            case (Herb.Condition.Regeneration):
+                berryG++;
+                transform.FindChild("BerryG").GetComponentInChildren<Text>().text = "" + berryGCount;
+                type = 1;
+                break;
+            case (Herb.Condition.Degenration):
+                berryB++;
+                transform.FindChild("BerryB").GetComponentInChildren<Text>().text = "" + berryBCount;
+                type = 2;
+                break;
+            default:
+                berryR++;
+                transform.FindChild("BerryR").GetComponentInChildren<Text>().text = "" + berryRCount;
+                break;
+        }
         return type;
     }
 }

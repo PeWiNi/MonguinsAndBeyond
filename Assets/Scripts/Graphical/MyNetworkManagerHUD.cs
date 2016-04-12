@@ -6,6 +6,10 @@ public class MyNetworkManagerHUD : MonoBehaviour {
     [SerializeField] public bool showGUI = true;
 	[SerializeField] public int offsetX;
 	[SerializeField] public int offsetY;
+    [SerializeField]
+    public GameObject HUD;
+    [SerializeField]
+    public GameObject Attribute;
 
     public int team = 0;
 
@@ -14,6 +18,7 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 
 	void Awake() {
 		manager = GetComponent<NetworkManager>();
+        swapMenus(false);
     }
 
     void Update() {
@@ -51,10 +56,10 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 		int spacing = 24;
 
 		if (!NetworkClient.active && !NetworkServer.active && manager.matchMaker == null) {
+            // Team Selection
             if (GUI.Button(new Rect(Screen.width - xpos - 100, ypos, 100, 20), "Banana")) {
                 team = 1;
-            }
-            if (GUI.Button(new Rect(Screen.width - xpos - 100, ypos + spacing, 100, 20), "Fish")) {
+            } if (GUI.Button(new Rect(Screen.width - xpos - 100, ypos + spacing, 100, 20), "Fish")) {
                 team = 2;
             }
 
@@ -63,10 +68,10 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 			}
 			ypos += spacing;
 
-			if (GUI.Button(new Rect(xpos, ypos, 105, 20), "LAN Client(C)")) {
+			if (team > 0 && GUI.Button(new Rect(xpos, ypos, 105, 20), "LAN Client(C)")) {
 				C();
 			}
-			manager.networkAddress = GUI.TextField(new Rect(xpos + 100, ypos, 95, 20), manager.networkAddress);
+			manager.networkAddress = GUI.TextField(new Rect(xpos + 105, ypos, 95, 20), manager.networkAddress);
 			ypos += spacing;
 
 			if (GUI.Button(new Rect(xpos, ypos, 200, 20), "LAN Server Only(S)")) {
@@ -186,11 +191,13 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 
     void H() { //LAN Host
         fetchAttributes();
+        swapMenus(true);
         manager.StartHost();
     }
 
     void C() { //LAN Client
         fetchAttributes();
+        swapMenus(true);
         manager.StartClient();
     }
 
@@ -198,8 +205,18 @@ public class MyNetworkManagerHUD : MonoBehaviour {
         manager.StartServer();
     }
 
+    void swapMenus(bool hud) {
+        try {
+            HUD.SetActive(hud);
+            Attribute.SetActive(!hud);
+        } catch {
+            GameObject.Find("HUD").SetActive(hud);
+            GameObject.Find("attributeWheel").SetActive(!hud);
+        }
+    }
+
     void fetchAttributes() {
-        try { attributes = GameObject.Find("attributeWheel").GetComponent<AttributeScript>().getAttributes(); } catch { }
+        try { attributes = Attribute.GetComponent<AttributeScript>().getAttributes(); } catch { attributes = GameObject.Find("attributeWheel").GetComponent<AttributeScript>().getAttributes(); }
     }
     public System.Collections.Hashtable getAttributes() {
         return attributes;

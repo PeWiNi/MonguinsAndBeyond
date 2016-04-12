@@ -32,13 +32,23 @@ public class SyncInventory : NetworkBehaviour {
     public void pickupBerry(int value) {
         if (isLocalPlayer) {
             int quality = inventory.pickupBerry(value, GetComponent<PlayerStats>().wisdom);
-            GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Collectables/Herb"), transform.position, transform.rotation);
-            pickup.transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load("Materials/berry" + (quality == 1 ? "_good" : quality == 2 ? "_bad" : "_neutral")) as Material;
-            pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(quality == 1 ? "BerryG" : quality == 2 ? "BerryB" : "BerryR"), GetComponentInChildren<Camera>());
+            veryBerryThings(quality);
+        }
+    }
+    public void pickupBerry(Herb.Condition value) {
+        if (isLocalPlayer) {
+            int quality = inventory.pickupBerry(value);
+            veryBerryThings(quality);
         }
     }
 
-    void pickupEffect(string type) {
+    void veryBerryThings(int berryType) {
+        GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Collectables/Herb"), transform.position, transform.rotation);
+        pickup.transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load("Materials/berry" + (berryType == 1 ? "_good" : berryType == 2 ? "_bad" : "_neutral")) as Material;
+        pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(berryType == 1 ? "BerryG" : berryType == 2 ? "BerryB" : "BerryR"), GetComponentInChildren<Camera>());
+    }
+
+        void pickupEffect(string type) {
         GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Collectables/" + type), transform.position, transform.rotation);
         pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(type), GetComponentInChildren<Camera>());
     }
