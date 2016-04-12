@@ -92,4 +92,18 @@ public class SyncInventory : NetworkBehaviour {
             Destroy(bananaNfunzies, duration);
         NetworkServer.Spawn(bananaNfunzies);
     }
+
+    public int HealForceBerryConsume() {
+        int berryConsumed = 0;
+        if(inventory.berryGCount == 1) {
+            inventory.useBerry("BerryG");
+            berryConsumed = 1;
+        } else if (inventory.berryGCount > 1) {
+            while(berryConsumed < 4 && inventory.berryGCount > 1) {
+                inventory.useBerry("BerryG");
+                berryConsumed++;
+            }
+        }
+        return berryConsumed;
+    }
 }

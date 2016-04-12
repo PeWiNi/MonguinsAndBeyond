@@ -20,6 +20,7 @@ public class PlayerBehaviour : NetworkBehaviour
     public bool isMoving = false;
     public Vector3 lastPosition;
     public float distanceTravelled = 0f;
+    public double enterTime;
 
     // Use this for initialization
     void Start()
@@ -141,14 +142,14 @@ public class PlayerBehaviour : NetworkBehaviour
     /// The player will take damage while moving inside a Spike Trap.
     /// </summary>
     /// <param name="player"></param>
-    public void TakeDamageWhileMoving(float dotDamage)
+    public void TakeDamageWhileMoving(float damage)
     {
         distanceTravelled = Vector3.Distance(transform.position, lastPosition);
         if (distanceTravelled >= 0.1f)
         {
             lastPosition = transform.position;
             print("Moved!");
-            GetComponent<PlayerStats>().TakeDmg(dotDamage);
+            GetComponent<PlayerStats>().TakeDmg(GetComponent<PlayerStats>().maxHealth * (damage + ((float)(Network.time - enterTime)/ 1000)));
         }
     }
 

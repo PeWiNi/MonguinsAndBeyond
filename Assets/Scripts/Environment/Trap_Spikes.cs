@@ -4,14 +4,14 @@ using System.Collections;
 
 public class Trap_Spikes : Trap
 {
-    public float impactDamage = 50f;//When a player first enter
-    public float dotDamage = 5f;
+    public float impactDamage = 0.06f;//When a player first enter
+    public float ticDamage = 0.005f;
 
     void OnTriggerStay(Collider col)
     {
         if (col.tag == "Player")
         {
-            col.transform.GetComponent<PlayerBehaviour>().TakeDamageWhileMoving(dotDamage);
+            col.transform.GetComponent<PlayerBehaviour>().TakeDamageWhileMoving(ticDamage);
         }
     }
 
@@ -20,7 +20,8 @@ public class Trap_Spikes : Trap
         if (col.tag == "Player")
         {
             col.transform.GetComponent<PlayerBehaviour>().lastPosition = col.transform.position;
-            col.transform.GetComponent<PlayerStats>().TakeDmg(impactDamage);
+            col.transform.GetComponent<PlayerBehaviour>().enterTime = Network.time;
+            col.transform.GetComponent<PlayerStats>().TakeDmg(col.transform.GetComponent<PlayerStats>().maxHealth * impactDamage);
         }
     }
 

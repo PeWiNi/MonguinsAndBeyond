@@ -65,7 +65,7 @@ public class Pickup : NetworkBehaviour {
     /// <param name="pos">Current position of the object</param>
     /// <param name="distance">Y-distance from terrain</param>
     /// <returns>Position away from the terrain</returns>
-    public Vector3 doNotTouchTerrain(Vector3 pos, float distance = 2) {
+    public Vector3 doNotTouchTerrain(Vector3 pos, float distance = 1.5f) {
         if (pos.y < 1)
             pos.y = 1;
         Vector3 hoverPos = pos;

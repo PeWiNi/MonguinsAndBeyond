@@ -46,6 +46,18 @@ public class Ability : NetworkBehaviour {
     internal void CmdDamagePlayer(GameObject player, float damage) {
         player.GetComponent<PlayerStats>().TakeDmg(damage);
     }
+    [Command]
+    internal void CmdDamagePlayerOverTime(GameObject player, float damageTick, float duration) {
+        player.GetComponent<PlayerStats>().BadBerry(damageTick, duration);
+    }
+    [Command]
+    internal void CmdHealPlayer(GameObject player, float heal) {
+        player.GetComponent<PlayerStats>().Healing(heal);
+    }
+    [Command]
+    internal void CmdHealPlayerOverTime(GameObject player, float healTick, float duration) {
+        player.GetComponent<PlayerStats>().GoodBerry(healTick, duration);
+    }
     /// <summary>
     /// Method for stunning players
     /// --Stunning incapacitates players/users, disabling their ability to control their character--

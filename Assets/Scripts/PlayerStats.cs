@@ -250,8 +250,10 @@ public class PlayerStats : NetworkBehaviour {
                 syncMaxHealth *= 1f;
                 // Do something according to SUP? Do Resilience? Do ATT?
                 //  Puke - (the old puke, does the same thing) stuns all enemies in range, has about 2 units distance units in range. Channeled 3 sec; CD:5 sec
+                abilities[1] = GetComponent<Puke>();
                 //  Throw poison - ranged ability, slows the enemy at 0,5*speed and deals 0.5% damage*max health over 3 sec (1.5% in total). Range from 5 to 30 distance units. No CD; takes 1 sec to cast and requires poisonous herbs
                 //  Heal force - ability targets only friendly characters. Heals 50-250 HP over 3 sec depending on skill and herbs used in the ability. Max range 20 units. 1 herb heals instantly for 50HP, 2->4 herb heal over time (50 at first and 50 more for each 'tic'). No CD; instant application; requires herbs to cast
+                abilities[2] = GetComponent<HealForce>();
                 syncSpeed *= 1f;
                 // Placeholder visual thing
                 body.GetComponent<SkinnedMeshRenderer>().material.color = Color.green;

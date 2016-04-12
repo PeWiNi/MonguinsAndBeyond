@@ -55,7 +55,7 @@ public class Camouflage : NetworkBehaviour
         }
         //Should Check whether the Player has moved or used and Ability.
         if (!movementLeeway() && !hasMovedFromCamouflagePoint && pickedUpTime + pickUpDelay < Network.time) {
-            duration = stealthDuration + (float)Network.time; //Set the duration. THOUGHT: scale according to size
+            duration = stealthDuration + (float)Network.time; //Set the duration. Scale with AGI
             CmdMoved();
             StopCoroutine(CamouflageDuration());
             StartCoroutine(CamouflageDuration());

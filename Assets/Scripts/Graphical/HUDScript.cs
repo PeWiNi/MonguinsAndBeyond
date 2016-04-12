@@ -45,9 +45,14 @@ public class HUDScript : MonoBehaviour {
 
         trap1 = actionBar.GetComponentsInChildren<Image>()[7];
         trap2 = actionBar.GetComponentsInChildren<Image>()[9];
+        trap3 = actionBar.GetComponentsInChildren<Image>()[11];
         inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
         castBar = transform.FindChild("CastBar").GetComponent<Slider>();
         castBar.gameObject.SetActive(false);
+        // Reset the silly timers
+        trap1Timer = -trap1Cooldown;
+        trap2Timer = -trap2Cooldown;
+        trap3Timer = -trap3Cooldown;
     }
 	
 	// Update is called once per frame
@@ -76,7 +81,7 @@ public class HUDScript : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.Alpha3) && !ps.GetComponentInChildren<SpawnTraps>().isPlacing && !OnCooldown(trap3Cooldown, trap3Timer) && ps.CanIMove()) {
                 SpawnSapTrap();
             }
-            ActionBarUpdate(ref trap2, trap2Cooldown, trap2Timer);
+            ActionBarUpdate(ref trap3, trap3Cooldown, trap3Timer);
             #endregion
             #region Cast Bar (currently working for drowning and respawning)
             if (ps.isDead) { // RESPAWNING
@@ -256,7 +261,7 @@ public class HUDScript : MonoBehaviour {
     }
 
     public void SpawnSapTrap() {
-        if (inventory.useBanana())
+        if (inventory.useSap())
             StartCoroutine(PlaceSapTrap());
         inventory.transform.FindChild("Sap").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().sapCount;
     }
