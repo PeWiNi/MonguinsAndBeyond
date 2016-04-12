@@ -35,6 +35,7 @@ public class Herb : Pickup {
                     transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load(mat) as Material;
             }
         } catch { transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load(mat) as Material; }
+        transform.position = doNotTouchTerrain(transform.position);
     }
 
     public void ChangeProperties(string type, int team) {
@@ -75,7 +76,9 @@ public class Herb : Pickup {
         if (_collider.tag == "Player") {
             PlayerStats ps = _collider.gameObject.GetComponent<PlayerStats>();
             if (conditionState == Condition.None)
-                ps.GetComponent<SyncInventory>().pickupBerry(Random.Range(0, 100)); // Why they always pick up new regardless?
+                ps.GetComponent<SyncInventory>().pickupBerry(Random.Range(0, 100));
+            else if (_collider.GetComponent<PlayerStats>().team == owner.GetComponent<PlayerStats>().team)
+                ps.GetComponent<SyncInventory>().pickupBerry(conditionState == Condition.Regeneration ? 100 : conditionState == Condition.Degenration ? 0 : Random.Range(0, 100));
             else if (conditionState == Condition.Regeneration)
                 ps.GoodBerry(amount, duration);
             else if (conditionState == Condition.Degenration)

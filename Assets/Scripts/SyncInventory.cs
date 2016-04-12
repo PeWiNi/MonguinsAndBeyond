@@ -76,6 +76,8 @@ public class SyncInventory : NetworkBehaviour {
         if (go == "BerryR" || go == "BerryG" || go == "BerryB") 
             bananaNfunzies.GetComponent<Herb>().ChangeProperties(go, GetComponent<PlayerStats>().team);
 
+        bananaNfunzies.GetComponent<Pickup>().owner = transform;
+
         if (duration > 0)
             Destroy(bananaNfunzies, duration);
         NetworkServer.Spawn(bananaNfunzies);

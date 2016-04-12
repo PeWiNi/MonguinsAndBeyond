@@ -95,16 +95,25 @@ public class Inventory : MonoBehaviour {
     /// Logic for picking up and identifying berries
     /// </summary>
     /// <param name="value">Berry value (determined by random number between 0 and 100)</param>
-    /// <param name="RNG">The RNG stat of the player</param>
+    /// <param name="RNG">The Wisdom stat of the player</param>
     /// <returns>0 if unknown, 1 if good, 2 if bad</returns>
     public int pickupBerry(int value, float RNG) {
-        if (value > 50) // Also do useful stuff with RNG
-            berryG++;
-        else berryB++;
+        int type = 0;
+        if(RNG == 0) {
+            berryR++;
+        } else { // Do useful stuff with RNG (wisdom)
+            if (value > 50) {
+                berryG++;
+                type = 1;
+            } else {
+                berryB++;
+                type = 2;
+            }
+        }
         transform.FindChild("BerryR").GetComponentInChildren<Text>().text = "" + berryRCount;
         transform.FindChild("BerryG").GetComponentInChildren<Text>().text = "" + berryGCount;
         transform.FindChild("BerryB").GetComponentInChildren<Text>().text = "" + berryBCount;
         Debug.Log("Picked up Berry! " + (value > 50 ? "A GOOD ONE!" : "A bad one ._."));
-        return value > 50 ? 1 : 2;
+        return type;
     }
 }

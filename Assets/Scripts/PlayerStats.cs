@@ -13,7 +13,7 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     int resilience; // Recieved damage modifier, 100 means 100% dmg reduction
     [SyncVar]
-    float RNGeezuz; // Wisdom, increases the chance of good stuff happening <Threshold stuff: above certain # you can tell the difference between good and bad berries> @'stina 07-03
+    float RNGeezuz = 0; // Wisdom, increases the chance of good stuff happening <Threshold stuff: above certain # you can tell the difference between good and bad berries> @'stina 07-03
     [SyncVar]
     float agility; // Modifies movementSpeed (and possibly casttime/cooldown) <Threshold stuff: above certain # you get attacker speed> @'stina 07-03
     [SyncVar]

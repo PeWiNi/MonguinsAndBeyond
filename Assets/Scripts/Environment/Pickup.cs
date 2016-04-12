@@ -13,9 +13,14 @@ public class Pickup : NetworkBehaviour {
     float ElapsedTime;
     float FinishTime;
 
+    [SyncVar]
+    public Transform owner = null;
+
     // Use this for initialization
     void Start () {
-
+        transform.position = doNotTouchTerrain(transform.position);
+        if (Unreachable() && owner != null)
+            ReturnToSender();
     }
 	
 	// Update is called once per frame
@@ -52,5 +57,37 @@ public class Pickup : NetworkBehaviour {
         cam = camera;
         ElapsedTime = 0;
         FinishTime = 2f;
+    }
+
+    /// <summary>
+    /// Keeps the y from hitting the terrain (except in extreme conditions)
+    /// </summary>
+    /// <param name="pos">Current position of the object</param>
+    /// <param name="distance">Y-distance from terrain</param>
+    /// <returns>Position away from the terrain</returns>
+    public Vector3 doNotTouchTerrain(Vector3 pos, float distance = 2) {
+        if (pos.y < 1)
+            pos.y = 1;
+        Vector3 hoverPos = pos;
+        RaycastHit hit;
+        if (Physics.Raycast(pos, -Vector3.up, out hit, Mathf.Infinity, ~(1 << 8))) {
+            var distancetoground = hit.distance;
+            var heightToAdd = transform.localScale.y * distance;
+            hoverPos.y = pos.y - distancetoground + heightToAdd;
+        } else if (Physics.Raycast(pos, Vector3.up, out hit, Mathf.Infinity, ~(1 << 8))) {
+            var distancetoground = hit.distance;
+            var heightToAdd = transform.localScale.y * distance;
+            hoverPos.y = pos.y + distancetoground + heightToAdd;
+        }
+        return hoverPos;
+    }
+
+    void ReturnToSender() {
+        transform.position = owner.transform.position;
+    }
+
+    bool Unreachable() {
+        Collider[] hitCol = Physics.OverlapSphere(GetComponent<Collider>().transform.position, 0.1f);
+        return hitCol.Length > 1;
     }
 }

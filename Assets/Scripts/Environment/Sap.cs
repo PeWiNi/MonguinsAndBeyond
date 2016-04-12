@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 public class Sap : Pickup {
     public int sap = 1;
@@ -8,6 +9,13 @@ public class Sap : Pickup {
         if (!canCollide)
             return;
         _collider.GetComponent<SyncInventory>().pickupSap(sap);
+
+        GameObject particles = (GameObject)Instantiate(
+            Resources.Load("Prefabs/Environments/ParticleSystems/SapPS"),
+            transform.position, Quaternion.Euler(270f, 0, 0));
+        Destroy(particles, 10);
+        NetworkServer.Spawn(particles);
+
         Destroy(gameObject);
     }
 }
