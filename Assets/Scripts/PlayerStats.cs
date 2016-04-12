@@ -242,8 +242,8 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[1] = GetComponent<PunchDance>();
                 // Placeholder visual thing
                 //body.GetComponent<SkinnedMeshRenderer>().material.color = Color.red;
-                foreach(Material m in body.GetComponent<SkinnedMeshRenderer>().materials)
-                    m.color = team == 1 ? Color.yellow : Color.blue;
+                //foreach(Material m in body.GetComponent<SkinnedMeshRenderer>().materials)
+                //    m.color = team == 1 ? Color.yellow : Color.blue;
                 break;
             case (Role.Supporter):
                 roleStats = new RoleStats(1f, 0, 1f);

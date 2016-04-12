@@ -33,5 +33,6 @@ public class HealthSlider : MonoBehaviour {
         cam = camera;
         // Placeholder Friend/Foe Colors
         fill.color = team ? new Color(0, 1, 0) : new Color(1, 0, 0);
+        healthText.color = team ?  new Color(0, 0, 0) : new Color(1, 1, 0);
     }
 }
