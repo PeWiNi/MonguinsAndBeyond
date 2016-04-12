@@ -48,7 +48,7 @@ public class SyncInventory : NetworkBehaviour {
         pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(berryType == 1 ? "BerryG" : berryType == 2 ? "BerryB" : "BerryR"), GetComponentInChildren<Camera>());
     }
 
-        void pickupEffect(string type) {
+    void pickupEffect(string type) {
         GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Collectables/" + type), transform.position, transform.rotation);
         pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(type), GetComponentInChildren<Camera>());
     }

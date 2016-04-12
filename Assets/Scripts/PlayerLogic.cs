@@ -122,7 +122,7 @@ public class PlayerLogic : NetworkBehaviour {
         }
 
         //Rotation
-        if (Input.GetMouseButton(1) && (!stats.isDead && !stats.isStunned && !stats.isIncapacitated)) {// if dead they cannot turn their char around (but they can still look around with their camera)
+        if (Input.GetMouseButton(1) && (!stats.isDead && !stats.isStunned)) {// && !stats.isIncapacitated)) {// if dead they cannot turn their char around (but they can still look around with their camera)
             transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
         }
         // Jumping

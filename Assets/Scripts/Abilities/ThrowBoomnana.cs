@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 
 /// <summary>
 /// Attacker
-/// Damaging projectile ability
+/// Damaging Projectile AreaOfEffect ability
 /// Friendly Fire Enabled
 /// 
 /// A boomerang attack that is trown forward for a specified range, and returns towards the user if it does not hit anything
