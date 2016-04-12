@@ -68,6 +68,10 @@ public class Ability : NetworkBehaviour {
     internal void CmdStunPlayer(GameObject player, float duration) {
         player.GetComponent<PlayerStats>().Stun(duration);
     }
+    [Command]
+    internal void CmdSlowPlayer(GameObject player, float duration) {
+        player.GetComponent<PlayerStats>().Slow(true, duration);
+    }
 
     [Command]
     internal void CmdPushPlayer(GameObject player, Vector3 force) {

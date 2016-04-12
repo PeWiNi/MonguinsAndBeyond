@@ -106,4 +106,8 @@ public class SyncInventory : NetworkBehaviour {
         }
         return berryConsumed;
     }
+
+    public bool ThrowPoisonBerryConsume() {
+        return inventory.useBerry("BerryB");
+    }
 }
