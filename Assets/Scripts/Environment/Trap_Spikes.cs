@@ -4,8 +4,8 @@ using System.Collections;
 
 public class Trap_Spikes : Trap
 {
-    public float impactDamage = 100f;//When a player first enter
-    public float dotDamage = 10f;
+    public float impactDamage = 50f;//When a player first enter
+    public float dotDamage = 5f;
 
     void OnTriggerStay(Collider col)
     {

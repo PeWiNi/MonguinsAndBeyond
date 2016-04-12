@@ -3,10 +3,8 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-public class Trap_VineTree : Trap
+public class RubberTree : NetworkBehaviour
 {
-    public List<GameObject> players;
-
     //[Tooltip("The force applied to the Player")]
     //public float thrust = 0f;
     //[Tooltip("The SphereCollider used for determine the triggerRadius area")]
@@ -29,6 +27,8 @@ public class Trap_VineTree : Trap
     //public Vector2 hotSpot = Vector2.zero;
     //public bool isHoveringTrap = false;//Hovering over trap.
     //public bool isHoldingDownTrap = false;//Holding LMB Down.
+
+    public GameObject parent;
 
     // Use this for initialization
     void Start()
@@ -170,25 +170,28 @@ public class Trap_VineTree : Trap
         //if (_collider.tag == "Player" && !this.isTriggered && !this.isUnderConstruction && player == null)
         //player = _collider.gameObject;
         if (collider.tag == "Player")
-            players.Add(collider.gameObject);
+        {
+            collider.gameObject.GetComponent<PlayerBehaviour>().isThrown = true;
+            parent.GetComponent<Animator>().SetTrigger("IsTriggered");
+        }
     }
 
     void OnTriggerStay(Collider collider)
     {
         //if (_collider.tag == "Player" && !this.isTriggered && !this.isUnderConstruction && player == null)
         //    player = _collider.gameObject; 
-        if (collider.tag == "Player" && collider.gameObject.GetComponent<PlayerStats>().isDead)//Remove the player from the list if they die within range of the rubber tree.
-            players.Remove(collider.gameObject);
+        if (collider.tag == "Player")
+        {
+            collider.gameObject.GetComponent<PlayerBehaviour>().isThrown = true;
+        }
     }
 
-    void OnTriggerExit(Collider collider)
-    {
+    //void OnTriggerExit(Collider collider)
+    //{
         /*If the player that was player would leave or not interact with the trap anymore, set it to null so another can take possesion of it*/
         //if (_collider.gameObject == player && !this.isHoldingDownTrap && !this.isUnderConstruction)
         //    player = null; 
-        if (players.Contains(collider.gameObject))
-            players.Remove(collider.gameObject);
-    }
+    //}
 
     //void OnMouseOver()
     //{

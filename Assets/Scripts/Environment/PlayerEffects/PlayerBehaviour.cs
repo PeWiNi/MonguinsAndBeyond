@@ -6,10 +6,11 @@ public class PlayerBehaviour : NetworkBehaviour
 {
     //Catapult variables.
     public bool isThrown = false;
-    float thrust = 0f;//Will be calculated.
-    float shootingRange = 30f;
-    float shootingAngle = 60f;
-    Vector3 targetLandingSpot;
+    public float thrust = 0f;//Will be calculated.
+    public float shootingRange = 30f;
+    public float shootingAngle = 60f;
+    public Vector3 targetLandingSpot;
+    public GameObject arrowProjector;
 
     //Slip variables.
     public bool isSlipping = false;
@@ -32,25 +33,23 @@ public class PlayerBehaviour : NetworkBehaviour
         //if (!isLocalPlayer || isServer)
         //    return;
         //Interact with RubberTree
-        if (/*isLocalPlayer &&*/ Input.GetKeyDown(KeyCode.V) && !GetComponent<PlayerStats>().isDead)
+        if (isThrown)
         {
-            Collider[] colliders = Physics.OverlapSphere(transform.position, 1f);//Within a 1f radius.
-            foreach (Collider col in colliders)
+            RaycastHit hitInfo;
+            if (Physics.Raycast(transform.position, transform.forward, out hitInfo, 1f))
             {
-                if (col.tag == "RubberTree" /*&& !col.gameObject.GetComponent<Trap_VineTree>().isTriggered || !col.gameObject.GetComponent<Trap_VineTree>().isUnderConstruction*/)
+                if (hitInfo.collider.tag == "RubberTree")
                 {
-                    //col.gameObject.GetComponent<Trap_VineTree>().isTriggered = true;
-                    //col.gameObject.GetComponent<Trap_VineTree>().isUnderConstruction = true;
-                    col.gameObject.GetComponent<Animator>().SetTrigger("IsTriggered");//The RubberTree is triggered.
-                    targetLandingSpot = transform.position + (transform.forward * shootingRange);
+                    GameObject rubberTreeparent = hitInfo.collider.gameObject.GetComponent<MyParent>().parent;
+                    //targetLandingSpot = transform.position + (transform.forward * shootingRange);//Based on Players orientation.
+                    targetLandingSpot = rubberTreeparent.transform.position + (-rubberTreeparent.transform.forward * shootingRange);//Based on Trees orientation.
                     targetLandingSpot.y = 1f;
-                    Debug.DrawLine(transform.position, targetLandingSpot, Color.yellow, 100f);
+                    Debug.DrawLine(transform.position, targetLandingSpot, Color.yellow, 10f);
                     thrust = Mathf.Sqrt((shootingRange * Physics.gravity.magnitude) / Mathf.Sin(2f * shootingAngle * Mathf.Deg2Rad));//Determine the launch velocity.
                     print("THRUST! = " + thrust);
                     thrust = Mathf.Clamp(thrust, 0f, 10f);//We need to clamp the thrust between 0f and 10f, otherwise we will get INSANE LAUNCH VELOCITY because of the angle.
                     print("thrust.... = " + thrust);
                     PlayerThrown(thrust, targetLandingSpot, shootingAngle);
-                    break;
                 }
             }
         }

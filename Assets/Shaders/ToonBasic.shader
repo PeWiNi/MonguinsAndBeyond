@@ -11,7 +11,7 @@ Shader "Custom/Toon/Basic" {
 		Blend SrcAlpha OneMinusSrcAlpha
 		Pass{ ColorMask 0 }
 		Pass {
-			Cull Back
+			Cull Off
 			ZWrite On
 			
 			CGPROGRAM
