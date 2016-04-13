@@ -15,11 +15,12 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     float RNGeezuz = 0; // Wisdom, increases the chance of good stuff happening <Threshold stuff: above certain # you can tell the difference between good and bad berries> @'stina 07-03
     [SyncVar]
-    float agility; // Modifies movementSpeed (and possibly casttime/cooldown) <Threshold stuff: above certain # you get attacker speed> @'stina 07-03
+    float agi; // Modifies movementSpeed (and possibly casttime/cooldown) <Threshold stuff: above certain # you get attacker speed> @'stina 07-03
     [SyncVar]
     Role syncRole = Role.Basic;
 
     public float wisdom { get { return RNGeezuz; } }
+    public float agility { get { return agi; } }
 
     #region Death
     [SyncVar]
@@ -216,13 +217,16 @@ public class PlayerStats : NetworkBehaviour {
         switch (role) {
             case (Role.Defender):
                 roleStats = new RoleStats(1.3f, (int)Mathf.Ceil(0.2f * (int)attributes["DEF"]), 0.80f);
-                syncMaxHealth *= 1.3f;
-                if (isLocalPlayer && attributes.ContainsKey("DEF")) //increased resilience based on STR
-                    resilience = (int)Mathf.Ceil(0.2f * (int)attributes["DEF"]);
+                if (isLocalPlayer) {
+                    CmdProvideStats(roleStats.maxHealth, roleStats.resilience, roleStats.speed);
+                    SetStats(roleStats.resilience, roleStats.speed);
+                }
                 //  Taunt (Roar/Growl/WTV) - taunts enemies (locks their target on him for 3 sec) CD:6 sec
+                abilities[1] = GetComponent<PunchDance>();
                 //  Smash (deals 1% of enemy health and stuns 1 sec) - no CD, should take 1sec to fully cast anyway
+                abilities[0] = GetComponent<Smash>();
                 //  Fortify - temporarily increase health and resilience of the defender with 20% for 10 sec. CD:20sec
-                syncSpeed *= 0.80f;
+                abilities[2] = GetComponent<PunchDance>();
                 // Placeholder visual thing
                 body.GetComponent<SkinnedMeshRenderer>().material.color = Color.blue;
                 break;
@@ -247,16 +251,19 @@ public class PlayerStats : NetworkBehaviour {
                 break;
             case (Role.Supporter):
                 roleStats = new RoleStats(1f, 0, 1f);
-                syncMaxHealth *= 1f;
+                if (isLocalPlayer) {
+                    CmdProvideStats(roleStats.maxHealth, roleStats.resilience, roleStats.speed);
+                    SetStats(roleStats.resilience, roleStats.speed);
+                }
                 // Do something according to SUP? Do Resilience? Do ATT?
                 //  Puke - (the old puke, does the same thing) stuns all enemies in range, has about 2 units distance units in range. Channeled 3 sec; CD:5 sec
                 abilities[1] = GetComponent<Puke>();
                 //  Throw poison - ranged ability, slows the enemy at 0,5*speed and deals 0.5% damage*max health over 3 sec (1.5% in total). Range from 5 to 30 distance units. No CD; takes 1 sec to cast and requires poisonous herbs
+                abilities[0] = GetComponent<ThrowPoison>();
                 //  Heal force - ability targets only friendly characters. Heals 50-250 HP over 3 sec depending on skill and herbs used in the ability. Max range 20 units. 1 herb heals instantly for 50HP, 2->4 herb heal over time (50 at first and 50 more for each 'tic'). No CD; instant application; requires herbs to cast
                 abilities[2] = GetComponent<HealForce>();
-                syncSpeed *= 1f;
                 // Placeholder visual thing
-                body.GetComponent<SkinnedMeshRenderer>().material.color = Color.green;
+                //body.GetComponent<SkinnedMeshRenderer>().material.color = Color.green;
                 break;
             default:
                 body.GetComponent<SkinnedMeshRenderer>().material.color = Color.white;

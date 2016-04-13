@@ -11,10 +11,10 @@ using UnityEngine.Networking;
 /// This script is tied to the Scripts/Abilities/PoisonDart.cs, defining how the Dart should behave when Triggered()
 /// </summary>
 public class ThrowPoison : Ability {
-    public GameObject prefab = Resources.Load("Prefabs/Bullet") as GameObject;
+    public GameObject prefab;// = Resources.Load("Prefabs/Bullet") as GameObject;
     public float distance = 30f;
     [Range(0, 1)]
-    public float damage = 0.005f;
+    public float damage = 0.015f;
 
     public override double Trigger() {
         if (!GetComponent<SyncInventory>().ThrowPoisonBerryConsume())
@@ -41,7 +41,7 @@ public class ThrowPoison : Ability {
         // Determine end-position of Projectile
         Vector3 pos = endPos == new Vector3() ? (transform.position + (transform.forward * distance)) : endPos;
         // Pass correct parameters from the Player Prefab
-        bullet.GetComponent<PoisonDart>().setup(damage, pos);
+        bullet.GetComponent<PoisonDart>().setup(GetComponent<PlayerStats>(), damage, pos);
 
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);

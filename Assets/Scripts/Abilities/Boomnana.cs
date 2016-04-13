@@ -50,10 +50,11 @@ public class Boomnana : NetworkBehaviour {
     /// <param name="fullDmg">The maximum damage dealt to opponent players</param>
     /// <param name="selfDmg">Reduced damage taken if the BOOMnana is unsuccessful and returns to the user</param>
     public void setup(GameObject owner, Vector3 endPos, float spd, float fullDmg, float selfDmg) {
+        PlayerStats ps = owner.GetComponent<PlayerStats>();
         this.owner = owner;
-        ownerTeam = owner.GetComponent<PlayerStats>().team;
-        damage = owner.GetComponent<PlayerStats>().maxHealth; //TODO: Get AGI and calculate DMG modifier -- do for all Abilities
-        speed = spd;
+        ownerTeam = ps.team;
+        damage = ps.maxHealth; //TODO: Get AGI and calculate DMG modifier -- do for all Abilities
+        speed = spd * (1 + (ps.agility / 100));
         fullDamage = fullDmg;
         selfDamage = selfDmg;
         endpoint = doNotTouchTerrain(endPos, false);
@@ -102,7 +103,7 @@ public class Boomnana : NetworkBehaviour {
     Vector3 doNotTouchTerrain(Vector3 pos, bool lerp = true) {
         Vector3 hoverPos = pos;
         RaycastHit hit;
-        if (Physics.Raycast(pos, -Vector3.up, out hit)) {
+        if (Physics.Raycast(pos, -Vector3.up, out hit, 2)) {
             var distancetoground = hit.distance;
             var heightToAdd = transform.localScale.y + .5f;
             hoverPos.y = pos.y - distancetoground + heightToAdd;

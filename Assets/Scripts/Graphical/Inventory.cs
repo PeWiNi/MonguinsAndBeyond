@@ -67,6 +67,10 @@ public class Inventory : MonoBehaviour {
         if (berry == 0)
             return false;
         berry = (type == "BerryG" ? berryG-- : type == "BerryB" ? berryB-- : berryR--);
+        transform.FindChild(type).GetComponentInChildren<Text>().text =
+                type == "BerryG" ? "" + GetComponent<Inventory>().berryGCount :
+                type == "BerryB" ? "" + GetComponent<Inventory>().berryBCount :
+                                   "" + GetComponent<Inventory>().berryRCount ;
         return true;
     }
 
