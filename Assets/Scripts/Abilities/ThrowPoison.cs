@@ -19,17 +19,19 @@ public class ThrowPoison : Ability {
     public override double Trigger() {
         if (!GetComponent<SyncInventory>().ThrowPoisonBerryConsume())
             return 0;
+        if(GetComponent<Aim>().aiming) { Cancel(); return 0; }
         StartCoroutine(GetComponent<Aim>().Poisony(this));
-        return base.Trigger();
+        return 0;
     }
 
     public void Throw(Vector3 pos) {
         CmdDoFire(pos);
+        base.Trigger();
         timer = (float)Network.time;
     }
 
     public void Cancel() {
-
+        GetComponent<SyncInventory>().pickupBerry(Herb.Condition.Degenration); 
     }
 
     [Command]

@@ -9,7 +9,7 @@ public class SpawnTraps : NetworkBehaviour {
     public string spikeTrap;
     string sap;
     [SyncVar]
-    float distFromTerrain = 2;
+    float distFromTerrain = 0;
     GameObject projector;
 
     bool active = false;
@@ -102,15 +102,8 @@ public class SpawnTraps : NetworkBehaviour {
     /// <param name="activate">State of activation (isPlacing)</param>
     void Activate(bool activate, bool threeDee = false) {
         if(activate) {
-            if (threeDee) {
-                projector = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Trap_Projector_3D") as GameObject, transform.position,
-                    Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
-                distFromTerrain = 0;
-            } else {
-                projector = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Trap_Projector") as GameObject, transform.position,
-                    Quaternion.Euler(new Vector3(90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
-                distFromTerrain = 2;
-            }
+            projector = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Trap_Projector_3D") as GameObject, transform.position,
+                Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
             projector.gameObject.SetActive(activate);
             CmdChangeDist(distFromTerrain);
         } else { Destroy(projector); }
@@ -129,7 +122,6 @@ public class SpawnTraps : NetworkBehaviour {
     /// </summary>
     public IEnumerator Slippery() {
         Activate(true);
-        projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/BananaSplat_Decal") as Texture;
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if(Input.GetMouseButtonDown(0)) {
@@ -138,14 +130,13 @@ public class SpawnTraps : NetworkBehaviour {
             else CmdDoDurationTrap(bananaTrap, projector.transform.position, bananaTrapDuration);
         }
         else 
-            GetComponent<SyncInventory>().pickupBanana(); // Mayhaps this requires a Command...
+            GetComponent<SyncInventory>().pickupBanana();
         yield return new WaitForFixedUpdate();
         Activate(false);
     }
 
     public IEnumerator Spikey() {
-        Activate(true, true);
-        //projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/Spikes") as Texture;
+        Activate(true);
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if (Input.GetMouseButtonDown(0)) {
@@ -154,21 +145,15 @@ public class SpawnTraps : NetworkBehaviour {
                 GetComponent<SyncInventory>().pickupLeaf();
             }
             else CmdDoTriggerTrap(spikeTrap, projector.transform.position, spikeTrapTriggerCount);
-        } else { // Mayhaps this requires a Command...
+        } else {
             GetComponent<SyncInventory>().pickupSticks();
             GetComponent<SyncInventory>().pickupLeaf();
         }
         Activate(false);
     }
 
-    /// <summary>
-    /// Throw sap
-    /// TODO: Check for spike trap (for combining) and water (for hardening) 
-    /// </summary>
-    /// <returns></returns>
     public IEnumerator StickySap() {
-        Activate(true, true);
-        //projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/xMarksTheSpot") as Texture;
+        Activate(true);
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if (Input.GetMouseButtonDown(0)) {
@@ -176,7 +161,7 @@ public class SpawnTraps : NetworkBehaviour {
                 GetComponent<SyncInventory>().pickupSap();
             else CmdDoDurationTrap(sap, projector.transform.position, sapDuration);
         } else
-            GetComponent<SyncInventory>().pickupSap(); // Mayhaps this requires a Command...
+            GetComponent<SyncInventory>().pickupSap();
         Activate(false);
     }
 
@@ -232,7 +217,7 @@ public class SpawnTraps : NetworkBehaviour {
     /// <param name="pos">Current position of the object</param>
     /// <param name="distance">Y-distance from terrain</param>
     /// <returns>Position away from the terrain</returns>
-    Vector3 doNotTouchTerrain(Vector3 pos, float distance = 2) {
+    Vector3 doNotTouchTerrain(Vector3 pos, float distance = 0) {
         if (pos.y < 1)
             pos.y = 1;
         Vector3 hoverPos = pos;

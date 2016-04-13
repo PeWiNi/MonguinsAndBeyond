@@ -49,7 +49,7 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     /// </summary>
     /// <returns>Position of the user's cursor in worldspace</returns>
     Vector3 PlaceStuff() {
-        Vector3 pos = transform.forward * -100;
+        Vector3 pos = transform.forward * -100 + Vector3.up;
         Camera camera = GetComponentInChildren<Camera>();
         RaycastHit hit;
         Ray ray = camera.ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
@@ -84,7 +84,7 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     /// Set the state of whether the user is placing or not (for logic with other classes)
     /// Also enables/disables the projector, projecting aim
     /// </summary>
-    /// <param name="activate">State of activation (isPlacing)</param>
+    /// <param name="activate">State of activation (aiming)</param>
     void Activate(bool activate) {
         active = activate;
         projector.gameObject.SetActive(activate);
