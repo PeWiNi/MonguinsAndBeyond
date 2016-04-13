@@ -113,13 +113,7 @@ public class PlayerLogic : NetworkBehaviour {
         //SetSpeed(out speed);
         SetSpeed();
         // Movement
-        if (Input.GetMouseButton(1))
-            //GetComponent<Rigidbody>().AddForce((transform.forward * vertAxis + transform.right * horizAxis) * Speed);
-            transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
-        else {
-            transform.Translate(new Vector3(0f, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
-            transform.Rotate(new Vector3(0, horizAxis, 0) * Speed * Time.fixedDeltaTime * 10);
-        }
+        transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
 
         //Rotation
         if (Input.GetMouseButton(1) && (!stats.isDead && !stats.isStunned)) {// && !stats.isIncapacitated)) {// if dead they cannot turn their char around (but they can still look around with their camera)

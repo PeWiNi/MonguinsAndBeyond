@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 /// <summary>
 /// High-level class for player abilities containing basic functions
@@ -12,6 +13,8 @@ public class Ability : NetworkBehaviour {
     public float timer = 0.0f;
     internal int team;
     public double castTime;
+    public Sprite Icon;
+    //public bool Available { get { return OnCooldown(); } }
 
     // Use this for initialization
     void Start () { }

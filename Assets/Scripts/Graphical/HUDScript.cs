@@ -200,6 +200,16 @@ public class HUDScript : MonoBehaviour {
         inventory.transform.FindChild("BerryB").FindChild("Icon").GetComponent<Image>().enabled = false;
         */
         #endregion
+        #region Abilities 
+        /*
+        ability1.sprite = ps.abilities[0].Icon;
+        actionBar.GetComponentsInChildren<Image>()[0].sprite = ps.abilities[0].Icon;
+        ability2.sprite = ps.abilities[1].Icon;
+        actionBar.GetComponentsInChildren<Image>()[2].sprite = ps.abilities[1].Icon;
+        ability3.sprite = ps.abilities[2].Icon;
+        actionBar.GetComponentsInChildren<Image>()[4].sprite = ps.abilities[2].Icon;
+        */
+        #endregion
         #region Inventory
         //Activate Inventory GO
         inventory.gameObject.SetActive(true);
