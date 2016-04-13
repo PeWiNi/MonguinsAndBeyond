@@ -125,7 +125,7 @@ public class PlayerLogic : NetworkBehaviour {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = true;
             //Play 'Jump' Animation
-            GetComponent<Animator>().SetTrigger("IsJumping");
+            GetComponent<Animator>().SetTrigger("Jumped");
         }
         // Double Jumping 
         else if (jump && dblJump) {

@@ -22,10 +22,14 @@ public class PlayerBehaviour : NetworkBehaviour
     public float distanceTravelled = 0f;
     public double enterTime;
 
+    //Animator
+    public Animator anim;
+
     // Use this for initialization
     void Start()
     {
         lastPosition = transform.position;
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -103,9 +107,7 @@ public class PlayerBehaviour : NetworkBehaviour
         this.targetLandingSpot = landingSpot;
         this.shootingAngle = angle;
         isThrown = true;
-        //float timeOfFlight = (Mathf.Sqrt(2f) * this.thrust) / Physics.gravity.magnitude;
-        float timeOfFlight = 2f * thrust;
-        print("Time of flight = " + timeOfFlight);
+        anim.SetBool("IsFlying", true);
         //Incapacitate(1);
     }
 

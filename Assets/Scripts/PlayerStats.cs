@@ -157,7 +157,6 @@ public class PlayerStats : NetworkBehaviour {
             health = 0;
             //Play Die Animation.
             GetComponent<Animator>().SetBool("IsDead", true);
-            GetComponent<Animator>().SetTrigger("IsDying");
             foreach (Material m in body.GetComponent<SkinnedMeshRenderer>().materials)m.color = new Color(c.r, c.g, c.b, .2f);
             return;
         } if (isStunned) {
