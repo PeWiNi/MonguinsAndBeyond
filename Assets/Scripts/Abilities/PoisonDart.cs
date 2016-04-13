@@ -33,7 +33,7 @@ public class PoisonDart : NetworkBehaviour {
         PlayerStats targetPS = _collision.transform.GetComponentInParent<PlayerStats>();
         if (targetPS != null) {
             if (targetPS.team != ownerTeam) {
-                CmdDamagePlayerOverTime(targetPS.gameObject, tickDamage, 3);
+                DamagePlayerOverTime(targetPS.gameObject, tickDamage, 3);
             }
         }
         if (_collision.collider.tag != "Ability") {
@@ -41,13 +41,11 @@ public class PoisonDart : NetworkBehaviour {
         }
         Physics.IgnoreCollision(_collision.collider, GetComponent<Collider>());
     }
-
-    [Command]
-    internal void CmdDamagePlayerOverTime(GameObject player, float damageTick, float duration) {
+    
+    internal void DamagePlayerOverTime(GameObject player, float damageTick, float duration) {
         player.GetComponent<PlayerStats>().BadBerry(damageTick, duration);
     }
-    [Command]
-    internal void CmdSlowPlayer(GameObject player, float duration) {
+    internal void SlowPlayer(GameObject player, float duration) {
         player.GetComponent<PlayerStats>().Slow(true, duration);
     }
 
