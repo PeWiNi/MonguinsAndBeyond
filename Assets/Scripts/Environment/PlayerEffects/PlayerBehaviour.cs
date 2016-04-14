@@ -26,25 +26,20 @@ public class PlayerBehaviour : NetworkBehaviour
     public Animator anim;
 
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
         lastPosition = transform.position;
         anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
         //if (!isLocalPlayer || isServer)
         //    return;
         //Interact with RubberTree
-        if (isThrown)
-        {
+        if (isThrown) {
             RaycastHit hitInfo;
-            if (Physics.Raycast(transform.position, transform.forward, out hitInfo, 1f))
-            {
-                if (hitInfo.collider.tag == "RubberTree")
-                {
+            if (Physics.Raycast(transform.position, transform.forward, out hitInfo, 1f)) {
+                if (hitInfo.collider.tag == "RubberTree") {
                     GameObject rubberTreeparent = hitInfo.collider.gameObject.GetComponent<MyParent>().parent;
                     //targetLandingSpot = transform.position + (transform.forward * shootingRange);//Based on Players orientation.
                     targetLandingSpot = rubberTreeparent.transform.position + (-rubberTreeparent.transform.forward * shootingRange);//Based on Trees orientation.
@@ -60,18 +55,13 @@ public class PlayerBehaviour : NetworkBehaviour
         }
     }
 
-    void FixedUpdate()
-    {
-        if (isThrown)
-        {
-            if (!float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).x) && !float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).y) && !float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).z))
-            {
+    void FixedUpdate() {
+        if (isThrown) {
+            if (!float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).x) && !float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).y) && !float.IsNaN(BallisticVel(targetLandingSpot, shootingAngle).z)) {
                 transform.GetComponent<Rigidbody>().velocity = BallisticVel(targetLandingSpot, shootingAngle);
             }
             else
-            {
                 print("Nope.....");
-            }
             isThrown = false;
         }
     }
@@ -82,8 +72,7 @@ public class PlayerBehaviour : NetworkBehaviour
     /// <param name="target"></param>
     /// <param name="angle"></param>
     /// <returns></returns>
-    public Vector3 BallisticVel(Vector3 target, float angle)
-    {
+    public Vector3 BallisticVel(Vector3 target, float angle) {
         Vector3 dir = target - transform.position; // get target direction 
         float h = dir.y; // get height difference 
         dir.y = 0; // retain only the horizontal direction 
@@ -99,8 +88,7 @@ public class PlayerBehaviour : NetworkBehaviour
     /// Player was thrown #Catapult.
     /// </summary>
     /// <param name="thrust"></param>
-    public void PlayerThrown(float thrust, Vector3 landingSpot, float angle)
-    {
+    public void PlayerThrown(float thrust, Vector3 landingSpot, float angle) {
         if (!isLocalPlayer || isServer)
             return;
         this.thrust = thrust;
@@ -116,24 +104,20 @@ public class PlayerBehaviour : NetworkBehaviour
     /// </summary>
     /// <param name="effectDuration"></param>
     /// <param name="thrust"></param>
-    public void PlayerSlipped(int effectDuration, float thrust)
-    {
+    public void PlayerSlipped(int effectDuration, float thrust) {
         if (!isLocalPlayer || isServer)
             return;
-        if (!isSlipping)
-        {
+        if (!isSlipping) {
             this.thrust = thrust;
             StartCoroutine(Slipping(effectDuration, thrust));
         }
     }
 
-    IEnumerator Slipping(int effectDuration, float thrust)
-    {
+    IEnumerator Slipping(int effectDuration, float thrust) {
         isSlipping = true;
         transform.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * thrust, ForceMode.Impulse);
         CmdStun(effectDuration);
-        while (effectDuration > 0)
-        {
+        while (effectDuration > 0) {
             yield return new WaitForSeconds(1f);
             effectDuration--;
         }
@@ -144,14 +128,12 @@ public class PlayerBehaviour : NetworkBehaviour
     /// The player will take damage while moving inside a Spike Trap.
     /// </summary>
     /// <param name="player"></param>
-    public void TakeDamageWhileMoving(float damage)
-    {
+    public void TakeDamageWhileMoving(float damage) {
         distanceTravelled = Vector3.Distance(transform.position, lastPosition);
-        if (distanceTravelled >= 0.1f)
-        {
+        if (distanceTravelled >= 0.1f) {
             lastPosition = transform.position;
             print("Moved!");
-            GetComponent<PlayerStats>().TakeDmg(GetComponent<PlayerStats>().maxHealth * (damage + ((float)(Network.time - enterTime)/ 1000)));
+            GetComponent<PlayerStats>().TakeDmg(GetComponent<PlayerStats>().maxHealth * (damage + ((float)(Network.time - enterTime) / 1000)));
         }
     }
 
@@ -161,8 +143,7 @@ public class PlayerBehaviour : NetworkBehaviour
     /// <param name="here"></param>
     /// <param name="threshold"></param>
     /// <returns></returns>
-    bool HasMoved(Vector3 here, float threshold)
-    {
+    bool HasMoved(Vector3 here, float threshold) {
         bool ret = false;
         if ((lastPosition.x + threshold >= here.x &&
             lastPosition.x - threshold <= here.x) &&
@@ -173,8 +154,7 @@ public class PlayerBehaviour : NetworkBehaviour
     }
 
     [Command]
-    void CmdStun(int effectDuration)
-    {
+    void CmdStun(int effectDuration) {
         transform.GetComponent<PlayerStats>().Stun(effectDuration);
     }
 }

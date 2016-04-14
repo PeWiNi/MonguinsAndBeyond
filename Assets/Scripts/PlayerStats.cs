@@ -127,7 +127,9 @@ public class PlayerStats : NetworkBehaviour {
                 role = determineRole((string)max.Key);
             } else role = Role.Basic;
             */ //Kept in case other roles are wanted
-            role = Role.Supporter;
+            role = Role.Attacker;
+            //role = Role.Supporter;
+            //role = Role.Defender;
             #endregion
             //CmdTeamSelection(NM.team);
             CmdTeamSelection(NM.team > 0 ? NM.team : team);

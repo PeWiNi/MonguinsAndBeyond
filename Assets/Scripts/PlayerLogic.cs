@@ -43,6 +43,8 @@ public class PlayerLogic : NetworkBehaviour {
     [SerializeField]
     AudioListener audioListener;
 
+    Animator anim;
+
     void Start() {
         // Only enable sound and camera for player if it's the local player
         if (isLocalPlayer) {
@@ -56,6 +58,7 @@ public class PlayerLogic : NetworkBehaviour {
         cam = characterCam.GetComponent<CharacterCamera>();
         stats = GetComponent<PlayerStats>();
         Speed = stats? stats.speed : Speed; // Only use speed from playerStats if it is not null
+        anim = GetComponent<Animator>();
     }
 
     void Update() {
@@ -125,12 +128,18 @@ public class PlayerLogic : NetworkBehaviour {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = true;
             //Play 'Jump' Animation
-            GetComponent<Animator>().SetTrigger("Jumped");
+            if (!isSwimming)//Shouldplay on Ground only.
+                anim.SetTrigger("Jumped");
         }
         // Double Jumping 
         else if (jump && dblJump) {
             GetComponent<Rigidbody>().velocity += new Vector3(0, jumpSpeed, 0);
             dblJump = false;
+        }
+        if (isNotFlying() && anim.GetBool(Animator.StringToHash("IsFlying")))
+        {
+            anim.SetBool("IsFlying", false);
+            print("isNotFlying? " + isNotFlying());
         }
         //transform.Translate(new Vector3(0f, jumpAxis, 0f) * jumpSpeed * Time.fixedDeltaTime);
 
@@ -150,6 +159,11 @@ public class PlayerLogic : NetworkBehaviour {
         externalForce = force;
     }
 
+    bool isNotFlying() {
+        //Raycast against Layers; Water, Ground, Trees.
+        return Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, GetComponent<Collider>().bounds.extents.y * 1.1f, (1 << 9) | (1 << 4) | (1 << 10));
+    }
+
     bool isGrounded() {
         return Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, GetComponent<Collider>().bounds.extents.y * 1.1f, ~(1 << 8));
     }
@@ -167,16 +181,19 @@ public class PlayerLogic : NetworkBehaviour {
 
     void SetSpeed() {
         Speed = stats ? stats.syncSpeed : Speed; // Only use speed from playerStats if it is not null
-        //Play 'Walking' Animation
-        GetComponent<Animator>().SetFloat("Speed", Speed * vertAxis);
         if (stats.isSlowed)
             Speed *= .3f;
+        //Play 'Walking' Animation
+        anim.SetFloat("Speed", Speed * vertAxis);
     }
 
     public void StartSwimming() {
         if (!isSwimming) {
             if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) { return; }
             isSwimming = true;
+            //Play 'Swimming'Animation
+            if (anim.GetBool(Animator.StringToHash("IsSwimming")) == false)
+                anim.SetBool("IsSwimming", true);
             StartCoroutine(InWater());
         }
     }
@@ -184,19 +201,26 @@ public class PlayerLogic : NetworkBehaviour {
     IEnumerator InWater() {
         drownTimer = (float)Network.time;
         while(isSwimming && (((float)Network.time - drownTimer) < drownTime)) {
-            if (GetComponent<PlayerStats>().isDead) { isSwimming = false; }
+            if (GetComponent<PlayerStats>().isDead) { isSwimming = false; anim.SetBool("IsDeadbyWater", true); anim.SetBool("IsSwimming", false); }
             if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) {
                 isSwimming = false;
+                if (anim.GetBool(Animator.StringToHash("IsSwimming")))
+                    anim.SetBool("IsSwimming", false);
                 yield return null;
             }
             //print(drownTimeLeft());
             yield return new WaitForSeconds(1);
         } if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) {
             isSwimming = false;
+            if (anim.GetBool(Animator.StringToHash("IsSwimming")))
+                anim.SetBool("IsSwimming", false);
             yield return null;
-        } if (isLocalPlayer && isSwimming)
+        }
+        if (isLocalPlayer && isSwimming)
             stats.CmdTakeDmg(10000);
         isSwimming = false;
+        if (anim.GetBool(Animator.StringToHash("IsSwimming")))
+            anim.SetBool("IsSwimming", false);
         yield return null;
     }
 

@@ -13,7 +13,8 @@ using UnityEngine.Networking;
 /// 
 /// This script is tied to the Scripts/Abilities/Boomnana.cs, defining how the BOOMnana should behave when Triggered()
 /// </summary>
-public class ThrowBoomnana : Ability {
+public class ThrowBoomnana : Ability
+{
     public GameObject prefab; //= Resources.Load("Prefabs/Bullet") as GameObject;
     public float distance = 12f;
     public float speed = 2f;
@@ -24,22 +25,20 @@ public class ThrowBoomnana : Ability {
 
     public override double Trigger() {
         StartCoroutine(GetComponent<Aim>().Boomy(this));
-        //Play AimBOOMnana Animation.
         GetComponent<Animator>().SetBool("IsAimingBOOMnana", true);
         //CmdDoFire(new Vector3());
         return base.Trigger();
     }
 
     public void Throw(Vector3 pos) {
+        GetComponent<Animator>().SetTrigger("DeliverBOOMnana");
+        //<--Insert BOOMnana animation that follows the hand of the monguin.
         CmdDoFire(pos);
-        //Stop AimBOOMnana, Play IsThrowingBOOMnana Animations.
-        GetComponent<Animator>().SetBool("IsAimingBOOMnana", false);
-        GetComponent<Animator>().SetTrigger("IsThrowingBOOMnana");
         timer = (float)Network.time;
     }
 
     public void Cancel() {
-
+        GetComponent<Animator>().SetBool("IsAimingBOOMnana", false);
     }
 
     [Command]
