@@ -201,14 +201,14 @@ public class HUDScript : MonoBehaviour {
         */
         #endregion
         #region Abilities 
-        /*
-        ability1.sprite = ps.abilities[0].Icon;
-        actionBar.GetComponentsInChildren<Image>()[0].sprite = ps.abilities[0].Icon;
-        ability2.sprite = ps.abilities[1].Icon;
-        actionBar.GetComponentsInChildren<Image>()[2].sprite = ps.abilities[1].Icon;
-        ability3.sprite = ps.abilities[2].Icon;
-        actionBar.GetComponentsInChildren<Image>()[4].sprite = ps.abilities[2].Icon;
-        */
+        try {
+            ability1.sprite = ps.abilities[0].Icon;
+            actionBar.GetComponentsInChildren<Image>()[0].sprite = ps.abilities[0].Icon;
+            ability2.sprite = ps.abilities[1].Icon;
+            actionBar.GetComponentsInChildren<Image>()[2].sprite = ps.abilities[1].Icon;
+            ability3.sprite = ps.abilities[2].Icon;
+            actionBar.GetComponentsInChildren<Image>()[4].sprite = ps.abilities[2].Icon;
+        } catch { }
         #endregion
         #region Inventory
         //Activate Inventory GO

@@ -4,6 +4,9 @@ using UnityEngine.Networking;
 
 public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     GameObject projector;
+    [SerializeField]
+    Texture2D crosshair;
+    Vector3 cursorHitPoint;
 
     float distance;
     bool active = false;
@@ -25,11 +28,15 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     // Update is called once per frame
     void Update() {
         if (aiming) {
-            Vector3 pos = MidDist(PlaceStuff());
-            projector.transform.position = pos;
-            // Rotate according to mouse position
-            projector.transform.eulerAngles = new Vector3(90, Quaternion.LookRotation(pos - 
-                doNotTouchTerrain(transform.position)).eulerAngles.y - 90, projector.transform.eulerAngles.z);
+            if (projector.activeSelf) {
+                Vector3 pos = MidDist(PlaceStuff());
+                projector.transform.position = pos;
+                // Rotate according to mouse position
+                projector.transform.eulerAngles = new Vector3(90, Quaternion.LookRotation(pos - 
+                    doNotTouchTerrain(transform.position)).eulerAngles.y - 90, projector.transform.eulerAngles.z);
+            } else {
+                cursorHitPoint = PlaceStuff(false);
+            }
         }
     }
 
@@ -48,23 +55,38 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     /// Returns the position of the user's cursor in worldspace
     /// </summary>
     /// <returns>Position of the user's cursor in worldspace</returns>
-    Vector3 PlaceStuff() {
+    Vector3 PlaceStuff(bool useProjector = true) {
         Vector3 pos = transform.forward * -100 + Vector3.up;
         Camera camera = GetComponentInChildren<Camera>();
-        RaycastHit hit;
-        Ray ray = camera.ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
-        //Debug.DrawRay(ray.origin, ray.direction * 100, Color.yellow);
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << 8))) {
-            pos = hit.point;
+        if (useProjector) { // Projection on ground
+            RaycastHit hit;
+            Ray ray = camera.ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+            //Debug.DrawRay(ray.origin, ray.direction * 100, Color.yellow);
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, ~(1 << 8))) {
+                pos = hit.point;
+            }
+            pos = doNotTouchTerrain(pos, 2);
+            // Check if behind player - and distable projector if it is
+            Vector3 toOther = pos - transform.position;
+            if (isBehind(toOther))
+                projector.gameObject.SetActive(false);
+            else if (!projector.gameObject.activeSelf)
+                projector.gameObject.SetActive(true);
+            //Debug.DrawLine(pos, new Vector3(pos.x, 5, pos.z), Color.blue);
+        } else { // Aim as a 3rd person shooter
+            Vector3 me = camera.transform.position;
+            RaycastHit hit;
+            // TODO: THIS IS NOT CORRECT...Oftenmost monguins can throw it further stupid Trigonometry..
+            // Or fix with constraining border
+            float dist = distance + camera.GetComponent<CharacterCamera>().currentDistance;
+            Ray ray = new Ray(me, camera.ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)).direction);
+            Debug.DrawRay(transform.position + Vector3.up, ray.direction * distance, Color.red);
+            Debug.DrawRay(ray.origin, ray.direction * dist, Color.yellow);
+            if (Physics.Raycast(ray, out hit, dist, ~(1 << 8))) {
+                pos = hit.point;
+            } else
+                pos = ray.GetPoint(dist);
         }
-        pos = doNotTouchTerrain(pos, 2);
-        // Check if behind player - and distable projector if it is
-        Vector3 toOther = pos - transform.position;
-        if (isBehind(toOther))
-            projector.gameObject.SetActive(false);
-        else if (!projector.gameObject.activeSelf)
-            projector.gameObject.SetActive(true);
-        //Debug.DrawLine(pos, new Vector3(pos.x, 5, pos.z), Color.blue);
         return pos;
     }
 
@@ -85,9 +107,12 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     /// Also enables/disables the projector, projecting aim
     /// </summary>
     /// <param name="activate">State of activation (aiming)</param>
-    void Activate(bool activate) {
+    void Activate(bool activate, bool useProjector = true) {
         active = activate;
-        projector.gameObject.SetActive(activate);
+        if (useProjector)
+            projector.gameObject.SetActive(activate);
+        else
+            Cursor.SetCursor(activate ? crosshair : null, activate ? new Vector2(32, 32) : Vector2.zero, CursorMode.Auto); ;
     }
 
     /// <summary>
@@ -151,24 +176,19 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     /// </summary>
     public IEnumerator Poisony(ThrowPoison ability) {
         distance = ability.distance;
-        Activate(true);
-        projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/AimPointer") as Texture;
+        Activate(true, false);
         projector.GetComponent<Projector>().aspectRatio = ability.distance / 2;
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if (Input.GetMouseButtonDown(0)) { // Sometimes I haz to press twice TT-TT
             if (isBehind(projector.transform.position - transform.position))
                 ability.Cancel();
-            else {
-                Vector3 me = doNotTouchTerrain(transform.position);
-                Ray ray = new Ray(me, (projector.transform.position - me).normalized);
-                ability.Throw(ray.GetPoint(distance));
-                //ability.Throw(Vector3.MoveTowards(transform.position, projector.transform.position, distance));
-            }
+            else 
+                ability.Throw(cursorHitPoint);
         } else
             ability.Cancel();
         yield return new WaitForFixedUpdate(); // Makes sure you don't activate anything else when you click
-        Activate(false);
+        Activate(false, false);
     }
 
     /// <summary>
