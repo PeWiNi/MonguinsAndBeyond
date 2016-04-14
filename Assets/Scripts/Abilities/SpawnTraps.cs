@@ -9,7 +9,7 @@ public class SpawnTraps : NetworkBehaviour {
     public string spikeTrap;
     string sap;
     [SyncVar]
-    float distFromTerrain = 0;
+    float distFromTerrain = 0.01f;
     GameObject projector;
 
     bool active = false;
@@ -125,7 +125,10 @@ public class SpawnTraps : NetworkBehaviour {
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if(Input.GetMouseButtonDown(0)) {
-            if (isBehind(projector.transform.position - transform.position))
+            bool overlapping = false;
+            foreach(Collider c in Physics.OverlapSphere(projector.transform.position, 1))
+                if(c.GetComponent<Trap_BananaIsland>() != null) overlapping = true;
+            if (isBehind(projector.transform.position - transform.position) || overlapping)
                 GetComponent<SyncInventory>().pickupBanana();
             else CmdDoDurationTrap(bananaTrap, projector.transform.position, bananaTrapDuration);
         }
@@ -140,7 +143,10 @@ public class SpawnTraps : NetworkBehaviour {
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if (Input.GetMouseButtonDown(0)) {
-            if (isBehind(projector.transform.position - transform.position)) {
+            bool overlapping = false;
+            foreach (Collider c in Physics.OverlapSphere(projector.transform.position, 1))
+                if (c.GetComponent<Trap_Spikes>() != null) overlapping = true;
+            if (isBehind(projector.transform.position - transform.position) || overlapping) {
                 GetComponent<SyncInventory>().pickupSticks();
                 GetComponent<SyncInventory>().pickupLeaf();
             }
@@ -157,7 +163,10 @@ public class SpawnTraps : NetworkBehaviour {
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if (Input.GetMouseButtonDown(0)) {
-            if (isBehind(projector.transform.position - transform.position))
+            bool overlapping = false;
+            foreach (Collider c in Physics.OverlapSphere(projector.transform.position, 1))
+                if (c.GetComponent<Trap_Sap>() != null) overlapping = true;
+            if (isBehind(projector.transform.position - transform.position) || overlapping)
                 GetComponent<SyncInventory>().pickupSap();
             else CmdDoDurationTrap(sap, projector.transform.position, sapDuration);
         } else
@@ -217,7 +226,7 @@ public class SpawnTraps : NetworkBehaviour {
     /// <param name="pos">Current position of the object</param>
     /// <param name="distance">Y-distance from terrain</param>
     /// <returns>Position away from the terrain</returns>
-    Vector3 doNotTouchTerrain(Vector3 pos, float distance = 0) {
+    Vector3 doNotTouchTerrain(Vector3 pos, float distance = 0.01f) {
         if (pos.y < 1)
             pos.y = 1;
         Vector3 hoverPos = pos;
