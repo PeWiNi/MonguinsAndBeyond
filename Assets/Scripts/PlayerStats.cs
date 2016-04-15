@@ -294,8 +294,9 @@ public class PlayerStats : NetworkBehaviour {
     /// </summary>
     [ClientCallback]
     void TeamSelect() {
-        body.GetChild(0).gameObject.SetActive(team == 1 ? true : false);
-        body.GetChild(1).gameObject.SetActive(team == 2 ? true : false);
+        try {
+            GetComponent<VisualizeTeam>().ToggleForeheadItem(team);
+        } catch { Debug.Log("Team visualization could not be achieved :("); }
     }
 
     /// <summary>
