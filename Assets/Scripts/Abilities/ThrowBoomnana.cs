@@ -26,12 +26,15 @@ public class ThrowBoomnana : Ability
     public override double Trigger() {
         StartCoroutine(GetComponent<Aim>().Boomy(this));
         GetComponent<Animator>().SetBool("IsAimingBOOMnana", true);
+        GetComponent<Animator>().SetLayerWeight(1, 1f);
         //CmdDoFire(new Vector3());
         return base.Trigger();
     }
 
     public void Throw(Vector3 pos) {
         GetComponent<Animator>().SetTrigger("DeliverBOOMnana");
+        GetComponent<Animator>().SetBool("IsAimingBOOMnana", false);
+        GetComponent<Animator>().SetLayerWeight(1, 0f);
         //<--Insert BOOMnana animation that follows the hand of the monguin.
         CmdDoFire(pos);
         timer = (float)Network.time;
@@ -39,6 +42,7 @@ public class ThrowBoomnana : Ability
 
     public void Cancel() {
         GetComponent<Animator>().SetBool("IsAimingBOOMnana", false);
+        GetComponent<Animator>().SetLayerWeight(1, 0f);
     }
 
     [Command]

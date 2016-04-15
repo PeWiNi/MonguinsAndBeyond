@@ -14,6 +14,8 @@ public class PunchDance : Ability {
     public float thirdDmg = .05f;
 
     public override double Trigger() {
+        GetComponent<Animator>().SetTrigger("DeliverPunch");
+        GetComponent<Animator>().SetLayerWeight(1, 1f);
         Vector3 PointOfImpact = transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up;
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
         //try { StartCoroutine(GetComponentInChildren<SlashEffect>().PunchDance()); } catch { }
@@ -37,6 +39,7 @@ public class PunchDance : Ability {
                 CmdDamagePlayer(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * thirdDmg);
             }
         }
+        GetComponent<Animator>().SetLayerWeight(1, 0f);
     }
 
     void OnDrawGizmos() {
