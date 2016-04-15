@@ -31,6 +31,7 @@ public class Inventory : MonoBehaviour {
             return false;
         if (use)
             bananas -= count;
+        transform.FindChild("Banana").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().bananaCount;
         return true;
     }
 
@@ -39,6 +40,7 @@ public class Inventory : MonoBehaviour {
             return false;
         if (use)
             sticks -= count;
+        transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().stickCount;
         return true;
     }
 
@@ -49,6 +51,8 @@ public class Inventory : MonoBehaviour {
             sticks -= count;
             leaves -= count;
         }
+        transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().stickCount;
+        transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().leafCount;
         return true;
     }
 
@@ -66,6 +70,7 @@ public class Inventory : MonoBehaviour {
             return false;
         if (use)
             leaves -= count;
+        transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().leafCount;
         return true;
     }
 

@@ -27,6 +27,11 @@ public class HUDScript : MonoBehaviour {
     float trap3Timer;
     #endregion
 
+    [SerializeField]
+    Color normalColor;
+    [SerializeField]
+    Color highlightColor;
+
     double gameTimer;
 
     CursorLockMode wantedMode;
@@ -260,20 +265,34 @@ public class HUDScript : MonoBehaviour {
     public void SpawnBananaTrap() {
         if (inventory.useBanana(1, false)) 
             StartCoroutine(PlaceBananaTrap());
-        inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().bananaCount;
+        Transform banana = inventory.transform.FindChild("Banana");
+        banana.GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().bananaCount;
+        ColorBlock cb = banana.GetComponent<Button>().colors;
+        cb.normalColor = highlightColor;
+        banana.GetComponent<Button>().colors = cb;
     }
 
     public void SpawnSpikeTrap() {
         if (inventory.useForSpikes(1, false))
             StartCoroutine(PlaceSpikeTrap());
-        inventory.transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
-        inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
+        Transform stick = inventory.transform.FindChild("Stick");
+        Transform leaf = inventory.transform.FindChild("Leaf");
+        stick.GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
+        leaf.GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
+        ColorBlock cb = stick.GetComponent<Button>().colors;
+        cb.normalColor = highlightColor;
+        stick.GetComponent<Button>().colors = cb;
+        leaf.GetComponent<Button>().colors = cb;
     }
 
     public void SpawnSapTrap() {
         if (inventory.useSap(1, false))
             StartCoroutine(PlaceSapTrap());
-        inventory.transform.FindChild("Sap").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().sapCount;
+        Transform sap = inventory.transform.FindChild("Sap");
+        sap.GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().sapCount;
+        ColorBlock cb = sap.GetComponent<Button>().colors;
+        cb.normalColor = highlightColor;
+        sap.GetComponent<Button>().colors = cb;
     }
 
     IEnumerator PlaceBananaTrap() {
@@ -284,6 +303,10 @@ public class HUDScript : MonoBehaviour {
             trap1Timer = Time.time;
             inventory.useBanana();
         }
+        Transform banana = inventory.transform.FindChild("Banana");
+        ColorBlock cb = banana.GetComponent<Button>().colors;
+        cb.normalColor = normalColor;
+        banana.GetComponent<Button>().colors = cb;
         yield return null;
     }
 
@@ -295,6 +318,12 @@ public class HUDScript : MonoBehaviour {
             trap2Timer = Time.time;
             inventory.useForSpikes();
         }
+        Transform stick = inventory.transform.FindChild("Stick");
+        Transform leaf = inventory.transform.FindChild("Leaf");
+        ColorBlock cb = stick.GetComponent<Button>().colors;
+        cb.normalColor = normalColor;
+        stick.GetComponent<Button>().colors = cb;
+        leaf.GetComponent<Button>().colors = cb;
         yield return null;
     }
 
@@ -306,6 +335,10 @@ public class HUDScript : MonoBehaviour {
             trap3Timer = Time.time;
             inventory.useSap();
         }
+        Transform sap = inventory.transform.FindChild("Sap");
+        ColorBlock cb = sap.GetComponent<Button>().colors;
+        cb.normalColor = normalColor;
+        sap.GetComponent<Button>().colors = cb;
         yield return null;
     }
 
@@ -316,8 +349,9 @@ public class HUDScript : MonoBehaviour {
     /// <param name="item">String representation of the item in question</param>
     public void DropItem(string item) {
         if (ps.CanIMove()) {
-            //Drop items if holding Shift
-            if (Input.GetKey(KeyCode.LeftShift) && (
+            try {
+                //Drop items if holding Shift
+                if (Input.GetKey(KeyCode.LeftShift) && (
                 item == "Banana" ? inventory.useBanana() :
                 item == "Stick" ? inventory.useSticks() :
                 item == "Sap" ? inventory.useSap() :
@@ -325,42 +359,32 @@ public class HUDScript : MonoBehaviour {
                 item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false))
                 ps.GetComponent<SyncInventory>().CmdSpawnItem(item, new Vector3(), 0);
 
-            // Banana Trap
-            else if (!OnCooldown(trap1Cooldown, trap1Timer) && item == "Banana" ? inventory.useBanana() : false)
-                StartCoroutine(PlaceBananaTrap());
+                // Banana Trap
+                else if (!OnCooldown(trap1Cooldown, trap1Timer) && item == "Banana" ? inventory.useBanana(1, false) : false)
+                    StartCoroutine(PlaceBananaTrap());
 
-            // Spike Trap
-            else if (!OnCooldown(trap2Cooldown, trap2Timer) && item == "Stick" ? inventory.useForSpikes() : false) {
-                StartCoroutine(PlaceSpikeTrap());
-                inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
+                // Spike Trap
+                else if (!OnCooldown(trap2Cooldown, trap2Timer) && item == "Stick" ? inventory.useForSpikes(1, false) : false) {
+                    StartCoroutine(PlaceSpikeTrap());
+                    inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
+                }
+
+                //Throw Sap
+                else if (!OnCooldown(trap3Cooldown, trap3Timer) && item == "Sap" ? inventory.useSap(1, false) : false)
+                    StartCoroutine(PlaceSapTrap());
+
+                // Camouflage
+                else if (item == "Leaf" ? inventory.useLeaf() : false)
+                    ps.GetComponent<SyncInventory>().CmdUseLeaf();
+
+                else if (item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false) {
+                    ps.EatBerry(item);
+                    //Herb berry = new Herb();
+                    //berry.ChangeProperties(item, ps.team);
+                    //berry.EatIt(ps);
+                }
             }
-
-            //Throw Sap
-            else if (!OnCooldown(trap3Cooldown, trap3Timer) && item == "Sap" ? inventory.useSap() : false)
-                StartCoroutine(PlaceSapTrap());
-
-            // Camouflage
-            else if (item == "Leaf" ? inventory.useLeaf() : false)
-                ps.GetComponent<SyncInventory>().CmdUseLeaf();
-
-
-            else if (item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false) {
-                ps.EatBerry(item);
-                //Herb berry = new Herb();
-                //berry.ChangeProperties(item, ps.team);
-                //berry.EatIt(ps);
-            }
-
-            // Update text field with new values
-            inventory.transform.FindChild(item).GetComponentInChildren<Text>().text =
-                item == "Banana" ? "" + inventory.GetComponent<Inventory>().bananaCount :
-                item == "Stick"  ? "" + inventory.GetComponent<Inventory>().stickCount  :
-                item == "Sap"    ? "" + inventory.GetComponent<Inventory>().sapCount    :
-                item == "Leaf"   ? "" + inventory.GetComponent<Inventory>().leafCount   :
-                item == "BerryR" ? "" + inventory.GetComponent<Inventory>().berryRCount :
-                item == "BerryG" ? "" + inventory.GetComponent<Inventory>().berryGCount :
-                item == "BerryB" ? "" + inventory.GetComponent<Inventory>().berryBCount :
-                "";
+            catch { }
         }
     }
     #endregion
