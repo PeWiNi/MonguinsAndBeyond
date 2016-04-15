@@ -133,7 +133,8 @@ ModelImporter:
     7400076: m_healed
     7400078: m_flyFrontHands
     7400080: m_walk_wider
-    7400082: monguin_AddAnim_001.00440
+    7400082: m_spikesWalking
+    7400084: monguin_AddAnim_001.0044
     9500000: //RootNode
     13700000: monguin_anim
   materials:
@@ -4794,7 +4795,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 1
     - serializedVersion: 16
-      name: monguin_AddAnim_001.00440
+      name: m_spikesWalking
       takeName: monguin_AddAnim_001.0044
       firstFrame: 836
       lastFrame: 860
