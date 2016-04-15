@@ -9,12 +9,16 @@ using UnityEngine.Networking;
 /// </summary>
 public class PickupSpawner : NetworkBehaviour {
     public GameObject prefab;
-    public float repeatTime = 5f;
+    public float spawnTime = 5f;
+    Vector3 SpawnPosition;
 
 	// Use this for initialization
 	void Start () {
-        if(isServer)
-            InvokeRepeating("Spawn", 0f, repeatTime);
+        if(isServer) {
+            SpawnPosition = transform.position + new Vector3(0, .75f, 0);
+            //InvokeRepeating("RepeatSpawn", 0f, spawnTime);
+            Spawn(SpawnPosition);
+        }
 	}
 	
 	// Update is called once per frame
@@ -28,15 +32,33 @@ public class PickupSpawner : NetworkBehaviour {
     /// 
     /// Works well if using InvokeRepeating
     /// </summary>
-    void Spawn() {
-        Vector3 pos = transform.position + new Vector3(0, .75f, 0);
-        Collider[] hitColliders = Physics.OverlapSphere(pos, .25f);
-        foreach(Collider c in hitColliders)
-            if(!c.isTrigger)
-                return;
+    void Spawn(Vector3 pos, float destroy = 0) {
         GameObject go = (GameObject)Instantiate(
             prefab, pos, prefab.transform.rotation);
-        Destroy(go, repeatTime);
+        if (destroy > 0) Destroy(go, destroy);
+        go.GetComponent<Pickup>().SetSpawner(this);
         NetworkServer.Spawn(go);
+    }
+
+    void RepeatSpawn() {
+        CheckForStuff(SpawnPosition);
+        Spawn(SpawnPosition);
+    }
+
+    void CheckForStuff(Vector3 pos) {
+        Collider[] hitColliders = Physics.OverlapSphere(pos, .25f);
+        foreach (Collider c in hitColliders)
+            //if(!c.isTrigger)
+            return;
+    }
+
+    public void TriggerSpawn() {
+        StartCoroutine(TriggerSpawnRoutine());
+    }
+
+    IEnumerator TriggerSpawnRoutine() {
+        yield return new WaitForSeconds(spawnTime);
+        print("aaand respawn");
+        Spawn(SpawnPosition);
     }
 }

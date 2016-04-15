@@ -11,7 +11,7 @@ public class SpawnTraps : NetworkBehaviour {
     [SyncVar]
     float distFromTerrain = 0.01f;
     GameObject projector;
-
+    
     bool active = false;
     public bool isPlacing {
         get {
@@ -120,7 +120,7 @@ public class SpawnTraps : NetworkBehaviour {
     /// Left clicking outside the valid area will cancel placement of the trap
     /// Right clicking will cancel placement right away
     /// </summary>
-    public IEnumerator Slippery() {
+    public IEnumerator Slippery(System.Action<bool> success) {
         Activate(true);
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
@@ -129,16 +129,18 @@ public class SpawnTraps : NetworkBehaviour {
             foreach(Collider c in Physics.OverlapSphere(projector.transform.position, 1))
                 if(c.GetComponent<Trap_BananaIsland>() != null) overlapping = true;
             if (isBehind(projector.transform.position - transform.position) || overlapping)
-                GetComponent<SyncInventory>().pickupBanana();
-            else CmdDoDurationTrap(bananaTrap, projector.transform.position, bananaTrapDuration);
-        }
-        else 
-            GetComponent<SyncInventory>().pickupBanana();
+                success(false);
+            else {
+                CmdDoDurationTrap(bananaTrap, projector.transform.position, bananaTrapDuration);
+                success(true);
+            }
+        } else
+            success(false);
         yield return new WaitForFixedUpdate();
         Activate(false);
     }
 
-    public IEnumerator Spikey() {
+    public IEnumerator Spikey(System.Action<bool> success) {
         Activate(true);
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
@@ -146,19 +148,18 @@ public class SpawnTraps : NetworkBehaviour {
             bool overlapping = false;
             foreach (Collider c in Physics.OverlapSphere(projector.transform.position, 1))
                 if (c.GetComponent<Trap_Spikes>() != null) overlapping = true;
-            if (isBehind(projector.transform.position - transform.position) || overlapping) {
-                GetComponent<SyncInventory>().pickupSticks();
-                GetComponent<SyncInventory>().pickupLeaf();
+            if (isBehind(projector.transform.position - transform.position) || overlapping)
+                success(false);
+            else {
+                CmdDoTriggerTrap(spikeTrap, projector.transform.position, spikeTrapTriggerCount);
+                success(true);
             }
-            else CmdDoTriggerTrap(spikeTrap, projector.transform.position, spikeTrapTriggerCount);
-        } else {
-            GetComponent<SyncInventory>().pickupSticks();
-            GetComponent<SyncInventory>().pickupLeaf();
-        }
+        } else
+            success(false);
         Activate(false);
     }
 
-    public IEnumerator StickySap() {
+    public IEnumerator StickySap(System.Action<bool> success) {
         Activate(true);
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
@@ -167,10 +168,13 @@ public class SpawnTraps : NetworkBehaviour {
             foreach (Collider c in Physics.OverlapSphere(projector.transform.position, 1))
                 if (c.GetComponent<Trap_Sap>() != null) overlapping = true;
             if (isBehind(projector.transform.position - transform.position) || overlapping)
-                GetComponent<SyncInventory>().pickupSap();
-            else CmdDoDurationTrap(sap, projector.transform.position, sapDuration);
+                success(false);
+            else {
+                CmdDoDurationTrap(sap, projector.transform.position, sapDuration);
+                success(true);
+            }
         } else
-            GetComponent<SyncInventory>().pickupSap();
+            success(false);
         Activate(false);
     }
 

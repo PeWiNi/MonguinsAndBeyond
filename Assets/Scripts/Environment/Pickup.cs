@@ -13,6 +13,8 @@ public class Pickup : NetworkBehaviour {
     float ElapsedTime;
     float FinishTime;
 
+    PickupSpawner spawner;
+
     [SyncVar]
     public Transform owner = null;
 
@@ -50,6 +52,11 @@ public class Pickup : NetworkBehaviour {
         }
     }
 
+    /// <summary>
+    /// Crash Bandicoot inspired "animation" triggered when picking up items
+    /// </summary>
+    /// <param name="guiTransform">Target Location towards the transform</param>
+    /// <param name="camera">The camera of the player</param>
     public void makeMoveGuy(Transform guiTransform, Camera camera) {
         moveToUI = true;
         GUIlocation = guiTransform;
@@ -89,5 +96,16 @@ public class Pickup : NetworkBehaviour {
     bool Unreachable() {
         Collider[] hitCol = Physics.OverlapSphere(GetComponent<Collider>().transform.position, 0.1f);
         return hitCol.Length > 1;
+    }
+
+    public void SetSpawner(PickupSpawner pickupS) {
+        spawner = pickupS;
+    }
+
+    void OnDestroy() {
+        if(spawner != null) {
+            print(spawner + " " + isServer);
+            spawner.TriggerSpawn();
+        }
     }
 }

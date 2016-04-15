@@ -26,39 +26,46 @@ public class Inventory : MonoBehaviour {
     public int berryBCount { get { return berryB; } }
     //THOUGHT: Cap/Duration/whatever?
 
-    public bool useBanana(int count = 1) {
+    public bool useBanana(int count = 1, bool use = true) {
         if (bananas == 0)
             return false;
-        bananas -= count;
+        if (use)
+            bananas -= count;
         return true;
     }
 
-    public bool useSticks(int count = 1) {
+    public bool useSticks(int count = 1, bool use = true) {
         if (sticks == 0)
             return false;
-        sticks -= count;
+        if (use)
+            sticks -= count;
         return true;
     }
 
-    public bool useForSpikes(int count = 1) {
+    public bool useForSpikes(int count = 1, bool use = true) {
         if (sticks == 0 || leaves == 0)
             return false;
-        sticks -= count;
-        leaves -= count;
+        if (use) {
+            sticks -= count;
+            leaves -= count;
+        }
         return true;
     }
 
-    public bool useSap(int count = 1) {
+    public bool useSap(int count = 1, bool use = true) {
         if (sap == 0)
             return false;
-        sap -= count;
+        if (use)
+            sap -= count;
+        transform.FindChild("Sap").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().sapCount;
         return true;
     }
 
-    public bool useLeaf(int count = 1) {
+    public bool useLeaf(int count = 1, bool use = true) {
         if (leaves == 0)
             return false;
-        leaves -= count;
+        if (use)
+            leaves -= count;
         return true;
     }
 

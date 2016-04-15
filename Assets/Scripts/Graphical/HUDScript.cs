@@ -258,49 +258,54 @@ public class HUDScript : MonoBehaviour {
 
     #region Environment methods
     public void SpawnBananaTrap() {
-        if (inventory.useBanana()) 
+        if (inventory.useBanana(1, false)) 
             StartCoroutine(PlaceBananaTrap());
         inventory.transform.FindChild("Banana").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().bananaCount;
     }
 
     public void SpawnSpikeTrap() {
-        if (inventory.useForSpikes())
+        if (inventory.useForSpikes(1, false))
             StartCoroutine(PlaceSpikeTrap());
         inventory.transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().stickCount;
         inventory.transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().leafCount;
     }
 
     public void SpawnSapTrap() {
-        if (inventory.useSap())
+        if (inventory.useSap(1, false))
             StartCoroutine(PlaceSapTrap());
         inventory.transform.FindChild("Sap").GetComponentInChildren<Text>().text = "" + inventory.GetComponent<Inventory>().sapCount;
     }
 
     IEnumerator PlaceBananaTrap() {
         SpawnTraps waitFor = ps.GetComponentInChildren<SpawnTraps>();
-        int bananaCount = inventory.bananaCount;
-        yield return StartCoroutine(waitFor.Slippery());
-        // If the counter is unchanged, this means that the coroutine has not refunded the banana
-        if(bananaCount == inventory.bananaCount) // Not entirely correct to not start timer; this is due to the player being able to pick up bananas while placing
+        bool successful = false;
+        yield return StartCoroutine(waitFor.Slippery(success => successful = success));
+        if (successful) {
             trap1Timer = Time.time;
+            inventory.useBanana();
+        }
         yield return null;
     }
 
     IEnumerator PlaceSpikeTrap() {
         SpawnTraps waitFor = ps.GetComponentInChildren<SpawnTraps>();
-        int stickCount = inventory.stickCount;
-        yield return StartCoroutine(waitFor.Spikey());
-        if (stickCount == inventory.stickCount) // Rogue Codez!
+        bool successful = false;
+        yield return StartCoroutine(waitFor.Spikey(success => successful = success));
+        if (successful) {
             trap2Timer = Time.time;
+            inventory.useForSpikes();
+        }
         yield return null;
     }
 
     IEnumerator PlaceSapTrap() {
         SpawnTraps waitFor = ps.GetComponentInChildren<SpawnTraps>();
-        int sapCount = inventory.sapCount;
-        yield return StartCoroutine(ps.GetComponentInChildren<SpawnTraps>().StickySap());
-        if (sapCount == inventory.sapCount) // Rogue Codez!
+        bool successful = false;
+        yield return StartCoroutine(waitFor.StickySap(success => successful = success));
+        if (successful) {
             trap3Timer = Time.time;
+            inventory.useSap();
+        }
         yield return null;
     }
 
@@ -349,9 +354,9 @@ public class HUDScript : MonoBehaviour {
             // Update text field with new values
             inventory.transform.FindChild(item).GetComponentInChildren<Text>().text =
                 item == "Banana" ? "" + inventory.GetComponent<Inventory>().bananaCount :
-                item == "Stick" ? "" + inventory.GetComponent<Inventory>().stickCount :
-                item == "Sap" ? "" + inventory.GetComponent<Inventory>().sapCount :
-                item == "Leaf" ? "" + inventory.GetComponent<Inventory>().leafCount :
+                item == "Stick"  ? "" + inventory.GetComponent<Inventory>().stickCount  :
+                item == "Sap"    ? "" + inventory.GetComponent<Inventory>().sapCount    :
+                item == "Leaf"   ? "" + inventory.GetComponent<Inventory>().leafCount   :
                 item == "BerryR" ? "" + inventory.GetComponent<Inventory>().berryRCount :
                 item == "BerryG" ? "" + inventory.GetComponent<Inventory>().berryGCount :
                 item == "BerryB" ? "" + inventory.GetComponent<Inventory>().berryBCount :
