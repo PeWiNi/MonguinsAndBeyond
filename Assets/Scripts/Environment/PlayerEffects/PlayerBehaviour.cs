@@ -29,6 +29,7 @@ public class PlayerBehaviour : NetworkBehaviour
     void Start() {
         lastPosition = transform.position;
         anim = GetComponent<Animator>();
+        Random.seed = 42;
     }
 
     // Update is called once per frame
@@ -95,17 +96,21 @@ public class PlayerBehaviour : NetworkBehaviour
         this.targetLandingSpot = landingSpot;
         this.shootingAngle = angle;
         isThrown = true;
-        int rand = Random.Range(1, 10);
-        if (rand <= 5) {
-            GetComponent<PlayerLogic>().isFlying = true;
-            anim.SetBool("IsFlying", true);
+        if (anim.GetBool(Animator.StringToHash("IsFlying")) || anim.GetBool(Animator.StringToHash("IsFlyingFrontHands")))
+            return;
+        else {
+            int rand = Random.Range(1, 10);
+            if (rand <= 5) {
+                GetComponent<PlayerLogic>().isFlying = true;
+                anim.SetBool("IsFlying", true);
+            }
+            else if (rand > 5) {
+                GetComponent<PlayerLogic>().isFlyingFrontHands = true;
+                anim.SetBool("IsFlyingFrontHands", true);
+            }
+            rand = -1;
+            print("The rand value = " + rand);
         }
-        else if (rand > 5) {
-            GetComponent<PlayerLogic>().isFlyingFrontHands = true;
-            anim.SetBool("IsFlyingFrontHands", true);
-        }
-        rand = -1;
-        print("The rand value = " + rand);
         //Incapacitate(1);
     }
 

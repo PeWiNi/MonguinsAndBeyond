@@ -26,7 +26,7 @@ public class PlayerLogic : NetworkBehaviour
     double castTime;
 
     bool dblJump = false;
-    bool isWalking;
+    //bool isWalking;
 
     [SyncVar]
     Vector3 externalForce;
@@ -143,12 +143,10 @@ public class PlayerLogic : NetworkBehaviour
                 anim.SetTrigger("Jumped");
         }
         if (isNotFlying() && (anim.GetBool(Animator.StringToHash("IsFlying")) || anim.GetBool(Animator.StringToHash("IsFlyingFrontHands")))) {
-            //Cancel the Flying Animation.
-            if (isFlying) {
+            //Cancel the Flying Animation(s).
+            if (isFlying || isFlyingFrontHands) {
                 anim.SetBool("IsFlying", false);
                 isFlying = false;
-            }
-            if (isFlyingFrontHands) {
                 anim.SetBool("IsFlyingFrontHands", false);
                 isFlyingFrontHands = false;
             }
@@ -204,8 +202,12 @@ public class PlayerLogic : NetworkBehaviour
             if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) { return; }
             isSwimming = true;
             //Play 'Swimming'Animation
-            if (anim.GetBool(Animator.StringToHash("IsSwimming")) == false)
+            if (anim.GetBool(Animator.StringToHash("IsSwimming")) == false) {
                 anim.SetBool("IsSwimming", true);
+                //If we were flying we need to set the bools to false (so we don't fly in water! BWAH!).
+                anim.SetBool("IsFlying", false);
+                anim.SetBool("IsFlyingFrontHands", false);
+            }
             StartCoroutine(InWater());
         }
     }
