@@ -223,11 +223,11 @@ public class PlayerStats : NetworkBehaviour {
                     SetStats(roleStats.resilience, roleStats.speed);
                 }
                 //  Taunt (Roar/Growl/WTV) - taunts enemies (locks their target on him for 3 sec) CD:6 sec
-                abilities[1] = GetComponent<PunchDance>();
+                abilities[1] = GetComponent<Taunt>();
                 //  Smash (deals 1% of enemy health and stuns 1 sec) - no CD, should take 1sec to fully cast anyway
                 abilities[0] = GetComponent<Smash>();
                 //  Fortify - temporarily increase health and resilience of the defender with 20% for 10 sec. CD:20sec
-                abilities[2] = GetComponent<PunchDance>();
+                abilities[2] = GetComponent<Fortify>();
                 // Placeholder visual thing
                 body.GetComponent<SkinnedMeshRenderer>().material.color = Color.blue;
                 break;
@@ -449,6 +449,14 @@ public class PlayerStats : NetworkBehaviour {
         isIncapacitated = true;
         incapacitatedTimer = Network.time + duration;
         RpcIncapacitating(duration);
+    }
+
+    public void Taunt(GameObject user, float duration) {
+        transform.LookAt(user.transform.position);
+    }
+
+    public void Fortify(float duration) {
+
     }
 
     /// <summary>

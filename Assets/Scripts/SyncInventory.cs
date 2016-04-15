@@ -51,11 +51,17 @@ public class SyncInventory : NetworkBehaviour {
         //pickup.transform.FindChild("Berry").GetComponent<MeshRenderer>().materials[1] = Resources.Load("Materials/berry_leaf") as Material;
         //pickup.transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load("Materials/berry" + (berryType == 1 ? "_good" : berryType == 2 ? "_bad" : "_neutral")) as Material;
         pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(berry), GetComponentInChildren<Camera>());
+        pickupFlashEffect(berry);
     }
 
     void pickupEffect(string type) {
         GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Collectables/" + type), transform.position, transform.rotation);
         pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(type), GetComponentInChildren<Camera>());
+        pickupFlashEffect(type);
+    }
+
+    IEnumerator pickupFlashEffect(string type) {
+        yield return null;
     }
 
     public void setInventory(Inventory i) {
