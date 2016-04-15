@@ -115,6 +115,23 @@ ModelImporter:
     7400040: AimBOOMnana
     7400042: ThrowingBOOMnana
     7400044: AimingIdle
+    7400046: m_taunt3
+    7400048: m_taunt2
+    7400050: m_taunt
+    7400052: m_smash
+    7400054: m_fortify
+    7400056: m_puke(noAnim)
+    7400058: m_throwPoison
+    7400060: m_healWave
+    7400062: m_idleLookAround
+    7400064: m_idle?Puke?idk
+    7400066: m_scratchingHead
+    7400068: m_HitBySmash
+    7400070: m_hitbyPoison
+    7400072: m_hitByPuke
+    7400074: m_taunted
+    7400076: m_healed
+    7400078: m_flyFrontHands
     9500000: //RootNode
     13700000: monguin_anim
   materials:
@@ -2674,6 +2691,1910 @@ ModelImporter:
       - path: 
         weight: 1
       - path: monguin
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_taunt3
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 812
+      lastFrame: 836
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_taunt2
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 788
+      lastFrame: 812
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_taunt
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 430
+      lastFrame: 454
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_smash
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 454
+      lastFrame: 478
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_fortify
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 478
+      lastFrame: 502
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_puke(noAnim)
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 502
+      lastFrame: 526
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_throwPoison
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 526
+      lastFrame: 550
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_healWave
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 550
+      lastFrame: 572
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_idleLookAround
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 572
+      lastFrame: 596
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_idle?Puke?idk
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 596
+      lastFrame: 620
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_scratchingHead
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 620
+      lastFrame: 644
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_HitBySmash
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 644
+      lastFrame: 668
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_hitbyPoison
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 668
+      lastFrame: 692
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_hitByPuke
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 692
+      lastFrame: 716
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_taunted
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 716
+      lastFrame: 740
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_healed
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 740
+      lastFrame: 764
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: monguin_Reference
+        weight: 1
+      - path: monguin_Reference/Character1_Hips
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg/Character1_LeftFoot/Character1_LeftToeBase/Character1_LeftFootMiddle1/Character1_LeftFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase/Character1_RightFootMiddle1/Character1_RightFootMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_LeftShoulder/Character1_LeftArm/Character1_LeftForeArm/Character1_LeftHand/Character1_LeftHandMiddle1/Character1_LeftHandMiddle2/Character1_LeftHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Neck/Monguin_Neck1/Character1_Head
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/Character1_RightHand/Character1_RightHandMiddle1/Character1_RightHandMiddle2/Character1_RightHandMiddle3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5
+        weight: 1
+      - path: monguin_Reference/Character1_Hips/joint1/joint2/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: monguinMesh
+        weight: 1
+      - path: monguinMesh/monguin_anim
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: m_flyFrontHands
+      takeName: monguin_AddAnim_001.0040
+      firstFrame: 769
+      lastFrame: 780
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
         weight: 1
       - path: monguin_Reference
         weight: 1
