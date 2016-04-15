@@ -1550,8 +1550,6 @@ ModelImporter:
       transformMask:
       - path: 
         weight: 1
-      - path: monguin
-        weight: 1
       - path: monguin_Reference
         weight: 1
       - path: monguin_Reference/Character1_Hips
@@ -4580,8 +4578,8 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
-      loopBlend: 0
+      loopTime: 1
+      loopBlend: 1
       loopBlendOrientation: 0
       loopBlendPositionY: 0
       loopBlendPositionXZ: 0

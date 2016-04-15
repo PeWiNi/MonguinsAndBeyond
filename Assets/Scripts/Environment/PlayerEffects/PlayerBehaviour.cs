@@ -95,7 +95,17 @@ public class PlayerBehaviour : NetworkBehaviour
         this.targetLandingSpot = landingSpot;
         this.shootingAngle = angle;
         isThrown = true;
-        anim.SetBool("IsFlying", true);
+        int rand = Random.Range(1, 10);
+        if (rand <= 5) {
+            GetComponent<PlayerLogic>().isFlying = true;
+            anim.SetBool("IsFlying", true);
+        }
+        else if (rand > 5) {
+            GetComponent<PlayerLogic>().isFlyingFrontHands = true;
+            anim.SetBool("IsFlyingFrontHands", true);
+        }
+        rand = -1;
+        print("The rand value = " + rand);
         //Incapacitate(1);
     }
 

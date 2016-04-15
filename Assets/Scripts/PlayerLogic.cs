@@ -5,12 +5,13 @@ using UnityEngine.Networking;
 /// <summary>
 /// Class in charge of parsing user input
 /// </summary>
-public class PlayerLogic : NetworkBehaviour {
+public class PlayerLogic : NetworkBehaviour
+{
 
     PlayerStats stats;
     CharacterCamera cam;
     private float Speed = 5f;
-    private float jumpSpeed = 4f; 
+    private float jumpSpeed = 4f;
     [System.NonSerialized]
     public float horizAxis = 0f;
     [System.NonSerialized]
@@ -23,7 +24,7 @@ public class PlayerLogic : NetworkBehaviour {
 
     Ability[] abilities;
     double castTime;
-    
+
     bool dblJump = false;
     bool isWalking;
 
@@ -44,12 +45,15 @@ public class PlayerLogic : NetworkBehaviour {
     AudioListener audioListener;
 
     Animator anim;
+    public bool isFlying;
+    public bool isFlyingFrontHands;
 
     void Start() {
         // Only enable sound and camera for player if it's the local player
         if (isLocalPlayer) {
             // Disable and Enable Cameras / AudioListener
-            try { GameObject.Find("Main Camera").SetActive(false); } catch { }
+            try { GameObject.Find("Main Camera").SetActive(false); }
+            catch { }
             characterCam.enabled = true;
             audioListener.enabled = true;
             //characterCam.transform.GetChild(0).GetComponent<Camera>().enabled = true;
@@ -57,15 +61,15 @@ public class PlayerLogic : NetworkBehaviour {
         }
         cam = characterCam.GetComponent<CharacterCamera>();
         stats = GetComponent<PlayerStats>();
-        Speed = stats? stats.speed : Speed; // Only use speed from playerStats if it is not null
+        Speed = stats ? stats.speed : Speed; // Only use speed from playerStats if it is not null
         anim = GetComponent<Animator>();
     }
 
     void Update() {
-        if(abilities == null || abilities.Length <= 0) {
+        if (abilities == null || abilities.Length <= 0) {
             abilities = stats.abilities;
         }
-        if (isLocalPlayer  && castTime < Network.time && stats.CanIMove()) { // if dead they cannot move
+        if (isLocalPlayer && castTime < Network.time && stats.CanIMove()) { // if dead they cannot move
             // Send Critical Input
             horizAxis = Input.GetAxis("Horizontal");
             vertAxis = Input.GetAxis("Vertical");
@@ -77,7 +81,7 @@ public class PlayerLogic : NetworkBehaviour {
             if (/*transform.position.y < 25 &&*/ !GetComponent<SpawnTraps>().isPlacing && !GetComponent<Aim>().aiming) {
                 #region abilities
                 if (Input.GetKeyDown(KeyCode.Q) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
-                //if (Input.GetMouseButtonDown(0) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
+                    //if (Input.GetMouseButtonDown(0) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
                     castTime = abilities[0].Trigger() + Network.time;
                     abilities[0].timer = (float)Network.time;
                 }
@@ -86,13 +90,13 @@ public class PlayerLogic : NetworkBehaviour {
                     abilities[1].timer = (float)Network.time;
                 }
                 if (Input.GetKeyDown(KeyCode.F) && !abilities[2].OnCooldown()) { //TODO make use of inputManager 
-                //if (Input.GetMouseButtonDown(1) && !abilities[2].OnCooldown()) { //TODO make use of inputManager 
+                    //if (Input.GetMouseButtonDown(1) && !abilities[2].OnCooldown()) { //TODO make use of inputManager 
                     //castTime = abilities[2].Trigger() + Network.time;
                     //abilities[2].timer = (float)Network.time;
                     abilities[2].Trigger();
                 }
-            } if(Input.GetMouseButton(0) && Input.GetMouseButton(1)) { vertAxis = 1; }
-            #endregion
+            } if (Input.GetMouseButton(0) && Input.GetMouseButton(1)) { vertAxis = 1; }
+                #endregion
         }
         if (stats.isDead || castTime > Network.time || stats.isStunned || stats.isIncapacitated) { // Don't keep moving when dead~
             horizAxis = 0;
@@ -103,7 +107,7 @@ public class PlayerLogic : NetworkBehaviour {
         if (transform.position.y < -100) { // Reset player position when they are below y-threshold
             transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
             GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-            if(isLocalPlayer)
+            if (isLocalPlayer)
                 stats.CmdTakeDmg(10000);
         }
     }
@@ -135,11 +139,19 @@ public class PlayerLogic : NetworkBehaviour {
         else if (jump && dblJump) {
             GetComponent<Rigidbody>().velocity += new Vector3(0, jumpSpeed, 0);
             dblJump = false;
+            if (!isSwimming)//Shouldplay on Ground only.
+                anim.SetTrigger("Jumped");
         }
-        if (isNotFlying() && anim.GetBool(Animator.StringToHash("IsFlying")))
-        {
-            anim.SetBool("IsFlying", false);
-            print("isNotFlying? " + isNotFlying());
+        if (isNotFlying() && (anim.GetBool(Animator.StringToHash("IsFlying")) || anim.GetBool(Animator.StringToHash("IsFlyingFrontHands")))) {
+            //Cancel the Flying Animation.
+            if (isFlying) {
+                anim.SetBool("IsFlying", false);
+                isFlying = false;
+            }
+            if (isFlyingFrontHands) {
+                anim.SetBool("IsFlyingFrontHands", false);
+                isFlyingFrontHands = false;
+            }
         }
         //transform.Translate(new Vector3(0f, jumpAxis, 0f) * jumpSpeed * Time.fixedDeltaTime);
 
@@ -200,8 +212,8 @@ public class PlayerLogic : NetworkBehaviour {
 
     IEnumerator InWater() {
         drownTimer = (float)Network.time;
-        while(isSwimming && (((float)Network.time - drownTimer) < drownTime)) {
-            if (GetComponent<PlayerStats>().isDead) { isSwimming = false; anim.SetBool("IsDeadbyWater", true); anim.SetBool("IsSwimming", false); }
+        while (isSwimming && (((float)Network.time - drownTimer) < drownTime)) {
+            if (GetComponent<PlayerStats>().isDead) { isSwimming = false; anim.SetBool("IsDeadByWater", true); anim.SetBool("IsSwimming", false); }
             if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) {
                 isSwimming = false;
                 if (anim.GetBool(Animator.StringToHash("IsSwimming")))
