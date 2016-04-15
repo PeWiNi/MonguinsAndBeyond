@@ -58,7 +58,6 @@ public class PickupSpawner : NetworkBehaviour {
 
     IEnumerator TriggerSpawnRoutine() {
         yield return new WaitForSeconds(spawnTime);
-        print("aaand respawn");
         Spawn(SpawnPosition);
     }
 }

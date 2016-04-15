@@ -103,9 +103,7 @@ public class Pickup : NetworkBehaviour {
     }
 
     void OnDestroy() {
-        if(spawner != null) {
-            print(spawner + " " + isServer);
+        if(spawner != null) 
             spawner.TriggerSpawn();
-        }
     }
 }
