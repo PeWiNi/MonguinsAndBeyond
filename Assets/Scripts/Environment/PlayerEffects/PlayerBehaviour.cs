@@ -25,6 +25,11 @@ public class PlayerBehaviour : NetworkBehaviour
     //Animator
     public Animator anim;
 
+    //Idle state variables.
+    public float timeToIdle = 10.0f; //10 seconds
+    float currentTime = 0f;
+    bool isIdle = false;
+
     // Use this for initialization
     void Start() {
         lastPosition = transform.position;
@@ -53,6 +58,18 @@ public class PlayerBehaviour : NetworkBehaviour
                     PlayerThrown(thrust, targetLandingSpot, shootingAngle);
                 }
             }
+        }
+        //Check if the player is passive and play idle animations accordingly.
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("m_idle") && !isIdle) {
+            isIdle = true;
+            currentTime = (float)Network.time + timeToIdle;
+            CheckIdle();
+        }
+        else if (!anim.GetCurrentAnimatorStateInfo(0).IsName("m_idle") && isIdle) {
+            isIdle = false;
+        }
+        if (isIdle) {
+            CheckIdle();
         }
     }
 
@@ -171,5 +188,23 @@ public class PlayerBehaviour : NetworkBehaviour
     [Command]
     void CmdStun(int effectDuration) {
         transform.GetComponent<PlayerStats>().Stun(effectDuration);
+    }
+
+    /// <summary>
+    /// Checks if the player has been idle for some time.
+    /// Play random 'Idle' animations that is the case.
+    /// </summary>
+    void CheckIdle() {
+        if ((float)Network.time > currentTime) {
+            int rand = Random.Range(1, 10);
+            if (rand <= 5) {
+                anim.SetTrigger("IdleLookAround");
+            }
+            else if (rand > 5) {
+                anim.SetTrigger("IdleScratchingHead");
+            }
+            rand = -1;
+            currentTime = (float)Network.time + timeToIdle;
+        }
     }
 }

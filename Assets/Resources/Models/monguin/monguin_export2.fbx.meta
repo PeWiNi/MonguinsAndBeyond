@@ -527,8 +527,6 @@ ModelImporter:
       transformMask:
       - path: 
         weight: 1
-      - path: monguin
-        weight: 1
       - path: monguin_Reference
         weight: 1
       - path: monguin_Reference/Character1_Hips
