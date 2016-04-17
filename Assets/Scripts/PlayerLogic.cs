@@ -243,4 +243,18 @@ public class PlayerLogic : NetworkBehaviour
             return ((float)Network.time - drownTimer) / drownTime;
         return 1;
     }
+    #region HUD Score stuff
+    void OnEnable() {
+        GetComponent<EventManager>().EventScoreChange += UpdateScoreInHUD;
+    }
+
+    // Just to make sure that we unsubscribe when the object is no longer in use
+    void OnDisable() {
+        GetComponent<EventManager>().EventScoreChange -= UpdateScoreInHUD;
+    }
+
+    void UpdateScoreInHUD(float team1, float team2) { // Should be isLocalPlayer but #cba it finally works
+        GameObject.Find("HUD").GetComponent<HUDScript>().UpdateDeathScore(team1, team2);
+    }
+    #endregion
 }

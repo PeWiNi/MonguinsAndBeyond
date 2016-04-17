@@ -52,8 +52,7 @@ public class ScoreManager : NetworkBehaviour {
         }
         RpcDeathCount();
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
-            go.GetComponent<EventManager>().RpcSendScoreEvent(teamOneDeathCount, teamTwoDeathCount);
-        //RpcSendScoreEvent(teamOneDeathCount, teamTwoDeathCount);
+            go.GetComponent<EventManager>().SendScoreEvent(teamOneDeathCount, teamTwoDeathCount);
     }
 
     /// <summary>

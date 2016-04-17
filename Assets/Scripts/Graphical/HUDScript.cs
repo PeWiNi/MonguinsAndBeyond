@@ -186,6 +186,10 @@ public class HUDScript : MonoBehaviour {
         pl = playerStats.GetComponent<PlayerLogic>();
         // Turn off world-space healthBar
         ps.GetComponentInChildren<Canvas>().enabled = false;
+        //ps.GetComponent<EventManager>().EventScoreChange += UpdateDeathScore;
+        //eventScript = ps.GetComponent<EventManager>();
+        //eventScript.EventScoreChange += UpdateDeathScore;
+        //EventManager.EventScoreChange += UpdateDeathScore;
         #region IconSwapping
         /*
         GetComponent<Canvas>().worldCamera = pl.GetComponentInChildren<Camera>().transform.GetChild(0).GetComponent<Camera>();
@@ -389,37 +393,32 @@ public class HUDScript : MonoBehaviour {
     }
     #endregion
 
-    void OnEnable() {
-        EventManager.EventScoreChange += UpdateDeathScore;
-    }
-
-    // Just to make sure that we unsubscribe when the object is no longer in use
-    void OnDisable() {
-        EventManager.EventScoreChange -= UpdateDeathScore;
-    }
-
     /// <summary>
     /// Method in charge of updating the score
     /// </summary>
     /// <param name="team1">Death count for Team 1</param>
     /// <param name="team2">Death count for Team 2</param>
-    void UpdateDeathScore(float team1, float team2) {
+    public void UpdateDeathScore(float team1, float team2) {
         Text[] textiez = transform.FindChild("ScoreBoard").GetComponentsInChildren<Text>();
         textiez[1].text = "Team 1: " + team1 + " deaths";
         textiez[2].text = "Team 2: " + team2 + " deaths";
     }
 
+    /// <summary>
+    /// Time when player connects to server
+    /// </summary>
+    /// <param name="time">NetworkTime - 'time since server started'</param>
     public void SetupTimer(double time) {
         //gameTimer = time;
-        StartCoroutine(LikeClockWork(time));
+        StartCoroutine(LikeClockWork(Time.time - time));
     }
 
     IEnumerator LikeClockWork(double time) {
         while(true) {
             yield return new WaitForSeconds(1);
-            float timez = (float)(Network.time - time);
-            float minute = Mathf.Floor(timez / 60);
-            float seconds = Mathf.Floor(timez % 60);
+            float timez = (float)(Time.time - time);
+            float minute = Mathf.Floor((float)timez / 60);
+            float seconds = Mathf.Floor((float)timez % 60);
             transform.FindChild("ScoreBoard").FindChild("Timer").GetComponent<Text>().text = string.Format("{0:00}:{1:00}", minute, seconds);
         }
     }

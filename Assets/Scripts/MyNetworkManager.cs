@@ -18,8 +18,8 @@ public class MyNetworkManager : NetworkManager {
         try { ScoreManager SM = GetComponentInChildren<ScoreManager>();
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
                 if (conn.clientOwnedObjects.Contains(go.GetComponent<NetworkIdentity>().netId)) {
-                    go.GetComponent<EventManager>().RpcSendScoreEvent(SM.teamOneDeathCount, SM.teamTwoDeathCount);
-                    go.GetComponent<PlayerStats>().SetServerInitTime(SM.initServerTime);
+                    go.GetComponent<EventManager>().SendScoreEvent(SM.teamOneDeathCount, SM.teamTwoDeathCount);
+                    go.GetComponent<PlayerStats>().RpcServerInitTime(Network.time - SM.initServerTime);
                     break;
                 }
         } catch { Debug.Log("No Score Manager found!"); }
