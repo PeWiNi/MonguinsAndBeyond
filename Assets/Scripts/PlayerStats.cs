@@ -148,12 +148,10 @@ public class PlayerStats : NetworkBehaviour {
 	void Update () {
         if (isDead) { // Send to co-routine?
             Color c = body.GetComponent<SkinnedMeshRenderer>().material.color;
-            if (((float)Network.time - deathTimer) > deathCooldown) {
+            if (((float)getServerTime() - deathTimer) > deathCooldown) {
                 foreach (Material m in body.GetComponent<SkinnedMeshRenderer>().materials)
                     m.color = new Color(c.r, c.g, c.b, 1f);
-                //if (isLocalPlayer) {
-                    Respawn();
-                //}
+                Respawn();
                 return;
             }
             health = 0;
@@ -161,22 +159,13 @@ public class PlayerStats : NetworkBehaviour {
             GetComponent<Animator>().SetBool("IsDead", true);
             foreach (Material m in body.GetComponent<SkinnedMeshRenderer>().materials)m.color = new Color(c.r, c.g, c.b, .2f);
             return;
-        } if (isStunned) {
+        } if (isStunned) 
             GetComponent<Rigidbody>().velocity = new Vector3();
-            if (stunTimer < Network.time) {
-                isStunned = false;
-            }
-        } if (isIncapacitated) {
-            if (incapacitatedTimer < Network.time) {
-                isIncapacitated = false;
-            }
-        } if (slowTime < Network.time) {
-            if (isSlowed) {
-                Slow(false);
-            }
-        } 
+
+        if (isServer)
+            ServerStateCheck();
         
-       TeamSelect();
+        TeamSelect();
         ApplyRole();
         StatSync();
 
@@ -185,15 +174,33 @@ public class PlayerStats : NetworkBehaviour {
         if (makeMap) { GenerateTerrain(); }
     }
 
+    void ServerStateCheck() {
+        if (isStunned) {
+            if (stunTimer < getServerTime()) {
+                isStunned = false;
+            }
+        }
+        if (isIncapacitated) {
+            if (incapacitatedTimer < getServerTime()) {
+                isIncapacitated = false;
+            }
+        }
+        if (slowTime < getServerTime()) {
+            if (isSlowed) {
+                Slow(false);
+            }
+        }
+    }
+
     public float deathTimeLeft() {
-        if (((float)Network.time - deathTimer) < deathCooldown)
-            return (float)Network.time - deathTimer;
+        if (((float)getServerTime() - deathTimer) < deathCooldown)
+            return (float)getServerTime() - deathTimer;
         return 1;
     }
 
     public float stunTimeLeft() {
-        if (stunTimer > Network.time)
-            return (float)(stunTimer - Network.time);
+        if (stunTimer > getServerTime())
+            return (float)(stunTimer - getServerTime());
         return 1;
     }
 
@@ -375,7 +382,6 @@ public class PlayerStats : NetworkBehaviour {
             ////´Stop Die Animation.
             GetComponent<Animator>().SetBool("IsDead", false);
         }
-        isDead = false;
         syncHealth = syncMaxHealth;
         transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
         GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
@@ -405,7 +411,7 @@ public class PlayerStats : NetworkBehaviour {
             ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
             SM.CountDeaths(team);
             isDead = true;
-            deathTimer = (float)Network.time;
+            deathTimer = (float)(getServerTime());
             syncHealth = 0;
         }
         RpcTakeDmg(amount * (1.0f - ((float)resilience / 100.0f)));
@@ -433,9 +439,12 @@ public class PlayerStats : NetworkBehaviour {
     public void Stun(float duration) {
         if (!isServer)
             return;
-        isStunned = true;
-        stunTimer = Network.time + duration;
-        RpcStunning(duration);
+        if (duration > 0) {
+            isStunned = true;
+            stunTimer = getServerTime() + duration;
+            RpcStunning(duration);
+        } else
+            isIncapacitated = false;
     }
     /// <summary>
     /// ONLY USE THIS ON SERVER
@@ -446,9 +455,12 @@ public class PlayerStats : NetworkBehaviour {
     public void Incapacitate(float duration) {
         if (!isServer)
             return;
-        isIncapacitated = true;
-        incapacitatedTimer = Network.time + duration;
-        RpcIncapacitating(duration);
+        if (duration > 0) {
+            isIncapacitated = true;
+            incapacitatedTimer = getServerTime() + duration;
+            RpcIncapacitating(duration);
+        } else
+            isIncapacitated = false;
     }
 
     public void Taunt(GameObject user, float duration) {
@@ -478,8 +490,8 @@ public class PlayerStats : NetworkBehaviour {
         if (!isServer)
             return;
         if (slow)
-            //slowTime = isSlowed ? Network.time : slowTime + time;
-            slowTime = Network.time + time;
+            //slowTime = isSlowed ? getServerTime() : slowTime + time;
+            slowTime = getServerTime() + time;
         isSlowed = slow;
     }
     /// <summary>
@@ -618,7 +630,6 @@ public class PlayerStats : NetworkBehaviour {
 
     [ClientRpc]
     public void RpcServerInitTime(double time) {
-        //serverInit = time;
         if (isLocalPlayer)
             GameObject.Find("HUD").GetComponent<HUDScript>().SetupTimer(time);
     }
@@ -638,5 +649,13 @@ public class PlayerStats : NetworkBehaviour {
 
     public bool CanIMove() {
         return !isDead && !isStunned && !isIncapacitated;
+    }
+
+    /// <summary>
+    /// Finally a networked time that actually works..
+    /// </summary>
+    /// <returns>The effin' difference in Network.time between you and the server</returns>
+    double getServerTime() {
+        return GetComponent<GameTime>().time;
     }
 }

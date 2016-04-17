@@ -32,8 +32,6 @@ public class HUDScript : MonoBehaviour {
     [SerializeField]
     Color highlightColor;
 
-    double gameTimer;
-
     CursorLockMode wantedMode;
     // Cast bar reference to ensure the correct bar is showing
     string currentText = "";
@@ -409,7 +407,6 @@ public class HUDScript : MonoBehaviour {
     /// </summary>
     /// <param name="time">NetworkTime - 'time since server started'</param>
     public void SetupTimer(double time) {
-        //gameTimer = time;
         StartCoroutine(LikeClockWork(Time.time - time));
     }
 
