@@ -15,6 +15,9 @@ public class Taunt : Ability {
     //public float damage = .01f;
 
     public override double Trigger() {
+        //Play Taunt Animation
+        GetComponent<Animator>().SetTrigger("CastTaunt");
+        GetComponent<Animator>().SetLayerWeight(1, 1f);
         Collider[] hitColliders = Physics.OverlapSphere((transform.localScale.y + .5f) * transform.up, range);
         TauntTargets(hitColliders);
         return base.Trigger();

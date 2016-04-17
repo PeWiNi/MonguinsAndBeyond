@@ -15,6 +15,9 @@ public class HealForce : Ability {
     public float heal = .05f;
 
     public override double Trigger() {
+        //Play HealForce Animation
+        GetComponent<Animator>().SetTrigger("CastHealForce");
+        GetComponent<Animator>().SetLayerWeight(1, 1f);
         healTics = GetComponent<SyncInventory>().HealForceBerryConsume();
         if(healTics >= 1) {
             Vector3 PointOfImpact = transform.position + (transform.localScale.y + .5f) * transform.up;

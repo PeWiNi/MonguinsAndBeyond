@@ -32,7 +32,7 @@ public class ThrowBoomnana : Ability
     }
 
     public void Throw(Vector3 pos) {
-        GetComponent<Animator>().SetTrigger("DeliverBOOMnana");
+        GetComponent<Animator>().SetTrigger("CastBOOMnana");
         GetComponent<Animator>().SetBool("IsAimingBOOMnana", false);
         GetComponent<Animator>().SetLayerWeight(1, 0f);
         //<--Insert BOOMnana animation that follows the hand of the monguin.

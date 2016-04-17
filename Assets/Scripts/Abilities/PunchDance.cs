@@ -14,7 +14,8 @@ public class PunchDance : Ability {
     public float thirdDmg = .05f;
 
     public override double Trigger() {
-        GetComponent<Animator>().SetTrigger("DeliverPunch");
+        //Play Punch Animation
+        GetComponent<Animator>().SetTrigger("CastPunch");
         GetComponent<Animator>().SetLayerWeight(1, 1f);
         Vector3 PointOfImpact = transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up;
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);

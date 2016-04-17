@@ -12,6 +12,9 @@ public class Fortify : Ability {
     public float effect = 20;
 
     public override double Trigger() {
+        //Play Fortify Animation
+        GetComponent<Animator>().SetTrigger("CastFortify");
+        GetComponent<Animator>().SetLayerWeight(1, 1f);
         CmdFortify(gameObject, duration);
         return base.Trigger();
     }

@@ -15,6 +15,9 @@ public class Puke : Ability {
     float triggerRate = 1;
 
     public override double Trigger() {
+        //Play Puke Animation
+        GetComponent<Animator>().SetTrigger("CastPuke");
+        GetComponent<Animator>().SetLayerWeight(1, 1f);
         StartCoroutine(GetComponent<Aim>().Pukey(this));
         return base.Trigger();
     }

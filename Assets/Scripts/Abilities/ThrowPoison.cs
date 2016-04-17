@@ -17,6 +17,9 @@ public class ThrowPoison : Ability {
     public float damage = 0.015f;
 
     public override double Trigger() {
+        //Play ThrowPoison Animation
+        GetComponent<Animator>().SetTrigger("CastThrowPoison");
+        GetComponent<Animator>().SetLayerWeight(1, 1f);
         if (!GetComponent<SyncInventory>().ThrowPoisonBerryConsume())
             return 0;
         if(GetComponent<Aim>().aiming) { Cancel(); return 0; }
