@@ -2,18 +2,7 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public enum PlayerState
-{
-    HitByBOOMnana,
-    HitByTailSlap,
-    HitByPunch,
-    HitByPuke,
-    HitByHealForce,
-    HitByThrowPoison,
-    HitByTaunt,
-    HitBySmash,
-    None
-}
+
 
 public class PlayerBehaviour : NetworkBehaviour
 {
@@ -43,6 +32,20 @@ public class PlayerBehaviour : NetworkBehaviour
     float currentTime = 0f;
     bool isIdle = false;
 
+    public enum PlayerState
+    {
+        HitByBOOMnana,
+        HitByTailSlap,
+        HitByPunch,
+        HitByPuke,
+        HitByHealForce,
+        HitByThrowPoison,
+        HitByTaunt,
+        HitBySmash,
+        None
+    }
+
+    [SyncVar]
     public PlayerState state;
 
     // Use this for initialization
@@ -88,39 +91,42 @@ public class PlayerBehaviour : NetworkBehaviour
             CheckIdle();
         }
         #endregion
+
         #region PlayerState Section
+        //if (!isLocalPlayer) {
         if (state == PlayerState.HitByBOOMnana) {
-            anim.SetTrigger(Animator.StringToHash("HitByBOOMnana"));
+            anim.SetTrigger("HitByBOOMnana");
             state = PlayerState.None;
         }
         if (state == PlayerState.HitByTailSlap) {
-            anim.SetTrigger(Animator.StringToHash("HitByTailSlap"));
+            anim.SetTrigger("HitByTailSlap");
             state = PlayerState.None;
         }
         if (state == PlayerState.HitByPunch) {
-            anim.SetTrigger(Animator.StringToHash("HitByPunch"));
+            anim.SetTrigger("HitByPunch");
             state = PlayerState.None;
         }
         if (state == PlayerState.HitByHealForce) {
-            anim.SetTrigger(Animator.StringToHash("HitByHealForce"));
+            anim.SetTrigger("HitByHealForce");
             state = PlayerState.None;
         }
         if (state == PlayerState.HitByPuke) {
-            anim.SetTrigger(Animator.StringToHash("HitByPuke"));
+            anim.SetTrigger("HitByPuke");
             state = PlayerState.None;
         }
         if (state == PlayerState.HitByThrowPoison) {
-            anim.SetTrigger(Animator.StringToHash("HitByThrowPoison"));
+            anim.SetTrigger("HitByThrowPoison");
             state = PlayerState.None;
         }
         if (state == PlayerState.HitByTaunt) {
-            anim.SetTrigger(Animator.StringToHash("HitByTaunt"));
+            anim.SetTrigger("HitByTaunt");
             state = PlayerState.None;
         }
         if (state == PlayerState.HitBySmash) {
-            anim.SetTrigger(Animator.StringToHash("HitBySmash"));
+            anim.SetTrigger("HitBySmash");
             state = PlayerState.None;
         }
+        //}
         #endregion
     }
 

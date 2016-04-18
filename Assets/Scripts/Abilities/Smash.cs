@@ -28,6 +28,7 @@ public class Smash : Ability {
         foreach (Collider c in hitColliders) {
             if (c.tag != "Player" || c.gameObject == gameObject) continue;
             if (c.GetComponentInParent<PlayerStats>().team != team) {
+                c.transform.GetComponentInParent<PlayerBehaviour>().state = PlayerBehaviour.PlayerState.HitBySmash;
                 // Stun
                 CmdStunPlayer(c.gameObject, stunDuration);
                 //Damage

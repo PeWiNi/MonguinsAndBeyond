@@ -172,8 +172,7 @@ public class Boomnana : NetworkBehaviour {
                 if (dist > innerRadius)  // If inside the radius (
                     dmg *= ((maxArea - (dist)) / (maxArea));
                 targetPS.TakeDmg(dmg);
-                _collider.transform.GetComponentInParent<PlayerBehaviour>().state = PlayerState.HitByBOOMnana;
-                print("_collider.transform.GetComponentInParent<PlayerBehaviour>().state " + _collider.transform.GetComponentInParent<PlayerBehaviour>().state);
+                _collider.transform.GetComponentInParent<PlayerBehaviour>().state = PlayerBehaviour.PlayerState.HitByBOOMnana;
             }
         }
         /*

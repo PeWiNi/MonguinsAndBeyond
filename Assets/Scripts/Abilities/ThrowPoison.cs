@@ -34,7 +34,6 @@ public class ThrowPoison : Ability {
 
     public void Cancel() {
         GetComponent<SyncInventory>().pickupBerry(Herb.Condition.Degenration);
-        //TODO: <--Quit aim state for ThrowPosion Animation
     }
 
     [Command]

@@ -48,6 +48,23 @@ public class PlayerLogic : NetworkBehaviour
     public bool isFlying;
     public bool isFlyingFrontHands;
 
+    public override void OnStartLocalPlayer() {
+        base.OnStartLocalPlayer();
+        int countParameters = GetComponent<NetworkAnimator>().animator.parameterCount;
+        print("Count Parameters Start Local Player = " + countParameters);
+        for (int i = 0; i < countParameters; i++) {
+            GetComponent<NetworkAnimator>().SetParameterAutoSend(i, true);
+        }
+    }
+
+    public override void PreStartClient() {
+        int countParameters = GetComponent<NetworkAnimator>().animator.parameterCount;
+        print("Count Parameters Pre Start Client = " + countParameters);
+        for (int i = 0; i < countParameters; i++) {
+            GetComponent<NetworkAnimator>().SetParameterAutoSend(i, true);
+        }
+    }
+
     void Start() {
         // Only enable sound and camera for player if it's the local player
         if (isLocalPlayer) {
