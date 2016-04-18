@@ -228,4 +228,16 @@ public class AttributeScript : MonoBehaviour {
 
         return distribution;
     }
+
+    public void LimitAttributes() { // use classifier for given attribute
+        Vector3 position;
+        int attLength = attributes.Split(';').Length;
+        int[] distribution = new int[attLength];
+        double[] dist = new double[attLength];
+        double total = 0;
+        for (int i = 0; i < distribution.Length; i++) { //Following line needs reverse-engineering for the sake of mapping values to the wheel
+            //dist[i] = System.Math.Sqrt(System.Math.Pow((attPoints[i].x - position.x), 2) + System.Math.Pow((attPoints[i].y - position.y), 2));
+            total += dist[i];
+        }
+    }
 }

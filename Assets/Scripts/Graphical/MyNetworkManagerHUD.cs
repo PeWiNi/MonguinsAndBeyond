@@ -2,7 +2,8 @@ using UnityEngine;
 using UnityEngine.Networking;
 public class MyNetworkManagerHUD : MonoBehaviour {
 	private NetworkManager manager;
-    private System.Collections.Hashtable attributes;
+    private int[] attributes;
+    //private System.Collections.Hashtable attributes;
     [SerializeField] public bool showGUI = true;
 	[SerializeField] public int offsetX;
 	[SerializeField] public int offsetY;
@@ -211,14 +212,14 @@ public class MyNetworkManagerHUD : MonoBehaviour {
             Attribute.SetActive(!hud);
         } catch {
             GameObject.Find("HUD").SetActive(hud);
-            GameObject.Find("attributeWheel").SetActive(!hud);
+            GameObject.Find("attributeSliders").SetActive(!hud);
         }
     }
 
     void fetchAttributes() {
-        try { attributes = Attribute.GetComponent<AttributeScript>().getAttributes(); } catch { attributes = GameObject.Find("attributeWheel").GetComponent<AttributeScript>().getAttributes(); }
+        try { attributes = Attribute.GetComponent<AttributeSliders>().getAttributes(); } catch { attributes = GameObject.Find("attributeSliders").GetComponent<AttributeSliders>().getAttributes(); }
     }
-    public System.Collections.Hashtable getAttributes() {
+    public int[] getAttributes() {
         return attributes;
     }
 }
