@@ -17,7 +17,6 @@ public class Taunt : Ability {
     public override double Trigger() {
         //Play Taunt Animation
         GetComponent<Animator>().SetTrigger("CastTaunt");
-        GetComponent<Animator>().SetLayerWeight(1, 1f);
         Collider[] hitColliders = Physics.OverlapSphere((transform.localScale.y + .5f) * transform.up, range);
         TauntTargets(hitColliders);
         return base.Trigger();
@@ -31,6 +30,7 @@ public class Taunt : Ability {
                 CmdTauntPlayer(c.gameObject, duration);
                 //Damage
                 //CmdDamagePlayer(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
+                //(Maybe)TODO: <-- Insert affected by taunt animation here (unless we do a check for this in another script).
             }
         }
     }

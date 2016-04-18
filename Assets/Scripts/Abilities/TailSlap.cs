@@ -10,7 +10,6 @@ public class TailSlap : Ability {
     
     public override double Trigger() {
         //Play TailSlap Animation
-        GetComponent<Animator>().SetLayerWeight(1, 1f);
         GetComponent<Animator>().SetTrigger("CastTailSlap");
         Vector3 PointOfImpact = transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up;
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
@@ -22,7 +21,6 @@ public class TailSlap : Ability {
                     break;
                 }
         }
-        //GetComponent<Animator>().SetLayerWeight(1, 0f);
         return base.Trigger();
     }
 }

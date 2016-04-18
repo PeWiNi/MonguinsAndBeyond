@@ -15,20 +15,20 @@ public class Puke : Ability {
     float triggerRate = 1;
 
     public override double Trigger() {
-        //Play Puke Animation
-        GetComponent<Animator>().SetTrigger("CastPuke");
-        GetComponent<Animator>().SetLayerWeight(1, 1f);
         StartCoroutine(GetComponent<Aim>().Pukey(this));
+        //TODO: <--Start the aim state for Puke Animation
         return base.Trigger();
     }
 
     public void Puking(Vector3 pos) {
+        //Play Puke Animation
+        GetComponent<Animator>().SetTrigger("CastPuke");
         StartCoroutine(Attack(pos));
         timer = (float)Network.time;
     }
 
     public void Cancel() {
-
+        //TODO: <--Quit aim state for Puke Animation
     }
 
     IEnumerator Attack(Vector3 pos) {

@@ -17,9 +17,6 @@ public class ThrowPoison : Ability {
     public float damage = 0.015f;
 
     public override double Trigger() {
-        //Play ThrowPoison Animation
-        GetComponent<Animator>().SetTrigger("CastThrowPoison");
-        GetComponent<Animator>().SetLayerWeight(1, 1f);
         if (!GetComponent<SyncInventory>().ThrowPoisonBerryConsume())
             return 0;
         if(GetComponent<Aim>().aiming) { Cancel(); return 0; }
@@ -28,13 +25,16 @@ public class ThrowPoison : Ability {
     }
 
     public void Throw(Vector3 pos) {
+        //Play ThrowPoison Animation
+        GetComponent<Animator>().SetTrigger("CastThrowPoison");
         CmdDoFire(pos);
         base.Trigger();
         timer = (float)Network.time;
     }
 
     public void Cancel() {
-        GetComponent<SyncInventory>().pickupBerry(Herb.Condition.Degenration); 
+        GetComponent<SyncInventory>().pickupBerry(Herb.Condition.Degenration);
+        //TODO: <--Quit aim state for ThrowPosion Animation
     }
 
     [Command]

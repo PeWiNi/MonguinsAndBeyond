@@ -18,7 +18,6 @@ public class Smash : Ability {
     public override double Trigger() {
         //Play Smash Animation
         GetComponent<Animator>().SetTrigger("CastSmash");
-        GetComponent<Animator>().SetLayerWeight(1, 1f);
         Vector3 PointOfImpact = transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up;
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
         Attack(hitColliders);
