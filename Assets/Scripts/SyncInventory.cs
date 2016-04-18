@@ -87,6 +87,11 @@ public class SyncInventory : NetworkBehaviour {
         NetworkServer.Spawn(particles);
     }
 
+    public void DropItem(string go, Vector3 position, float duration) {
+        GetComponent<Animator>().SetTrigger("Dropping");
+        CmdSpawnItem(go, position, duration);
+    }
+
     [Command]
     public void CmdSpawnItem(string go, Vector3 position, float duration) {
         Vector3 spawnPos = transform.position + ((transform.localScale.x * 2) * transform.forward);

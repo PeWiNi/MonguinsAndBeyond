@@ -359,7 +359,7 @@ public class HUDScript : MonoBehaviour {
                 item == "Sap" ? inventory.useSap() :
                 item == "Leaf" ? inventory.useLeaf() :
                 item.Substring(0, 5) == "Berry" ? inventory.useBerry(item) : false))
-                ps.GetComponent<SyncInventory>().CmdSpawnItem(item, new Vector3(), 0);
+                ps.GetComponent<SyncInventory>().DropItem(item, new Vector3(), 0);
 
                 // Banana Trap
                 else if (!OnCooldown(trap1Cooldown, trap1Timer) && item == "Banana" ? inventory.useBanana(1, false) : false)
