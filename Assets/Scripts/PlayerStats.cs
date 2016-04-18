@@ -381,10 +381,10 @@ public class PlayerStats : NetworkBehaviour {
             CmdRespawn();
             ////´Stop Die Animation.
             GetComponent<Animator>().SetBool("IsDead", false);
+            syncHealth = syncMaxHealth;
+            transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
+            GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
         }
-        syncHealth = syncMaxHealth;
-        transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
-        GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
     }
 
     /// <summary>
