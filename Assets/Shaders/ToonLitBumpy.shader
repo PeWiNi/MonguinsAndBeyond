@@ -3,11 +3,10 @@ Shader "Custom/Toon/BumpyLit" {
 		_Color ("Main Color", Color) = (0.5,0.5,0.5,1)
 		_MainTex ("Base (RGB)", 2D) = "white" {}
 		_BumpMap("Bumpmap", 2D) = "bump" {}
-		_Ramp ("Toon Ramp (RGB)", 2D) = "gray" {} 
+		_Ramp ("Toon Ramp (RGB)", 2D) = "gray" {}
 	}
 
 	SubShader {
-		//Tags{ "Queue" = "AlphaTest+50" "RenderType" = "Transparent" }
 		Tags{ "RenderType" = "Opaque" }
 		Pass{ ColorMask 0 }
 		LOD 200

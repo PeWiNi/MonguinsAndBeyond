@@ -132,8 +132,10 @@ public class Camouflage : NetworkBehaviour
     }
 
     void changeColor(float alpha) {
-        Color c = GetComponent<PlayerStats>().body.GetComponent<SkinnedMeshRenderer>().material.color;
-        foreach (Material m in GetComponent<PlayerStats>().body.GetComponent<SkinnedMeshRenderer>().materials) m.color = new Color(c.r, c.g, c.b, alpha);
+        PlayerStats ps = GetComponent<PlayerStats>();
+        ps.ChangeMaterial(alpha < 1);
+        Color c = ps.body.GetComponent<SkinnedMeshRenderer>().material.color;
+        ps.body.GetComponent<SkinnedMeshRenderer>().material.color = new Color(c.r, c.g, c.b, alpha);
     }
     #endregion
 

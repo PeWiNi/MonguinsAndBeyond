@@ -71,6 +71,14 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     bool makeMap = false;
 
+    public Material currentMaterial;
+    [SerializeField]
+    Material standardMat;
+    [SerializeField]
+    Material stealthMat;
+    public Material standardMaterial { get { return standardMat; } }
+    public Material stealthMaterial  { get { return stealthMat; } }
+
     //[SyncVar(hook = "SetServerInitTime")]
     //double serverInit;
     //[SyncVar]
@@ -141,23 +149,26 @@ public class PlayerStats : NetworkBehaviour {
             GetComponent<SyncInventory>().setInventory(hud.inventory);
             //} catch { }
         }
+        currentMaterial = standardMaterial;
         syncHealth = syncMaxHealth;
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (isDead) { // Send to co-routine?
-            Color c = body.GetComponent<SkinnedMeshRenderer>().material.color;
             if (((float)getServerTime() - deathTimer) > deathCooldown) {
-                foreach (Material m in body.GetComponent<SkinnedMeshRenderer>().materials)
-                    m.color = new Color(c.r, c.g, c.b, 1f);
+                ChangeMaterial(false);
                 Respawn();
                 return;
             }
             health = 0;
             //Play Die Animation.
             GetComponent<Animator>().SetBool("IsDead", true);
-            foreach (Material m in body.GetComponent<SkinnedMeshRenderer>().materials)m.color = new Color(c.r, c.g, c.b, .2f);
+            if (currentMaterial != stealthMat) {
+                ChangeMaterial(true);
+                Color c = body.GetComponent<SkinnedMeshRenderer>().material.color;
+                body.GetComponent<SkinnedMeshRenderer>().material.color = new Color(c.r, c.g, c.b, .2f);
+            }
             return;
         } if (isStunned) 
             GetComponent<Rigidbody>().velocity = new Vector3();
@@ -235,8 +246,6 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[0] = GetComponent<Smash>();
                 //  Fortify - temporarily increase health and resilience of the defender with 20% for 10 sec. CD:20sec
                 abilities[2] = GetComponent<Fortify>();
-                // Placeholder visual thing
-                body.GetComponent<SkinnedMeshRenderer>().material.color = Color.blue;
                 break;
             case (Role.Attacker):
                 roleStats = new RoleStats(0.85f, 0, 1.15f); //TODO: Calculate speed using the charts
@@ -252,10 +261,6 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[0] = GetComponent<TailSlap>();
                 //  Punch Dance - deals a stronger tail slap (3% of current health damage) that if it hits stuns the enemy for 2 sec and it's followed by 2 more tail slaps of 4% and 5% damage*current health. CD:20 sec
                 abilities[1] = GetComponent<PunchDance>();
-                // Placeholder visual thing
-                //body.GetComponent<SkinnedMeshRenderer>().material.color = Color.red;
-                //foreach(Material m in body.GetComponent<SkinnedMeshRenderer>().materials)
-                //    m.color = team == 1 ? Color.yellow : Color.blue;
                 break;
             case (Role.Supporter):
                 roleStats = new RoleStats(1f, 0, 1f);
@@ -270,11 +275,8 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[0] = GetComponent<ThrowPoison>();
                 //  Heal force - ability targets only friendly characters. Heals 50-250 HP over 3 sec depending on skill and herbs used in the ability. Max range 20 units. 1 herb heals instantly for 50HP, 2->4 herb heal over time (50 at first and 50 more for each 'tic'). No CD; instant application; requires herbs to cast
                 abilities[2] = GetComponent<HealForce>();
-                // Placeholder visual thing
-                //body.GetComponent<SkinnedMeshRenderer>().material.color = Color.green;
                 break;
             default:
-                body.GetComponent<SkinnedMeshRenderer>().material.color = Color.white;
                 abilities[0] = GetComponent<ShootBullet>();
                 abilities[1] = GetComponent<HealSelf>();
                 break;
@@ -657,5 +659,16 @@ public class PlayerStats : NetworkBehaviour {
     /// <returns>The effin' difference in Network.time between you and the server</returns>
     double getServerTime() {
         return GetComponent<GameTime>().time;
+    }
+
+    public void ChangeMaterial(bool stealth) {
+        if(stealth && currentMaterial != stealthMaterial) {
+            currentMaterial = stealthMaterial;
+            body.GetComponent<SkinnedMeshRenderer>().material = currentMaterial;
+        }
+        else if (currentMaterial != standardMaterial) {
+            currentMaterial = standardMaterial;
+            body.GetComponent<SkinnedMeshRenderer>().material = currentMaterial;
+        }
     }
 }
