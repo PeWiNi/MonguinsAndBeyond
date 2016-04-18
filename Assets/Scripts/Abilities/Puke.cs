@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
+
 /// <summary>
 /// Supporter
 /// Damaging Ranged AreaOfEffect Ability
@@ -22,7 +24,7 @@ public class Puke : Ability {
 
     public void Puking(Vector3 pos) {
         //Play Puke Animation
-        GetComponent<Animator>().SetTrigger("CastPuke");
+        GetComponent<NetworkAnimator>().SetTrigger("CastPuke");
         StartCoroutine(Attack(pos));
         timer = (float)Network.time;
     }

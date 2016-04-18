@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Supporter
@@ -16,7 +17,7 @@ public class HealForce : Ability {
 
     public override double Trigger() {
         //Play HealForce Animation
-        GetComponent<Animator>().SetTrigger("CastHealForce");
+        GetComponent<NetworkAnimator>().SetTrigger("CastHealForce");
         healTics = GetComponent<SyncInventory>().HealForceBerryConsume();
         if(healTics >= 1) {
             Vector3 PointOfImpact = transform.position + (transform.localScale.y + .5f) * transform.up;

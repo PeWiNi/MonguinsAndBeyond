@@ -26,7 +26,7 @@ public class ThrowPoison : Ability {
 
     public void Throw(Vector3 pos) {
         //Play ThrowPoison Animation
-        GetComponent<Animator>().SetTrigger("CastThrowPoison");
+        GetComponent<NetworkAnimator>().SetTrigger("CastThrowPoison");
         CmdDoFire(pos);
         base.Trigger();
         timer = (float)Network.time;

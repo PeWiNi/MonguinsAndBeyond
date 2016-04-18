@@ -10,7 +10,7 @@ public class TailSlap : Ability {
     
     public override double Trigger() {
         //Play TailSlap Animation
-        GetComponent<Animator>().SetTrigger("CastTailSlap");
+        GetComponent<NetworkAnimator>().SetTrigger("CastTailSlap");
         Vector3 PointOfImpact = transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up;
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
         //try { StartCoroutine(GetComponentInChildren<SlashEffect>().TailSlap()); } catch { }

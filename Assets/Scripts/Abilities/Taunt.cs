@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+
 /// <summary>
 /// Defender
 /// CrowdControlling AreaOfEffect ability
@@ -16,7 +17,7 @@ public class Taunt : Ability {
 
     public override double Trigger() {
         //Play Taunt Animation
-        GetComponent<Animator>().SetTrigger("CastTaunt");
+        GetComponent<NetworkAnimator>().SetTrigger("CastTaunt");
         Collider[] hitColliders = Physics.OverlapSphere((transform.localScale.y + .5f) * transform.up, range);
         TauntTargets(hitColliders);
         return base.Trigger();

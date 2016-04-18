@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Defender
@@ -17,7 +18,7 @@ public class Smash : Ability {
 
     public override double Trigger() {
         //Play Smash Animation
-        GetComponent<Animator>().SetTrigger("CastSmash");
+        GetComponent<NetworkAnimator>().SetTrigger("CastSmash");
         Vector3 PointOfImpact = transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up;
         Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
         Attack(hitColliders);
