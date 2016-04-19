@@ -113,21 +113,26 @@ public class AttributeSliders : MonoBehaviour {
     public Hashtable getAttributes() {
         Hashtable ht = new Hashtable();
         int i = 0;
-        foreach (int att in attributes)
-            ht.Add(transform.Find("Button (" + i++ + ")").GetComponent<Button>().GetComponentInChildren<Text>().text, att);
+        foreach (int att in attributes) 
+            ht.Add(GameObject.Find("Button (" + i++ + ")").GetComponent<Button>().GetComponentInChildren<Text>().text, att);
         return ht;
     }
 
     public void SetRole(int role) {
+        if(RoleSelection >= 0) SwapButtonColors(RoleSelection, role);
         RoleSelection = RoleSelection == role ? -1 : role;
-        Button roleButton = GameObject.Find("Button (" + role + ")").GetComponent<Button>();
-        ColorBlock cb = roleButton.colors;
-        cb.normalColor = RoleSelection == role ? cb.highlightedColor : cb.pressedColor;
-        roleButton.colors = cb;
+        SwapButtonColors(role, RoleSelection);
         if (RoleSelection >= 0) {
             sliders[RoleSelection].value = 100;
             RoleSliding(RoleSelection, RoleSelection);
         } else
             FreeModeSliding(role);
+    }
+
+    void SwapButtonColors(int roleSelected, int roleRequested) {
+        Button roleButton = GameObject.Find("Button (" + roleSelected + ")").GetComponent<Button>();
+        ColorBlock cb = roleButton.colors;
+        cb.normalColor = roleRequested == roleSelected ? cb.highlightedColor : cb.pressedColor;
+        roleButton.colors = cb;
     }
 }

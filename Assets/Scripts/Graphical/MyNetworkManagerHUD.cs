@@ -43,7 +43,7 @@ public class MyNetworkManagerHUD : MonoBehaviour {
         }
 		if (NetworkServer.active && NetworkClient.active) {
 			if (Input.GetKeyDown(KeyCode.X)) {
-				manager.StopHost();
+                X();
             }
         }
 	}
@@ -109,8 +109,8 @@ public class MyNetworkManagerHUD : MonoBehaviour {
 
 		if (NetworkServer.active || NetworkClient.active) {
 			if (GUI.Button(new Rect(xpos, ypos, 200, 20), "Stop (X)")) {
-				manager.StopHost();
-			}
+                X();
+            }
 			ypos += spacing;
 		}
         #region Matchmaking stuff
@@ -206,6 +206,11 @@ public class MyNetworkManagerHUD : MonoBehaviour {
         manager.StartServer();
     }
 
+    void X() { //Stop
+        manager.StopHost();
+        swapMenus(false);
+    }
+
     void swapMenus(bool hud) {
         try {
             HUD.SetActive(hud);
@@ -217,7 +222,7 @@ public class MyNetworkManagerHUD : MonoBehaviour {
     }
 
     void fetchAttributes() {
-        //try { attributes = Attribute.GetComponent<AttributeSliders>().getAttributes(); } catch { attributes = GameObject.Find("attributeSliders").GetComponent<AttributeSliders>().getAttributes(); }
+        try { attributes = Attribute.GetComponent<AttributeSliders>().getAttributes(); } catch { attributes = GameObject.Find("attributeSliders").GetComponent<AttributeSliders>().getAttributes(); }
     }
     public System.Collections.Hashtable getAttributes() {
         return attributes;

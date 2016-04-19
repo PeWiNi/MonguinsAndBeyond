@@ -10,6 +10,7 @@ using UnityEngine.Networking;
 /// Ties with SyncInventory.HealForceBerryConsume()
 /// </summary>
 public class HealForce : Ability {
+    public GameObject prefab;// = Resources.Load("Prefabs/Bullet") as GameObject;
     public float impactRadius = 20;
     int healTics = 0;
     [Range(0, 1)]
@@ -20,6 +21,7 @@ public class HealForce : Ability {
         GetComponent<NetworkAnimator>().SetTrigger("CastHealForce");
         healTics = GetComponent<SyncInventory>().HealForceBerryConsume();
         if(healTics >= 1) {
+            CmdSpawnHeal();
             Vector3 PointOfImpact = transform.position + (transform.localScale.y + .5f) * transform.up;
             Collider[] hitColliders = Physics.OverlapSphere(PointOfImpact, impactRadius);
             foreach (Collider c in hitColliders) {
@@ -33,5 +35,15 @@ public class HealForce : Ability {
             }
             return base.Trigger();
         } return 0;
+    }
+
+    [Command]
+    void CmdSpawnHeal() {
+        // Initiate GameObject using prefab, position and a rotation
+        GameObject bullet = (GameObject)Instantiate(prefab, transform.position, Quaternion.identity);
+
+        Destroy(bullet, 5); // Add whatever number fits the time of the thing
+        // Spawn GameObject on Server
+        NetworkServer.Spawn(bullet);
     }
 }

@@ -92,13 +92,19 @@ public class PlayerStats : NetworkBehaviour {
 
     public struct RoleStats {
         public float maxHealth;
-        public int resilience;
         public float speed;
+        public int resilience;
+        public int wisdom;
+        public int agility;
 
-        public RoleStats(float mHp, int resi, float spd) {
+        public RoleStats(int resi, int wis, int agi) {
+            float mHp = 1f; // Do resilience & agi math
+            float spd = 1f;
             maxHealth = mHp;
             resilience = resi;
             speed = spd;
+            wisdom = wis;
+            agility = agi;
         }
     }
 
@@ -128,7 +134,7 @@ public class PlayerStats : NetworkBehaviour {
             #region Loading attributes and determining Role
             // Load Attributes set before entering game
             MyNetworkManagerHUD NM = GameObject.Find("NetworkManager").GetComponent<MyNetworkManagerHUD>();
-            /*
+
             attributes = NM.getAttributes();
             // Check for highest value
             DictionaryEntry max = new DictionaryEntry("s", 0);
@@ -140,10 +146,6 @@ public class PlayerStats : NetworkBehaviour {
             if ((int)max.Value > (100 / attributes.Count) + 5) {
                 role = determineRole((string)max.Key);
             } else role = Role.Basic;
-            */ //Kept in case other roles are wanted
-            //role = Role.Attacker;
-            role = Role.Supporter;
-            //role = Role.Defender;
             #endregion
             //CmdTeamSelection(NM.team);
             CmdTeamSelection(NM.team > 0 ? NM.team : team);
@@ -241,8 +243,8 @@ public class PlayerStats : NetworkBehaviour {
         abilities = new Ability[3];
         switch (role) {
             case (Role.Defender):
-                roleStats = new RoleStats(1.3f, (int)Mathf.Ceil(0.2f * (int)attributes["DEF"]), 0.80f);
-                if (isLocalPlayer) {
+                roleStats = new RoleStats((int)attributes["DEF"], (int)attributes["SUP"], (int)attributes["ATT"]);
+                if (isLocalPlayer) { // Weird health 
                     CmdProvideStats(roleStats.maxHealth, roleStats.resilience, roleStats.speed);
                     SetStats(roleStats.resilience, roleStats.speed);
                 }
@@ -254,7 +256,7 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[2] = GetComponent<Fortify>();
                 break;
             case (Role.Attacker):
-                roleStats = new RoleStats(0.85f, 0, 1.15f); //TODO: Calculate speed using the charts
+                roleStats = new RoleStats((int)attributes["DEF"], (int)attributes["SUP"], (int)attributes["ATT"]); //TODO: Calculate speed using the charts
                 if (isLocalPlayer) {
                     CmdProvideStats(roleStats.maxHealth, roleStats.resilience, roleStats.speed);
                     SetStats(roleStats.resilience, roleStats.speed);
@@ -269,7 +271,7 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[1] = GetComponent<PunchDance>();
                 break;
             case (Role.Supporter):
-                roleStats = new RoleStats(1f, 0, 1f);
+                roleStats = new RoleStats((int)attributes["DEF"], (int)attributes["SUP"], (int)attributes["ATT"]);
                 if (isLocalPlayer) {
                     CmdProvideStats(roleStats.maxHealth, roleStats.resilience, roleStats.speed);
                     SetStats(roleStats.resilience, roleStats.speed);
@@ -283,9 +285,8 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[2] = GetComponent<HealForce>();
                 break;
             default:
-                abilities[0] = GetComponent<ShootBullet>();
-                abilities[1] = GetComponent<HealSelf>();
-                break;
+                // Instead we should do the freeMode player stuff here
+                goto case Role.Attacker;
         }
         gameObject.GetComponent<Rigidbody>().transform.localScale = new Vector3(sizeModifier, sizeModifier, sizeModifier);
         //gameObject.GetComponent<Rigidbody>().transform.localScale *= sizeModifier; // Applies on others
