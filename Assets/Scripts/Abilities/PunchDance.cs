@@ -30,7 +30,8 @@ public class PunchDance : Ability {
             // Push
             CmdPushPlayer(c.gameObject, (transform.up * 5) + (transform.forward * distance));
             if (c.GetComponentInParent<PlayerStats>().team != team) {
-                c.transform.GetComponentInParent<PlayerBehaviour>().state = PlayerBehaviour.PlayerState.HitByPunch;
+                // Set PlayerState to HitByPunch
+                CmdHitPlayerAnimation(c.gameObject, PlayerBehaviour.PlayerState.HitByPunch);
                 // Stun
                 CmdStunPlayer(c.gameObject, stunDuration);
                 //Damage

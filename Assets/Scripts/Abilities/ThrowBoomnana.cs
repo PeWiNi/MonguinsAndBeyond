@@ -25,19 +25,19 @@ public class ThrowBoomnana : Ability
 
     public override double Trigger() {
         StartCoroutine(GetComponent<Aim>().Boomy(this));
-        GetComponent<Animator>().SetTrigger("Aim");
+        GetComponent<NetworkAnimator>().SetTrigger("Aim");
         //CmdDoFire(new Vector3());
         return base.Trigger();
     }
 
     public void Throw(Vector3 pos) {
-        GetComponent<Animator>().SetTrigger("CastBOOMnana");
+        GetComponent<NetworkAnimator>().SetTrigger("CastBOOMnana");
         CmdDoFire(pos);
         timer = (float)Network.time;
     }
 
     public void Cancel() {
-        GetComponent<Animator>().SetTrigger("CancelAim");
+        GetComponent<NetworkAnimator>().SetTrigger("CancelAim");
     }
 
     [Command]

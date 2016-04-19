@@ -27,7 +27,8 @@ public class Taunt : Ability {
         foreach (Collider c in hitColliders) {
             if (c.tag != "Player" || c.gameObject == gameObject) continue;
             if (c.GetComponentInParent<PlayerStats>().team != team) {
-                c.transform.GetComponentInParent<PlayerBehaviour>().state = PlayerBehaviour.PlayerState.HitByTaunt;
+                // Set PlayerState to HitByTaunt
+                CmdHitPlayerAnimation(c.gameObject, PlayerBehaviour.PlayerState.HitByTaunt);
                 // Stun
                 CmdTauntPlayer(c.gameObject, duration);
                 //Damage

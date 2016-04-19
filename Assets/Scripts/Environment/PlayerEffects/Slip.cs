@@ -6,18 +6,20 @@ public class Slip : NetworkBehaviour
 {
     public bool isSlipping = false;
     float thrust = 0f;
+    Animator animLocal;
 
     /// <summary>
     /// Player slipped
     /// </summary>
     /// <param name="effectDuration"></param>
     /// <param name="thrust"></param>
-    public void PlayerSlipped(int effectDuration, float thrust)
-    {
+    public void PlayerSlipped(int effectDuration, float thrust) {
         if (!isLocalPlayer || isServer)
             return;
-        if (!isSlipping)
-        {
+        if (!isSlipping) {
+            if (animLocal == null)
+                animLocal = GetComponent<Animator>();
+            animLocal.SetBool("AffectedByBananaPeelTrap", true);
             this.thrust = thrust;
             StartCoroutine(Slipping(effectDuration, thrust));
         }
@@ -31,6 +33,7 @@ public class Slip : NetworkBehaviour
             yield return new WaitForSeconds(1f);
             effectDuration--;
         }
+        animLocal.SetBool("AffectedByBananaPeelTrap", false);
         isSlipping = false;
     }
 

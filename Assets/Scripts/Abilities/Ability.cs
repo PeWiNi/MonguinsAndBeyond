@@ -81,6 +81,11 @@ public class Ability : NetworkBehaviour {
         player.GetComponent<PlayerLogic>().PushMe(force);
     }
 
+    [Command]
+    internal void CmdHitPlayerAnimation(GameObject player, PlayerBehaviour.PlayerState playerState) {
+        player.GetComponent<PlayerBehaviour>().state = playerState;
+    }
+
     public bool OnCooldown() {
         return ((float)Network.time - timer) < cooldown;
     }

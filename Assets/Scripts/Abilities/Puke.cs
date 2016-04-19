@@ -8,7 +8,8 @@ using UnityEngine.Networking;
 /// 
 /// Puke - (the old puke, does the same thing) stuns all enemies in range, has about 2 units distance units in range. Channeled 3 sec; CD:5 sec
 /// </summary>
-public class Puke : Ability {
+public class Puke : Ability
+{
     public float distance;
     public float impactRadius;
     public float stunDuration = 0.0f;
@@ -41,7 +42,8 @@ public class Puke : Ability {
             foreach (Collider c in hitColliders) {
                 if (c.tag != "Player" || c.gameObject == gameObject) continue;
                 if (c.GetComponentInParent<PlayerStats>().team != team) {
-                    c.transform.GetComponentInParent<PlayerBehaviour>().state = PlayerBehaviour.PlayerState.HitByPuke;
+                    // Set PlayerState to HitByPuke
+                    CmdHitPlayerAnimation(c.gameObject, PlayerBehaviour.PlayerState.HitByPuke);
                     // Stun
                     CmdStunPlayer(c.gameObject, stunDuration);
                     //Damage

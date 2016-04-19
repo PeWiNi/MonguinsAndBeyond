@@ -18,7 +18,9 @@ public class TailSlap : Ability {
             if(hit.tag == "Player")
                 if (hit.GetComponentInParent<PlayerStats>().team != team) {
                     CmdDamagePlayer(hit.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
-                    hit.transform.GetComponentInParent<PlayerBehaviour>().state = PlayerBehaviour.PlayerState.HitByTailSlap;
+                    // Set PlayerState to HitByTailSlap
+                    CmdHitPlayerAnimation(hit.gameObject, PlayerBehaviour.PlayerState.HitByTailSlap);
+                    //hit.transform.GetComponentInParent<PlayerBehaviour>().state = PlayerBehaviour.PlayerState.HitByTailSlap;
                     break;
                 }
         }

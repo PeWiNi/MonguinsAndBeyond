@@ -30,7 +30,7 @@ public class PlayerBehaviour : NetworkBehaviour
     //Idle state variables.
     public float timeToIdle = 10.0f; //10 seconds
     float currentTime = 0f;
-    bool isIdle = false;
+    public bool isIdle = false;
 
     public enum PlayerState
     {
@@ -97,34 +97,42 @@ public class PlayerBehaviour : NetworkBehaviour
         if (state == PlayerState.HitByBOOMnana) {
             anim.SetTrigger("HitByBOOMnana");
             state = PlayerState.None;
+            isIdle = false;
         }
         if (state == PlayerState.HitByTailSlap) {
             anim.SetTrigger("HitByTailSlap");
             state = PlayerState.None;
+            isIdle = false;
         }
         if (state == PlayerState.HitByPunch) {
             anim.SetTrigger("HitByPunch");
             state = PlayerState.None;
+            isIdle = false;
         }
         if (state == PlayerState.HitByHealForce) {
             anim.SetTrigger("HitByHealForce");
             state = PlayerState.None;
+            isIdle = false;
         }
         if (state == PlayerState.HitByPuke) {
             anim.SetTrigger("HitByPuke");
             state = PlayerState.None;
+            isIdle = false;
         }
         if (state == PlayerState.HitByThrowPoison) {
             anim.SetTrigger("HitByThrowPoison");
             state = PlayerState.None;
+            isIdle = false;
         }
         if (state == PlayerState.HitByTaunt) {
             anim.SetTrigger("HitByTaunt");
             state = PlayerState.None;
+            isIdle = false;
         }
         if (state == PlayerState.HitBySmash) {
             anim.SetTrigger("HitBySmash");
             state = PlayerState.None;
+            isIdle = false;
         }
         //}
         #endregion
@@ -223,6 +231,8 @@ public class PlayerBehaviour : NetworkBehaviour
             lastPosition = transform.position;
             print("Moved!");
             GetComponent<PlayerStats>().TakeDmg(GetComponent<PlayerStats>().maxHealth * (damage + ((float)(Network.time - enterTime) / 1000)));
+            //gameObject.GetComponent<Animator>().SetBool("AffectedBySpikeTrap", true);
+            gameObject.GetComponent<NetworkAnimator>().SetTrigger("AffectedBySpikeTrapTrigger");
         }
     }
 

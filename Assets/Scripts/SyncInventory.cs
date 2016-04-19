@@ -88,7 +88,7 @@ public class SyncInventory : NetworkBehaviour {
     }
 
     public void DropItem(string go, Vector3 position, float duration) {
-        GetComponent<Animator>().SetTrigger("Dropping");
+        GetComponent<NetworkAnimator>().SetTrigger("Dropping");
         CmdSpawnItem(go, position, duration);
     }
 

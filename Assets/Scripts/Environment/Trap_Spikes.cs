@@ -27,6 +27,7 @@ public class Trap_Spikes : Trap
 
     void OnTriggerExit(Collider _col) {
         if (_col.tag == "Player") {
+            //_col.gameObject.GetComponent<Animator>().SetBool("AffectedBySpikeTrap", false);
             DecrementTrigger();
         }
     }

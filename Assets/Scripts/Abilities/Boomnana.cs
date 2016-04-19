@@ -14,7 +14,7 @@ using UnityEngine.Networking;
 /// 
 /// This script is tied to the Scripts/Abilities/ThrowBoomnana.cs
 /// </summary>
-public class Boomnana : NetworkBehaviour {
+public class Boomnana : Ability {
     float damage;
     public GameObject owner;
     float speed;
@@ -172,7 +172,9 @@ public class Boomnana : NetworkBehaviour {
                 if (dist > innerRadius)  // If inside the radius (
                     dmg *= ((maxArea - (dist)) / (maxArea));
                 targetPS.TakeDmg(dmg);
-                _collider.transform.GetComponentInParent<PlayerBehaviour>().state = PlayerBehaviour.PlayerState.HitByBOOMnana;
+                // Set PlayerState to HitByBOOMnana
+                CmdHitPlayerAnimation(_collider.transform.parent.gameObject, PlayerBehaviour.PlayerState.HitByBOOMnana);
+                //_collider.transform.GetComponentInParent<PlayerBehaviour>().state = PlayerBehaviour.PlayerState.HitByBOOMnana;
             }
         }
         /*
