@@ -3,12 +3,22 @@ using System.Collections;
 using UnityEngine.Networking;
 
 public class RotateMe : NetworkBehaviour {
+    [SyncVar]
     public float x = 0;
+    [SyncVar]
     public float y = 0;
+    [SyncVar]
     public float z = 0;
 
 	// Use this for initialization
 	void Start () {
         transform.rotation = Quaternion.Euler(x, y, z);
+    }
+
+    public void SetRotation(Quaternion rot) {
+        x = rot.eulerAngles.x;
+        y = rot.eulerAngles.y;
+        z = rot.eulerAngles.z;
+        transform.rotation = rot;
     }
 }

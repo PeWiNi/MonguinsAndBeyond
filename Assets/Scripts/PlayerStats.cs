@@ -110,6 +110,12 @@ public class PlayerStats : NetworkBehaviour {
                 return Role.Attacker;
             case "SUP":
                 return Role.Supporter;
+            case "RES":
+                return Role.Defender;
+            case "AGI":
+                return Role.Attacker;
+            case "WIS":
+                return Role.Supporter;
             default:
                 return Role.Basic;
         }
@@ -135,8 +141,8 @@ public class PlayerStats : NetworkBehaviour {
                 role = determineRole((string)max.Key);
             } else role = Role.Basic;
             */ //Kept in case other roles are wanted
-            role = Role.Attacker;
-            //role = Role.Supporter;
+            //role = Role.Attacker;
+            role = Role.Supporter;
             //role = Role.Defender;
             #endregion
             //CmdTeamSelection(NM.team);

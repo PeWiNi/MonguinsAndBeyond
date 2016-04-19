@@ -46,6 +46,8 @@ public class ThrowPoison : Ability {
         Vector3 pos = endPos == new Vector3() ? (transform.position + (transform.forward * distance)) : endPos;
         // Pass correct parameters from the Player Prefab
         bullet.GetComponent<PoisonDart>().setup(GetComponent<PlayerStats>(), damage, pos);
+        bullet.transform.LookAt(endPos);
+        bullet.GetComponent<PoisonDart>().SetRotation(bullet.transform.rotation);
 
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);

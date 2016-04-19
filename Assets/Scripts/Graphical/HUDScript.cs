@@ -41,14 +41,16 @@ public class HUDScript : MonoBehaviour {
         playerUI = transform.FindChild("Player").gameObject;
         healthText = playerUI.GetComponentInChildren<Text>();
         healthSlider = playerUI.gameObject.GetComponentInChildren<Slider>();
-        actionBar = transform.FindChild("ActionBar").gameObject;
-        ability1 = actionBar.GetComponentsInChildren<Image>()[1]; // index 0 is the picture behind index 1
-        ability2 = actionBar.GetComponentsInChildren<Image>()[3];
-        ability3 = actionBar.GetComponentsInChildren<Image>()[5];
 
-        trap1 = actionBar.GetComponentsInChildren<Image>()[7];
-        trap2 = actionBar.GetComponentsInChildren<Image>()[9];
-        trap3 = actionBar.GetComponentsInChildren<Image>()[11];
+        actionBar = transform.FindChild("ActionBar").gameObject; // index 0 is background
+        ability1 = actionBar.GetComponentsInChildren<Image>()[2]; // index 1 is the picture behind index 2
+        ability2 = actionBar.GetComponentsInChildren<Image>()[4]; // index 3 is the picture behind index 4
+        ability3 = actionBar.GetComponentsInChildren<Image>()[6]; // index 5 is the picture behind index 6
+        // index 7 is border
+        trap1 = actionBar.GetComponentsInChildren<Image>()[9]; // index 8 is the picture behind index 9
+        trap2 = actionBar.GetComponentsInChildren<Image>()[11]; // index 10 is the picture behind index 11
+        trap3 = actionBar.GetComponentsInChildren<Image>()[13]; // index 12 is the picture behind index 13
+
         inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
         castBar = transform.FindChild("CastBar").GetComponent<Slider>();
         castBar.gameObject.SetActive(false);

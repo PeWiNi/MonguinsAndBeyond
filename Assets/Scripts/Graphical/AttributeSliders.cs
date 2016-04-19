@@ -18,6 +18,11 @@ public class AttributeSliders : MonoBehaviour {
     void Update() {
     }
 
+    public void TextToSlider(int slider) {
+        sliders[slider].value = int.Parse(GameObject.Find("InputField (" + slider + ")").GetComponent<InputField>().text);
+        SliderDragging(slider);
+    }
+
     public void SliderDragging(int slider) {
         if (RoleSelection < 0)
             FreeModeSliding(slider);
@@ -48,94 +53,81 @@ public class AttributeSliders : MonoBehaviour {
         }
     }
 
-    void RoleSliding(int role, int slider) {
+    void RoleSliding(int main, int secondary, int minor, int slider) {
         float points = 100;
+        if (slider == main) {
+            sliders[main].value = Mathf.Clamp(sliders[main].value, 65, 100);
+            points -= sliders[main].value;
+            sliders[secondary].value = Mathf.Clamp(sliders[secondary].value, 0, Mathf.Clamp(35, 0, points));
+            points -= sliders[secondary].value;
+            sliders[minor].value = Mathf.Clamp(sliders[minor].value, points, Mathf.Clamp(10, 0, points));
+        }
+        if (slider == secondary) {
+            sliders[secondary].value = Mathf.Clamp(sliders[secondary].value, 0, 35);
+            points -= sliders[secondary].value;
+            if (sliders[main].value >= 75) {
+                sliders[minor].value = Mathf.Clamp(sliders[minor].value, 0, Mathf.Clamp(10, 0, points));
+                points -= sliders[minor].value;
+                sliders[main].value = Mathf.Clamp(sliders[main].value, 65, Mathf.Clamp(100, 65, points));
+            } else {
+                sliders[main].value = Mathf.Clamp(sliders[main].value, 65, Mathf.Clamp(100, 65, points));
+                points -= sliders[main].value;
+                sliders[minor].value = Mathf.Clamp(sliders[minor].value, points, Mathf.Clamp(10, 0, points));
+            }
+        }
+        if (slider == minor) {
+            sliders[minor].value = Mathf.Clamp(sliders[minor].value, 0, 10);
+            points -= sliders[minor].value;
+            if (sliders[main].value >= 75) {
+                sliders[secondary].value = Mathf.Clamp(sliders[secondary].value, 0, Mathf.Clamp(35, 0, points));
+                points -= sliders[secondary].value;
+                sliders[main].value = Mathf.Clamp(sliders[main].value, 65, Mathf.Clamp(100, 65, points));
+            } else {
+                sliders[main].value = Mathf.Clamp(sliders[main].value, 65, Mathf.Clamp(100, 65, points));
+                points -= sliders[main].value;
+                sliders[secondary].value = Mathf.Clamp(sliders[secondary].value, points, Mathf.Clamp(35, 0, points));
+            }
+        }
+    }
+
+    void RoleSliding(int role, int slider) {
         switch (role) {
             case (0):
-                if(slider == 0) {
-                    sliders[0].value = Mathf.Clamp(sliders[0].value, 65, 100);
-                    points -= sliders[0].value;
-                    sliders[1].value = Mathf.Clamp(sliders[1].value, 0, Mathf.Clamp(35, 0, points));
-                    points -= sliders[1].value;
-                    sliders[2].value = Mathf.Clamp(sliders[2].value, points, Mathf.Clamp(10, 0, points));
-                } if(slider == 1) {
-                    sliders[1].value = Mathf.Clamp(sliders[1].value, 0, 35);
-                    points -= sliders[1].value;
-                    sliders[0].value = Mathf.Clamp(sliders[0].value, 65, Mathf.Clamp(100, 65, points));
-                    points -= sliders[0].value;
-                    sliders[2].value = Mathf.Clamp(sliders[2].value, points, Mathf.Clamp(10, 0, points));
-                } if(slider == 2) {
-                    sliders[2].value = Mathf.Clamp(sliders[2].value, 0, 10);
-                    points -= sliders[2].value;
-                    sliders[0].value = Mathf.Clamp(sliders[0].value, 65, Mathf.Clamp(100, 65, points));
-                    points -= sliders[0].value;
-                    sliders[1].value = Mathf.Clamp(sliders[1].value, points, Mathf.Clamp(35, 0, points));
-                }
+                RoleSliding(0, 1, 2, slider);
                 break;
             case (1):
-                if (slider == 1) {
-                    sliders[1].value = Mathf.Clamp(sliders[1].value, 65, 100);
-                    points -= sliders[1].value;
-                    sliders[2].value = Mathf.Clamp(sliders[2].value, 0, Mathf.Clamp(35, 0, points));
-                    points -= sliders[2].value;
-                    sliders[0].value = Mathf.Clamp(sliders[0].value, points, Mathf.Clamp(10, 0, points));
-                }
-                if (slider == 2) {
-                    sliders[2].value = Mathf.Clamp(sliders[2].value, 0, 35);
-                    points -= sliders[2].value;
-                    sliders[1].value = Mathf.Clamp(sliders[1].value, 65, Mathf.Clamp(100, 65, points));
-                    points -= sliders[1].value;
-                    sliders[0].value = Mathf.Clamp(sliders[0].value, points, Mathf.Clamp(10, 0, points));
-                }
-                if (slider == 0) {
-                    sliders[0].value = Mathf.Clamp(sliders[0].value, 0, 10);
-                    points -= sliders[0].value;
-                    sliders[1].value = Mathf.Clamp(sliders[1].value, 65, Mathf.Clamp(100, 65, points));
-                    points -= sliders[1].value;
-                    sliders[2].value = Mathf.Clamp(sliders[2].value, points, Mathf.Clamp(35, 0, points));
-                }
+                RoleSliding(1, 2, 0, slider);
                 break;
             case (2):
-                if (slider == 2) {
-                    sliders[2].value = Mathf.Clamp(sliders[2].value, 65, 100);
-                    points -= sliders[2].value;
-                    sliders[0].value = Mathf.Clamp(sliders[0].value, 0, Mathf.Clamp(35, 0, points));
-                    points -= sliders[0].value;
-                    sliders[1].value = Mathf.Clamp(sliders[1].value, points, Mathf.Clamp(10, 0, points));
-                }
-                if (slider == 0) {
-                    sliders[0].value = Mathf.Clamp(sliders[0].value, 0, 35);
-                    points -= sliders[0].value;
-                    sliders[2].value = Mathf.Clamp(sliders[2].value, 65, Mathf.Clamp(100, 65, points));
-                    points -= sliders[2].value;
-                    sliders[1].value = Mathf.Clamp(sliders[1].value, points, Mathf.Clamp(10, 0, points));
-                }
-                if (slider == 1) {
-                    sliders[1].value = Mathf.Clamp(sliders[1].value, 0, 10);
-                    points -= sliders[1].value;
-                    sliders[2].value = Mathf.Clamp(sliders[2].value, 65, Mathf.Clamp(100, 65, points));
-                    points -= sliders[2].value;
-                    sliders[0].value = Mathf.Clamp(sliders[0].value, points, Mathf.Clamp(35, 0, points));
-                }
+                RoleSliding(2, 0, 1, slider);
                 break;
             default:
                 FreeModeSliding(slider);
                 break;
-        } for (int i = 0; i< sliders.Length; i++) {
+        } for (int i = 0; i < sliders.Length; i++) {
             attributes[i] = (int)Mathf.Ceil(sliders[i].value);
             texts[i].text = "" + attributes[i];
         }
     }
 
-    public int[] getAttributes() {
-        return attributes;
+    public Hashtable getAttributes() {
+        Hashtable ht = new Hashtable();
+        int i = 0;
+        foreach (int att in attributes)
+            ht.Add(transform.Find("Button (" + i++ + ")").GetComponent<Button>().GetComponentInChildren<Text>().text, att);
+        return ht;
     }
 
     public void SetRole(int role) {
         RoleSelection = RoleSelection == role ? -1 : role;
+        Button roleButton = GameObject.Find("Button (" + role + ")").GetComponent<Button>();
+        ColorBlock cb = roleButton.colors;
+        cb.normalColor = RoleSelection == role ? cb.highlightedColor : cb.pressedColor;
+        roleButton.colors = cb;
         if (RoleSelection >= 0) {
             sliders[RoleSelection].value = 100;
             RoleSliding(RoleSelection, RoleSelection);
-        }
+        } else
+            FreeModeSliding(role);
     }
 }
