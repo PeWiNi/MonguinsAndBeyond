@@ -19,6 +19,7 @@ public class Camouflage : NetworkBehaviour
     public float visibilityRangeRadius = 20f;// This should be affected based on the values of the Role selected (Supportor, Defender, Attacker).
     [SerializeField]
     public float stealthDuration = 15f;
+    float stealthFromAgility = 0f;
     [SyncVar]
     Vector3 camouflagePosition;
     [SyncVar]
@@ -55,11 +56,16 @@ public class Camouflage : NetworkBehaviour
         }
         //Should Check whether the Player has moved or used and Ability.
         if (!movementLeeway() && !hasMovedFromCamouflagePoint && pickedUpTime + pickUpDelay < Network.time) {
-            duration = stealthDuration + (float)Network.time; //Set the duration. Scale with AGI
+            duration = (stealthDuration + stealthFromAgility) + (float)Network.time; //Set the duration. Scale with AGI
             CmdMoved();
             StopCoroutine(CamouflageDuration());
             StartCoroutine(CamouflageDuration());
         }
+    }
+
+    void StealthFromAgility() {
+        float agi = GetComponent<PlayerStats>().Agility;
+        stealthFromAgility = (agi <= 35 ? (agi / 100) * 0.142857f : agi > 35 ? (((float)(agi - 36) / 100) * 0.156250078125f) + 4.999995f : 0);
     }
 
     bool movementLeeway() {
@@ -87,6 +93,7 @@ public class Camouflage : NetworkBehaviour
         isCamouflaged = true; //The Player is now camouflaged.
         camouflagePosition = gameObject.transform.position; //Set the current player position to be the camouflage position.
         hasMovedFromCamouflagePoint = false;
+        StealthFromAgility();
     }
     
     [Command]
