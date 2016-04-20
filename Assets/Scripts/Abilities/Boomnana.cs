@@ -14,7 +14,7 @@ using UnityEngine.Networking;
 /// 
 /// This script is tied to the Scripts/Abilities/ThrowBoomnana.cs
 /// </summary>
-public class Boomnana : Ability {
+public class Boomnana : NetworkBehaviour {
     float damage;
     public GameObject owner;
     float speed;
@@ -165,7 +165,7 @@ public class Boomnana : Ability {
         PlayerStats targetPS = null;
         foreach (Collider _collider in hitColliders) {
             if (_collider.tag == "Player") { // Check if player
-                targetPS = _collider.transform.GetComponentInParent<PlayerStats>();
+                targetPS = _collider.transform.GetComponent<PlayerStats>();
                 // Determine maxDamage based on team
                 dmg = damage * (targetPS.team != ownerTeam ? fullDamage : selfDamage);
                 float dist = Vector3.Distance(transform.position, _collider.transform.position);
@@ -173,8 +173,7 @@ public class Boomnana : Ability {
                     dmg *= ((maxArea - (dist)) / (maxArea));
                 targetPS.TakeDmg(dmg);
                 // Set PlayerState to HitByBOOMnana
-                CmdHitPlayerAnimation(_collider.transform.parent.gameObject, PlayerBehaviour.PlayerState.HitByBOOMnana);
-                //_collider.transform.GetComponentInParent<PlayerBehaviour>().state = PlayerBehaviour.PlayerState.HitByBOOMnana;
+                HitPlayerAnimation(_collider.gameObject, PlayerBehaviour.PlayerState.HitByBOOMnana);
             }
         }
         /*
@@ -184,5 +183,9 @@ public class Boomnana : Ability {
         Debug.DrawLine(transform.position, transform.position + transform.forward * maxDist, Color.yellow, 10);
         Debug.DrawLine(transform.position, transform.position + -transform.forward * maxDist, Color.yellow, 10);
         */
+    }
+
+    internal void HitPlayerAnimation(GameObject player, PlayerBehaviour.PlayerState playerState) {
+        player.GetComponent<PlayerBehaviour>().state = playerState;
     }
 }

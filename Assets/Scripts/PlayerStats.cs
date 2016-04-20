@@ -170,12 +170,12 @@ public class PlayerStats : NetworkBehaviour {
                 return;
             }
             health = 0;
-            //Play Die Animation.
-            GetComponent<Animator>().SetBool("IsDead", true);
             if (currentMaterial != stealthMat) {
                 ChangeMaterial(true);
                 Color c = body.GetComponent<SkinnedMeshRenderer>().material.color;
                 body.GetComponent<SkinnedMeshRenderer>().material.color = new Color(c.r, c.g, c.b, .2f);
+                GetComponent<Animator>().SetBool("IsAlive", false);
+                GetComponent<NetworkAnimator>().SetTrigger("DeadByDamageTrigger");
             }
             return;
         } if (isStunned) 
@@ -388,8 +388,9 @@ public class PlayerStats : NetworkBehaviour {
         if (isLocalPlayer)
         {
             CmdRespawn();
-            ////´Stop Die Animation.
-            GetComponent<Animator>().SetBool("IsDead", false);
+            ////Set to IsAlive parameter to True in the Animator.
+            //GetComponent<Animator>().SetBool("IsDead", false);
+            GetComponent<Animator>().SetBool("IsAlive", true);
             syncHealth = syncMaxHealth;
             transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
             GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);

@@ -1061,7 +1061,7 @@ ModelImporter:
       name: m_death_damage
       takeName: Take 001
       firstFrame: 168
-      lastFrame: 192
+      lastFrame: 190.9
       wrapMode: 0
       orientationOffsetY: 0
       level: 0

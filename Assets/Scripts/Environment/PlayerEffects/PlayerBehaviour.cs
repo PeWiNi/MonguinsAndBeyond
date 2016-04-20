@@ -26,6 +26,7 @@ public class PlayerBehaviour : NetworkBehaviour
 
     //Animator
     public Animator anim;
+    int IsAliveHash = Animator.StringToHash("IsAlive");
 
     //Idle state variables.
     public float timeToIdle = 10.0f; //10 seconds
@@ -79,16 +80,18 @@ public class PlayerBehaviour : NetworkBehaviour
             }
         }
         #region Check if the player is passive and play idle animations accordingly.
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("m_idle") && !isIdle) {
-            isIdle = true;
-            currentTime = (float)Network.time + timeToIdle;
-            CheckIdle();
-        }
-        else if (!anim.GetCurrentAnimatorStateInfo(0).IsName("m_idle") && isIdle) {
-            isIdle = false;
-        }
-        if (isIdle) {
-            CheckIdle();
+        if (anim.GetBool(IsAliveHash)) {
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("m_idle") && !isIdle) {
+                isIdle = true;
+                currentTime = (float)Network.time + timeToIdle;
+                CheckIdle();
+            }
+            else if (!anim.GetCurrentAnimatorStateInfo(0).IsName("m_idle") && isIdle) {
+                isIdle = false;
+            }
+            if (isIdle) {
+                CheckIdle();
+            }
         }
         #endregion
 
