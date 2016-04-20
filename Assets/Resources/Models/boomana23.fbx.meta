@@ -8,16 +8,32 @@ ModelImporter:
     100000: banana
     100002: //RootNode
     100004: bottomDinamite
+    100006: bottomDinamite1
+    100008: halfDinamite
+    100010: wick
     400000: banana
     400002: //RootNode
     400004: bottomDinamite
+    400006: bottomDinamite1
+    400008: halfDinamite
+    400010: wick
     2300000: banana
     2300002: bottomDinamite
+    2300004: bottomDinamite1
+    2300006: halfDinamite
+    2300008: wick
     3300000: banana
     3300002: bottomDinamite
+    3300004: bottomDinamite1
+    3300006: halfDinamite
+    3300008: wick
     4300000: bottomDinamite
     4300002: banana
+    4300004: wick
+    4300006: halfDinamite
+    4300008: bottomDinamite1
     7400000: Take 001
+    7400002: boomana_redo.0001
     9500000: //RootNode
   materials:
     importMaterials: 0
@@ -43,7 +59,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 100
     meshCompression: 0
     addColliders: 0
     importBlendShapes: 1
