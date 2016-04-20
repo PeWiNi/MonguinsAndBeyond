@@ -21,11 +21,14 @@ public class Slip : NetworkBehaviour
                 animLocal = GetComponent<Animator>();
             animLocal.SetBool("AffectedByBananaPeelTrap", true);
             this.thrust = thrust;
-            StartCoroutine(Slipping(effectDuration, thrust));
+            int resi = GetComponent<PlayerStats>().Resilience;
+            float duration = effectDuration * (1f - (resi <= 10 ? (float)(resi / 100) / 2 : resi <= 35 ? ((((float)(resi - 10) / 100) * .2f) + .05f) : resi > 35 ? ((((float)(resi - 36) / 100) * 0.15625f) + .10f) : 0));
+            print(effectDuration * (1f - (resi <= 10 ? (float)(resi / 100) / 2 : resi <= 35 ? ((((float)(resi - 10) / 100) * .2f) + .05f) : resi > 35 ? ((((float)(resi - 36) / 100) * 0.15625f) + .10f) : 0)));
+            StartCoroutine(Slipping(duration, thrust));
         }
     }
 
-    IEnumerator Slipping(int effectDuration, float thrust) {
+    IEnumerator Slipping(float effectDuration, float thrust) {
         isSlipping = true;
         transform.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * thrust, ForceMode.Impulse);
         CmdStun(effectDuration);
@@ -38,7 +41,7 @@ public class Slip : NetworkBehaviour
     }
 
     [Command]
-    void CmdStun(int effectDuration) {
+    void CmdStun(float effectDuration) {
         transform.GetComponent<PlayerStats>().Incapacitate(effectDuration);
     }
 }

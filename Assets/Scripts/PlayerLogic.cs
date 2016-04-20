@@ -152,17 +152,17 @@ public class PlayerLogic : NetworkBehaviour
         }
         // Jumping
         //if(jumpAxis > 0 && isGrounded()) {
-        if (jump && (isGrounded() || isSwimming)) {
+        if (jump && isGrounded()) {
             GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = true;
             //Play 'Jump' Animation
-            if (!isSwimming)//Shouldplay on Ground only.
-                animNetwork.SetTrigger("Jumped");
+            animNetwork.SetTrigger("Jumped");
         }
         // Double Jumping 
         else if (jump && dblJump) {
             GetComponent<Rigidbody>().velocity += new Vector3(0, jumpSpeed, 0);
             dblJump = false;
+            //Play 'Jump' Animation
             if (!isSwimming)//Shouldplay on Ground only.
                 animNetwork.SetTrigger("Jumped");
         }
@@ -234,6 +234,7 @@ public class PlayerLogic : NetworkBehaviour
             }
             StartCoroutine(InWater());
         }
+        dblJump = true;
     }
 
     IEnumerator InWater() {

@@ -157,7 +157,7 @@ public class Camouflage : NetworkBehaviour
     }
 
     void UpdateVisibilityState() //mayhaps optimize with while loops
-    {
+    { // TODO: Make hook for wisdom, checking a bigger range and letting them decide if they can see you (based on wisdom)
         if (isCamouflaged && !isLocalPlayer) // If you want it WoW-stealth-like the player themselves shouldn't have the visibru effect when enemies are near
         {
             float visibru = visibilityRangeRadius * GetComponent<PlayerStats>().sizeModifier; // Scaling according to player size

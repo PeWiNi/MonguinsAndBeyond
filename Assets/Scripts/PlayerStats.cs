@@ -45,7 +45,11 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     public float damageModifier = 1f;
     [SyncVar]
+    public float damageReduction = 1f;
+    [SyncVar]
     public float syncSpeed;
+    [SyncVar]
+    public float sapModifier = 1f;
 
     [Range(0.2f, 2.5f)]
     [SyncVar]
@@ -106,6 +110,8 @@ public class PlayerStats : NetworkBehaviour {
         public float maxHealth;
         public float speed;
         public float dmgMultiplier;
+        public float dmgReduction;
+        public float sapModifier;
         public int resilience;
         public int wisdom;
         public int agility;
@@ -113,10 +119,10 @@ public class PlayerStats : NetworkBehaviour {
         public RoleStats(int resi, int agi, int wis) {
             print(resi + ", " + agi + ", " + wis);
             float mHp = 1f;
-            // Resilience-health math
-            mHp += (resi <= 10 ? (resi / 100) : resi <= 35 ? ((((float)(resi - 10) / 1000) * 2) + .1f) : resi > 35 ? ((((float)(resi - 36) / 1000) * 2.34375f) + .15f) : 0);
+            // Resilience-health math (0..10 = +0-150, 11..35 = +150-
+            mHp += (resi <= 10 ? (resi / 100) : resi <= 35 ? ((((float)(resi - 10) / 100) * .2f) + .1f) : resi > 35 ? ((((float)(resi - 36) / 100) * 0.234375f) + .15f) : 0);
             // Agility-health math
-            mHp -= (agi > 35 ? ((float)(agi - 36) / 1000) * 2.35f : 0);
+            mHp -= (agi > 35 ? ((float)(agi - 36) / 100) * 0.234375f : 0);
 
             float spd = 1f;
             // Resilience-speed math
@@ -126,10 +132,14 @@ public class PlayerStats : NetworkBehaviour {
 
             float dmg = 1f;
             // Agility-damage math
-            dmg += (agi <= 10 ? (agi / 100) : agi <= 35 ? ((((float)(agi - 10) / 100) * .4f) + .1f) : agi > 35 ? (((float)(agi - 36) / 100) * 0.3125f + .20f) : 0);
+            dmg += (agi <= 10 ? (agi / 100) : agi <= 35 ? ((((float)(agi - 10) / 100) * .4f) + .1f) : agi > 35 ? ((((float)(agi - 36) / 100) * 0.3125f) + .20f) : 0);
 
+            float dmgR = 1f;
+            dmgR -= (resi <= 10 ? (resi / 100) : resi <= 35 ? ((((float)(resi - 10) / 100) * .4f) + .1f) : resi > 35 ? ((((float)(resi - 36) / 100) * 0.3125f) + .20f) : 0);
             maxHealth = mHp;
             dmgMultiplier = dmg;
+            dmgReduction = dmgR;
+            sapModifier = 1 - (resi <= 10 ? (resi / 100) : resi <= 35 ? ((((float)(resi - 10) / 100) * .8f) + .10f) : resi > 35 ? ((((float)(resi - 36) / 100) * 0.3125f) + .30f) : 0);
             speed = spd;
             resilience = resi;
             agility = agi;
@@ -272,8 +282,8 @@ public class PlayerStats : NetworkBehaviour {
         abilities = new Ability[3];
         roleStats = new RoleStats((int)attributes["DEF"], (int)attributes["ATT"], (int)attributes["SUP"]);
         if (isLocalPlayer) {
-            CmdProvideStats(roleStats.maxHealth, roleStats.dmgMultiplier, roleStats.speed, roleStats.resilience, roleStats.agility, roleStats.wisdom);
-            SetStats(roleStats.resilience, roleStats.agility, roleStats.wisdom, roleStats.speed, roleStats.dmgMultiplier);
+            CmdProvideStats(roleStats.maxHealth, roleStats.dmgMultiplier, roleStats.dmgReduction, roleStats.sapModifier, roleStats.speed, roleStats.resilience, roleStats.agility, roleStats.wisdom);
+            SetStats(roleStats.resilience, roleStats.agility, roleStats.wisdom, roleStats.speed, roleStats.dmgMultiplier, roleStats.dmgReduction, roleStats.sapModifier);
         }
         switch (role) {
             case (Role.Defender):
@@ -342,11 +352,11 @@ public class PlayerStats : NetworkBehaviour {
     /// <param name="agi"></param>
     /// <param name="wis"></param>
     [Command]
-    void CmdProvideStats(float maxHp, float spd, float dmg, int resi, int agi, int wis) {
+    void CmdProvideStats(float maxHp, float spd, float dmg, float dmgR, float sapEffect, int resi, int agi, int wis) {
         ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
         syncMaxHealth = SM.compositeHealthFormula(team == 1 ? SM.teamOne : team == 2 ? SM.teamTwo : 0) * maxHp;
         maxHealth = syncMaxHealth;
-        SetStats(resi, agi, wis, spd, dmg);
+        SetStats(resi, agi, wis, spd, dmg, dmgR, sapEffect);
     }
     /// <summary>
     /// Set the current stats locally
@@ -354,13 +364,15 @@ public class PlayerStats : NetworkBehaviour {
     /// </summary>
     /// <param name="resi">The modifier which determines dmg reduction</param>
     /// <param name="spd">Movement speed of the character</param>
-    void SetStats(int resi, int agi, int wis, float spd, float dmg) {
+    void SetStats(int resi, int agi, int wis, float spd, float dmg, float dmgR, float sapEffect) {
         resilience = resi;
         agility = agi;
         wisdom = wis;
         sizeModifier = (maxHealth / 1000);
         syncSpeed = speed * spd;
         damageModifier = dmg;
+        damageReduction = dmgR;
+        sapModifier = sapEffect;
         GetComponentInChildren<CharacterCamera>().parentHeight = sizeModifier;
     }
 
@@ -440,7 +452,7 @@ public class PlayerStats : NetworkBehaviour {
         if (!isServer)
             return;
         GetComponent<Camouflage>().brokeStealth = true;
-        syncHealth -= amount * (1.0f - ((float)resilience / 100.0f)); //TODO: New RESI math from role chart
+        syncHealth -= amount * damageReduction;
         if (syncHealth <= 0 && !isDead) {
             ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
             SM.CountDeaths(team);
@@ -448,7 +460,7 @@ public class PlayerStats : NetworkBehaviour {
             deathTimer = (float)(getServerTime());
             syncHealth = 0;
         }
-        RpcTakeDmg(amount * (1.0f - ((float)resilience / 100.0f)));
+        RpcTakeDmg(amount * damageReduction);
     }
 
     /// <summary>

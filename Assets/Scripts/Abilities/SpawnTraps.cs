@@ -198,8 +198,7 @@ public class SpawnTraps : NetworkBehaviour {
         
         trap.GetComponent<Trap>().SetTriggerCount(triggerCount);
 
-        if (trap.GetComponent<Trap_Spikes>())
-            trap.GetComponent<Trap_Spikes>().SetDmgModifier(GetComponent<PlayerStats>().damageModifier);
+        trapModifiers(trap);
 
         NetworkServer.Spawn(trap);
     }
@@ -221,13 +220,19 @@ public class SpawnTraps : NetworkBehaviour {
 
         trap.GetComponent<Trap>().SetOwner(gameObject);
 
-        if (trap.GetComponent<Trap_Spikes>())
-            trap.GetComponent<Trap_Spikes>().SetDmgModifier(GetComponent<PlayerStats>().damageModifier);
+        trapModifiers(trap);
 
         if (duration > 10)
             Destroy(trap, duration);
 
         NetworkServer.Spawn(trap);
+    }
+
+    void trapModifiers(GameObject trap) {
+        if (trap.GetComponent<Trap_Spikes>())
+            trap.GetComponent<Trap_Spikes>().SetDmgModifier(GetComponent<PlayerStats>().damageModifier);
+        if (trap.GetComponent<Trap_BananaIsland>())
+            trap.GetComponent<Trap_BananaIsland>().SetForceModifier(GetComponent<PlayerStats>().Wisdom);
     }
 
     /// <summary>

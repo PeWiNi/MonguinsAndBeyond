@@ -18,7 +18,7 @@ public class Waterz : NetworkBehaviour {
         print("In Water");
         if (_collider.tag == "Player") {
             _collider.GetComponent<Rigidbody>().useGravity = false;
-            _collider.GetComponent<Rigidbody>().velocity = new Vector3();
+            _collider.GetComponent<Rigidbody>().velocity = new Vector3(); // Figure a better solution to them flying away
             //Amberfy - THOUGHT: Move to OnTriggerStay and grant a couple seconds immunity (to not be stun-locked by someone spamming saptraps while you are in the water)
             if(_collider.GetComponent<PlayerStats>().isSlowed && !_collider.GetComponent<PlayerStats>().isStunned)
                 AmberIt(_collider.GetComponent<PlayerStats>());
@@ -47,14 +47,15 @@ public class Waterz : NetworkBehaviour {
     }
 
     void AmberIt(PlayerStats ps) {
-        ps.Stun(EventManager.amberStunTime);
+        float stunTime = EventManager.amberStunTime * ps.sapModifier;
+        ps.Stun(stunTime);
         if (!isServer)
             return;
         GameObject bullet = (GameObject)Instantiate(
             Resources.Load("Prefabs/Environments/Amber"), ps.transform.position,
             Quaternion.identity);
         bullet.GetComponent<Amber>().SetParent(ps.transform);
-        Destroy(bullet, EventManager.amberStunTime);
+        Destroy(bullet, stunTime);
         NetworkServer.Spawn(bullet);
     }
 }
