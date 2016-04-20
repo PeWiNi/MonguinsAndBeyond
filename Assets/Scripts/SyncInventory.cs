@@ -31,13 +31,17 @@ public class SyncInventory : NetworkBehaviour {
     }
     public void pickupBerry(int value) {
         if (isLocalPlayer) {
-            int quality = inventory.pickupBerry(value, GetComponent<PlayerStats>().wisdom);
+            int quality = inventory.pickupBerry(value, GetComponent<PlayerStats>().Wisdom);
             veryBerryThings(quality);
         }
     }
     public void pickupBerry(Herb.Condition value) {
         if (isLocalPlayer) {
-            int quality = inventory.pickupBerry(value);
+            int quality = 0;
+            if (value == Herb.Condition.Random)
+                quality = inventory.pickupBerry(Random.Range(0, 100), GetComponent<PlayerStats>().Wisdom);
+            else
+                quality = inventory.pickupBerry(value);
             veryBerryThings(quality);
         }
     }

@@ -116,14 +116,21 @@ public class Inventory : MonoBehaviour {
     public int pickupBerry(int value, float RNG) {
         if(RNG == 0) {
             return pickupBerry(Herb.Condition.Random);
-        } else { // Do useful stuff with RNG (wisdom)
-            if (value > 50) {
-                return pickupBerry(Herb.Condition.Regeneration);
-            } else {
-                return pickupBerry(Herb.Condition.Degenration);
-            }
+        } else { 
+            int rand = Random.Range(0, 100);
+            // Wisdom formula (0..10 = 0-25%, 11..35 = 25-50%, 36..100 = 50-100%)
+            if (rand < (RNG <= 10 ? RNG * 2.5f : RNG <= 35 ? ((RNG - 10) * 1f) + 25f : ((RNG - 36) * 0.78125f) + 50f))
+                return getBerryType(value);
+            return pickupBerry(Herb.Condition.Random);
         }
-        //Debug.Log("Picked up Berry! " + (value > 50 ? "A GOOD ONE!" : "A bad one ._."));
+    }
+
+    int getBerryType(int value) {
+        if (value > 50) {
+            return pickupBerry(Herb.Condition.Regeneration);
+        } else {
+            return pickupBerry(Herb.Condition.Degenration);
+        }
     }
 
     public int pickupBerry(Herb.Condition cond) {

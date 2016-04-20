@@ -4,23 +4,53 @@ using UnityEngine.Networking;
 
 public class PlayerStats : NetworkBehaviour {
 
+    #region attributes & role
+    [SerializeField]
+    private Hashtable attributes; // Strength, Agility, Wisdom, etc. and their respective values
+
+    [SyncVar]
+    int resilience; // Defender stat, makes you tougher
+    [SyncVar]
+    int wisdom; // Supporter stat, increases the chance of good stuff happening
+    [SyncVar]
+    int agility; // Attacker stat, increases your combat efficiency
+    public int Resilience { get { return resilience; } }
+    public int Wisdom     { get { return wisdom; } }
+    public int Agility    { get { return agility; } }
+
+    [SyncVar]
+    Role syncRole = Role.Basic;
+    [SerializeField]
+    Role role = Role.Basic; // Current primary Role to determine abilities
+
+    public Ability[] abilities;
+
+    RoleStats roleStats;
+    #endregion
+
+    #region stats affected by attributes
     [SyncVar(hook = "SyncMaxHealth")]
-    float syncMaxHealth = 1000f;
+    float syncMaxHealth = 1500f;
     [SyncVar]
     float syncHealth;
     [SerializeField]
-    float resilienceValue = 40;
+    public float maxHealth; // Full amount of health
+    [SerializeField]
+    public float health; // Reach 0 and you die
     [SyncVar]
-    int resilience; // Recieved damage modifier, 100 means 100% dmg reduction
-    [SyncVar]
-    float RNGeezuz = 0; // Wisdom, increases the chance of good stuff happening <Threshold stuff: above certain # you can tell the difference between good and bad berries> @'stina 07-03
-    [SyncVar]
-    float agi; // Modifies movementSpeed (and possibly casttime/cooldown) <Threshold stuff: above certain # you get attacker speed> @'stina 07-03
-    [SyncVar]
-    Role syncRole = Role.Basic;
+    public bool changeMaxHealth = false;
 
-    public float wisdom { get { return RNGeezuz; } }
-    public float agility { get { return agi; } }
+    [Range(0.5f, 10f)]
+    public float speed = 5f; // Movement (and jumping) speed (see PlayerLogic.cs)
+    [SyncVar]
+    public float damageModifier = 1f;
+    [SyncVar]
+    public float syncSpeed;
+
+    [Range(0.2f, 2.5f)]
+    [SyncVar]
+    public float sizeModifier = 1f;
+    #endregion
 
     #region Death
     [SyncVar]
@@ -31,30 +61,11 @@ public class PlayerStats : NetworkBehaviour {
     #endregion
 
     [SerializeField]
-    public float maxHealth; // Full amount of health
-    [SerializeField]
-    public float health; // Reach 0 and you die
-    [SerializeField]
-    private Hashtable attributes; // Strength, Agility, Wisdom, etc. and their respective values // SYNCVAR?
-    [SerializeField]
-    Role role = Role.Basic; // Current primary Role to determine abilities
-    [Range(0.2f, 2.5f)] [SyncVar]
-    public float sizeModifier = 1f;
-    [Range(0.5f, 10f)]
-    public float speed = 5f; // Movement (and jumping) speed (see PlayerLogic.cs)
-    [SyncVar]
-    public float syncSpeed;
-    [SerializeField]
     public Transform body;
     [SyncVar]
     public int team;
-    [SyncVar]
-    public bool changeMaxHealth = false;
 
-    public Ability[] abilities;
-
-    RoleStats roleStats;
-
+    #region Player states
     [SyncVar]
     public bool isIncapacitated = false;
     [SyncVar]
@@ -67,10 +78,12 @@ public class PlayerStats : NetworkBehaviour {
     public bool isSlowed = false;
     [SyncVar]
     double slowTime;
+    #endregion
 
     [SyncVar]
     bool makeMap = false;
 
+    #region Materials
     public Material currentMaterial;
     [SerializeField]
     Material standardMat;
@@ -78,13 +91,12 @@ public class PlayerStats : NetworkBehaviour {
     Material stealthMat;
     public Material standardMaterial { get { return standardMat; } }
     public Material stealthMaterial  { get { return stealthMat; } }
+    #endregion
 
     //[SyncVar(hook = "SetServerInitTime")]
     //double serverInit;
     //[SyncVar]
     //float initSinking;
-
-    public GameObject bulletPrefab;
     
     public enum Role {
         Basic, Defender, Attacker, Supporter
@@ -93,18 +105,35 @@ public class PlayerStats : NetworkBehaviour {
     public struct RoleStats {
         public float maxHealth;
         public float speed;
+        public float dmgMultiplier;
         public int resilience;
         public int wisdom;
         public int agility;
 
-        public RoleStats(int resi, int wis, int agi) {
-            float mHp = 1f; // Do resilience & agi math
+        public RoleStats(int resi, int agi, int wis) {
+            print(resi + ", " + agi + ", " + wis);
+            float mHp = 1f;
+            // Resilience-health math
+            mHp += (resi <= 10 ? (resi / 100) : resi <= 35 ? ((((float)(resi - 10) / 1000) * 2) + .1f) : resi > 35 ? ((((float)(resi - 36) / 1000) * 2.34375f) + .15f) : 0);
+            // Agility-health math
+            mHp -= (agi > 35 ? ((float)(agi - 36) / 1000) * 2.35f : 0);
+
             float spd = 1f;
+            // Resilience-speed math
+            spd -= (resi > 35 ? ((float)(resi - 36) / 100) * 0.15625f : 0);
+            // Agility-speed math
+            spd += (agi > 35 ? ((float)(resi - 36) / 100) * 0.234375f : 0);
+
+            float dmg = 1f;
+            // Agility-damage math
+            dmg += (agi <= 10 ? (agi / 100) : agi <= 35 ? ((((float)(agi - 10) / 100) * .4f) + .1f) : agi > 35 ? (((float)(agi - 36) / 100) * 0.3125f + .20f) : 0);
+
             maxHealth = mHp;
-            resilience = resi;
+            dmgMultiplier = dmg;
             speed = spd;
-            wisdom = wis;
+            resilience = resi;
             agility = agi;
+            wisdom = wis;
         }
     }
 
@@ -241,13 +270,13 @@ public class PlayerStats : NetworkBehaviour {
     /// <param name="role">The player Role</param>
     void RoleCharacteristics(Role role) {
         abilities = new Ability[3];
+        roleStats = new RoleStats((int)attributes["DEF"], (int)attributes["ATT"], (int)attributes["SUP"]);
+        if (isLocalPlayer) {
+            CmdProvideStats(roleStats.maxHealth, roleStats.dmgMultiplier, roleStats.speed, roleStats.resilience, roleStats.agility, roleStats.wisdom);
+            SetStats(roleStats.resilience, roleStats.agility, roleStats.wisdom, roleStats.speed, roleStats.dmgMultiplier);
+        }
         switch (role) {
             case (Role.Defender):
-                roleStats = new RoleStats((int)attributes["DEF"], (int)attributes["SUP"], (int)attributes["ATT"]);
-                if (isLocalPlayer) { // Weird health 
-                    CmdProvideStats(roleStats.maxHealth, roleStats.resilience, roleStats.speed);
-                    SetStats(roleStats.resilience, roleStats.speed);
-                }
                 //  Taunt (Roar/Growl/WTV) - taunts enemies (locks their target on him for 3 sec) CD:6 sec
                 abilities[1] = GetComponent<Taunt>();
                 //  Smash (deals 1% of enemy health and stuns 1 sec) - no CD, should take 1sec to fully cast anyway
@@ -256,13 +285,6 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[2] = GetComponent<Fortify>();
                 break;
             case (Role.Attacker):
-                roleStats = new RoleStats((int)attributes["DEF"], (int)attributes["SUP"], (int)attributes["ATT"]); //TODO: Calculate speed using the charts
-                if (isLocalPlayer) {
-                    CmdProvideStats(roleStats.maxHealth, roleStats.resilience, roleStats.speed);
-                    SetStats(roleStats.resilience, roleStats.speed);
-                }
-                //if (attributes.ContainsKey("DEF")) //increased resilience based on STR
-                //    resilience = (int)Mathf.Ceil(0.2f * (int)attributes["DEF"]); // Do damage according to ATT aswell?
                 //  Boomnana - (yup, same one) deals 80% of current health on enemy target in damage; of no targets are hit it return to the caster and deals 35% of current health damage. CD: 3sec
                 abilities[2] = GetComponent<ThrowBoomnana>();
                 //  Tail Slap - (yup, same one) deals 2% of current health on enemy target; melee; no CD; 1 sec to "cast"
@@ -271,12 +293,6 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[1] = GetComponent<PunchDance>();
                 break;
             case (Role.Supporter):
-                roleStats = new RoleStats((int)attributes["DEF"], (int)attributes["SUP"], (int)attributes["ATT"]);
-                if (isLocalPlayer) {
-                    CmdProvideStats(roleStats.maxHealth, roleStats.resilience, roleStats.speed);
-                    SetStats(roleStats.resilience, roleStats.speed);
-                }
-                // Do something according to SUP? Do Resilience? Do ATT?
                 //  Puke - (the old puke, does the same thing) stuns all enemies in range, has about 2 units distance units in range. Channeled 3 sec; CD:5 sec
                 abilities[1] = GetComponent<Puke>();
                 //  Throw poison - ranged ability, slows the enemy at 0,5*speed and deals 0.5% damage*max health over 3 sec (1.5% in total). Range from 5 to 30 distance units. No CD; takes 1 sec to cast and requires poisonous herbs
@@ -317,16 +333,20 @@ public class PlayerStats : NetworkBehaviour {
 
     /// <summary>
     /// Let the server determine your health along with setting other stats
+    /// TODO: Implement the rest of the stats
     /// </summary>
     /// <param name="maxHp">The maximum health of your selected role</param>
-    /// <param name="resi">The resilience from your attributes</param>
     /// <param name="spd">The speed modifer from your role</param>
+    /// <param name="dmg"></param>
+    /// <param name="resi">The resilience from your attributes</param>
+    /// <param name="agi"></param>
+    /// <param name="wis"></param>
     [Command]
-    void CmdProvideStats(float maxHp, int resi, float spd) {
+    void CmdProvideStats(float maxHp, float spd, float dmg, int resi, int agi, int wis) {
         ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
         syncMaxHealth = SM.compositeHealthFormula(team == 1 ? SM.teamOne : team == 2 ? SM.teamTwo : 0) * maxHp;
         maxHealth = syncMaxHealth;
-        SetStats(resi, spd);
+        SetStats(resi, agi, wis, spd, dmg);
     }
     /// <summary>
     /// Set the current stats locally
@@ -334,10 +354,13 @@ public class PlayerStats : NetworkBehaviour {
     /// </summary>
     /// <param name="resi">The modifier which determines dmg reduction</param>
     /// <param name="spd">Movement speed of the character</param>
-    void SetStats(int resi, float spd) {
-        resilience = 0 + resi;
+    void SetStats(int resi, int agi, int wis, float spd, float dmg) {
+        resilience = resi;
+        agility = agi;
+        wisdom = wis;
         sizeModifier = (maxHealth / 1000);
         syncSpeed = speed * spd;
+        damageModifier = dmg;
         GetComponentInChildren<CharacterCamera>().parentHeight = sizeModifier;
     }
 
@@ -347,7 +370,8 @@ public class PlayerStats : NetworkBehaviour {
     [ClientCallback]
     void StatSync() {
         if (maxHealth != syncMaxHealth && isLocalPlayer) {
-            CmdChangeHealth((syncMaxHealth / (1000 * roleStats.maxHealth)));
+            CmdChangeHealth((syncMaxHealth / (1000 * roleStats.maxHealth)), roleStats.maxHealth);
+            health = syncHealth;
         }
         maxHealth = syncMaxHealth;
         health = syncHealth;
@@ -360,11 +384,11 @@ public class PlayerStats : NetworkBehaviour {
     /// </summary>
     /// <param name="hp">Health modifier to be updated with</param>
     [Command]
-    void CmdChangeHealth(float hp) {
-        if(syncHealth < (1000 * roleStats.maxHealth) * hp) {
+    void CmdChangeHealth(float hp, float RSmaxHealth) {
+        if(syncHealth < (1000 * RSmaxHealth) * hp) {
             float miniMe = syncHealth / syncMaxHealth;
-            syncHealth = miniMe * (1000 * roleStats.maxHealth) * hp;
-        } else syncHealth = (1000 * roleStats.maxHealth) * hp;
+            syncHealth = miniMe * (1000 * RSmaxHealth) * hp;
+        } else syncHealth = (1000 * RSmaxHealth) * hp;
     }
 
     /// <summary>

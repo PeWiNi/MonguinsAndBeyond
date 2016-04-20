@@ -28,7 +28,7 @@ public class HealForce : Ability {
                 if (c.tag != "Player") continue;
                 if (c.GetComponentInParent<PlayerStats>().team == team) {
                     CmdHealPlayer(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * heal);
-                    CmdHealPlayerOverTime(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * heal, healTics - 1);
+                    CmdHealPlayerOverTime(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * heal * (healTics - 1), healTics - 1);
                     // Set PlayerState to HitByHealForce
                     CmdHitPlayerAnimation(c.gameObject, PlayerBehaviour.PlayerState.HitByHealForce);
                 }

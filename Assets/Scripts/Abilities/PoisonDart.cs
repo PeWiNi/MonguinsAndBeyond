@@ -26,7 +26,7 @@ public class PoisonDart : RotateMe {
         ownerTeam = ps.team;
         tickDamage = damageTick * ps.maxHealth;
         Destination = endPos;
-        speed *= (1 + (ps.agility / 100));
+        speed *= (1 + (ps.Agility / 100));
     }
 
     void OnCollisionEnter(Collision _collision) {

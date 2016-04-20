@@ -53,8 +53,8 @@ public class Boomnana : NetworkBehaviour {
         PlayerStats ps = owner.GetComponent<PlayerStats>();
         this.owner = owner;
         ownerTeam = ps.team;
-        damage = ps.maxHealth; //TODO: Get AGI and calculate DMG modifier -- do for all Abilities
-        speed = spd * (1 + (ps.agility / 100));
+        damage = ps.maxHealth * ps.damageModifier; //TODO: Get AGI and calculate DMG modifier -- do for all Abilities
+        speed = spd * (1 + (ps.Agility / 100));
         fullDamage = fullDmg;
         selfDamage = selfDmg;
         endpoint = doNotTouchTerrain(endPos, false);

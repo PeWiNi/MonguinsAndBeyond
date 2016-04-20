@@ -7,20 +7,10 @@ public class EventManager : NetworkBehaviour {
     [SyncEvent]
     public event ScoreChange EventScoreChange;
 
-    public delegate float TimeRequest();
-    [SyncEvent]
-    public event TimeRequest EventTimeRequest;
-
     public static float amberStunTime = 12;
 
     public void SendScoreEvent(float team1, float team2) {
         if (EventScoreChange != null)
             EventScoreChange(team1, team2);
-    }
-
-    public float SendTime() {
-        if (EventTimeRequest != null)
-            return EventTimeRequest();
-        return 0;
     }
 }

@@ -5,8 +5,8 @@ using UnityEngine.Networking;
 public class SpawnTraps : NetworkBehaviour {
     // Interconnectivity with CharacterCamera (disable while putting traps so you can properly place the trap)
     // THOUGHT: Accumulate traps so you can throw multiple banana-peels at the same time (not on top of itself)
-    public string bananaTrap;
-    public string spikeTrap;
+    string bananaTrap;
+    string spikeTrap;
     string sap;
     [SyncVar]
     float distFromTerrain = 0.01f;
@@ -190,15 +190,18 @@ public class SpawnTraps : NetworkBehaviour {
         if (position != new Vector3())
             spawnPos = position;
         spawnPos = doNotTouchTerrain(spawnPos, distFromTerrain);
-        GameObject banana = (GameObject)Instantiate(
+        GameObject trap = (GameObject)Instantiate(
             Resources.Load(go) as GameObject, spawnPos,
             Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
 
-        banana.GetComponent<Trap>().SetOwner(gameObject);
+        trap.GetComponent<Trap>().SetOwner(gameObject);
         
-        banana.GetComponent<Trap>().SetTriggerCount(triggerCount);
+        trap.GetComponent<Trap>().SetTriggerCount(triggerCount);
 
-        NetworkServer.Spawn(banana);
+        if (trap.GetComponent<Trap_Spikes>())
+            trap.GetComponent<Trap_Spikes>().SetDmgModifier(GetComponent<PlayerStats>().damageModifier);
+
+        NetworkServer.Spawn(trap);
     }
     /// <summary>
     /// Spawn object on server
@@ -212,16 +215,19 @@ public class SpawnTraps : NetworkBehaviour {
         if (position != new Vector3())
             spawnPos = position;
         spawnPos = doNotTouchTerrain(spawnPos, distFromTerrain);
-        GameObject banana = (GameObject)Instantiate(
+        GameObject trap = (GameObject)Instantiate(
             Resources.Load(go) as GameObject, spawnPos,
             Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
 
-        banana.GetComponent<Trap>().SetOwner(gameObject);
+        trap.GetComponent<Trap>().SetOwner(gameObject);
+
+        if (trap.GetComponent<Trap_Spikes>())
+            trap.GetComponent<Trap_Spikes>().SetDmgModifier(GetComponent<PlayerStats>().damageModifier);
 
         if (duration > 10)
-            Destroy(banana, duration);
+            Destroy(trap, duration);
 
-        NetworkServer.Spawn(banana);
+        NetworkServer.Spawn(trap);
     }
 
     /// <summary>
