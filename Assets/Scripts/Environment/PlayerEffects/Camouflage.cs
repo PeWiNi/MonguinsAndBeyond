@@ -19,7 +19,6 @@ public class Camouflage : NetworkBehaviour
     float visibilityRangeRadius = 10f;  //21-04-16: Maximum detectionRange is 7 (with 100 WIS)
     [SerializeField]
     public float stealthDuration = 15f;
-    float stealthFromAgility = 0f;
     [SyncVar]
     Vector3 camouflagePosition;
     [SyncVar]
@@ -56,17 +55,18 @@ public class Camouflage : NetworkBehaviour
             CmdChangeIsCamouflaged(false);
         }
         //Should Check whether the Player has moved or used and Ability.
-        if (!movementLeeway() && !hasMovedFromCamouflagePoint && pickedUpTime + pickUpDelay < Network.time) {
-            duration = (stealthDuration + stealthFromAgility) + (float)Network.time; //Set the duration. Scale with AGI
-            CmdMoved();
+        if (isStealthed && !movementLeeway() && !hasMovedFromCamouflagePoint) {
+            duration = (stealthDuration + StealthFromAgility()) + (float)getServerTime(); //Set the duration. Scale with AGI
+            CmdMoved(StealthFromAgility());
             StopCoroutine(CamouflageDuration());
             StartCoroutine(CamouflageDuration());
         }
     }
 
-    void StealthFromAgility() {
+    float StealthFromAgility() {
         float agi = GetComponent<PlayerStats>().Agility;
-        stealthFromAgility = (agi <= 35 ? (agi / 100) * 0.142857f : agi > 35 ? (((float)(agi - 36) / 100) * 0.156250078125f) + 4.999995f : 0);
+        float stealthFromAgility = (agi <= 35 ? agi * 0.142857f : agi > 35 ? ((agi - 36) * 0.156250078125f) + 4.999995f : 0);
+        return stealthFromAgility;
     }
 
     bool movementLeeway() {
@@ -95,12 +95,11 @@ public class Camouflage : NetworkBehaviour
         camouflagePosition = gameObject.transform.position; //Set the current player position to be the camouflage position.
         hasMovedFromCamouflagePoint = false;
         isPartlySpotted = false;
-        StealthFromAgility();
     }
     
     [Command]
-    void CmdMoved() {
-        duration = stealthDuration + (float)Network.time; //Set the duration. THOUGHT: scale according to size
+    void CmdMoved(float stealthFromAgility) {
+        duration = (stealthDuration + stealthFromAgility) + (float)getServerTime(); //Set the duration.
         hasMovedFromCamouflagePoint = true;
     }
 
@@ -155,7 +154,7 @@ public class Camouflage : NetworkBehaviour
     /// <returns></returns>
     IEnumerator CamouflageDuration()
     {
-        while (duration > Network.time) {
+        while (duration > getServerTime()) {
             yield return new WaitForSeconds(1f);
             if (!hasMovedFromCamouflagePoint)
                 yield break;
@@ -192,11 +191,16 @@ public class Camouflage : NetworkBehaviour
         }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (isCamouflaged) {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(gameObject.transform.position, visibilityRangeRadius * GetComponent<PlayerStats>().sizeModifier);
+    public float stealthTimeLeft(bool time = false) {
+        if (duration > getServerTime()) {
+            if (time)
+                return (float)(duration - getServerTime());
+            else return (float)(duration - getServerTime()) / (stealthDuration + StealthFromAgility());
         }
+        return 1;
+    }
+
+    double getServerTime() {
+        return GetComponent<GameTime>().time;
     }
 }

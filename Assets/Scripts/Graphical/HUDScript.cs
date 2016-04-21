@@ -129,9 +129,26 @@ public class HUDScript : MonoBehaviour {
                     castBar.value = value;
                 else
                     castBar.gameObject.SetActive(false);
-            }  else if (castBar.gameObject.activeSelf) {
+            } else if (ps.GetComponent<Camouflage>().isCamouflaged) {
+                if (!castBar.gameObject.activeSelf || currentText.Substring(0, 7) != "Stealthed") {
+                    castBar.gameObject.SetActive(true);
+                    castBar.fillRect.GetComponentInChildren<Image>().color = new Color(49f / 255f, 187f / 255f, 0f / 255f); //Foreground
+                    castBar.targetGraphic.GetComponentInChildren<Image>().color = new Color(51f / 255f, 68f / 255f, 37f / 255f); //Background
+                    currentText = "Stealthed";
+                    castBar.GetComponentInChildren<Text>().text = currentText;
+                    castBar.value = 1;
+                }
+                float timer = ps.GetComponent<Camouflage>().stealthTimeLeft(true);
+                float value = ps.GetComponent<Camouflage>().stealthTimeLeft(false);
+                 if (timer > 0.01f) {
+                    castBar.GetComponentInChildren<Text>().text = "Stealthed for " + Mathf.Ceil(timer) + "s..";
+                    castBar.value = value;
+                } else
+                    castBar.gameObject.SetActive(false);
+                
+            } else if (castBar.gameObject.activeSelf) {
                 castBar.gameObject.SetActive(false);
-            }
+            } 
         }
         #endregion
         // When pressing Alt the mouse will be released from whatever state is set

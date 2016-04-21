@@ -68,7 +68,9 @@ public class PlayerBehaviour : NetworkBehaviour
                 if (hitInfo.collider.tag == "RubberTree") {
                     GameObject rubberTreeparent = hitInfo.collider.gameObject.GetComponent<MyParent>().parent;
                     //targetLandingSpot = transform.position + (transform.forward * shootingRange);//Based on Players orientation.
-                    targetLandingSpot = rubberTreeparent.transform.position + (-rubberTreeparent.transform.forward * shootingRange);//Based on Trees orientation.
+                    int agi = GetComponent<PlayerStats>().Agility;
+                    float distanceAMP = (agi <= 10 ? (float)(agi / 100) + 1f : agi <= 35 ? ((((float)(agi - 10) / 100) * .2f) + 1.1f) : agi > 35 ? ((((float)(agi - 36) / 100) * 0.15625f) + 1.15f) : 1f);
+                    targetLandingSpot = rubberTreeparent.transform.position + (-rubberTreeparent.transform.forward * (shootingRange * distanceAMP));//Based on Trees orientation.
                     targetLandingSpot.y = 1f;
                     Debug.DrawLine(transform.position, targetLandingSpot, Color.yellow, 10f);
                     thrust = Mathf.Sqrt((shootingRange * Physics.gravity.magnitude) / Mathf.Sin(2f * shootingAngle * Mathf.Deg2Rad));//Determine the launch velocity.
