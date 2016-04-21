@@ -280,8 +280,8 @@ public class PlayerStats : NetworkBehaviour {
     /// <param name="role">The player Role</param>
     void RoleCharacteristics(Role role) {
         abilities = new Ability[3];
-        roleStats = new RoleStats((int)attributes["DEF"], (int)attributes["ATT"], (int)attributes["SUP"]);
         if (isLocalPlayer) {
+            roleStats = new RoleStats((int)attributes["DEF"], (int)attributes["ATT"], (int)attributes["SUP"]);
             CmdProvideStats(roleStats.maxHealth, roleStats.dmgMultiplier, roleStats.dmgReduction, roleStats.sapModifier, roleStats.speed, roleStats.resilience, roleStats.agility, roleStats.wisdom);
             SetStats(roleStats.resilience, roleStats.agility, roleStats.wisdom, roleStats.speed, roleStats.dmgMultiplier, roleStats.dmgReduction, roleStats.sapModifier);
         }
@@ -709,10 +709,12 @@ public class PlayerStats : NetworkBehaviour {
         if(stealth && currentMaterial != stealthMaterial) {
             currentMaterial = stealthMaterial;
             body.GetComponent<SkinnedMeshRenderer>().material = currentMaterial;
+            GetComponent<VisualizeTeam>().ToggleForeheadItem(team, false);
         }
-        else if (currentMaterial != standardMaterial) {
+        else if (!stealth && currentMaterial != standardMaterial) {
             currentMaterial = standardMaterial;
             body.GetComponent<SkinnedMeshRenderer>().material = currentMaterial;
+            GetComponent<VisualizeTeam>().ToggleForeheadItem(team, true);
         }
     }
 }

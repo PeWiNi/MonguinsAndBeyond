@@ -15,8 +15,8 @@ using UnityEngine.Networking;
 /// </summary>
 public class Camouflage : NetworkBehaviour
 {
-    [SerializeField]
-    public float visibilityRangeRadius = 20f;// This should be affected based on the values of the Role selected (Supportor, Defender, Attacker).
+    // This should be affected based on the values of the Role selected (Supporter, Defender, Attacker).
+    float visibilityRangeRadius = 10f;  //21-04-16: Maximum detectionRange is 7 (with 100 WIS)
     [SerializeField]
     public float stealthDuration = 15f;
     float stealthFromAgility = 0f;
@@ -35,10 +35,11 @@ public class Camouflage : NetworkBehaviour
     [SyncVar]
     public bool hasMovedFromCamouflagePoint = false;
     public bool isPartlySpotted = false;
-    
+
+    private IEnumerator spotted;
+
     // Use this for initialization
-    void Start()
-    {
+    void Start() {
         InvokeRepeating("UpdateVisibilityState", 1f, 1f);
     }
 
@@ -93,6 +94,7 @@ public class Camouflage : NetworkBehaviour
         isCamouflaged = true; //The Player is now camouflaged.
         camouflagePosition = gameObject.transform.position; //Set the current player position to be the camouflage position.
         hasMovedFromCamouflagePoint = false;
+        isPartlySpotted = false;
         StealthFromAgility();
     }
     
@@ -133,8 +135,8 @@ public class Camouflage : NetworkBehaviour
         float visibilityValue = 0.2f;
         while (partlySpottedValue > visibilityValue) {
             changeColor(partlySpottedValue);
-            yield return new WaitForSeconds(0.1f);
-            partlySpottedValue -= 0.1f;
+            yield return new WaitForSeconds(0.05f);
+            partlySpottedValue -= 0.01f;
         }
     }
 
@@ -163,27 +165,29 @@ public class Camouflage : NetworkBehaviour
         yield return null;
     }
 
-    void UpdateVisibilityState() //mayhaps optimize with while loops
-    { // TODO: Make hook for wisdom, checking a bigger range and letting them decide if they can see you (based on wisdom)
-        if (isCamouflaged && !isLocalPlayer) // If you want it WoW-stealth-like the player themselves shouldn't have the visibru effect when enemies are near
-        {
-            float visibru = visibilityRangeRadius * GetComponent<PlayerStats>().sizeModifier; // Scaling according to player size
-            Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, visibru);
-            foreach ( Collider _collider in hitColliders) {
-                if (_collider.tag != "Player")
+    void UpdateVisibilityState() {
+        if (isCamouflaged) {
+            //float visibru = visibilityRangeRadius * GetComponent<PlayerStats>().sizeModifier; // Scaling according to player size
+            Collider[] hitColliders = Physics.OverlapSphere(gameObject.transform.position, visibilityRangeRadius);
+            int trespassers = hitColliders.Length;
+            foreach (Collider _collider in hitColliders) {
+                if (_collider.tag != "Player" || _collider.gameObject == gameObject || _collider.GetComponent<PlayerStats>() != GameObject.Find("HUD").GetComponent<HUDScript>().GetPlayerStats()) {
+                    trespassers--;
                     continue;
-                if (!isPartlySpotted && _collider.transform.GetComponent<PlayerStats>().team != GetComponent<PlayerStats>().team && 
-                    Vector3.Distance(gameObject.transform.position, _collider.transform.position) <= visibru) {
-                    print("Enemy is wthin spot range! GET AWAY OR YOU WILL BE SPOTTED!!!");
+                }
+                int wis = _collider.GetComponent<PlayerStats>().Wisdom;
+                float detectionRange = (wis > 10 && wis <= 35 ? ((wis - 10) * 0.12f) + 2f : wis > 35 ? ((wis - 36) * 0.03125f) + 5f : 2f);
+                if (!isPartlySpotted &&  Vector3.Distance(gameObject.transform.position, _collider.transform.position) <= detectionRange) {
+                    print("DISTANCE: " + Vector3.Distance(gameObject.transform.position, _collider.transform.position) + ", RANGE: " + detectionRange);
                     isPartlySpotted = true;
-                    StartCoroutine(PartlySpotted());
-                }
-                else if (_collider.transform.GetComponent<PlayerStats>().team != GetComponent<PlayerStats>().team 
-                    && Vector3.Distance(gameObject.transform.position, _collider.transform.position) > visibru) {
-                    isPartlySpotted = false;
-                    StopCoroutine(PartlySpotted());
-                    Hide();
-                }
+                    spotted = PartlySpotted();
+                    StartCoroutine(spotted);
+                } // Mayhaps friendly guys can see you?
+            }
+            if (trespassers == 0 && isPartlySpotted) {
+                isPartlySpotted = false;
+                StopCoroutine(spotted);
+                Hide();
             }
         }
     }
