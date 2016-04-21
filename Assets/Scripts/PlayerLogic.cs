@@ -102,18 +102,16 @@ public class PlayerLogic : NetworkBehaviour
             if (/*transform.position.y < 25 &&*/ !GetComponent<SpawnTraps>().isPlacing && !GetComponent<Aim>().aiming) {
                 #region abilities
                 if (Input.GetKeyDown(KeyCode.Q) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
-                    //if (Input.GetMouseButtonDown(0) && !abilities[0].OnCooldown()) { //TODO make use of inputManager 
                     castTime = abilities[0].Trigger() + Network.time;
-                    abilities[0].timer = (float)Network.time;
+                    //abilities[0].timer = (float)Network.time;
                     playerBehaviour.isIdle = false;
                 }
                 if (Input.GetKeyDown(KeyCode.E) && !abilities[1].OnCooldown()) { //TODO make use of inputManager 
                     castTime = abilities[1].Trigger() + Network.time;
-                    abilities[1].timer = (float)Network.time;
+                    //abilities[1].timer = (float)Network.time;
                     playerBehaviour.isIdle = false;
                 }
                 if (Input.GetKeyDown(KeyCode.F) && !abilities[2].OnCooldown()) { //TODO make use of inputManager 
-                    //if (Input.GetMouseButtonDown(1) && !abilities[2].OnCooldown()) { //TODO make use of inputManager 
                     //castTime = abilities[2].Trigger() + Network.time;
                     //abilities[2].timer = (float)Network.time;
                     abilities[2].Trigger();

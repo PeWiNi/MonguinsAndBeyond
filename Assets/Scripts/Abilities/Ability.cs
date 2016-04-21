@@ -36,6 +36,7 @@ public class Ability : NetworkBehaviour {
     /// </summary>
     /// <returns>The time in which the player is unable to move while casting the ability</returns>
     public virtual double Trigger() {
+        timer = (float)Network.time;
         GetComponent<Camouflage>().brokeStealth = true;
         return castTime;
     }

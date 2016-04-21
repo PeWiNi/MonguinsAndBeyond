@@ -81,6 +81,8 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     public bool isSlowed = false;
     [SyncVar]
+    public bool isSapped = false;
+    [SyncVar]
     double slowTime;
     #endregion
 
@@ -262,6 +264,7 @@ public class PlayerStats : NetworkBehaviour {
         return 1;
     }
 
+    #region RoleStuff
     /// <summary>
     /// Set the characteristics of your selected role on other clients
     /// </summary>
@@ -404,6 +407,16 @@ public class PlayerStats : NetworkBehaviour {
     }
 
     /// <summary>
+    /// Update the SyncVar by telling your role to the server
+    /// </summary>
+    /// <param name="role">Your currently selected role</param>
+    [Command]
+    void CmdProvideRole(Role role) {
+        syncRole = role;
+    }
+    #endregion
+
+    /// <summary>
     /// Tell the server that you are about to respawn
     /// </summary>
     [Command]
@@ -431,15 +444,6 @@ public class PlayerStats : NetworkBehaviour {
             transform.position = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().GetSpawnPosition();
             GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
         }
-    }
-
-    /// <summary>
-    /// Update the SyncVar by telling your role to the server
-    /// </summary>
-    /// <param name="role">Your currently selected role</param>
-    [Command]
-    void CmdProvideRole(Role role) {
-        syncRole = role;
     }
 
     /// <summary>
@@ -513,8 +517,18 @@ public class PlayerStats : NetworkBehaviour {
         transform.LookAt(user.transform.position);
     }
 
-    public void Fortify(float duration) {
+    public void Fortify(float value, float duration) {
+        print(damageReduction);
+        damageReduction -= value;
+        StartCoroutine(TurnOffDamageReduction(value, duration));
+        print(damageReduction);
+    }
 
+    IEnumerator TurnOffDamageReduction(float value, float time) {
+        yield return new WaitForSeconds(time);
+        print(damageReduction);
+        damageReduction += value;
+        print(damageReduction);
     }
 
     /// <summary>
@@ -532,13 +546,14 @@ public class PlayerStats : NetworkBehaviour {
     [Command]
     public void CmdHealing(float amount) { Healing(amount); }
     
-    public void Slow(bool slow, float time = 1) {
+    public void Slow(bool slow, float time = 1, bool sap = false) {
         if (!isServer)
             return;
         if (slow)
             //slowTime = isSlowed ? getServerTime() : slowTime + time;
             slowTime = getServerTime() + time;
         isSlowed = slow;
+        isSapped = sap;
     }
     /// <summary>
     /// Logic for when the player has connected and team stuff happens

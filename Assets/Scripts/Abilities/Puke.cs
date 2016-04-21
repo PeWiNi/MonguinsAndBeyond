@@ -7,51 +7,34 @@ using UnityEngine.Networking;
 /// Damaging Ranged AreaOfEffect Ability
 /// 
 /// Puke - (the old puke, does the same thing) stuns all enemies in range, has about 2 units distance units in range. Channeled 3 sec; CD:5 sec
+/// 21-04-16: 2 area in front of you, no trigger, .08f dmg & slow (3s) 1 tick, no channeling, 10s cooldown
 /// </summary>
-public class Puke : Ability
-{
-    public float distance;
-    public float impactRadius;
-    public float stunDuration = 0.0f;
+public class Puke : Ability {
+    public float area = 2;
+    public float slowDuration = 3.0f;
     [Range(0, 1)]
-    public float damage = .00f;
-    float triggerRate = 1;
+    public float damage = .08f;
 
     public override double Trigger() {
-        StartCoroutine(GetComponent<Aim>().Pukey(this));
-        //TODO: <--Start the aim state for Puke Animation
+        //Play Puke Animation
+        GetComponent<NetworkAnimator>().SetTrigger("CastPuke");
+        Pukey();
         return base.Trigger();
     }
 
-    public void Puking(Vector3 pos) {
-        //Play Puke Animation
-        GetComponent<NetworkAnimator>().SetTrigger("CastPuke");
-        StartCoroutine(Attack(pos));
-        timer = (float)Network.time;
-    }
-
-    public void Cancel() {
-        //TODO: <--Quit aim state for Puke Animation
-    }
-
-    IEnumerator Attack(Vector3 pos) {
-        double timeSpent = 0;
+    void Pukey() {
         gameObject.GetComponent<PlayerStats>().Incapacitate((float)castTime);
-        while (timeSpent < castTime) {
-            Collider[] hitColliders = Physics.OverlapSphere(pos, impactRadius);
+            Collider[] hitColliders = Physics.OverlapSphere(transform.position + ((transform.localScale.y + .5f) * transform.up) + (transform.forward * area / 2), area / 2);
             foreach (Collider c in hitColliders) {
                 if (c.tag != "Player" || c.gameObject == gameObject) continue;
                 if (c.GetComponentInParent<PlayerStats>().team != team) {
                     // Set PlayerState to HitByPuke
                     CmdHitPlayerAnimation(c.gameObject, PlayerBehaviour.PlayerState.HitByPuke);
-                    // Stun
-                    CmdStunPlayer(c.gameObject, stunDuration);
+                    // Slow
+                    CmdSlowPlayer(c.gameObject, slowDuration);
                     //Damage
                     CmdDamagePlayer(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
                 }
             }
-            yield return new WaitForSeconds(triggerRate);
-            timeSpent += triggerRate;
-        }
     }
 }

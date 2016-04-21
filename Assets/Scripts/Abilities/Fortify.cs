@@ -5,7 +5,8 @@ using UnityEngine.Networking;
 /// Defender 
 /// Enhancement ability
 /// 
-/// Fortify - temporarily increase health and resilience of the defender with 20% for 10 sec. CD:20sec
+/// Fortify - temporarily increase health and resilience of the defender with 20% for 5 sec. CD:20sec
+/// 21-04-16: reduce damage taken (temp resi boost), duration = 10
 /// </summary>
 public class Fortify : Ability {
     public float duration = 10;
@@ -21,6 +22,6 @@ public class Fortify : Ability {
     [Command]
     void CmdFortify(GameObject player, float duration) {
         // TODO: Implement in PlayerStats
-        player.GetComponent<PlayerStats>().Fortify(duration);
+        player.GetComponent<PlayerStats>().Fortify(effect / 100, duration);
     }
 }

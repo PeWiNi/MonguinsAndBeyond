@@ -143,33 +143,6 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     }
 
     /// <summary>
-    /// Load the aim and wait for input to start puking
-    /// Left clicking outside the valid area will cancel placement of the trap
-    /// Right clicking will cancel placement right away
-    /// </summary>
-    public IEnumerator Pukey(Puke ability) {
-        distance = ability.distance;
-        Activate(true);
-        projector.GetComponent<Projector>().material.mainTexture = Resources.Load("Images/AimPointer") as Texture;
-        projector.GetComponent<Projector>().aspectRatio = ability.distance / 2;
-        while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
-            yield return new WaitForFixedUpdate();
-        if (Input.GetMouseButtonDown(0)) { // Sometimes I haz to press twice TT-TT
-            if (isBehind(projector.transform.position - transform.position))
-                ability.Cancel();
-            else {
-                Vector3 me = doNotTouchTerrain(transform.position);
-                Ray ray = new Ray(me, (projector.transform.position - me).normalized);
-                ability.Puking(ray.GetPoint(distance));
-                //ability.Throw(Vector3.MoveTowards(transform.position, projector.transform.position, distance));
-            }
-        } else
-            ability.Cancel();
-        yield return new WaitForFixedUpdate(); // Makes sure you don't activate anything else when you click
-        Activate(false);
-    }
-
-    /// <summary>
     /// Load the aim and wait for input to throw Poison Dart
     /// Left clicking outside the valid area will cancel placement of the trap
     /// Right clicking will cancel placement right away
@@ -181,10 +154,7 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if (Input.GetMouseButtonDown(0)) { // Sometimes I haz to press twice TT-TT
-            if (isBehind(projector.transform.position - transform.position))
-                ability.Cancel();
-            else 
-                ability.Throw(cursorHitPoint);
+            ability.Throw(cursorHitPoint);
         } else
             ability.Cancel();
         yield return new WaitForFixedUpdate(); // Makes sure you don't activate anything else when you click

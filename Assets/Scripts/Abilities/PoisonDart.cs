@@ -11,6 +11,7 @@ public class PoisonDart : RotateMe {
     Vector3 Destination;
     float tickDamage = 0;
     int ownerTeam;
+    int ticks = 3;
     float speed = 0.25f;
 
     void FixedUpdate() {
@@ -33,7 +34,7 @@ public class PoisonDart : RotateMe {
         PlayerStats targetPS = _collision.transform.GetComponentInParent<PlayerStats>();
         if (targetPS != null) {
             if (targetPS.team != ownerTeam) {
-                DamagePlayerOverTime(targetPS.gameObject, tickDamage, 3);
+                DamagePlayerOverTime(targetPS.gameObject, tickDamage * ticks, ticks);
             }
         }
         if (_collision.collider.tag != "Ability") {

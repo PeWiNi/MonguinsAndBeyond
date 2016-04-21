@@ -11,12 +11,12 @@ public class DripScript : RotateMe {
 	void FixedUpdate () {
 	    if (host != null) {
             transform.position = host.position + new Vector3(0f, .5f, -0.1f);
-            if (!host.GetComponent<PlayerStats>().isSlowed && !noMore) {
+            if (!host.GetComponent<PlayerStats>().isSapped && !noMore) {
                 var em = GetComponent<ParticleSystem>().emission;
                 em.enabled = false;
                 StartCoroutine(KillMe(25));
                 noMore = true;
-            } if(host.GetComponent<PlayerStats>().isSlowed && host.GetComponent<PlayerStats>().isStunned)
+            } if(host.GetComponent<PlayerStats>().isSapped && host.GetComponent<PlayerStats>().isStunned)
                 Destroy(gameObject);
         }
 	}

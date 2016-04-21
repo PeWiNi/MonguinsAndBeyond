@@ -6,14 +6,14 @@ public class Trap_Sap : Trap {
 
     void OnTriggerEnter(Collider _col) {
         if (_col.tag == "Player") {
-            if(!_col.GetComponent<PlayerStats>().isSlowed) SpawnDripper(_col.transform);
-            _col.transform.GetComponent<PlayerStats>().Slow(true, slowTime * _col.transform.GetComponent<PlayerStats>().sapModifier);
+            if(!_col.GetComponent<PlayerStats>().isSapped) SpawnDripper(_col.transform);
+            _col.transform.GetComponent<PlayerStats>().Slow(true, slowTime * _col.transform.GetComponent<PlayerStats>().sapModifier, true);
         }
     }
 
     void OnTriggerStay(Collider _col) {
         if (_col.tag == "Player") {
-            _col.transform.GetComponent<PlayerStats>().Slow(true, slowTime * _col.transform.GetComponent<PlayerStats>().sapModifier);
+            _col.transform.GetComponent<PlayerStats>().Slow(true, slowTime * _col.transform.GetComponent<PlayerStats>().sapModifier, true);
         }
     }
     //void OnDestroy() { }

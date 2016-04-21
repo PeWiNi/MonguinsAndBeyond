@@ -27,7 +27,7 @@ public class ThrowBoomnana : Ability
         StartCoroutine(GetComponent<Aim>().Boomy(this));
         GetComponent<NetworkAnimator>().SetTrigger("Aim");
         //CmdDoFire(new Vector3());
-        return base.Trigger();
+        return 0;
     }
 
     public void Throw(Vector3 pos) {

@@ -20,7 +20,7 @@ public class Waterz : NetworkBehaviour {
             _collider.GetComponent<Rigidbody>().useGravity = false;
             _collider.GetComponent<Rigidbody>().velocity = new Vector3(); // Figure a better solution to them flying away
             //Amberfy - THOUGHT: Move to OnTriggerStay and grant a couple seconds immunity (to not be stun-locked by someone spamming saptraps while you are in the water)
-            if(_collider.GetComponent<PlayerStats>().isSlowed && !_collider.GetComponent<PlayerStats>().isStunned)
+            if(_collider.GetComponent<PlayerStats>().isSapped && !_collider.GetComponent<PlayerStats>().isStunned)
                 AmberIt(_collider.GetComponent<PlayerStats>());
         }
     }
