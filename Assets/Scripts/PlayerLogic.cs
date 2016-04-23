@@ -180,6 +180,13 @@ public class PlayerLogic : NetworkBehaviour
             externalForce = new Vector3();
             CmdPushMe(new Vector3());
         }
+        if (stats.isTaunted() != null) {
+            Quaternion before = transform.rotation;
+            transform.LookAt(stats.isTaunted());
+            Quaternion after = transform.rotation;
+            float rot = 5 * Time.deltaTime; // Adjust speed?
+            transform.rotation = Quaternion.Lerp(before, after, rot);
+        }
     }
 
     public void PushMe(Vector3 force) {
@@ -219,6 +226,7 @@ public class PlayerLogic : NetworkBehaviour
         animLocal.SetFloat("Speed", Speed * vertAxis);
     }
 
+    #region Swim stuff
     public void StartSwimming() {
         if (!isSwimming) {
             if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) { return; }
@@ -266,6 +274,7 @@ public class PlayerLogic : NetworkBehaviour
             return ((float)Network.time - drownTimer) / drownTime;
         return 1;
     }
+    #endregion
     #region HUD Score stuff
     void OnEnable() {
         GetComponent<EventManager>().EventScoreChange += UpdateScoreInHUD;

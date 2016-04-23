@@ -29,6 +29,7 @@ public class CharacterCamera : MonoBehaviour {
     private float y = 0.0f;
     
     public Vector3 rotate;
+    PlayerStats ps;
 
     void Start() {
         currentDistance = distance;
@@ -38,13 +39,15 @@ public class CharacterCamera : MonoBehaviour {
         var angles = transform.eulerAngles;
         x = angles.y;
         y = angles.x;
+
+        ps = GetComponentInParent<PlayerStats>();
     }
 
     void LateUpdate() {
         if (Input.GetMouseButton(0) || Input.GetMouseButton(1)) { // Move camera
             x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
             y -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
-        } else if (Input.GetAxis("Vertical") != 0f || Input.GetAxis("Horizontal") != 0f) // Reset rotation when moving
+        } else if (Input.GetAxis("Vertical") != 0f || Input.GetAxis("Horizontal") != 0f || ps.isTaunted()) // Reset rotation when moving
             if (GetComponentInParent<PlayerStats>().CanIMove()) { // No more spinny spinny camera
                 var targetRotationAngle = target.eulerAngles.y;
                 var currentRotationAngle = transform.eulerAngles.y;

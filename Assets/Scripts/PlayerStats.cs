@@ -84,6 +84,10 @@ public class PlayerStats : NetworkBehaviour {
     public bool isSapped = false;
     [SyncVar]
     double slowTime;
+    [SyncVar]
+    public double tauntedTime;
+    [SyncVar]
+    public Transform tauntedTarget;
     #endregion
 
     [SyncVar]
@@ -494,7 +498,7 @@ public class PlayerStats : NetworkBehaviour {
             stunTimer = getServerTime() + duration;
             RpcStunning(duration);
         } else
-            isIncapacitated = false;
+            isStunned = false;
     }
     /// <summary>
     /// ONLY USE THIS ON SERVER
@@ -514,7 +518,12 @@ public class PlayerStats : NetworkBehaviour {
     }
 
     public void Taunt(GameObject user, float duration) {
-        transform.LookAt(user.transform.position);
+        tauntedTarget = user.transform;
+        tauntedTime = getServerTime() + duration;
+    }
+
+    public Transform isTaunted() {
+        return tauntedTime > getServerTime() ? tauntedTarget : null;
     }
 
     public void Fortify(float value, float duration) {
