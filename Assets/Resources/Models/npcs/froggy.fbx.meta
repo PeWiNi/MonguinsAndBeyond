@@ -59,6 +59,8 @@ ModelImporter:
     7400004: froggy_jumpyWalky
     7400006: froggy_lookyLeft
     7400008: froggy_lookyRight
+    7400010: froggy_idle
+    7400012: froggy_lookyAround
     9500000: //RootNode
     13700000: froggy
   materials:
@@ -391,6 +393,158 @@ ModelImporter:
       takeName: frog.0056
       firstFrame: 97
       lastFrame: 119
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: froggy
+        weight: 1
+      - path: joint1
+        weight: 1
+      - path: joint1/leftLeg
+        weight: 1
+      - path: joint1/leftLeg/joint3
+        weight: 1
+      - path: joint1/leftLeg/joint3/joint4
+        weight: 1
+      - path: joint1/leftLeg/joint3/joint4/joint5
+        weight: 1
+      - path: joint1/leftLeg/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: joint1/rightLeg
+        weight: 1
+      - path: joint1/rightLeg/joint8
+        weight: 1
+      - path: joint1/rightLeg/joint8/joint9
+        weight: 1
+      - path: joint1/rightLeg/joint8/joint9/joint10
+        weight: 1
+      - path: joint1/rightLeg/joint8/joint9/joint10/joint11
+        weight: 1
+      - path: joint1/spine
+        weight: 1
+      - path: joint1/spine/head
+        weight: 1
+      - path: joint1/spine/head/joint14
+        weight: 1
+      - path: joint1/spine/leftHand
+        weight: 1
+      - path: joint1/spine/leftHand/joint16
+        weight: 1
+      - path: joint1/spine/leftHand/joint16/joint17
+        weight: 1
+      - path: joint1/spine/leftHand/joint16/joint17/joint18
+        weight: 1
+      - path: joint1/spine/rightHand
+        weight: 1
+      - path: joint1/spine/rightHand/joint20
+        weight: 1
+      - path: joint1/spine/rightHand/joint20/joint21
+        weight: 1
+      - path: joint1/spine/rightHand/joint20/joint21/joint22
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: froggy_lookyAround
+      takeName: frog.0056
+      firstFrame: 73
+      lastFrame: 119
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: froggy
+        weight: 1
+      - path: joint1
+        weight: 1
+      - path: joint1/leftLeg
+        weight: 1
+      - path: joint1/leftLeg/joint3
+        weight: 1
+      - path: joint1/leftLeg/joint3/joint4
+        weight: 1
+      - path: joint1/leftLeg/joint3/joint4/joint5
+        weight: 1
+      - path: joint1/leftLeg/joint3/joint4/joint5/joint6
+        weight: 1
+      - path: joint1/rightLeg
+        weight: 1
+      - path: joint1/rightLeg/joint8
+        weight: 1
+      - path: joint1/rightLeg/joint8/joint9
+        weight: 1
+      - path: joint1/rightLeg/joint8/joint9/joint10
+        weight: 1
+      - path: joint1/rightLeg/joint8/joint9/joint10/joint11
+        weight: 1
+      - path: joint1/spine
+        weight: 1
+      - path: joint1/spine/head
+        weight: 1
+      - path: joint1/spine/head/joint14
+        weight: 1
+      - path: joint1/spine/leftHand
+        weight: 1
+      - path: joint1/spine/leftHand/joint16
+        weight: 1
+      - path: joint1/spine/leftHand/joint16/joint17
+        weight: 1
+      - path: joint1/spine/leftHand/joint16/joint17/joint18
+        weight: 1
+      - path: joint1/spine/rightHand
+        weight: 1
+      - path: joint1/spine/rightHand/joint20
+        weight: 1
+      - path: joint1/spine/rightHand/joint20/joint21
+        weight: 1
+      - path: joint1/spine/rightHand/joint20/joint21/joint22
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 1
+    - serializedVersion: 16
+      name: froggy_idle
+      takeName: frog.0056
+      firstFrame: 1
+      lastFrame: 4
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
