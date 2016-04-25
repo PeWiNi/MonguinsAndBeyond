@@ -25,7 +25,7 @@ Shader "Custom/Toony Transparent wNormal" {
 
 	SubShader {
 		//Tags { "RenderType"="Opaque" }
-		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
+		Tags{ "Queue" = "Transparent+11" "RenderType" = "Transparent" }
 
 		// extra pass that renders to depth buffer only
 		Pass {

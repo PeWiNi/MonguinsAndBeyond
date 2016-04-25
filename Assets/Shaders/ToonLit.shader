@@ -6,7 +6,7 @@ Shader "Custom/Toon/Lit" {
 	}
 
 	SubShader {
-		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
+		Tags{ "Queue" = "Transparent+1" "RenderType" = "Transparent" }
 		Blend SrcAlpha OneMinusSrcAlpha
 		Pass{ ColorMask 0 }
 		LOD 200

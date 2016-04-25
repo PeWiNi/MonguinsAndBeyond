@@ -140,7 +140,9 @@ public class HUDScript : MonoBehaviour {
                 }
                 float timer = ps.GetComponent<Camouflage>().stealthTimeLeft(true);
                 float value = ps.GetComponent<Camouflage>().stealthTimeLeft(false);
-                 if (timer > 0.01f) {
+                if (!ps.GetComponent<Camouflage>().hasMovedFromCamouflagePoint) {
+                    castBar.GetComponentInChildren<Text>().text = "Stealthed ...";
+                } else if (timer > 0.01f) {
                     castBar.GetComponentInChildren<Text>().text = "Stealthed for " + Mathf.Ceil(timer) + "s..";
                     castBar.value = value;
                 } else

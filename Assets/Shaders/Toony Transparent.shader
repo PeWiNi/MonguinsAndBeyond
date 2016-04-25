@@ -20,7 +20,7 @@ Shader "Custom/Toony Transparent" {
 
 	SubShader {
 		//Tags { "RenderType"="Opaque" }
-		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
+		Tags{ "Queue" = "Transparent+10" "RenderType" = "Transparent" }
 
 		CGPROGRAM
 

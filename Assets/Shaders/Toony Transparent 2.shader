@@ -20,7 +20,7 @@ Shader "Custom/Toony Transparent Bits" {
 
 	SubShader {
 		//Tags { "RenderType"="Opaque" }
-		Tags{ "Queue" = "Transparent" "RenderType" = "Transparent" }
+		Tags{ "Queue" = "Transparent+12" "RenderType" = "Transparent" }
 
 		CGPROGRAM
 
