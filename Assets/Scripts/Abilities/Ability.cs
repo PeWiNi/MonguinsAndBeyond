@@ -48,11 +48,11 @@ public class Ability : NetworkBehaviour {
     /// <param name="damage">The amount of damage dealt</param>
     [Command]
     internal void CmdDamagePlayer(GameObject player, float damage) {
-        player.GetComponent<PlayerStats>().TakeDmg(damage);
+        player.GetComponent<PlayerStats>().TakeDmg(damage, transform);
     }
     [Command]
     internal void CmdDamagePlayerOverTime(GameObject player, float damageTick, float duration) {
-        player.GetComponent<PlayerStats>().BadBerry(damageTick, duration);
+        player.GetComponent<PlayerStats>().BadBerry(damageTick, duration, transform);
     }
     [Command]
     internal void CmdHealPlayer(GameObject player, float heal) {

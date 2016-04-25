@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using System.Collections.Generic;
 
 /// <summary>
 /// Class for keeping track of teamsizes 
@@ -14,6 +15,8 @@ public class ScoreManager : NetworkBehaviour {
     public float teamOneDeathCount = 0;
     public float teamTwoDeathCount = 0;
 
+    List<Transform> players = new List<Transform>();
+
     public float sinkTimer;
 
     void Start() {
@@ -25,7 +28,8 @@ public class ScoreManager : NetworkBehaviour {
     /// </summary>
     /// <param name="player">PlayerStats of the the newly connected player</param>
     public void TeamSelection(PlayerStats player) {
-        int team = player.team; // OLD COMMENT useless, team is not set in the prefab....
+        players.Add(player.transform);
+        int team = player.team;
         //if (team == 0) { team = playerNumber % 2 == 1 ? 1 : 2; }
         if (team == 0) {
             team = teamOne <= teamTwo ? 1 : 2;
@@ -74,6 +78,15 @@ public class ScoreManager : NetworkBehaviour {
         print("Number of players is: " + numberOfPlayers);
         print("Calculated Health is: " + health);
         return health;
+    }
+
+    public float GetScore(PlayerStats player) {
+        float score = 0;
+        foreach(Transform p in players)
+            if(p.GetComponent<PlayerStats>() == player) {
+                score = (player.kills * 4) - (player.deaths * 2);
+            }
+        return score;
     }
 
     /// <summary>

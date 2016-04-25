@@ -62,6 +62,13 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     float deathTimer;
     public float deathCooldown = 15f;
+
+    [SyncVar]
+    public int kills;
+    [SyncVar]
+    public int assists;
+    [SyncVar]
+    public int deaths;
     #endregion
 
     [SerializeField]
@@ -178,7 +185,7 @@ public class PlayerStats : NetworkBehaviour {
         if (isLocalPlayer) {
             #region Loading attributes and determining Role
             // Load Attributes set before entering game
-            MyNetworkManagerHUD NM = GameObject.Find("NetworkManager").GetComponent<MyNetworkManagerHUD>();
+            MenuScript NM = GameObject.Find("NetworkManager").GetComponent<MenuScript>();
 
             attributes = NM.getAttributes();
             // Check for highest value
@@ -456,7 +463,8 @@ public class PlayerStats : NetworkBehaviour {
     /// Sets players to being dead (if they are at 0 or less health) and updates the ScoreManager
     /// </summary>
     /// <param name="amount"></param>
-    public void TakeDmg(float amount) { // amount == currSizeMaxHealth
+    /// <param name="attacker"></param>
+    public void TakeDmg(float amount, Transform attacker) {
         if (!isServer)
             return;
         GetComponent<Camouflage>().brokeStealth = true;
@@ -467,6 +475,12 @@ public class PlayerStats : NetworkBehaviour {
             isDead = true;
             deathTimer = (float)(getServerTime());
             syncHealth = 0;
+            #region Individual Score
+            if(attacker != null)
+                attacker.GetComponent<PlayerStats>().kills++;
+            //Do assist stuff
+            deaths++;
+            #endregion
         }
         RpcTakeDmg(amount * damageReduction);
     }
@@ -546,7 +560,7 @@ public class PlayerStats : NetworkBehaviour {
     /// </summary>
     /// <param name="amount"></param>
     [Command]
-    public void CmdTakeDmg(float amount) { TakeDmg(amount); }
+    public void CmdTakeDmg(float amount) { TakeDmg(amount, null); }
     /// <summary>
     /// Issue a command to hte server to heal the player
     /// See the Healing function for more details
@@ -668,17 +682,17 @@ public class PlayerStats : NetworkBehaviour {
     /// </summary>
     /// <param name="degenerationAmount"></param>
     /// <param name="duration"></param>
-    IEnumerator Degenerate(float degenerationAmount, float duration) {
+    IEnumerator Degenerate(float degenerationAmount, float duration, Transform caster) {
         float countDown = duration;
         while (countDown > 0f) {
             //print("Auch! - tick of damage occured");
             yield return new WaitForSeconds(1.0f);
-            TakeDmg((degenerationAmount / duration));
+            TakeDmg((degenerationAmount / duration), caster);
             countDown--;
         }
     }
-    public void BadBerry(float amount, float duration) {
-        StartCoroutine(Degenerate(amount, duration));
+    public void BadBerry(float amount, float duration, Transform caster) {
+        StartCoroutine(Degenerate(amount, duration, caster));
     }
     /// <summary>
     /// Regenrate health over time.
@@ -713,7 +727,7 @@ public class PlayerStats : NetworkBehaviour {
         if (!isServer)
             CmdEatBerry(berryType);
         Herb berry = new Herb();
-        berry.ChangeProperties(berryType, team);
+        berry.ChangeProperties(berryType, this);
         berry.EatIt(this);
     }
 

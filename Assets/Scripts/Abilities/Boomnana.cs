@@ -25,7 +25,6 @@ public class Boomnana : NetworkBehaviour {
     Vector3 endpoint;
 
     #region AoE
-    public bool areaOfEffect = true;
     [Tooltip("Total size of the AoE")]
     public float maxArea = 3f;
     [Tooltip("The area inside, in which they take full damage")]
@@ -121,22 +120,8 @@ public class Boomnana : NetworkBehaviour {
     /// </summary>
     /// <param name="_collision"></param>
     void OnCollisionEnter(Collision _collision) {
-        bool me = _collision.gameObject == owner;
-        if (areaOfEffect) {
-            AoE();
-        } else {
-            PlayerStats targetPS = _collision.transform.GetComponentInParent<PlayerStats>();
-            if (targetPS != null) {
-                if ((me && movingBack) || (targetPS.team == ownerTeam && _collision.gameObject != owner)) {
-                    targetPS.TakeDmg(damage * selfDamage); // Nana is spawned and is on server, trigger on client
-                } else {
-                    if (_collision.collider.tag == "Player" && targetPS.team != ownerTeam) {
-                        targetPS.TakeDmg(damage * fullDamage); // Nana is spawned and is on server, trigger on client
-                    }
-                }
-            }
-        }
         if (_collision.collider.tag != "Ability") {
+            AoE();
             BOOM();
             Destroy(gameObject);
         }
@@ -171,7 +156,7 @@ public class Boomnana : NetworkBehaviour {
                 float dist = Vector3.Distance(transform.position, _collider.transform.position);
                 if (dist > innerRadius)  // If inside the radius (
                     dmg *= ((maxArea - (dist)) / (maxArea));
-                targetPS.TakeDmg(dmg);
+                targetPS.TakeDmg(dmg, owner.transform);
                 // Set PlayerState to HitByBOOMnana
                 HitPlayerAnimation(_collider.gameObject, PlayerBehaviour.PlayerState.HitByBOOMnana);
             }

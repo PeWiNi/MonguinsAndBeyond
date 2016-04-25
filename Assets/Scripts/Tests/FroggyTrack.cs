@@ -8,10 +8,10 @@ public class FroggyTrack : NetworkBehaviour {
     [SyncVar]
     bool statusOn = false;
     bool on = false;
-    [SerializeField]
-    Material frogOn;
-    [SerializeField]
-    Material frogOff;
+    //[SerializeField]
+    //Material frogOn;
+    //[SerializeField]
+    //Material frogOff;
 
     [SerializeField]
     SkinnedMeshRenderer frog;
@@ -20,7 +20,7 @@ public class FroggyTrack : NetworkBehaviour {
 	void Update () {
 	    if(on != statusOn) {
             on = statusOn;
-            frog.material = statusOn ? frogOn : frogOff;
+            //frog.material = statusOn ? frogOn : frogOff;
             Track.SetActive(statusOn);
         }
 	}

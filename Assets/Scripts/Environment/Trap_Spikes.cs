@@ -18,7 +18,7 @@ public class Trap_Spikes : Trap
     {
         if (col.tag == "Player")
         {
-            col.transform.GetComponent<PlayerBehaviour>().TakeDamageWhileMoving(ticDamage);
+            col.transform.GetComponent<PlayerBehaviour>().TakeDamageWhileMoving(ticDamage, owner.transform);
         }
     }
 
@@ -28,7 +28,7 @@ public class Trap_Spikes : Trap
         {
             col.transform.GetComponent<PlayerBehaviour>().lastPosition = col.transform.position;
             col.transform.GetComponent<PlayerBehaviour>().enterTime = Network.time;
-            col.transform.GetComponent<PlayerStats>().TakeDmg(col.transform.GetComponent<PlayerStats>().maxHealth * impactDamage);
+            col.transform.GetComponent<PlayerStats>().TakeDmg(col.transform.GetComponent<PlayerStats>().maxHealth * impactDamage, owner.transform);
         }
     }
 

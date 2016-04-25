@@ -9,9 +9,7 @@ public class Herb : Pickup {
         Random,
         None
     };
-
-    [SyncVar]
-    int teamOwner;
+    
     [SyncVar]
     public Condition conditionState = Condition.None;//Default None.
     [SyncVar]
@@ -29,7 +27,7 @@ public class Herb : Pickup {
     void Start() {
         try { if (!isServer) {
                 PlayerStats ps = GameObject.Find("NetworkManager").GetComponentInChildren<HUDScript>().GetPlayerStats();
-                if (ps.team != teamOwner)
+                if (ps.team != owner.GetComponent<PlayerStats>().team)
                     transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load("Materials/berry_neutral") as Material;
                 else
                     transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load(mat) as Material;
@@ -38,11 +36,11 @@ public class Herb : Pickup {
         transform.position = doNotTouchTerrain(transform.position);
     }
 
-    public void ChangeProperties(string type, int team) {
+    public void ChangeProperties(string type, PlayerStats owner) {
         mat = "Materials/berry" + (type == "BerryG" ? "_good" : type == "BerryB" ? "_bad" : "_neutral");
         conditionState = type == "BerryG" ? Condition.Regeneration :
             type == "BerryB" ? Condition.Degenration : Condition.Random;
-        teamOwner = team;
+        this.owner = owner.transform;
     }
 
     /// <summary>
@@ -58,14 +56,14 @@ public class Herb : Pickup {
         if (conditionState == Condition.Regeneration)
             ps.GoodBerry(amount, duration);
         if (conditionState == Condition.Degenration)
-            ps.BadBerry(amount, duration);
+            ps.BadBerry(amount, duration, ps.transform);
     }
 
     public void EatIt(PlayerStats ps) {
         if (conditionState == Condition.Regeneration)
             ps.GoodBerry(amount, duration);
         else if (conditionState == Condition.Degenration)
-            ps.BadBerry(amount, duration);
+            ps.BadBerry(amount, duration, ps.transform);
         else //if (conditionState == Condition.Random)
             RandomCondition(ps);
     }
@@ -82,7 +80,7 @@ public class Herb : Pickup {
             else if (conditionState == Condition.Regeneration)
                 ps.GoodBerry(amount, duration);
             else if (conditionState == Condition.Degenration)
-                ps.BadBerry(amount, duration);
+                ps.BadBerry(amount, duration, owner);
             else //if (conditionState == Condition.Random)
                 RandomCondition(ps);
 
