@@ -63,13 +63,13 @@ public class MenuScript : MonoBehaviour {
         joinButton.interactable = team > 0;
         Color highlight = new Color(51f / 255f, 68f / 255f, 34f / 255f);
         Color normal = new Color(137f / 255f, 143f / 255f, 43f / 255f);
-        print(team);
         bananaButton.image.color = team == 1 ? highlight : normal;
         fishButton.image.color = team == 2 ? highlight : normal;
     }
 
     public void Host() { //LAN Host
         fetchAttributes();
+        if (team == 0) team = 1;
         swapMenus(true);
         manager.StartHost();
     }

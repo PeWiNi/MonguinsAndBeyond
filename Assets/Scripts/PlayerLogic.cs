@@ -278,15 +278,42 @@ public class PlayerLogic : NetworkBehaviour
     #region HUD Score stuff
     void OnEnable() {
         GetComponent<EventManager>().EventScoreChange += UpdateScoreInHUD;
+        GetComponent<EventManager>().EventScoreBoard += ScoreBoardInHUD;
     }
 
     // Just to make sure that we unsubscribe when the object is no longer in use
     void OnDisable() {
         GetComponent<EventManager>().EventScoreChange -= UpdateScoreInHUD;
+        GetComponent<EventManager>().EventScoreBoard -= ScoreBoardInHUD;
     }
 
     void UpdateScoreInHUD(float team1, float team2) { // Should be isLocalPlayer but #cba it finally works
         GameObject.Find("HUD").GetComponent<HUDScript>().UpdateDeathScore(team1, team2);
+    }
+
+    void ScoreBoardInHUD(int[] team, int[] kills, int[] deaths, float[] score) {
+        GameObject.Find("HUD").GetComponent<HUDScript>().SetupScoreBoard(team, kills, deaths, score);
+    }
+
+    public void TriggerScoreBoard() {
+        CmdTriggerScoreBoard();
+    }
+
+    [Command]
+    void CmdTriggerScoreBoard() {
+        ScoreManager SM = GameObject.Find("NetworkManager").GetComponentInChildren<ScoreManager>();
+        PlayerStats[] ps = SM.GetScoreBoard();
+        int[] team = new int[ps.Length];
+        int[] kills = new int[ps.Length];
+        int[] deaths = new int[ps.Length];
+        float[] score = new float[ps.Length];
+        for(int i = 0; i < ps.Length; i++) {
+            team[i] = ps[i].team;
+            kills[i] = ps[i].kills;
+            deaths[i] = ps[i].deaths;
+            score[i] = ps[i].score;
+        }
+        GetComponent<EventManager>().SendScoreBoardEvent(team, kills, deaths, score);
     }
     #endregion
 }

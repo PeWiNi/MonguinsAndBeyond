@@ -15,7 +15,8 @@ public class ScoreManager : NetworkBehaviour {
     public float teamOneDeathCount = 0;
     public float teamTwoDeathCount = 0;
 
-    List<Transform> players = new List<Transform>();
+    public List<Transform> players = new List<Transform>();
+    public List<PlayerStats> legacyPlayers = new List<PlayerStats>();
 
     public float sinkTimer;
 
@@ -43,7 +44,8 @@ public class ScoreManager : NetworkBehaviour {
     /// Method triggered whenever someone dies
     /// </summary>
     /// <param name="team">Team number of player killed</param>
-    public void CountDeaths(int team) {
+    /// <param name="killer">Player who killed the fella</param>
+    public void CountDeaths(int team, PlayerStats killer) {
         switch (team) {
             case (1):
                 teamOneDeathCount++;
@@ -57,6 +59,35 @@ public class ScoreManager : NetworkBehaviour {
         RpcDeathCount();
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
             go.GetComponent<EventManager>().SendScoreEvent(teamOneDeathCount, teamTwoDeathCount);
+        if(killer) {
+            killer.score += GetKillScore(killer);
+            killer.GetComponent<EventManager>().SendPersonalScore(killer.score - GetDeathsScore(killer));
+        } else {
+            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+                go.GetComponent<EventManager>().SendPersonalScore(go.GetComponent<PlayerStats>().score - GetDeathsScore(go.GetComponent<PlayerStats>()));
+        }
+    }
+
+    public float GetKillScore(PlayerStats player) {
+        float score = 0;
+        score = 4 / (player.team == 1 ? teamTwo : teamOne);
+        return score;
+    }
+
+    public float GetDeathsScore(PlayerStats player) {
+        float score = 0;
+        score = player.deaths * 2;
+        return score;
+    }
+
+    public PlayerStats[] GetScoreBoard() {
+        PlayerStats[] ps = new PlayerStats[players.Count + legacyPlayers.Count];
+        int i = 0;
+        foreach (Transform t in players)
+            ps[i++] = t.GetComponent<PlayerStats>();
+        foreach (PlayerStats lp in legacyPlayers)
+            ps[i++] = lp.GetComponent<PlayerStats>();
+        return ps;
     }
 
     /// <summary>
@@ -78,15 +109,6 @@ public class ScoreManager : NetworkBehaviour {
         print("Number of players is: " + numberOfPlayers);
         print("Calculated Health is: " + health);
         return health;
-    }
-
-    public float GetScore(PlayerStats player) {
-        float score = 0;
-        foreach(Transform p in players)
-            if(p.GetComponent<PlayerStats>() == player) {
-                score = (player.kills * 4) - (player.deaths * 2);
-            }
-        return score;
     }
 
     /// <summary>

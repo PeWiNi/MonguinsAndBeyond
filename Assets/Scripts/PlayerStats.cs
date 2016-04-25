@@ -66,9 +66,9 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     public int kills;
     [SyncVar]
-    public int assists;
-    [SyncVar]
     public int deaths;
+    [SyncVar]
+    public float score;
     #endregion
 
     [SerializeField]
@@ -471,14 +471,15 @@ public class PlayerStats : NetworkBehaviour {
         syncHealth -= amount * damageReduction;
         if (syncHealth <= 0 && !isDead) {
             ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
-            SM.CountDeaths(team);
             isDead = true;
             deathTimer = (float)(getServerTime());
             syncHealth = 0;
-            #region Individual Score
-            if(attacker != null)
-                attacker.GetComponent<PlayerStats>().kills++;
-            //Do assist stuff
+            #region Scoring
+            if (attacker != transform) {
+                SM.CountDeaths(team, attacker.GetComponent<PlayerStats>());
+                if (attacker != null)
+                    attacker.GetComponent<PlayerStats>().kills++;
+            } else SM.CountDeaths(team, null);
             deaths++;
             #endregion
         }
