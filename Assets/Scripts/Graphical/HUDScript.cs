@@ -26,7 +26,8 @@ public class HUDScript : MonoBehaviour {
     public float trap3Cooldown = 10f;
     float trap3Timer;
     #endregion
-    
+
+    [SerializeField]
     ScoreBoard scoreBoard;
 
     [SerializeField]
@@ -53,7 +54,14 @@ public class HUDScript : MonoBehaviour {
         trap2 = actionBar.GetComponentsInChildren<Image>()[11]; // index 10 is the picture behind index 11
         trap3 = actionBar.GetComponentsInChildren<Image>()[13]; // index 12 is the picture behind index 13
 
-        scoreBoard = GetComponent<ScoreBoard>();
+        if(!scoreBoard)
+            scoreBoard = GameObject.Find("ScoreBoard").GetComponent<ScoreBoard>();
+        if (!scoreBoard) {
+            GameObject ScoreBoard = Instantiate(Resources.Load("Prefabs/GUI/ScoreBoard"), new Vector3(), Quaternion.identity) as GameObject;
+            ScoreBoard.transform.parent = transform.parent;
+            ScoreBoard.name = "ScoreBoard";
+            scoreBoard = ScoreBoard.GetComponent<ScoreBoard>();
+        }
         scoreBoard.showScoreBoard = false;
 
         inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
@@ -212,6 +220,7 @@ public class HUDScript : MonoBehaviour {
     public void SetPlayerStats(PlayerStats playerStats) {
         ps = playerStats;
         pl = playerStats.GetComponent<PlayerLogic>();
+        healthSlider.transform.parent.Find("Name").GetComponentInChildren<Text>().text = ps.playerName;
         // Turn off world-space healthBar
         ps.GetComponentInChildren<Canvas>().enabled = false;
         //ps.GetComponent<EventManager>().EventScoreChange += UpdateDeathScore;

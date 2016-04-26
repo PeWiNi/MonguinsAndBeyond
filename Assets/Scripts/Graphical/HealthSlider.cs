@@ -11,6 +11,8 @@ public class HealthSlider : MonoBehaviour {
     [SerializeField]
     Camera cam;
     Image fill;
+    [SerializeField]
+    Text nameText;
 
     // Use this for initialization
     void Start() {
@@ -19,6 +21,7 @@ public class HealthSlider : MonoBehaviour {
         ps = gameObject.GetComponentInParent<PlayerStats>();
         canv = gameObject.GetComponentInParent<Canvas>();
         fill = healthSlider.transform.FindChild("Fill Area").FindChild("Fill").GetComponent<Image>();
+        nameText.text = ps.playerName;
     }
 
     // Update is called once per frame
