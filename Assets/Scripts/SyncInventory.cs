@@ -49,7 +49,7 @@ public class SyncInventory : NetworkBehaviour {
     void veryBerryThings(int berryType) {
         GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Collectables/Herb"), transform.position, transform.rotation);
         string berry = berryType == 1 ? "BerryG" : berryType == 2 ? "BerryB" : "BerryR";
-        pickup.GetComponent<Herb>().ChangeProperties(berry, GetComponent<PlayerStats>().team);
+        pickup.GetComponent<Herb>().ChangeProperties(berry, GetComponent<PlayerStats>());
         pickup.GetComponent<Pickup>().owner = transform;
         //pickup.transform.FindChild("Berry").GetComponent<MeshRenderer>().materials[0] = Resources.Load("Materials/berry" + (berryType == 1 ? "_good" : berryType == 2 ? "_bad" : "_neutral")) as Material;
         //pickup.transform.FindChild("Berry").GetComponent<MeshRenderer>().materials[1] = Resources.Load("Materials/berry_leaf") as Material;
@@ -112,7 +112,7 @@ public class SyncInventory : NetworkBehaviour {
             banana, spawnPos, banana.transform.rotation);
 
         if (go == "BerryR" || go == "BerryG" || go == "BerryB") 
-            bananaNfunzies.GetComponent<Herb>().ChangeProperties(go, GetComponent<PlayerStats>().team);
+            bananaNfunzies.GetComponent<Herb>().ChangeProperties(go, GetComponent<PlayerStats>());
 
         bananaNfunzies.GetComponent<Pickup>().owner = transform;
 

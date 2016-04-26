@@ -26,6 +26,8 @@ public class HUDScript : MonoBehaviour {
     public float trap3Cooldown = 10f;
     float trap3Timer;
     #endregion
+    
+    ScoreBoard scoreBoard;
 
     [SerializeField]
     Color normalColor;
@@ -50,6 +52,9 @@ public class HUDScript : MonoBehaviour {
         trap1 = actionBar.GetComponentsInChildren<Image>()[9]; // index 8 is the picture behind index 9
         trap2 = actionBar.GetComponentsInChildren<Image>()[11]; // index 10 is the picture behind index 11
         trap3 = actionBar.GetComponentsInChildren<Image>()[13]; // index 12 is the picture behind index 13
+
+        scoreBoard = GetComponent<ScoreBoard>();
+        scoreBoard.showScoreBoard = false;
 
         inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
         castBar = transform.FindChild("CastBar").GetComponent<Slider>();
@@ -150,9 +155,13 @@ public class HUDScript : MonoBehaviour {
                 
             } else if (castBar.gameObject.activeSelf) {
                 castBar.gameObject.SetActive(false);
-            } 
+            }
+            #endregion
+            if(Input.GetKeyDown(KeyCode.Tab)) {
+                if(!scoreBoard.showScoreBoard) pl.TriggerScoreBoard();
+                scoreBoard.showScoreBoard = !scoreBoard.showScoreBoard;
+            }
         }
-        #endregion
         // When pressing Alt the mouse will be released from whatever state is set
         if (Input.GetKeyDown(KeyCode.LeftAlt)) {
             if (wantedMode != CursorLockMode.None) {
@@ -439,5 +448,12 @@ public class HUDScript : MonoBehaviour {
             float seconds = Mathf.Floor((float)timez % 60);
             transform.FindChild("ScoreBoard").FindChild("Timer").GetComponent<Text>().text = string.Format("{0:00}:{1:00}", minute, seconds);
         }
+    }
+
+    public void SetupScoreBoard(int[] team, int[] kills, int[] deaths, float[] score) {
+        scoreBoard.teams = team;
+        scoreBoard.kills = kills;
+        scoreBoard.deaths = deaths;
+        scoreBoard.score = score;
     }
 }

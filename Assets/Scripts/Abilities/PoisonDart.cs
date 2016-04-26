@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 public class PoisonDart : RotateMe {
     Vector3 Destination;
     float tickDamage = 0;
-    int ownerTeam;
+    Transform owner;
     int ticks = 3;
     float speed = 0.25f;
 
@@ -24,7 +24,7 @@ public class PoisonDart : RotateMe {
     }
 
     public void setup(PlayerStats ps, float damageTick, Vector3 endPos) {
-        ownerTeam = ps.team;
+        owner = ps.transform;
         tickDamage = damageTick * ps.maxHealth;
         Destination = endPos;
         speed *= (1 + (ps.Agility / 100));
@@ -33,7 +33,7 @@ public class PoisonDart : RotateMe {
     void OnCollisionEnter(Collision _collision) {
         PlayerStats targetPS = _collision.transform.GetComponentInParent<PlayerStats>();
         if (targetPS != null) {
-            if (targetPS.team != ownerTeam) {
+            if (targetPS.team != owner.GetComponent<PlayerStats>().team) {
                 DamagePlayerOverTime(targetPS.gameObject, tickDamage * ticks, ticks);
             }
         }
@@ -44,7 +44,7 @@ public class PoisonDart : RotateMe {
     }
     
     internal void DamagePlayerOverTime(GameObject player, float damageTick, float duration) {
-        player.GetComponent<PlayerStats>().BadBerry(damageTick, duration);
+        player.GetComponent<PlayerStats>().BadBerry(damageTick, duration, owner);
     }
     internal void SlowPlayer(GameObject player, float duration) {
         player.GetComponent<PlayerStats>().Slow(true, duration);

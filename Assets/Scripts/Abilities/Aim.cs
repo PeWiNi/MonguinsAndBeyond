@@ -66,7 +66,7 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
                 pos = hit.point;
             }
             pos = doNotTouchTerrain(pos, 2);
-            // Check if behind player - and distable projector if it is
+            // Check if behind player - and disable projector if it is
             Vector3 toOther = pos - transform.position;
             if (isBehind(toOther))
                 projector.gameObject.SetActive(false);
@@ -96,8 +96,8 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     /// </summary>
     /// <param name="point">Point to be checked against</param>
     /// <returns>True if the point is in front of (and inside of the castAngles)</returns>
-    bool isBehind(Vector3 point) {
-        Vector3 forward = transform.TransformDirection(Vector3.forward);
+    bool isBehind(Vector3 point) { //TODO: Look into weird behaviour here
+        Vector3 forward = transform.forward;//.TransformDirection(Vector3.forward);
         Vector3 toOther = projector.transform.position - transform.position;
         return Vector3.Dot(forward.normalized, toOther.normalized) < castAngles;
     }

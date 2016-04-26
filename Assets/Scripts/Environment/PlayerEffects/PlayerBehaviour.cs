@@ -230,12 +230,12 @@ public class PlayerBehaviour : NetworkBehaviour
     /// The player will take damage while moving inside a Spike Trap.
     /// </summary>
     /// <param name="player"></param>
-    public void TakeDamageWhileMoving(float damage) {
+    public void TakeDamageWhileMoving(float damage, Transform playerPlaced) {
         distanceTravelled = Vector3.Distance(transform.position, lastPosition);
         if (distanceTravelled >= 0.1f) {
             lastPosition = transform.position;
             print("Moved!");
-            GetComponent<PlayerStats>().TakeDmg(GetComponent<PlayerStats>().maxHealth * (damage + ((float)(Network.time - enterTime) / 1000)));
+            GetComponent<PlayerStats>().TakeDmg(GetComponent<PlayerStats>().maxHealth * (damage + ((float)(Network.time - enterTime) / 1000)), playerPlaced);
             //gameObject.GetComponent<Animator>().SetBool("AffectedBySpikeTrap", true);
             gameObject.GetComponent<NetworkAnimator>().SetTrigger("AffectedBySpikeTrapTrigger");
         }
