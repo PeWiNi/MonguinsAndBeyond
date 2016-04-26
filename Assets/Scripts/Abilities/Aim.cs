@@ -7,6 +7,7 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     [SerializeField]
     Texture2D crosshair;
     Vector3 cursorHitPoint;
+    bool useProjector = false;
 
     float distance;
     bool active = false;
@@ -28,14 +29,14 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     // Update is called once per frame
     void Update() {
         if (aiming) {
-            if (projector.activeSelf) {
+            if (useProjector) {
                 Vector3 pos = MidDist(PlaceStuff());
                 projector.transform.position = pos;
                 // Rotate according to mouse position
                 projector.transform.eulerAngles = new Vector3(90, Quaternion.LookRotation(pos - 
                     doNotTouchTerrain(transform.position)).eulerAngles.y - 90, projector.transform.eulerAngles.z);
             } else {
-                cursorHitPoint = PlaceStuff(false);
+                cursorHitPoint = PlaceStuff();
             }
         }
     }
@@ -55,7 +56,7 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     /// Returns the position of the user's cursor in worldspace
     /// </summary>
     /// <returns>Position of the user's cursor in worldspace</returns>
-    Vector3 PlaceStuff(bool useProjector = true) {
+    Vector3 PlaceStuff() {
         Vector3 pos = transform.forward * -100 + Vector3.up;
         Camera camera = GetComponentInChildren<Camera>();
         if (useProjector) { // Projection on ground
@@ -109,10 +110,14 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
     /// <param name="activate">State of activation (aiming)</param>
     void Activate(bool activate, bool useProjector = true) {
         active = activate;
-        if (useProjector)
+        if (useProjector) {
             projector.gameObject.SetActive(activate);
-        else
+            this.useProjector = useProjector;
+        }
+        else {
             Cursor.SetCursor(activate ? crosshair : null, activate ? new Vector2(32, 32) : Vector2.zero, CursorMode.Auto); ;
+            this.useProjector = useProjector;
+        }
     }
 
     /// <summary>
