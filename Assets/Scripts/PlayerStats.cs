@@ -103,7 +103,7 @@ public class PlayerStats : NetworkBehaviour {
     #region Materials
     public Material currentMaterial;
     [SerializeField]
-    Material standardMat;
+    public Material standardMat;
     [SerializeField]
     Material stealthMat;
     public Material standardMaterial { get { return standardMat; } }
