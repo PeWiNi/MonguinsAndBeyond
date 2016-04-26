@@ -64,7 +64,7 @@ public class SyncInventory : NetworkBehaviour {
         StartCoroutine(pickupFlashEffect(type));
     }
 
-    IEnumerator pickupFlashEffect(string type) {
+    IEnumerator pickupFlashEffect(string type) { //BUG: sometimes gets stuck (when picking up multiple of the same item)
         Transform button = inventory.transform.FindChild(type);
         while(button.localScale.x < 1.2f) {
             button.localScale *= 1.01f;

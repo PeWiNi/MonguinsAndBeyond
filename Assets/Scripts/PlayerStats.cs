@@ -105,7 +105,7 @@ public class PlayerStats : NetworkBehaviour {
     #region Materials
     public Material currentMaterial;
     [SerializeField]
-    public Material standardMat;
+    Material standardMat;
     [SerializeField]
     Material stealthMat;
     public Material standardMaterial { get { return standardMat; } }
@@ -353,6 +353,7 @@ public class PlayerStats : NetworkBehaviour {
     /// </summary>
     [ClientCallback]
     void TeamSelect() {
+        if(standardMat != Resources.Load("Materials/monguin")) { return; }
         try {
             GetComponent<VisualizeTeam>().ToggleForeheadItem(team);
         } catch { Debug.Log("Team visualization could not be achieved :("); }
@@ -757,12 +758,19 @@ public class PlayerStats : NetworkBehaviour {
         if(stealth && currentMaterial != stealthMaterial) {
             currentMaterial = stealthMaterial;
             body.GetComponent<SkinnedMeshRenderer>().material = currentMaterial;
-            GetComponent<VisualizeTeam>().ToggleForeheadItem(team, false);
-        }
-        else if (!stealth && currentMaterial != standardMaterial) {
+            //GetComponent<VisualizeTeam>().ToggleForeheadItem(team, false);
+        } else if (!stealth && currentMaterial != standardMaterial) {
             currentMaterial = standardMaterial;
             body.GetComponent<SkinnedMeshRenderer>().material = currentMaterial;
-            GetComponent<VisualizeTeam>().ToggleForeheadItem(team, true);
+            //GetComponent<VisualizeTeam>().ToggleForeheadItem(team, true);
+        }
+    }
+
+    public void SetStandardMaterial(Material m) {
+        standardMat = m;
+        if (currentMaterial != stealthMaterial) {
+            currentMaterial = standardMaterial;
+            body.GetComponent<SkinnedMeshRenderer>().material = currentMaterial;
         }
     }
 }

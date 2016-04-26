@@ -15,8 +15,7 @@ public class VisualizeTeam : NetworkBehaviour {
 
     public void ToggleForeheadItem(int team, bool show = true) {
 //		GetComponent<PlayerStats> ().standardMat.mainTexture = Resources.Load("Materials/Textures/" + (team == 1 ? "monguinUV2_banana" : "monguinUV2_fish")) as Texture;
-		GetComponent<PlayerStats>().standardMat= team == 1 ? bananterial : fishterial;
-		GetComponent<PlayerStats> ().ChangeMaterial (false);
+		GetComponent<PlayerStats>().SetStandardMaterial(team == 1 ? bananterial : team == 2 ? fishterial : Resources.Load("Materials/monguin") as Material);
        // banana.SetActive(show ? team == 1 : false);
       //  fish.SetActive(show ? team == 2 : false);
     }

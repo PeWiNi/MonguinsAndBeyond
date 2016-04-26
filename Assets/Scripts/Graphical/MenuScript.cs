@@ -114,6 +114,8 @@ public class MenuScript : MonoBehaviour {
 
     public void MakeServer() { //LAN Server Only
         manager.StartServer();
+        HUD.SetActive(false);
+        Attribute.SetActive(false);
     }
 
     public void QuitSession() { //Stop
