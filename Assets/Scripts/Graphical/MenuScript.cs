@@ -18,6 +18,32 @@ public class MenuScript : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        #region Failsafe: Find objects if not set
+        if (!manager)
+            manager = GetComponent<NetworkManager>();
+        if (!HUD) 
+            HUD = GameObject.Find("HUD");
+        if (!HUD) {
+            HUD = Instantiate(Resources.Load("Prefabs/HUD"), new Vector3(), Quaternion.identity) as GameObject;
+            HUD.transform.parent = transform;
+            HUD.name = "HUD";
+        }
+        if (!Attribute) 
+            Attribute = GameObject.Find("MenuAttribute");
+        if (!Attribute) {
+            Attribute = Instantiate(Resources.Load("Prefabs/MenuAttribute"), new Vector3(), Quaternion.identity) as GameObject;
+            Attribute.transform.parent = transform;
+            Attribute.name = "MenuAttribute";
+        }
+        if (!mainInputField)
+            mainInputField = Attribute.transform.FindChild("MenuStuff").GetComponentInChildren<InputField>();
+        if (!joinButton)
+            joinButton = Attribute.transform.FindChild("MenuStuff").FindChild("Join").GetComponent<Button>();
+        if (!bananaButton)
+            bananaButton = Attribute.transform.FindChild("MenuStuff").FindChild("TeamSelection").FindChild("Banana").GetComponent<Button>();
+        if (!fishButton)
+            fishButton = Attribute.transform.FindChild("MenuStuff").FindChild("TeamSelection").FindChild("Fish").GetComponent<Button>();
+        #endregion
         swapMenus(false);
         mainInputField.text = manager.networkAddress;
         mainInputField.onValueChanged.AddListener(delegate { UpdateAddress(); });
@@ -90,14 +116,8 @@ public class MenuScript : MonoBehaviour {
     }
 
     void swapMenus(bool hud) {
-        try {
-            HUD.SetActive(hud);
-            Attribute.SetActive(!hud);
-        }
-        catch {
-            GameObject.Find("HUD").SetActive(hud);
-            GameObject.Find("attributeSliders").SetActive(!hud);
-        }
+        HUD.SetActive(hud);
+        Attribute.SetActive(!hud);
     }
 
     void fetchAttributes() {
