@@ -16,12 +16,12 @@ public class HealthSlider : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        healthSlider = this.gameObject.GetComponentInChildren<Slider>();
+        healthSlider = GetComponentInChildren<Slider>();
         healthText = healthSlider.GetComponentInChildren<Text>();
         ps = gameObject.GetComponentInParent<PlayerStats>();
         canv = gameObject.GetComponentInParent<Canvas>();
         fill = healthSlider.transform.FindChild("Fill Area").FindChild("Fill").GetComponent<Image>();
-        nameText.text = ps.playerName;
+        nameText = transform.parent.GetComponentInChildren<Text>();
     }
 
     // Update is called once per frame
@@ -33,6 +33,7 @@ public class HealthSlider : MonoBehaviour {
     }
 
     public void setCamera(Camera camera, bool team = false) {
+        nameText.text = ps.playerName;
         cam = camera;
         // Placeholder Friend/Foe Colors
         fill.color = team ? new Color(0, 1, 0) : new Color(1, 0, 0);

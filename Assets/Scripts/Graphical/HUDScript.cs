@@ -42,8 +42,8 @@ public class HUDScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         playerUI = transform.FindChild("Player").gameObject;
-        healthText = playerUI.GetComponentInChildren<Text>();
         healthSlider = playerUI.gameObject.GetComponentInChildren<Slider>();
+        healthText = healthSlider.GetComponentInChildren<Text>();
 
         actionBar = transform.FindChild("ActionBar").gameObject; // index 0 is background
         ability1 = actionBar.GetComponentsInChildren<Image>()[2]; // index 1 is the picture behind index 2
