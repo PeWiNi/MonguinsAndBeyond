@@ -104,7 +104,7 @@ public class HUDScript : MonoBehaviour {
             }
             ActionBarUpdate(ref trap3, trap3Cooldown, trap3Timer);
             #endregion
-            #region Cast Bar (currently working for drowning and respawning)
+            #region Cast Bar (currently working for respawning, stunned, drowning and camouflage)
             if (ps.isDead) { // RESPAWNING
                 if (!castBar.gameObject.activeSelf || currentText != "Respawning") { //Reset graphics and text if disabled or using the wrong text
                     castBar.gameObject.SetActive(true);
