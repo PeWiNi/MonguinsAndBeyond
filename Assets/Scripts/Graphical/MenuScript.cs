@@ -9,12 +9,14 @@ public class MenuScript : MonoBehaviour {
     [SerializeField] GameObject HUD;
     [SerializeField] GameObject Attribute;
     public int team = 0;
+    public string pName = "";
     [SerializeField] bool hotKeys = true;
 
     public InputField mainInputField;
     public Button joinButton;
     public Button bananaButton;
     public Button fishButton;
+    public InputField playerNameInputField;
 
     // Use this for initialization
     void Start () {
@@ -24,14 +26,14 @@ public class MenuScript : MonoBehaviour {
         if (!HUD) 
             HUD = GameObject.Find("HUD");
         if (!HUD) {
-            HUD = Instantiate(Resources.Load("Prefabs/HUD"), new Vector3(), Quaternion.identity) as GameObject;
+            HUD = Instantiate(Resources.Load("Prefabs/GUI/HUD"), new Vector3(), Quaternion.identity) as GameObject;
             HUD.transform.parent = transform;
             HUD.name = "HUD";
         }
         if (!Attribute) 
             Attribute = GameObject.Find("MenuAttribute");
         if (!Attribute) {
-            Attribute = Instantiate(Resources.Load("Prefabs/MenuAttribute"), new Vector3(), Quaternion.identity) as GameObject;
+            Attribute = Instantiate(Resources.Load("Prefabs/GUI/MenuAttribute"), new Vector3(), Quaternion.identity) as GameObject;
             Attribute.transform.parent = transform;
             Attribute.name = "MenuAttribute";
         }
@@ -43,6 +45,8 @@ public class MenuScript : MonoBehaviour {
             bananaButton = Attribute.transform.FindChild("MenuStuff").FindChild("TeamSelection").FindChild("Banana").GetComponent<Button>();
         if (!fishButton)
             fishButton = Attribute.transform.FindChild("MenuStuff").FindChild("TeamSelection").FindChild("Fish").GetComponent<Button>();
+        if (!playerNameInputField)
+            playerNameInputField = Attribute.transform.FindChild("MenuStuff").FindChild("NameSelection").GetComponentInChildren<InputField>();
         #endregion
         swapMenus(false);
         mainInputField.text = manager.networkAddress;
@@ -50,6 +54,7 @@ public class MenuScript : MonoBehaviour {
         joinButton.onClick.AddListener(delegate { JoinClient(); });
         bananaButton.onClick.AddListener(delegate { ButtonUpdate(1); });
         fishButton.onClick.AddListener(delegate { ButtonUpdate(2); });
+        playerNameInputField.onValueChanged.AddListener(delegate { UpdateName(); });
         joinButton.interactable = false;
     }
 	
@@ -57,27 +62,28 @@ public class MenuScript : MonoBehaviour {
 	void Update () {
         if (!hotKeys)
             return;
-
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            Application.Quit();
-        }
-
+        
         if (!NetworkClient.active && !NetworkServer.active && manager.matchMaker == null) {
-            if (Input.GetKeyDown(KeyCode.S)) {
+            if (Input.GetKeyDown(KeyCode.F2)) {
                 MakeServer();
             }
-            if (Input.GetKeyDown(KeyCode.H)) {
+            if (Input.GetKeyDown(KeyCode.F1)) {
                 Host();
             }
-            if (Input.GetKeyDown(KeyCode.C)) {
-                JoinClient();
-            }
         }
-        if (NetworkServer.active && NetworkClient.active) {
-            if (Input.GetKeyDown(KeyCode.X)) {
+        if (NetworkServer.active || NetworkClient.active) {
+            if (Input.GetKeyDown(KeyCode.Escape)) {
                 QuitSession();
             }
+        } else {
+            if (Input.GetKeyDown(KeyCode.Escape)) {
+                Application.Quit();
+            }
         }
+    }
+
+    public void UpdateName() {
+        pName = playerNameInputField.text;
     }
 
     public void UpdateAddress() {
@@ -108,6 +114,8 @@ public class MenuScript : MonoBehaviour {
 
     public void MakeServer() { //LAN Server Only
         manager.StartServer();
+        HUD.SetActive(false);
+        Attribute.SetActive(false);
     }
 
     public void QuitSession() { //Stop

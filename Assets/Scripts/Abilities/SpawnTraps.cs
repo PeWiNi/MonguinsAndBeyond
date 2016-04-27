@@ -194,7 +194,7 @@ public class SpawnTraps : NetworkBehaviour {
             Resources.Load(go) as GameObject, spawnPos,
             Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
 
-        trap.GetComponent<Trap>().SetOwner(gameObject);
+        trap.GetComponent<Trap>().SetOwner(transform);
         
         trap.GetComponent<Trap>().SetTriggerCount(triggerCount);
 
@@ -218,7 +218,7 @@ public class SpawnTraps : NetworkBehaviour {
             Resources.Load(go) as GameObject, spawnPos,
             Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
 
-        trap.GetComponent<Trap>().SetOwner(gameObject);
+        trap.GetComponent<Trap>().SetOwner(transform);
 
         trapModifiers(trap);
 

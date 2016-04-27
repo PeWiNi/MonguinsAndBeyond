@@ -75,6 +75,8 @@ public class PlayerStats : NetworkBehaviour {
     public Transform body;
     [SyncVar]
     public int team;
+    [SyncVar]
+    public string playerName;
 
     #region Player states
     [SyncVar]
@@ -103,7 +105,7 @@ public class PlayerStats : NetworkBehaviour {
     #region Materials
     public Material currentMaterial;
     [SerializeField]
-    public Material standardMat;
+    Material standardMat;
     [SerializeField]
     Material stealthMat;
     public Material standardMaterial { get { return standardMat; } }
@@ -201,6 +203,7 @@ public class PlayerStats : NetworkBehaviour {
             #endregion
             //CmdTeamSelection(NM.team);
             CmdTeamSelection(NM.team > 0 ? NM.team : team);
+            CmdNameSelection(NM.pName);
             RoleCharacteristics(role);
             SelectRole();
             //try {
@@ -350,6 +353,7 @@ public class PlayerStats : NetworkBehaviour {
     /// </summary>
     [ClientCallback]
     void TeamSelect() {
+        if(standardMat != Resources.Load("Materials/monguin")) { return; }
         try {
             GetComponent<VisualizeTeam>().ToggleForeheadItem(team);
         } catch { Debug.Log("Team visualization could not be achieved :("); }
@@ -475,7 +479,7 @@ public class PlayerStats : NetworkBehaviour {
             deathTimer = (float)(getServerTime());
             syncHealth = 0;
             #region Scoring
-            if (attacker != transform) {
+            if (attacker && attacker.GetComponent<PlayerStats>().team != team) { 
                 SM.CountDeaths(team, attacker.GetComponent<PlayerStats>());
                 if (attacker != null)
                     attacker.GetComponent<PlayerStats>().kills++;
@@ -594,6 +598,12 @@ public class PlayerStats : NetworkBehaviour {
         foreach(PlayerStats ps in FindObjectsOfType<PlayerStats>())
             ps.changeMaxHealth = ps.team == joinedTeam ? true : ps.team == joinedTeam ? true : false;
         RpcTeam(team, gameObject.name);
+    }
+    [Command]
+    public void CmdNameSelection(string newName) {
+        if (newName == "")
+            newName = team == 1 ? "Bananarama5000" : "Fishinator2000"; // Pull out random names form our asses
+        playerName = newName;
     }
 
     /// <summary>
@@ -748,12 +758,19 @@ public class PlayerStats : NetworkBehaviour {
         if(stealth && currentMaterial != stealthMaterial) {
             currentMaterial = stealthMaterial;
             body.GetComponent<SkinnedMeshRenderer>().material = currentMaterial;
-            GetComponent<VisualizeTeam>().ToggleForeheadItem(team, false);
-        }
-        else if (!stealth && currentMaterial != standardMaterial) {
+            //GetComponent<VisualizeTeam>().ToggleForeheadItem(team, false);
+        } else if (!stealth && currentMaterial != standardMaterial) {
             currentMaterial = standardMaterial;
             body.GetComponent<SkinnedMeshRenderer>().material = currentMaterial;
-            GetComponent<VisualizeTeam>().ToggleForeheadItem(team, true);
+            //GetComponent<VisualizeTeam>().ToggleForeheadItem(team, true);
+        }
+    }
+
+    public void SetStandardMaterial(Material m) {
+        standardMat = m;
+        if (currentMaterial != stealthMaterial) {
+            currentMaterial = standardMaterial;
+            body.GetComponent<SkinnedMeshRenderer>().material = currentMaterial;
         }
     }
 }

@@ -26,14 +26,14 @@ public class Trap : NetworkBehaviour
     public bool trigger = false;
 
     [SyncVar]
-    public GameObject owner;
+    public Transform owner;
 
     void Update () {
         if (trigger && triggerCount == 0)
             Destroy(gameObject);
     }
 
-    public void SetOwner(GameObject player) {
+    public void SetOwner(Transform player) {
         owner = player;
     }
 

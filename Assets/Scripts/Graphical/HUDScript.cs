@@ -12,6 +12,7 @@ public class HUDScript : MonoBehaviour {
     Image ability3;
     Slider healthSlider;
     Text healthText;
+    Text playerNameText;
     PlayerStats ps;
     PlayerLogic pl;
 
@@ -26,7 +27,8 @@ public class HUDScript : MonoBehaviour {
     public float trap3Cooldown = 10f;
     float trap3Timer;
     #endregion
-    
+
+    [SerializeField]
     ScoreBoard scoreBoard;
 
     [SerializeField]
@@ -41,8 +43,9 @@ public class HUDScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         playerUI = transform.FindChild("Player").gameObject;
-        healthText = playerUI.GetComponentInChildren<Text>();
         healthSlider = playerUI.gameObject.GetComponentInChildren<Slider>();
+        healthText = healthSlider.GetComponentInChildren<Text>();
+        playerNameText = healthSlider.transform.parent.Find("Name").GetComponentInChildren<Text>();
 
         actionBar = transform.FindChild("ActionBar").gameObject; // index 0 is background
         ability1 = actionBar.GetComponentsInChildren<Image>()[2]; // index 1 is the picture behind index 2
@@ -53,7 +56,14 @@ public class HUDScript : MonoBehaviour {
         trap2 = actionBar.GetComponentsInChildren<Image>()[11]; // index 10 is the picture behind index 11
         trap3 = actionBar.GetComponentsInChildren<Image>()[13]; // index 12 is the picture behind index 13
 
-        scoreBoard = GetComponent<ScoreBoard>();
+        if(!scoreBoard)
+            scoreBoard = GameObject.Find("ScoreBoard").GetComponent<ScoreBoard>();
+        if (!scoreBoard) {
+            GameObject ScoreBoard = Instantiate(Resources.Load("Prefabs/GUI/ScoreBoard"), new Vector3(), Quaternion.identity) as GameObject;
+            ScoreBoard.transform.parent = transform.parent;
+            ScoreBoard.name = "ScoreBoard";
+            scoreBoard = ScoreBoard.GetComponent<ScoreBoard>();
+        }
         scoreBoard.showScoreBoard = false;
 
         inventory = transform.FindChild("Inventory").GetComponent<Inventory>();
@@ -71,6 +81,7 @@ public class HUDScript : MonoBehaviour {
             #region Health Bar
             healthText.text = (int)System.Math.Ceiling(ps.health) + "/" + System.Math.Ceiling(ps.maxHealth);
             healthSlider.value = (ps.health / ps.maxHealth);
+            if(playerNameText.text == "") playerNameText.text = ps.playerName;
             #endregion
             #region Action Bar
             ActionBarUpdate(ref ability1, ps.abilities[0]);
@@ -212,12 +223,9 @@ public class HUDScript : MonoBehaviour {
     public void SetPlayerStats(PlayerStats playerStats) {
         ps = playerStats;
         pl = playerStats.GetComponent<PlayerLogic>();
+        playerNameText.text = "";
         // Turn off world-space healthBar
         ps.GetComponentInChildren<Canvas>().enabled = false;
-        //ps.GetComponent<EventManager>().EventScoreChange += UpdateDeathScore;
-        //eventScript = ps.GetComponent<EventManager>();
-        //eventScript.EventScoreChange += UpdateDeathScore;
-        //EventManager.EventScoreChange += UpdateDeathScore;
         #region IconSwapping
         /*
         GetComponent<Canvas>().worldCamera = pl.GetComponentInChildren<Camera>().transform.GetChild(0).GetComponent<Camera>();
@@ -450,7 +458,8 @@ public class HUDScript : MonoBehaviour {
         }
     }
 
-    public void SetupScoreBoard(int[] team, int[] kills, int[] deaths, float[] score) {
+    public void SetupScoreBoard(string[] names, int[] team, int[] kills, int[] deaths, float[] score) {
+        scoreBoard.names = names;
         scoreBoard.teams = team;
         scoreBoard.kills = kills;
         scoreBoard.deaths = deaths;
