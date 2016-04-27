@@ -177,7 +177,7 @@ public class EnvironmentPlacement : MonoBehaviour
                 }
                 RaycastHit hitInfo;
                 //if (Physics.Raycast(ray, out hitInfo, groundLayerMask) && hitInfo.transform.gameObject.layer != LayerMask.NameToLayer("Environment")) {
-                if (Physics.SphereCast(ray, assetGameObject.transform.localScale.y, out hitInfo, radius, groundLayerMask)) {
+                if (Physics.SphereCast(ray, assetGameObject.transform.localScale.y, out hitInfo, groundLayerMask)) {
                     if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Environment"))
                         continue;
                     GameObject go = Instantiate(assetGameObject, hitInfo.point, Quaternion.identity) as GameObject;
