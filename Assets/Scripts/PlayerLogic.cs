@@ -291,8 +291,8 @@ public class PlayerLogic : NetworkBehaviour
         GameObject.Find("HUD").GetComponent<HUDScript>().UpdateDeathScore(team1, team2);
     }
 
-    void ScoreBoardInHUD(int[] team, int[] kills, int[] deaths, float[] score) {
-        GameObject.Find("HUD").GetComponent<HUDScript>().SetupScoreBoard(team, kills, deaths, score);
+    void ScoreBoardInHUD(string[] names, int[] team, int[] kills, int[] deaths, float[] score) {
+        GameObject.Find("HUD").GetComponent<HUDScript>().SetupScoreBoard(names, team, kills, deaths, score);
     }
 
     public void TriggerScoreBoard() {
@@ -303,17 +303,19 @@ public class PlayerLogic : NetworkBehaviour
     void CmdTriggerScoreBoard() {
         ScoreManager SM = GameObject.Find("NetworkManager").GetComponentInChildren<ScoreManager>();
         PlayerStats[] ps = SM.GetScoreBoard();
+        string[] names = new string[ps.Length];
         int[] team = new int[ps.Length];
         int[] kills = new int[ps.Length];
         int[] deaths = new int[ps.Length];
         float[] score = new float[ps.Length];
         for(int i = 0; i < ps.Length; i++) {
+            names[i] = ps[i].playerName;
             team[i] = ps[i].team;
             kills[i] = ps[i].kills;
             deaths[i] = ps[i].deaths;
             score[i] = ps[i].score;
         }
-        GetComponent<EventManager>().SendScoreBoardEvent(team, kills, deaths, score);
+        GetComponent<EventManager>().SendScoreBoardEvent(names, team, kills, deaths, score);
     }
     #endregion
 }

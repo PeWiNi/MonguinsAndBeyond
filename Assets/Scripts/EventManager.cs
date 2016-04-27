@@ -7,7 +7,7 @@ public class EventManager : NetworkBehaviour {
     [SyncEvent]
     public event ScoreChange EventScoreChange;
 
-    public delegate void ScoreBoard(int[] team, int[] kills, int[] deaths, float[] score);
+    public delegate void ScoreBoard(string[] names, int[] team, int[] kills, int[] deaths, float[] score);
     [SyncEvent]
     public event ScoreBoard EventScoreBoard;
 
@@ -22,9 +22,9 @@ public class EventManager : NetworkBehaviour {
             EventScoreChange(team1, team2);
     }
 
-    public void SendScoreBoardEvent(int[] team, int[] kills, int[] deaths, float[] score) {
+    public void SendScoreBoardEvent(string[] names, int[] team, int[] kills, int[] deaths, float[] score) {
         if (EventScoreBoard != null)
-            EventScoreBoard(team, kills, deaths, score);
+            EventScoreBoard(names, team, kills, deaths, score);
     }
 
     public void SendPersonalScore(float score) {

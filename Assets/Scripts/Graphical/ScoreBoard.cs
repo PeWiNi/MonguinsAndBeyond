@@ -12,6 +12,7 @@ public class ScoreBoard : MonoBehaviour {
     [SerializeField]
     GameObject scoreBoard;
 
+    public string[] names;
     public int[] teams;
     public int[] kills;
     public int[] deaths;
@@ -33,7 +34,7 @@ public class ScoreBoard : MonoBehaviour {
             float team1Score = 0;
             float team2Score = 0;
             for (int i = 0; i < teams.Length; i++) {
-                Add("Player " + (i + 1), kills[i], deaths[i], score[i], teams[i] == 1 ? team1 : team2);
+                Add(names[i], kills[i], deaths[i], score[i], teams[i] == 1 ? team1 : team2);
                 if(teams[i] == 1) team1Score += score[i];
                 if(teams[i] == 2) team2Score += score[i];
             }

@@ -71,7 +71,7 @@ public class MenuScript : MonoBehaviour {
                 Host();
             }
         }
-        if (NetworkServer.active && NetworkClient.active) {
+        if (NetworkServer.active || NetworkClient.active) {
             if (Input.GetKeyDown(KeyCode.Escape)) {
                 QuitSession();
             }
