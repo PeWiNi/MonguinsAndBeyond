@@ -12,11 +12,14 @@ public class ScoreManager : NetworkBehaviour {
     public float initialHealthPool = 1000;
     public int teamOne = 0;
     public int teamTwo = 0;
-    public float teamOneDeathCount = 0;
-    public float teamTwoDeathCount = 0;
+    public int teamOneDeathCount = 0;
+    public int teamTwoDeathCount = 0;
+    public int teamOneKillCount = 0;
+    public int teamTwoKillCount = 0;
+    public float teamOneScore = 0;
+    public float teamTwoScore = 0;
 
     public List<Transform> players = new List<Transform>();
-    public List<PlayerStats> legacyPlayers = new List<PlayerStats>();
 
     public float sinkTimer;
 
@@ -43,50 +46,48 @@ public class ScoreManager : NetworkBehaviour {
     /// <summary>
     /// Method triggered whenever someone dies
     /// </summary>
-    /// <param name="team">Team number of player killed</param>
+    /// <param name="victim">Player that got killed</param>
     /// <param name="killer">Player who killed the fella</param>
-    public void CountDeaths(int team, PlayerStats killer) {
-        switch (team) {
+    public void CountDeaths(PlayerStats victim, PlayerStats killer) {
+        switch (victim.team) {
             case (1):
                 teamOneDeathCount++;
+                if (killer)
+                    teamTwoKillCount++;
+                teamOneScore -= GetDeathsScore(victim);
                 break;
             case (2):
                 teamTwoDeathCount++;
+                if (killer)
+                    teamOneKillCount++;
+                teamTwoScore -= GetDeathsScore(victim);
                 break;
             default:
                 break;
+        } victim.score -= GetDeathsScore(victim);
+        if (killer) {
+            float score = GetKillScore(victim);
+            killer.score += score;
+            if (killer.team == 1) teamOneScore += score;
+            else if (killer.team == 2) teamTwoScore += score;
         }
-        RpcDeathCount();
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
-            go.GetComponent<EventManager>().SendScoreEvent(teamOneDeathCount, teamTwoDeathCount);
-        if(killer) {
-            killer.score += GetKillScore(killer);
-            killer.GetComponent<EventManager>().SendPersonalScore(killer.score - GetDeathsScore(killer));
-        } else {
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
-                go.GetComponent<EventManager>().SendPersonalScore(go.GetComponent<PlayerStats>().score - GetDeathsScore(go.GetComponent<PlayerStats>()));
-        }
+            go.GetComponent<EventManager>().SendScoreEvent(teamOneScore, teamTwoScore);
     }
 
-    public float GetKillScore(PlayerStats player) {
-        float score = 0;
-        score = 4 / (player.team == 1 ? teamTwo : teamOne);
-        return score;
+    public float GetKillScore(PlayerStats victim) {
+        return victim.maxHealth / 250;
     }
 
     public float GetDeathsScore(PlayerStats player) {
-        float score = 0;
-        score = player.deaths * 2;
-        return score;
+        return player.maxHealth / 500;
     }
 
     public PlayerStats[] GetScoreBoard() {
-        PlayerStats[] ps = new PlayerStats[players.Count + legacyPlayers.Count];
+        PlayerStats[] ps = new PlayerStats[players.Count];
         int i = 0;
         foreach (Transform t in players)
             ps[i++] = t.GetComponent<PlayerStats>();
-        foreach (PlayerStats lp in legacyPlayers)
-            ps[i++] = lp.GetComponent<PlayerStats>();
         return ps;
     }
 
@@ -109,13 +110,5 @@ public class ScoreManager : NetworkBehaviour {
         print("Number of players is: " + numberOfPlayers);
         print("Calculated Health is: " + health);
         return health;
-    }
-
-    /// <summary>
-    /// Send a status update on deaths across teams to clients
-    /// </summary>
-    [ClientRpc]
-    void RpcDeathCount() {
-        Debug.Log(string.Format("Team Banana has been killed: {0} \nTeam Fish has been killed: {1}", teamOneDeathCount, teamTwoDeathCount));
     }
 }

@@ -480,10 +480,10 @@ public class PlayerStats : NetworkBehaviour {
             syncHealth = 0;
             #region Scoring
             if (attacker && attacker.GetComponent<PlayerStats>().team != team) { 
-                SM.CountDeaths(team, attacker.GetComponent<PlayerStats>());
+                SM.CountDeaths(this, attacker.GetComponent<PlayerStats>());
                 if (attacker != null)
                     attacker.GetComponent<PlayerStats>().kills++;
-            } else SM.CountDeaths(team, null);
+            } else SM.CountDeaths(this, null);
             deaths++;
             #endregion
         }

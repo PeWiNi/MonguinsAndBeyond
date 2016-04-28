@@ -436,8 +436,8 @@ public class HUDScript : MonoBehaviour {
     /// <param name="team2">Death count for Team 2</param>
     public void UpdateDeathScore(float team1, float team2) {
         Text[] textiez = transform.FindChild("ScoreBoard").GetComponentsInChildren<Text>();
-        textiez[1].text = "Team 1: " + team1 + " deaths";
-        textiez[2].text = "Team 2: " + team2 + " deaths";
+        textiez[1].text = string.Format("Team 1: {0,7:000.00}", team1);
+        textiez[2].text = string.Format("Team 2: {0,7:000.00}", team2);
     }
 
     /// <summary>
@@ -458,11 +458,17 @@ public class HUDScript : MonoBehaviour {
         }
     }
 
-    public void SetupScoreBoard(string[] names, int[] team, int[] kills, int[] deaths, float[] score) {
+    public void SetupScoreBoard(string[] names, int[] team, int[] kills, int[] deaths, float[] score, int[] teamKills, int[] teamDeaths, float[] teamScore) {
         scoreBoard.names = names;
         scoreBoard.teams = team;
         scoreBoard.kills = kills;
         scoreBoard.deaths = deaths;
         scoreBoard.score = score;
+        scoreBoard.teamOneKillCount = teamKills[0];
+        scoreBoard.teamTwoKillCount = teamKills[1];
+        scoreBoard.teamOneDeathCount = teamDeaths[0];
+        scoreBoard.teamTwoDeathCount = teamDeaths[1];
+        scoreBoard.teamOneScore = teamScore[0];
+        scoreBoard.teamTwoScore = teamScore[1];
     }
 }

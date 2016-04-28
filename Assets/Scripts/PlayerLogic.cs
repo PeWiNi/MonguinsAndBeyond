@@ -291,8 +291,8 @@ public class PlayerLogic : NetworkBehaviour
         GameObject.Find("HUD").GetComponent<HUDScript>().UpdateDeathScore(team1, team2);
     }
 
-    void ScoreBoardInHUD(string[] names, int[] team, int[] kills, int[] deaths, float[] score) {
-        GameObject.Find("HUD").GetComponent<HUDScript>().SetupScoreBoard(names, team, kills, deaths, score);
+    void ScoreBoardInHUD(string[] names, int[] team, int[] kills, int[] deaths, float[] score, int[] teamKills, int[] teamDeaths, float[] teamScore) {
+        GameObject.Find("HUD").GetComponent<HUDScript>().SetupScoreBoard(names, team, kills, deaths, score, teamKills, teamDeaths, teamScore);
     }
 
     public void TriggerScoreBoard() {
@@ -308,14 +308,18 @@ public class PlayerLogic : NetworkBehaviour
         int[] kills = new int[ps.Length];
         int[] deaths = new int[ps.Length];
         float[] score = new float[ps.Length];
-        for(int i = 0; i < ps.Length; i++) {
+        int[] teamKills = new int[2] { SM.teamOneKillCount, SM.teamTwoKillCount };
+        int[] teamDeaths = new int[2] { SM.teamOneDeathCount, SM.teamTwoDeathCount };
+        float[] teamScore = new float[2] { SM.teamOneScore, SM.teamTwoScore };
+        for (int i = 0; i < ps.Length; i++) {
+            if (!ps[i]) continue;
             names[i] = ps[i].playerName;
             team[i] = ps[i].team;
             kills[i] = ps[i].kills;
             deaths[i] = ps[i].deaths;
             score[i] = ps[i].score;
         }
-        GetComponent<EventManager>().SendScoreBoardEvent(names, team, kills, deaths, score);
+        GetComponent<EventManager>().SendScoreBoardEvent(names, team, kills, deaths, score, teamKills, teamDeaths, teamScore);
     }
     #endregion
 }

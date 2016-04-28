@@ -75,8 +75,6 @@ public class MyNetworkManager : NetworkManager {
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
             if (conn.clientOwnedObjects.Contains(go.GetComponent<NetworkIdentity>().netId)) {
                 // Get the stats of the guy who left (and remove him from the players List in SM
-                PlayerStats psst = go.GetComponent<PlayerStats>();
-                SM.legacyPlayers.Add(psst);
                 SM.players.Remove(go.transform);
                 continue;
             }
