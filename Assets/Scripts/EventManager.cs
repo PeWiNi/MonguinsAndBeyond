@@ -7,13 +7,9 @@ public class EventManager : NetworkBehaviour {
     [SyncEvent]
     public event ScoreChange EventScoreChange;
 
-    public delegate void ScoreBoard(string[] names, int[] team, int[] kills, int[] deaths, float[] score);
+    public delegate void ScoreBoard(string[] names, int[] team, int[] kills, int[] deaths, float[] score, int[] teamKills, int[] teamDeaths, float[] teamScore);
     [SyncEvent]
     public event ScoreBoard EventScoreBoard;
-
-    public delegate void PersonalScore(float score);
-    [SyncEvent]
-    public event PersonalScore EventPersonalScore;
 
     public static float amberStunTime = 12;
 
@@ -22,13 +18,8 @@ public class EventManager : NetworkBehaviour {
             EventScoreChange(team1, team2);
     }
 
-    public void SendScoreBoardEvent(string[] names, int[] team, int[] kills, int[] deaths, float[] score) {
+    public void SendScoreBoardEvent(string[] names, int[] team, int[] kills, int[] deaths, float[] score, int[] teamKills, int[] teamDeaths, float[] teamScore) {
         if (EventScoreBoard != null)
-            EventScoreBoard(names, team, kills, deaths, score);
-    }
-
-    public void SendPersonalScore(float score) {
-        if (EventPersonalScore != null)
-            EventPersonalScore(score);
+            EventScoreBoard(names, team, kills, deaths, score, teamKills, teamDeaths, teamScore);
     }
 }

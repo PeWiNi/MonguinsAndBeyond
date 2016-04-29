@@ -18,6 +18,13 @@ public class ScoreBoard : MonoBehaviour {
     public int[] deaths;
     public float[] score;
 
+    public int teamOneKillCount = 0;
+    public int teamTwoKillCount = 0;
+    public int teamOneDeathCount = 0;
+    public int teamTwoDeathCount = 0;
+    public float teamOneScore = 0;
+    public float teamTwoScore = 0;
+
     void Start() {
         scoreBoard.SetActive(false);
     }
@@ -30,16 +37,11 @@ public class ScoreBoard : MonoBehaviour {
             Clear(team2);
         } else if (showScoreBoard && !scoreBoard.activeSelf) {
             scoreBoard.SetActive(true);
-
-            float team1Score = 0;
-            float team2Score = 0;
-            for (int i = 0; i < teams.Length; i++) {
+            
+            for (int i = 0; i < teams.Length; i++) 
                 Add(names[i], kills[i], deaths[i], score[i], teams[i] == 1 ? team1 : team2);
-                if(teams[i] == 1) team1Score += score[i];
-                if(teams[i] == 2) team2Score += score[i];
-            }
-            Add("TOTAL: ", 0, 0, team1Score, team1);
-            Add("TOTAL: ", 0, 0, team2Score, team2);
+            Add("TOTAL: ", teamOneKillCount, teamOneDeathCount, teamOneScore, team1);
+            Add("TOTAL: ", teamTwoKillCount, teamTwoDeathCount, teamTwoScore, team2);
         }
     }
 
