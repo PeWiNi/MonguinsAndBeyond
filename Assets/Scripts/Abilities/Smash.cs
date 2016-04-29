@@ -15,6 +15,8 @@ public class Smash : Ability {
     public float stunDuration = 1.0f;
     [Range(0, 1)]
     public float damage = .01f;
+    public string tooltip = "Smash: Many tiny hits to shake the ground underneath your enemies and disorient them.";
+    public override string tooltipText { get { return tooltip; } }
 
     public override double Trigger() {
         //Play Smash Animation

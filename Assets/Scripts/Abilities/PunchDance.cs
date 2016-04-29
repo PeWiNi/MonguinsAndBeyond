@@ -13,6 +13,8 @@ public class PunchDance : Ability {
     public float secondDmg = .04f;
     [Range(0, 1)]
     public float thirdDmg = .05f;
+    public string tooltip = "Punch: A complicated maneuver that stuns and hurts the enemies.";
+    public override string tooltipText { get { return tooltip; } }
 
     public override double Trigger() {
         //Play Punch Animation

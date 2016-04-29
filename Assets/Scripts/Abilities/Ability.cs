@@ -14,6 +14,7 @@ public class Ability : NetworkBehaviour {
     internal int team;
     public double castTime;
     public Sprite Icon;
+    public virtual string tooltipText { get { return ""; } }
     //public bool Available { get { return OnCooldown(); } }
 
     // Use this for initialization

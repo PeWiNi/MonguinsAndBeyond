@@ -121,6 +121,7 @@ public class Camouflage : NetworkBehaviour
     void Appear() {
         changeColor(1f);
         isStealthed = false;
+        brokeStealth = false;
         if (!isLocalPlayer) GetComponentInChildren<Canvas>().enabled = true;
     }
 

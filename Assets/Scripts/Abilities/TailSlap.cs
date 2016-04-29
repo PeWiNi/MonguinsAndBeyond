@@ -7,7 +7,9 @@ public class TailSlap : Ability {
     public float impactRadius;
     [Range(0, 1)]
     public float damage = .02f;
-    
+    public string tooltip = "Tail Slap: One quick hit, for a bit of damage.";
+    public override string tooltipText { get { return tooltip; } }
+
     public override double Trigger() {
         //Play TailSlap Animation
         GetComponent<NetworkAnimator>().SetTrigger("CastTailSlap");

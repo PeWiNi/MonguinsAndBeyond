@@ -253,6 +253,7 @@ public class HUDScript : MonoBehaviour {
             actionBar.GetComponentsInChildren<Image>()[3].sprite = ps.abilities[1].Icon;
             ability3.sprite = ps.abilities[2].Icon;
             actionBar.GetComponentsInChildren<Image>()[5].sprite = ps.abilities[2].Icon;
+            SetTooltips();
         } catch { }
         #endregion
         #region Inventory
@@ -428,6 +429,24 @@ public class HUDScript : MonoBehaviour {
         }
     }
     #endregion
+
+    void SetTooltips() {
+        // Ability tooltips are set in their respective abilities
+        actionBar.transform.Find("Abilities").Find("Action_1").GetComponent<ToolTips>().toolTipText = ps.abilities[0].tooltipText;
+        actionBar.transform.Find("Abilities").Find("Action_2").GetComponent<ToolTips>().toolTipText = ps.abilities[1].tooltipText;
+        actionBar.transform.Find("Abilities").Find("Action_3").GetComponent<ToolTips>().toolTipText = ps.abilities[2].tooltipText;
+        actionBar.transform.Find("Traps").Find("Trap_1").GetComponent<ToolTips>().toolTipText = "Banana Splat: Makes you slip uncontrollably for at least 2 sec. Can throw your enemies further, if you’re one of the supporters. (Consumes Bananas)";
+        actionBar.transform.Find("Traps").Find("Trap_2").GetComponent<ToolTips>().toolTipText = "Spikes: Hides some sharp-sharp spikes, depending on agility, on the ground that hurt when you or your enemies walk through them. (Consumes Sticks and Leaves)";
+        actionBar.transform.Find("Traps").Find("Trap_3").GetComponent<ToolTips>().toolTipText = "Sap trap: Whomever it is thrown at, is slowed and has a chance to turn to amber if they touch the water. (Consumes Sap)";
+
+        inventory.transform.Find("Banana").GetComponent<ToolTips>().toolTipText = "Bananas: Used for banana splat. 1 Banana per trap.";
+        inventory.transform.Find("Stick").GetComponent<ToolTips>().toolTipText = "Sticks: Used for the spikes trap. 1 Stick + 1 Leaf are consumed for every trap.";
+        inventory.transform.Find("Sap").GetComponent<ToolTips>().toolTipText = "Sap: To be thrown at the others. It will slow them down and might turn them to amber for a little while.";
+        inventory.transform.Find("Leaf").GetComponent<ToolTips>().toolTipText = "Leaves: Used to camouflage things. Can be triggered to activate a temporary stealth. Also used for the spikes trap.";
+        inventory.transform.Find("BerryR").GetComponent<ToolTips>().toolTipText = "Neutral Berry: The mysteries of the rainforest hide the true nature of this berry. It might hurt you or it might heal you, who knows ?!?";
+        inventory.transform.Find("BerryG").GetComponent<ToolTips>().toolTipText = "Good Berry: Refreshing and energizing. Heals for 50 all together.";
+        inventory.transform.Find("BerryB").GetComponent<ToolTips>().toolTipText = "Bad Berry: Disgusting and hurtful. Takes 50 out of your health.";
+    }
 
     /// <summary>
     /// Method in charge of updating the score

@@ -22,6 +22,8 @@ public class ThrowBoomnana : Ability
     public float fullDamage = 0.8f;
     [Range(0, 1)]
     public float selfDamage = 0.35f;
+    public string tooltip = "BOOMnana: A really skillful action that creates explosions on impact.";
+    public override string tooltipText { get { return tooltip; } }
 
     public override double Trigger() {
         StartCoroutine(GetComponent<Aim>().Boomy(this));

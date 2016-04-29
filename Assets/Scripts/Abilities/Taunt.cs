@@ -15,6 +15,8 @@ public class Taunt : Ability {
     public float radius = 2;
     [Range(0, 1)]
     public float damage = .08f;
+    public string tooltip = "Forces your enemies to look at you and only you for a brief moment.";
+    public override string tooltipText { get { return tooltip; } }
 
     public override double Trigger() {
         //Play Taunt Animation

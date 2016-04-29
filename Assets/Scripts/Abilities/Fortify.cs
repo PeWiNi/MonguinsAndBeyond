@@ -11,6 +11,8 @@ using UnityEngine.Networking;
 public class Fortify : Ability {
     public float duration = 10;
     public float effect = 20;
+    public string tooltip = "Fortify: Increases the durability of skin for 20 seconds - acts as resilience boost.";
+    public override string tooltipText { get { return tooltip; } }
 
     public override double Trigger() {
         //Play Fortify Animation

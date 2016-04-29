@@ -14,6 +14,8 @@ public class Puke : Ability {
     public float slowDuration = 3.0f;
     [Range(0, 1)]
     public float damage = .08f;
+    public string tooltip = "Puke: Covers the area around you in banana and fish slime that slows and hurts your enemies.";
+    public override string tooltipText { get { return tooltip; } }
 
     public override double Trigger() {
         //Play Puke Animation

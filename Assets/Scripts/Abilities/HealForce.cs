@@ -15,6 +15,8 @@ public class HealForce : Ability {
     int healTics = 0;
     [Range(0, 1)]
     public float heal = .05f;
+    public string tooltip = "Heal Force: Brings forth the soothing effects of good berries on you and your teammates, through healing. (Requires Good Berries)";
+    public override string tooltipText { get { return tooltip; } }
 
     public override double Trigger() {
         //Play HealForce Animation

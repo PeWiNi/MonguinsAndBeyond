@@ -15,6 +15,8 @@ public class ThrowPoison : Ability {
     public float distance = 30f;
     [Range(0, 1)]
     public float damage = 0.015f;
+    public string tooltip = "Poison Dart: Throws a poisonous berry at your enemies, assuring they are affected by the its effect. (Requires Bad Berries)";
+    public override string tooltipText { get { return tooltip; } }
 
     public override double Trigger() {
         if (!GetComponent<SyncInventory>().ThrowPoisonBerryConsume())

@@ -7,7 +7,7 @@ Shader "Custom/Toon/Basic" {
 
 
 	SubShader {
-		Tags{ "Queue" = "Transparent" "RenderType"="Transparent" }
+		Tags{ "RenderType"="Opaque" }
 		Blend SrcAlpha OneMinusSrcAlpha
 		Pass{ ColorMask 0 }
 		Pass {
@@ -53,7 +53,7 @@ Shader "Custom/Toon/Basic" {
 			{
 				fixed4 col = _Color * tex2D(_MainTex, i.texcoord);
 				fixed4 cube = texCUBE(_ToonShade, i.cubenormal);
-				fixed4 c = fixed4(2.0f * cube.rgb * col.rgb, col.a * _Color.a);
+				fixed4 c = fixed4(2.0f * cube.rgb * col.rgb, 1);
 				UNITY_APPLY_FOG(i.fogCoord, c);
 				return c;
 			}
