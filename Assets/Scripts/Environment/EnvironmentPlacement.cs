@@ -171,21 +171,25 @@ public class EnvironmentPlacement : MonoBehaviour
                 //            normalsWithinRadius.Add(terrainNormals);
                 //        }
                 //    }
-                Ray ray = new Ray(gameObject.transform.position, Random.onUnitSphere * radius);
-                while (ray.direction.y > gameObject.transform.position.y) {
-                    ray = new Ray(gameObject.transform.position, Random.onUnitSphere * radius);
-                }
+                Vector3 first = transform.position;
+                Vector3 second = new Vector3(transform.position.x * Random.Range(0, radius), transform.position.y * Random.Range(0, -radius), transform.position.z * Random.Range(0, radius));
+                Ray ray = new Ray(first, second);
+                //Ray ray = new Ray(transform.position, Random.insideUnitSphere);
                 RaycastHit hitInfo;
-                //if (Physics.Raycast(ray, out hitInfo, groundLayerMask) && hitInfo.transform.gameObject.layer != LayerMask.NameToLayer("Environment")) {
-                if (Physics.SphereCast(ray, assetGameObject.transform.localScale.y, out hitInfo, groundLayerMask)) {
-                    if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Environment"))
+                if (Physics.Raycast(ray, out hitInfo, Vector3.Distance(first, second) * 2, groundLayerMask)) {
+                    //if (Physics.SphereCast(ray, assetGameObject.transform.localScale.magnitude, out hitInfo, Mathf.Infinity, groundLayerMask)) {
+                    print("Name = " + assetGameObject.name + ", Magnitude = " + assetGameObject.transform.localScale.magnitude);
+                    if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Environment")) {
                         continue;
-                    GameObject go = Instantiate(assetGameObject, hitInfo.point, Quaternion.identity) as GameObject;
-                    //GameObject go = Instantiate(assetGameObject, hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal)) as GameObject;
-                    go.transform.parent = transform;
-                    Debug.DrawLine(gameObject.transform.position, hitInfo.point, Color.red, 100f);
-                    amountWeNeed++;
+                    }
+                    else {
+                        //GameObject go = Instantiate(assetGameObject, hitInfo.point, Quaternion.identity) as GameObject;
+                        //GameObject go = Instantiate(assetGameObject, hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal)) as GameObject;
+                        //go.transform.parent = transform;
+                        Debug.DrawLine(gameObject.transform.position, hitInfo.point, Color.red, 100f);
+                    }
                 }
+                amountWeNeed++;
             }
             #endregion
         }
@@ -222,11 +226,12 @@ public class EnvironmentPlacement : MonoBehaviour
         }
     }
 
-    //void OnDrawGizmosSelected()
-    //{
-    //    Vector3 center = gameObject.GetComponent<MeshRenderer>().bounds.center;
-    //    float radius = gameObject.GetComponent<MeshRenderer>().bounds.extents.magnitude;
-    //    Gizmos.color = Color.white;
-    //    Gizmos.DrawWireSphere(center, radius);
-    //}
+    void OnDrawGizmosSelected() {
+        //Vector3 center = gameObject.GetComponent<MeshRenderer>().bounds.center;
+        //float radius = gameObject.GetComponent<MeshRenderer>().bounds.extents.magnitude;
+        Vector3 center = gameObject.transform.position;
+        float radius = this.areaRadius;
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(center, radius);
+    }
 }
