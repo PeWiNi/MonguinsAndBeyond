@@ -298,7 +298,7 @@ public class PlayerStats : NetworkBehaviour {
     void RoleCharacteristics(Role role) {
         abilities = new Ability[3];
         if (isLocalPlayer) {
-            roleStats = new RoleStats((int)attributes["DEF"], (int)attributes["ATT"], (int)attributes["SUP"]);
+            roleStats = new RoleStats((int)attributes["RESI"], (int)attributes["AGI"], (int)attributes["WIS"]);
             CmdProvideStats(roleStats.maxHealth, roleStats.dmgMultiplier, roleStats.dmgReduction, roleStats.sapModifier, roleStats.speed, roleStats.resilience, roleStats.agility, roleStats.wisdom);
             SetStats(roleStats.resilience, roleStats.agility, roleStats.wisdom, roleStats.speed, roleStats.dmgMultiplier, roleStats.dmgReduction, roleStats.sapModifier);
         }

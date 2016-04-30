@@ -254,7 +254,7 @@ public class HUDScript : MonoBehaviour {
             ability3.sprite = ps.abilities[2].Icon;
             actionBar.GetComponentsInChildren<Image>()[5].sprite = ps.abilities[2].Icon;
             SetTooltips();
-        } catch { }
+        } catch { Debug.Log("Actionbar (automatic) setup for abilities failed.."); }
         #endregion
         #region Inventory
         //Activate Inventory GO
