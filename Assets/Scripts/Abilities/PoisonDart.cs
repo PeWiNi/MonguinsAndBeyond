@@ -14,13 +14,24 @@ public class PoisonDart : RotateMe {
     int ticks = 3;
     float speed = 0.25f;
 
+    Transform target;
+    float maxDistance;
+    Vector3 Origin;
+
     void FixedUpdate() {
         if (!isServer)
             return;
-        if (CloseEnough(transform.position, Destination, .0025f)) {
-            Destroy(gameObject);
+        if(!target) { // Original movement of dart projectile
+            if (CloseEnough(transform.position, Destination, .0025f)) {
+                Destroy(gameObject);
+            }
+            transform.position = Vector3.MoveTowards(transform.position, Destination, speed);
+        } else { // Updated movement of dart projectile - chasing players
+            if(Vector3.Distance(Origin, target.position) > maxDistance) {
+                Destroy(gameObject);
+            }
+            transform.position = Vector3.MoveTowards(transform.position, target.position + (target.localScale.y + .5f) * target.up, speed);
         }
-        transform.position = Vector3.MoveTowards(transform.position, Destination, speed);
     }
 
     public void setup(PlayerStats ps, float damageTick, Vector3 endPos) {
@@ -30,11 +41,21 @@ public class PoisonDart : RotateMe {
         speed *= (1 + (ps.Agility / 100));
     }
 
+    public void setup(PlayerStats ps, float damageTick, Transform target, float distance) {
+        owner = ps.transform;
+        tickDamage = damageTick * ps.maxHealth;
+        speed *= (1 + (ps.Agility / 100));
+        this.target = target;
+        maxDistance = distance;
+        Origin = owner.transform.position;
+        print(target + ", maxDist = " + distance);
+    }
+
     void OnCollisionEnter(Collision _collision) {
         PlayerStats targetPS = _collision.transform.GetComponentInParent<PlayerStats>();
         if (targetPS != null) {
             if (targetPS.team != owner.GetComponent<PlayerStats>().team) {
-                DamagePlayerOverTime(targetPS.gameObject, tickDamage * ticks, ticks);
+                DamagePlayerOverTime(targetPS.gameObject, tickDamage, ticks);
             }
         }
         if (_collision.collider.tag != "Ability") {

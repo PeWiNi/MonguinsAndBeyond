@@ -24,23 +24,30 @@ public class ThrowBoomnana : Ability
     public float selfDamage = 0.35f;
     public string tooltip = "BOOMnana: A really skillful action that creates explosions on impact.";
     public override string tooltipText { get { return tooltip; } }
+    [SyncVar]
+    Transform target;
 
     public override double Trigger() {
+        CmdTarget(gameObject);
         StartCoroutine(GetComponent<Aim>().Boomy(this));
         GetComponent<NetworkAnimator>().SetTrigger("Aim");
         //CmdDoFire(new Vector3());
         return 0;
     }
 
-    public void Throw(Vector3 pos) {
+    public void Throw(Vector3 pos, Transform target) {
+        CmdTarget(target.gameObject);
         GetComponent<NetworkAnimator>().SetTrigger("CastBOOMnana");
         CmdDoFire(pos);
         timer = (float)Network.time;
+        print(target + ", maxDist = " + distance);
     }
 
     public void Cancel() {
         GetComponent<NetworkAnimator>().SetTrigger("CancelAim");
     }
+    [Command]
+    void CmdTarget(GameObject targetGO) { target = targetGO.transform; }
 
     [Command]
     void CmdDoFire(Vector3 endPos) {
@@ -48,10 +55,15 @@ public class ThrowBoomnana : Ability
         GameObject bullet = (GameObject)Instantiate(
             prefab, transform.position + (transform.localScale.x + .5f) * transform.forward + (transform.localScale.y + .5f) * transform.up,
             Quaternion.identity);
-        // Determine end-position of BOOMnana
-        Vector3 pos = endPos == new Vector3() ? (transform.position + (transform.forward * distance)) : endPos;
-        // Pass correct parameters from the Player Prefab
-        bullet.GetComponent<Boomnana>().setup(gameObject, pos, speed, fullDamage, selfDamage);
+        if(target == transform) {
+            // Determine end-position of BOOMnana
+            Vector3 pos = endPos == new Vector3() ? (transform.position + (transform.forward * distance)) : endPos;
+            // Pass correct parameters from the Player Prefab
+            bullet.GetComponent<Boomnana>().setup(gameObject, pos, speed, fullDamage, selfDamage);
+        } else {
+            // Pass correct parameters from the Player Prefab
+            bullet.GetComponent<Boomnana>().setup(gameObject, target, distance, speed, fullDamage, selfDamage);
+        }
 
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);

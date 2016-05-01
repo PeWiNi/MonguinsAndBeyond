@@ -138,7 +138,17 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
             else {
                 Vector3 me = doNotTouchTerrain(transform.position);
                 Ray ray = new Ray(me, (projector.transform.position - me).normalized);
-                ability.Throw(ray.GetPoint(distance));
+                #region Aim assist
+                Transform target = transform;
+                RaycastHit hit;
+                Ray rayT = GetComponentInChildren<Camera>().ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+                if (Physics.Raycast(rayT, out hit, Mathf.Infinity)) {
+                    PlayerStats ps = hit.collider.GetComponent<PlayerStats>();
+                    if (ps)
+                        target = ps.transform;
+                }
+                #endregion
+                ability.Throw(ray.GetPoint(distance), target);
             //ability.Throw(Vector3.MoveTowards(transform.position, projector.transform.position, distance));
             }
         } else
@@ -159,7 +169,17 @@ public class Aim : NetworkBehaviour { // Future TODO: Fuse with SpawnTraps.cs
         while (!Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1))
             yield return new WaitForFixedUpdate();
         if (Input.GetMouseButtonDown(0)) { // Sometimes I haz to press twice TT-TT
-            ability.Throw(cursorHitPoint);
+            #region Aim assist
+            Transform target = transform;
+            RaycastHit hit;
+            Ray rayT = GetComponentInChildren<Camera>().ScreenPointToRay(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0));
+            if (Physics.Raycast(rayT, out hit, Mathf.Infinity)) {
+                PlayerStats ps = hit.collider.GetComponent<PlayerStats>();
+                if (ps)
+                    target = ps.transform;
+            }
+            #endregion
+            ability.Throw(cursorHitPoint, target);
         } else
             ability.Cancel();
         yield return new WaitForFixedUpdate(); // Makes sure you don't activate anything else when you click

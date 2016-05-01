@@ -17,8 +17,11 @@ public class ThrowPoison : Ability {
     public float damage = 0.015f;
     public string tooltip = "Poison Dart: Throws a poisonous berry at your enemies, assuring they are affected by the its effect. (Requires Bad Berries)";
     public override string tooltipText { get { return tooltip; } }
+    [SyncVar]
+    Transform target;
 
     public override double Trigger() {
+        CmdTarget(gameObject);
         if (!GetComponent<SyncInventory>().ThrowPoisonBerryConsume())
             return 0;
         if(GetComponent<Aim>().aiming) { Cancel(); return 0; }
@@ -26,17 +29,21 @@ public class ThrowPoison : Ability {
         return 0;
     }
 
-    public void Throw(Vector3 pos) {
+    public void Throw(Vector3 pos, Transform target) {
+        CmdTarget(target.gameObject);
         //Play ThrowPoison Animation
         GetComponent<NetworkAnimator>().SetTrigger("CastThrowPoison");
         CmdDoFire(pos);
         base.Trigger();
         timer = (float)Network.time;
+        print(target + ", maxDist = " + distance);
     }
 
     public void Cancel() {
         GetComponent<SyncInventory>().pickupBerry(Herb.Condition.Degenration);
     }
+    [Command]
+    void CmdTarget(GameObject targetGO) { target = targetGO.transform; }
 
     [Command]
     void CmdDoFire(Vector3 endPos) {
@@ -44,12 +51,16 @@ public class ThrowPoison : Ability {
         GameObject bullet = (GameObject)Instantiate( // Offset by 5?
             prefab, transform.position + (transform.localScale.x + .5f) * transform.forward + (transform.localScale.y + .5f) * transform.up,
             Quaternion.identity);
-        // Determine end-position of Projectile
-        Vector3 pos = endPos == new Vector3() ? (transform.position + (transform.forward * distance)) : endPos;
-        // Pass correct parameters from the Player Prefab
-        bullet.GetComponent<PoisonDart>().setup(GetComponent<PlayerStats>(), damage, pos);
-        bullet.transform.LookAt(endPos);
-        bullet.GetComponent<PoisonDart>().SetRotation(bullet.transform.rotation);
+        if(target == transform) {
+            // Determine end-position of Projectile
+            Vector3 pos = endPos == new Vector3() ? (transform.position + (transform.forward * distance)) : endPos;
+            // Pass correct parameters from the Player Prefab
+            bullet.GetComponent<PoisonDart>().setup(GetComponent<PlayerStats>(), damage, pos);
+        } else {
+            bullet.GetComponent<PoisonDart>().setup(GetComponent<PlayerStats>(), damage, target, distance);
+            bullet.transform.LookAt(target.position);
+            bullet.GetComponent<PoisonDart>().SetRotation(bullet.transform.rotation);
+        }
 
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);

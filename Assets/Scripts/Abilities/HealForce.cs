@@ -44,7 +44,7 @@ public class HealForce : Ability {
         // Initiate GameObject using prefab, position and a rotation
         GameObject bullet = (GameObject)Instantiate(prefab, transform.position, Quaternion.identity);
 
-        Destroy(bullet, 5); // Add whatever number fits the time of the thing
+        Destroy(bullet, 50); // Add whatever number fits the time of the thing
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);
     }

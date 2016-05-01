@@ -24,6 +24,10 @@ public class Boomnana : NetworkBehaviour {
     bool movingBack = false;
     Vector3 endpoint;
 
+    Transform target;
+    float maxDistance;
+    Vector3 Origin;
+
     #region AoE
     [Tooltip("Total size of the AoE")]
     public float maxArea = 3f;
@@ -60,18 +64,46 @@ public class Boomnana : NetworkBehaviour {
         movingBack = false;
     }
 
+    /// <summary>
+    /// A seperate Start function, created because the BOOMnana needs to be setup properly
+    /// </summary>
+    /// <param name="owner">GameObject of the player who threw the BOOMnana</param>
+    /// <param name="endPos">The position to which the BOOMnana will fly before returning</param>
+    /// <param name="spd">The speed at which the BOOMnana will fly</param>
+    /// <param name="fullDmg">The maximum damage dealt to opponent players</param>
+    /// <param name="selfDmg">Reduced damage taken if the BOOMnana is unsuccessful and returns to the user</param>
+    public void setup(GameObject owner, Transform target, float distance, float spd, float fullDmg, float selfDmg) {
+        PlayerStats ps = owner.GetComponent<PlayerStats>();
+        this.owner = owner;
+        ownerTeam = ps.team;
+        damage = ps.maxHealth * ps.damageModifier; //TODO: Get AGI and calculate DMG modifier -- do for all Abilities
+        speed = spd * (1 + (ps.Agility / 100));
+        fullDamage = fullDmg;
+        selfDamage = selfDmg;
+        movingBack = false;
+
+        this.target = target;
+        maxDistance = distance;
+        Origin = owner.transform.position;
+        print(target + ", maxDist = " + distance);
+    }
+
     // Update is called once per frame
     void FixedUpdate() {
         if (!isServer)
             return;
-        if (CloseEnough(transform.position, endpoint, .0025f)) {
+        if(target) {
+            if (Vector3.Distance(Origin, target.position) > maxDistance) {
+                movingBack = true;
+            }
+        } else if (CloseEnough(transform.position, endpoint, .0025f)) {
             movingBack = true;
         }
         if (movingBack) {
             GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
             transform.position = doNotTouchTerrain(Vector3.MoveTowards(transform.position, owner.gameObject.transform.position, speed));
         } else {
-            transform.position = doNotTouchTerrain(Vector3.MoveTowards(transform.position, endpoint, speed));
+            transform.position = doNotTouchTerrain(Vector3.MoveTowards(transform.position, target ? target.position + (target.localScale.y + .5f) * target.up : endpoint, speed));
         }
     }
 
