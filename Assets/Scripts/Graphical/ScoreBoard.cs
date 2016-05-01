@@ -37,12 +37,16 @@ public class ScoreBoard : MonoBehaviour {
             Clear(team2);
         } else if (showScoreBoard && !scoreBoard.activeSelf) {
             scoreBoard.SetActive(true);
-            
-            for (int i = 0; i < teams.Length; i++) 
-                Add(names[i], kills[i], deaths[i], score[i], teams[i] == 1 ? team1 : team2);
-            Add("TOTAL: ", teamOneKillCount, teamOneDeathCount, teamOneScore, team1);
-            Add("TOTAL: ", teamTwoKillCount, teamTwoDeathCount, teamTwoScore, team2);
+            StartCoroutine(DrawStuff());
         }
+    }
+
+    IEnumerator DrawStuff() {
+        yield return new WaitForFixedUpdate(); // We mayhaps need to wait a little longer for the command to finish (depends on serverDelay)
+        for (int i = 0; i < teams.Length; i++)
+            Add(names[i], kills[i], deaths[i], score[i], teams[i] == 1 ? team1 : team2);
+        Add("TOTAL: ", teamOneKillCount, teamOneDeathCount, teamOneScore, team1);
+        Add("TOTAL: ", teamTwoKillCount, teamTwoDeathCount, teamTwoScore, team2);
     }
 
     void Add(string name, int kills, int deaths, float score, Transform team) {
