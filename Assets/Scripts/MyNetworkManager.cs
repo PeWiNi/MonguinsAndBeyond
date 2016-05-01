@@ -18,7 +18,7 @@ public class MyNetworkManager : NetworkManager {
         try { ScoreManager SM = GetComponentInChildren<ScoreManager>();
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
                 if (conn.clientOwnedObjects.Contains(go.GetComponent<NetworkIdentity>().netId)) {
-                    go.GetComponent<EventManager>().SendScoreEvent(SM.teamOneDeathCount, SM.teamTwoDeathCount);
+                    go.GetComponent<EventManager>().SendScoreEvent(SM.teamOneScore, SM.teamTwoScore);
                     go.GetComponent<PlayerStats>().RpcServerInitTime(Network.time - SM.initServerTime);
                     break;
                 }

@@ -46,8 +46,8 @@ public class PunchDance : Ability {
         }
     }
 
-    void OnDrawGizmos() {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawSphere(transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up, impactRadius);
-    }
+    //void OnDrawGizmos() {
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawSphere(transform.position + (transform.forward * distance) + (transform.localScale.y + .5f) * transform.up, impactRadius);
+    //}
 }

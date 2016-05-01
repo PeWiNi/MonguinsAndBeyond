@@ -42,10 +42,15 @@ public class HealForce : Ability {
     [Command]
     void CmdSpawnHeal() {
         // Initiate GameObject using prefab, position and a rotation
-        GameObject bullet = (GameObject)Instantiate(prefab, transform.position, Quaternion.identity);
+        GameObject bullet = (GameObject)Instantiate(prefab, transform.position + (transform.localScale.y - .5f) * transform.up, Quaternion.identity);
 
         Destroy(bullet, 50); // Add whatever number fits the time of the thing
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);
     }
+
+    //void OnDrawGizmos() {
+    //    Gizmos.color = Color.yellow;
+    //    Gizmos.DrawSphere(transform.position + (transform.localScale.y + .5f) * transform.up, impactRadius);
+    //}
 }
