@@ -10,12 +10,12 @@ using UnityEngine.Networking;
 public class PickupSpawner : NetworkBehaviour {
     public GameObject prefab;
     public float spawnTime = 5f;
-    Vector3 SpawnPosition;
+    public Vector3 SpawnPosition;
 
 	// Use this for initialization
 	void Start () {
         if(isServer) {
-            SpawnPosition = transform.position + new Vector3(0, .75f, 0);
+            if(SpawnPosition == new Vector3()) SpawnPosition = transform.position + new Vector3(0, .75f, 0);
             //InvokeRepeating("RepeatSpawn", 0f, spawnTime);
             Spawn(SpawnPosition);
         }
