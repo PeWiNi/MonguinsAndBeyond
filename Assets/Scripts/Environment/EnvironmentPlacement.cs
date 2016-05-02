@@ -132,6 +132,7 @@ public class EnvironmentPlacement : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, groundLayerMask);//Get a collection of all colliders touched or within the sphere.
         GameObject assetGameObject = assets[assetID];//Get the environment asset you want to fill this area with.
         int amountWeNeed = 0;
+        bool hasEnsuredCollectable = false;// Used to ensure that we do atleast have '1' Collectable created.
         while (amountWeNeed < maxNumberOfAssets) {
             #region Meshes: If we are using Normal 3D Meshes
             //int randomHitCollider = 0;
@@ -153,19 +154,23 @@ public class EnvironmentPlacement : MonoBehaviour
             //int randomVerticesWithinRadius = Random.Range(0, verticesWithinRadius.Count);
             //Vector3 randomVertex = verticesWithinRadius[randomVerticesWithinRadius];
             //Vector3 randomNormal = normalsWithinRadius[randomVerticesWithinRadius];
-            #endregion
-            if (randomAssets) {
-                assetGameObject = assets[Random.Range(0, assets.Count)];
-            }
+
             //GameObject go = Instantiate(assetGameObject, randomVertex, Quaternion.FromToRotation(Vector3.up, randomNormal)) as GameObject;//The FromToRotation(Vector3.up, hit.normal) ensures we align the 'go' GameObject along the surface of the mesh.
             //go.transform.parent = transform;
             //amountWeNeed++;
+            #endregion
 
             #region UnityTerrain: If we are using a Unity Terrain.
             if (isUsingUnityTerrain) {
                 List<Vector3> normalsWithinRadius = new List<Vector3>();
                 TerrainData myTerrainData = terrainParentInfo.GetTerrainData();
-
+                if (randomAssets && hasEnsuredCollectable) {
+                    assetGameObject = assets[Random.Range(0, assets.Count)];
+                }
+                else {
+                    hasEnsuredCollectable = true;
+                    assetGameObject = assets[0];
+                }
                 //TerrainData myTerrainData = hitColliders[0].gameObject.GetComponent<TerrainCollider>().terrainData;
                 //float[,] allHeights = myTerrainData.GetHeights(0, 0, myTerrainData.heightmapResolution, myTerrainData.heightmapResolution);
                 //print("AllHeights length = " + allHeights.Length);
