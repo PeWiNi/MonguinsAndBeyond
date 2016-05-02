@@ -472,14 +472,21 @@ public class PlayerStats : NetworkBehaviour {
         if (!isServer)
             return;
         GetComponent<Camouflage>().brokeStealth = true;
-        syncHealth -= amount * damageReduction;
+        if(!isDead) {
+            syncHealth -= amount * damageReduction;
+            // Add gore effect on dmg taken
+            GameObject bullet = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/ParticleSystems/Gore"), transform.position + (transform.localScale.y - .5f) * transform.up, Quaternion.identity);
+            Destroy(bullet, 5);
+            // Spawn GameObject on Server
+            NetworkServer.Spawn(bullet);
+        }
         if (syncHealth <= 0 && !isDead) {
             ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
             isDead = true;
             deathTimer = (float)(getServerTime());
             syncHealth = 0;
             #region Scoring
-            if (attacker && attacker.GetComponent<PlayerStats>().team != team) { 
+            if (attacker && attacker.GetComponent<PlayerStats>().team != team) {
                 SM.CountDeaths(this, attacker.GetComponent<PlayerStats>());
                 if (attacker != null)
                     attacker.GetComponent<PlayerStats>().kills++;
