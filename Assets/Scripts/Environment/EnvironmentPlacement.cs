@@ -32,11 +32,14 @@ public class EnvironmentPlacement : MonoBehaviour
     [Tooltip("Required for PlacementState [Area]\nDefault (True)")]
     public bool isUsingUnityTerrain = true;
 
-    private MeshFilter[] meshFilters;
-    private Dictionary<GameObject, Vector3[]> sections = new Dictionary<GameObject, Vector3[]>();
     int randomSeedValue = 42;
 
+    public GameObject terrainParent = null;
+    TerrainInfo terrainParentInfo;
+
     void Start() {
+        if (terrainParent != null)
+            terrainParentInfo = terrainParent.GetComponent<TerrainInfo>();
         Random.seed = randomSeedValue;//Sets the seed value of the Random class.
         if (placementState == Placement.Random)
             RandomPlacement(this.maxNumberOfAssets, this.assets);
@@ -126,10 +129,8 @@ public class EnvironmentPlacement : MonoBehaviour
     /// <param name="randomAssets"></param>
     public void AreaPlacement(float radius, int maxNumberOfAssets, int assetID, bool randomAssets) {
         int groundLayerMask = (1 << 9);//The 'Ground' Layers we want to check.
-        //Get a collection of all colliders touched or within the sphere.
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, groundLayerMask);
-        //Get the environment asset you want to fill this area with.
-        GameObject assetGameObject = assets[assetID];
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, groundLayerMask);//Get a collection of all colliders touched or within the sphere.
+        GameObject assetGameObject = assets[assetID];//Get the environment asset you want to fill this area with.
         int amountWeNeed = 0;
         while (amountWeNeed < maxNumberOfAssets) {
             #region Meshes: If we are using Normal 3D Meshes
@@ -162,34 +163,40 @@ public class EnvironmentPlacement : MonoBehaviour
 
             #region UnityTerrain: If we are using a Unity Terrain.
             if (isUsingUnityTerrain) {
-                //    TerrainData myTerrainData = hitColliders[0].gameObject.GetComponent<TerrainCollider>().terrainData;
-                //    float[,] allHeights = myTerrainData.GetHeights(0, 0, myTerrainData.heightmapResolution, myTerrainData.heightmapResolution);
-                //    print("AllHeights length = " + allHeights.Length);
-                //    for (int x = 0; x < allHeights.GetLength(0); x++) {
-                //        for (int y = 0; y < allHeights.GetLength(1); y++) {
-                //            Vector3 terrainNormals = myTerrainData.GetInterpolatedNormal(x, y);
-                //            normalsWithinRadius.Add(terrainNormals);
-                //        }
+                List<Vector3> normalsWithinRadius = new List<Vector3>();
+                TerrainData myTerrainData = terrainParentInfo.GetTerrainData();
+
+                //TerrainData myTerrainData = hitColliders[0].gameObject.GetComponent<TerrainCollider>().terrainData;
+                //float[,] allHeights = myTerrainData.GetHeights(0, 0, myTerrainData.heightmapResolution, myTerrainData.heightmapResolution);
+                //print("AllHeights length = " + allHeights.Length);
+                //for (int x = 0; x < allHeights.GetLength(0); x++) {
+                //    for (int y = 0; y < allHeights.GetLength(1); y++) {
+                //        //print("Height = " + allHeights[x, y] + ", X = " + x + ", Y = " + y);
                 //    }
-                Vector3 first = transform.position;
-                Vector3 second = new Vector3(transform.position.x * Random.Range(0, radius), transform.position.y * Random.Range(0, -radius), transform.position.z * Random.Range(0, radius));
-                Ray ray = new Ray(first, second);
-                //Ray ray = new Ray(transform.position, Random.insideUnitSphere);
+                //}
+
+                //Vector3 first = transform.position;
+                //Vector3 second = new Vector3(first.x * Random.Range(-radius, radius), -first.y * radius, first.z * Random.Range(-radius, radius));
+                //Ray ray = new Ray(first, second);
+                Vector3 randomVector = Random.insideUnitSphere * 500;
+                randomVector.y = -50f;
+                Ray ray = new Ray(transform.position, randomVector);
                 RaycastHit hitInfo;
-                if (Physics.Raycast(ray, out hitInfo, Vector3.Distance(first, second) * 2, groundLayerMask)) {
-                    //if (Physics.SphereCast(ray, assetGameObject.transform.localScale.magnitude, out hitInfo, Mathf.Infinity, groundLayerMask)) {
-                    print("Name = " + assetGameObject.name + ", Magnitude = " + assetGameObject.transform.localScale.magnitude);
+                if (Physics.Raycast(ray, out hitInfo, radius*2, groundLayerMask)) {
                     if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Environment")) {
                         continue;
                     }
                     else {
+                        Vector3 interpolatedNormal = myTerrainData.GetInterpolatedNormal(hitInfo.point.x, hitInfo.point.y);
+                        Vector3 something = (interpolatedNormal - hitInfo.point) / myTerrainData.size.magnitude;
+                        print("something = " + something);
                         //GameObject go = Instantiate(assetGameObject, hitInfo.point, Quaternion.identity) as GameObject;
-                        //GameObject go = Instantiate(assetGameObject, hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal)) as GameObject;
-                        //go.transform.parent = transform;
+                        GameObject go = Instantiate(assetGameObject, hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal)) as GameObject;
+                        go.transform.parent = transform;
                         Debug.DrawLine(gameObject.transform.position, hitInfo.point, Color.red, 100f);
+                        amountWeNeed++;
                     }
                 }
-                amountWeNeed++;
             }
             #endregion
         }
