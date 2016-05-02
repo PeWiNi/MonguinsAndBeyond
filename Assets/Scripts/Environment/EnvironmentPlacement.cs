@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Networking;
 
-public class EnvironmentPlacement : MonoBehaviour
+public class EnvironmentPlacement : NetworkBehaviour
 {
     public enum Placement // your custom enumeration
     {
@@ -38,9 +39,11 @@ public class EnvironmentPlacement : MonoBehaviour
     TerrainInfo terrainParentInfo;
 
     void Start() {
+        if (!isServer)
+            return;
         if (terrainParent != null)
             terrainParentInfo = terrainParent.GetComponent<TerrainInfo>();
-        Random.seed = randomSeedValue;//Sets the seed value of the Random class.
+        //Random.seed = randomSeedValue;//Sets the seed value of the Random class.
         if (placementState == Placement.Random)
             RandomPlacement(this.maxNumberOfAssets, this.assets);
         if (placementState == Placement.Area)
@@ -200,6 +203,7 @@ public class EnvironmentPlacement : MonoBehaviour
                         go.transform.parent = transform;
                         Debug.DrawLine(gameObject.transform.position, hitInfo.point, Color.red, 100f);
                         amountWeNeed++;
+                        NetworkServer.Spawn(go);
                     }
                 }
             }
