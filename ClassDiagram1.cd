@@ -1,0 +1,940 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Monguin">
+    <Position X="12.533" Y="0.5" Height="0.291" Width="6.776" />
+  </Comment>
+  <Comment CommentText="Server/Networking">
+    <Position X="21.108" Y="0.5" Height="0.291" Width="3.92" />
+  </Comment>
+  <Class Name="FireLight" Collapsed="true">
+    <Position X="41.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAAAAACAAAAAAAAAAAAAMAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Sample Assets\Effects\Particle Systems\scripts\FireLight.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ParticleSystemMultiplier" Collapsed="true">
+    <Position X="41.5" Y="11.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Sample Assets\Effects\Particle Systems\scripts\ParticleSystemMultiplier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ParticleSystemDestroyer" Collapsed="true">
+    <Position X="29" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAYAAACAAAAAAAAAAAAAABAAAAAIAIAAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Sample Assets\Utility\ParticleSystemDestroyer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Water" Collapsed="true">
+    <Position X="41.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CgwkACAAAxCAAAAAAQAAIAIAACEIEAAIAAAAABEAAIQ=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Water (Pro Only)\Sources\Scripts\Water.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ability" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAACIACAAABAAAAEMAAIBACAQgAAEAAAIAAEAAIw=</HashCode>
+      <FileName>Assets\Scripts\Abilities\Ability.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ArrayOfAbilities" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Aim" Collapsed="true">
+    <Position X="12.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAABAiACAACQBAAAAAAAAAgEAAAAAQAgAAoAAAggA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\Aim.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Boomnana" Collapsed="true">
+    <Position X="21" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgBAAQAAAiAAwAggIAAAAECASAAAAQAIAoAAEAgAAQA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\Boomnana.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Fortify" Collapsed="true">
+    <Position X="12.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAIIAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\Fortify.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HealForce" Collapsed="true">
+    <Position X="16.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACCAAIAIAAABAAAAAAAAIAAAAAAAAEAAAAAAAAACA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\HealForce.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HealWave" Collapsed="true">
+    <Position X="20.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\HealWave.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PoisonDart" Collapsed="true">
+    <Position X="12.75" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAgQAgAiAIAAAAAAICAAAAQAMAAAAAAhAAAA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\PoisonDart.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Puke" Collapsed="true">
+    <Position X="19" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAgBAAAAAAAAAAACAAAgAAAAAAAAAAACE=</HashCode>
+      <FileName>Assets\Scripts\Abilities\Puke.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PunchDance" Collapsed="true">
+    <Position X="1" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAIAAAAABAEAAAAAAAQAMAAAAABAAAAAAAAQCA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\PunchDance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SlashEffect" Collapsed="true">
+    <Position X="37.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACACAAAAAAAAAAAAAAAAAAAAAwAAAAAAAgA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\SlashEffect.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Smash" Collapsed="true">
+    <Position X="3.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAIAAAAgBAAAAAAAAAAAMAAAAAAAAAAAAAAQCA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\Smash.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpawnTraps" Collapsed="true">
+    <Position X="15.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAQJAFAuACAAAEBAACAIEAAAAAAAABAEEiAAoCIAAAE=</HashCode>
+      <FileName>Assets\Scripts\Abilities\SpawnTraps.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="TailSlap" Collapsed="true">
+    <Position X="5.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAIAAAAgBAAAAAAAAAAAEAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\TailSlap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Taunt" Collapsed="true">
+    <Position X="7.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIICAAAgBAAAAAAAAAAAAAAAgAAAAAAACAAACA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\Taunt.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ThrowBoomnana" Collapsed="true">
+    <Position X="10" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIQAAAABAAIQAAAAIAAEAAAQAAAYAAAAAAESA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\ThrowBoomnana.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Aim" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ThrowPoison" Collapsed="true">
+    <Position X="14.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIQAAAgBAAIQAAAAIAAEAAAAAAAYAAAAAAECA=</HashCode>
+      <FileName>Assets\Scripts\Abilities\ThrowPoison.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Aim" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="BOOM_decal" Collapsed="true">
+    <Position X="29" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\BOOM_decal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CharacterCamera" Collapsed="true">
+    <Position X="17.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAACAAAAAAIASQIARBgEgAEgAkBARgAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\CharacterCamera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Amber" Collapsed="true">
+    <Position X="15" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAiAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Amber.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AnimatedUVs" Collapsed="true">
+    <Position X="37.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAgAAAAAACAAAAAAAAABIAAAAAAAAAAAAAAAAAAAgAE=</HashCode>
+      <FileName>Assets\Scripts\Environment\AnimatedUVs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AssignSplatMap" Collapsed="true">
+    <Position X="37.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\AssignSplatMap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Banana" Collapsed="true">
+    <Position X="0.75" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Banana.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DripScript" Collapsed="true">
+    <Position X="10.5" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAgAAAAAAEAAAAAAAAAAAAAAAAEgAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\DripScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EnvironmentPlacement" Collapsed="true">
+    <Position X="30.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIgAAQACIAAAAAAAAAACACAAAIUCAAwEACAAQAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\EnvironmentPlacement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Fish" Collapsed="true">
+    <Position X="3" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Fish.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Herb" Collapsed="true">
+    <Position X="5.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAIAACAAAAAAoAAAAAAAACIAgCAAQAAIAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Herb.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IceFloes" Collapsed="true">
+    <Position X="36" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\IceFloes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Icicles" Collapsed="true">
+    <Position X="36" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAQAACAABAAAAAAAAAAAAAAAAAAMAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Icicles.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Leaf" Collapsed="true">
+    <Position X="9.75" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Leaf.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyParent" Collapsed="true">
+    <Position X="41.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\MyParent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OuterAreaPlacement" Collapsed="true">
+    <Position X="36" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAACAAAIAIAAAAAEggAIEDACAAAAAGCAAAgAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\OuterAreaPlacement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Pickup" Collapsed="true">
+    <Position X="6.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBBgACAigAgIAAAAhAAAAAAAAAAIAAAgBAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Pickup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PickupSpawner" Collapsed="true">
+    <Position X="30.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYCAAAAACAAAAACAAEAAAIAAAAAAAAAAQAAAAAEAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\PickupSpawner.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Camouflage" Collapsed="true">
+    <Position X="17.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAQAJABCApAyAAEAIAAABCACEAAQAAAAAwICAAAAQ=</HashCode>
+      <FileName>Assets\Scripts\Environment\PlayerEffects\Camouflage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerBehaviour" Collapsed="true">
+    <Position X="16" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQJgYAAAiAAgAQQAAIAUCAAgABABACEIQQBAAAAAAo=</HashCode>
+      <FileName>Assets\Scripts\Environment\PlayerEffects\PlayerBehaviour.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Slip" Collapsed="true">
+    <Position X="17.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAQCAAAABAAAAAAAAAAQAAAAg=</HashCode>
+      <FileName>Assets\Scripts\Environment\PlayerEffects\Slip.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Throw" Collapsed="true">
+    <Position X="23.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAQAAIAACgAAAAAAAAAAAAAAAABABAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\PlayerEffects\Throw.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RestrictPickupNumber" Collapsed="true">
+    <Position X="30.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQACAAAAAAAAAAAAEAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\RestrictPickupNumber.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RubberTree" Collapsed="true">
+    <Position X="23.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAABBAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\RubberTree.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sap" Collapsed="true">
+    <Position X="7.5" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Sap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Sticks" Collapsed="true">
+    <Position X="12" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Sticks.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Trap" Collapsed="true">
+    <Position X="14.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQAAEIIEARAgAAAAAAAAAggAAAAAAAABEAAAAAQAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Trap.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Placement" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Trap_BananaIsland" Collapsed="true">
+    <Position X="15.75" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIABAAAAAQAAAAAAAAAQ=</HashCode>
+      <FileName>Assets\Scripts\Environment\Trap_BananaIsland.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Trap_Sap" Collapsed="true">
+    <Position X="18" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAABAAAAAAEAAAAAAAAAAAQAQAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Trap_Sap.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Trap_Spikes" Collapsed="true">
+    <Position X="11.25" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAJCAAAAAAAAAAAAAAIAEQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Trap_Spikes.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Trap_Spring" Collapsed="true">
+    <Position X="13.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAEAAACAQAAAAAAAAAAAAAABAAAABQAQAAAAAIAI=</HashCode>
+      <FileName>Assets\Scripts\Environment\Trap_Spring.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Waterz" Collapsed="true">
+    <Position X="25.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAABAAAAAAAAAAAAAAAIAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Environment\Waterz.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="EventManager" Collapsed="true">
+    <Position X="27.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAQAAAAAAAAAAAAACAAAAAAAAAAEAAAACAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\EventManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameTime" Collapsed="true">
+    <Position X="19.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAACUAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\GameTime.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AttributeScript" Collapsed="true">
+    <Position X="37.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCgAAggCAhAAFAQCAAEAASABCAkBBAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graphical\AttributeScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AttributeSliders" Collapsed="true">
+    <Position X="22" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABwAIBAIACAAAAgAAAQAEAgAgAACEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graphical\AttributeSliders.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DragUI" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="37.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQAIQAAAAAAAAQAAABAAAAAAAAAACAEAAIQAAAQAAI=</HashCode>
+      <FileName>Assets\Scripts\Graphical\DragUI.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="HealthSlider" Collapsed="true">
+    <Position X="29" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARABAAAACAQAEIAAAAAAAAAAAAAAAAgAAgAAIAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graphical\HealthSlider.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HUDScript" Collapsed="true">
+    <Position X="23.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SAUEQIQCwCgEgMTABEAAI4AAoCABEUAmACAQQJCAAIA=</HashCode>
+      <FileName>Assets\Scripts\Graphical\HUDScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Inventory" Collapsed="true">
+    <Position X="23.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAIBEAAAAJAECBAAAAoEAIAChAIAJAFAAAAAAQAA=</HashCode>
+      <FileName>Assets\Scripts\Graphical\Inventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MenuScript" Collapsed="true">
+    <Position X="20.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QUQAAAAAAWACAAAAIQAAEAAMACEQGAAAAOAEAAACAAY=</HashCode>
+      <FileName>Assets\Scripts\Graphical\MenuScript.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="UsedToShowPlayerData" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="MyNetworkManagerHUD" Collapsed="true">
+    <Position X="22" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAQAAAAAAQACAADAAAAAEAAEACAQEIAAAACAhECAQEA=</HashCode>
+      <FileName>Assets\Scripts\Graphical\MyNetworkManagerHUD.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerScoreScript" Collapsed="true">
+    <Position X="20.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgACAAAAgAAAAAIAABgAAAAAQAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Graphical\PlayerScoreScript.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ScoreBoard" Collapsed="true">
+    <Position X="20.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACZAAAAAACwIAAAAAAAIgIAAAAAEAAIIEAIAoABAAIA=</HashCode>
+      <FileName>Assets\Scripts\Graphical\ScoreBoard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ToolTips" Collapsed="true">
+    <Position X="23.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAABICAQAAAAAABAAAAAEABAgBAIAACAAAAAQAA=</HashCode>
+      <FileName>Assets\Scripts\Graphical\ToolTips.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="circleGenerator" Collapsed="true">
+    <Position X="36" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQAAAAACCEAAAAAJUIAABgAAAACAAAAIABAAQAAYAA=</HashCode>
+      <FileName>Assets\Scripts\Map\circleGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mapCreator" Collapsed="true">
+    <Position X="36" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>SCgAECECCDQAAAAEQEKAIhgAEAIAACAIIAAIAAAQAEA=</HashCode>
+      <FileName>Assets\Scripts\Map\mapCreator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="mapPartBehavior" Collapsed="true">
+    <Position X="36" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQQAIAAAACAAAgAAAAAgAAAACBAAAQAIAAAAAABwAAI=</HashCode>
+      <FileName>Assets\Scripts\Map\mapPartBehavior.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MeshGenerator" Collapsed="true">
+    <Position X="41.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQBAAAAAAACEBAAgAACAQBAAAARAAgABAAAAAhEAgA=</HashCode>
+      <FileName>Assets\Scripts\Map\MeshGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ringHandler" Collapsed="true">
+    <Position X="36" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAACAAAAAAAAAABIAAAAAAAAAAAAAAIBAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Map\ringHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MyNetworkManager" Collapsed="true">
+    <Position X="21.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAIAAAAAACAAAQAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\MyNetworkManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerID" Collapsed="true">
+    <Position X="37.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAAABQAgAAAAAAAAIAAAAAgAAAAAAAAAAACAAAAEQ=</HashCode>
+      <FileName>Assets\Scripts\PlayerID.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerLogic" Collapsed="true">
+    <Position X="14.25" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAUCJCgRACAAQSAwAgABIBABSEBAADIoAAAGAwBIDAU=</HashCode>
+      <FileName>Assets\Scripts\PlayerLogic.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="NetworkMovement" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="PlayerMovementSync" Collapsed="true">
+    <Position X="7.75" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQYAAAIAAjAQgAAAEAAABwAAAAAQAAAQAUAQAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\PlayerMovementSync.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerStats" Collapsed="true">
+    <Position X="12.5" Y="1.25" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="PlayerStats.Role" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\PlayerStats.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Struct Name="PlayerStats.RoleStats" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Assets\Scripts\PlayerStats.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AJSEOBioZSIIC0IDiPGIERmlR1IYMUgPQqEwaQVgFQs=</HashCode>
+      <FileName>Assets\Scripts\PlayerStats.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TeamColoring" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="RotateMe" Collapsed="true">
+    <Position X="12.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAgAAABgAQAAAAA=</HashCode>
+      <FileName>Assets\Scripts\RotateMe.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ScoreManager" Collapsed="true">
+    <Position X="23.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAgJCQAAAAAAAAAAAAAAAAEAACIMBKAgDAEAAA=</HashCode>
+      <FileName>Assets\Scripts\ScoreManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SyncInventory" Collapsed="true">
+    <Position X="23.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAIAAAAAAgAAAAAAAAAAEIiAhAAACADgAAAAAAAo=</HashCode>
+      <FileName>Assets\Scripts\SyncInventory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CameraMovement" Collapsed="true">
+    <Position X="27.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABBIAQAAACABAAAAAASIIARAAEgAACAAJAQAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Tests\CameraMovement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CubeTimer" Collapsed="true">
+    <Position X="36" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABAAAACAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Tests\CubeTimer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Froggy" Collapsed="true">
+    <Position X="27.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JAQIAAAAICAAAAAAIAAAGAAAAAAAAACIAASAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Tests\Froggy.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FroggyTrack" Collapsed="true">
+    <Position X="37.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AASAgAAAAEAAAAAAAAAAAAAAAAAAAAAAQgAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Tests\FroggyTrack.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HealthCondition" Collapsed="true">
+    <Position X="27.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAYAASAAAAAAgAAAAAAAACAAgAAAAAAAAAQAAAA=</HashCode>
+      <FileName>Assets\Scripts\Tests\HealthCondition.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="IgnoreCollision" Collapsed="true">
+    <Position X="36" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAACAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Tests\IgnoreCollision.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Master_CubeTimer" Collapsed="true">
+    <Position X="37.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABQAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Tests\Master_CubeTimer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VisualizeTeam" Collapsed="true">
+    <Position X="8.75" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAQBAAAAAAAAAAQAAgAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\VisualizeTeam.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.Antialiasing" Collapsed="true">
+    <Position X="22.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gQIAIABAiBAABACAAAoAAAECBAgQAAEEgBAAAACAAIA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\Antialiasing.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.Bloom" Collapsed="true">
+    <Position X="29" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIgIAEAABAQAABSDhDAAAAIgIgNAgBQBUAEEBAg=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\Bloom.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.BloomAndFlares" Collapsed="true">
+    <Position X="44.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAIgIIAAAlAQIAByChDIAAAIgAgPIABQBUAEEBAw=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\BloomAndFlares.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.BloomOptimized" Collapsed="true">
+    <Position X="49.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQIAAAAAAAAAAACAAAAAACCEICBAEAAgAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\BloomOptimized.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.Blur" Collapsed="true">
+    <Position X="41.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABIAAAGAAAAAAAgAAAAABAAAAAAEIEAAAAABAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\Blur.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.BlurOptimized" Collapsed="true">
+    <Position X="60.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAAEJEBAEAAgQAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\BlurOptimized.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.CameraMotionBlur" Collapsed="true">
+    <Position X="15.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgADAQCAACAgAACQgAQAEIJABxBQNCFIABACAGAACpE=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\CameraMotionBlur.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.ColorCorrectionCurves" Collapsed="true">
+    <Position X="17.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAA2gECIAABDQCICAAACAAEAkQAGAAlAAAAACAEA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\ColorCorrectionCurves.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.ColorCorrectionLookup" Collapsed="true">
+    <Position X="24.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAIAAAAAAAAAAAAGIBBAAEEBAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\ColorCorrectionLookup.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.ColorCorrectionRamp" Collapsed="true">
+    <Position X="38.25" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\ColorCorrectionRamp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.ContrastEnhance" Collapsed="true">
+    <Position X="33.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAEAAgAAAAAAAAAIAAAAAGCEAABAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\ContrastEnhance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.ContrastStretch" Collapsed="true">
+    <Position X="41.5" Y="9.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>GBAAABAAgCoAACAAIAAAACggAgBAAGEIAIAAAAAACAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\ContrastStretch.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.CreaseShading" Collapsed="true">
+    <Position X="38" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAASAAAAAAAAAAgAAAAAAAAAAAACAEBEBCAABAABAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\CreaseShading.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.DepthOfField" Collapsed="true">
+    <Position X="42.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAhggAgAgABUQAkBQAAAEAAIAQAAAAkNADAABAgIGEA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\DepthOfField.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.DepthOfFieldDeprecated" Collapsed="true">
+    <Position X="47" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QBQqCgQikkAAAQBBBAAQASKAMBAABAWMURCIFKAHDGQ=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\DepthOfFieldDeprecated.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.EdgeDetection" Collapsed="true">
+    <Position X="51.5" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAEAACAoAACAAAAAAAACAABAAAUAABAQgAgCCAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\EdgeDetection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.Fisheye" Collapsed="true">
+    <Position X="56" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAAAAAAAAAAAAEAQDAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\Fisheye.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.GlobalFog" Collapsed="true">
+    <Position X="62.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAQQAAAIAAAKAAAgAAAEAADAAAAIAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\GlobalFog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.Grayscale" Collapsed="true">
+    <Position X="33.75" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAQAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\Grayscale.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.ImageEffectBase" Collapsed="true">
+    <Position X="39.25" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAACAAAAAAAAAAAAAAAAAAAAAIAAAAAEBAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\ImageEffectBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.ImageEffects" Collapsed="true">
+    <Position X="41.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQgAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\ImageEffects.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.MotionBlur" Collapsed="true">
+    <Position X="40.5" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAACAAAAAAEAIAAAAAAEIAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\MotionBlur.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.NoiseAndGrain" Collapsed="true">
+    <Position X="35.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAgAAAAQAQAAABBggQAAIAAggAQAEAAZACIBIAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\NoiseAndGrain.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.NoiseAndScratches" Collapsed="true">
+    <Position X="41.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBEAAAACAAAABAAAACCAAIAwJQwAEIAACAAQhAIAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\NoiseAndScratches.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.PostEffectsBase" Collapsed="true">
+    <Position X="39.25" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgCAAAIDAAAAAIAAAQIACAAAAAAAAQABAABAAgCAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\PostEffectsBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.PostEffectsHelper" Collapsed="true">
+    <Position X="41.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAIQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\PostEffectsHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.Quads" Collapsed="true">
+    <Position X="41.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAACggAAEEAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\Quads.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.ScreenOverlay" Collapsed="true">
+    <Position X="53.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAKgEAABAABAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\ScreenOverlay.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.ScreenSpaceAmbientObscurance" Collapsed="true">
+    <Position X="58.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAACAAAAABAAAAAAAAAAAAACAUIQBAEAAAQAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\ScreenSpaceAmbientObscurance.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.ScreenSpaceAmbientOcclusion" Collapsed="true">
+    <Position X="41.5" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgABAigIAAAEAAAAAAAAAAAIICGIAAAABAAACAQ=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\ScreenSpaceAmbientOcclusion.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.SepiaTone" Collapsed="true">
+    <Position X="36" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\SepiaTone.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.SunShafts" Collapsed="true">
+    <Position X="20" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACgAAAAAAAAAIApAAiBAAAAgBAEAAJAgAAAAAAI=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\SunShafts.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.TiltShift" Collapsed="true">
+    <Position X="26.75" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAEAAAACgAAAAgAAAAAAAAAEBABAAAAAQAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\TiltShift.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.Tonemapping" Collapsed="true">
+    <Position X="31.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAgACIAAEAAAAAAADBBEIABBIAIAAEAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\Tonemapping.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.Triangles" Collapsed="true">
+    <Position X="31.75" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACABAAAAAAAAAAAAAAAAAAACgAAAEEAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\Triangles.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.Twirl" Collapsed="true">
+    <Position X="42.75" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAACAAAAAAAAAAAAAAAAAAAAAEAAAAAAABAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\Twirl.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.VignetteAndChromaticAberration" Collapsed="true">
+    <Position X="40.25" Y="16.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAABQAAEAAgACAAAhAAAAEAAgACAGAABAAQBAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\VignetteAndChromaticAberration.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="UnityStandardAssets.ImageEffects.Vortex" Collapsed="true">
+    <Position X="45" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAACAAAAAAAAAAAAAAAAAAAAAEAAAAAAABAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\Vortex.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="UnityStandardAssets.ImageEffects.AAMode" Collapsed="true">
+    <Position X="47.25" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAQAAAAAAAAAAAAAAAIAAAAABAAIAAAACAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\Antialiasing.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="UnityStandardAssets.ImageEffects.LensflareStyle34" Collapsed="true">
+    <Position X="52.5" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAQAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\BloomAndFlares.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="UnityStandardAssets.ImageEffects.TweakMode34" Collapsed="true">
+    <Position X="54.25" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\BloomAndFlares.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="UnityStandardAssets.ImageEffects.HDRBloomMode" Collapsed="true">
+    <Position X="50.75" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAIA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\BloomAndFlares.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="UnityStandardAssets.ImageEffects.BloomScreenBlendMode" Collapsed="true">
+    <Position X="49" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\DaQ-GAMES\Low Poly Cartoon Forest Pack\Demo\Standard Assets\Image Effects (Pro Only)\Scripts\BloomAndFlares.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

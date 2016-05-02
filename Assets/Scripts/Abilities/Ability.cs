@@ -15,6 +15,16 @@ public class Ability : NetworkBehaviour {
     public double castTime;
     public Sprite Icon;
     public virtual string tooltipText { get { return ""; } }
+
+    public PlayerStats ArrayOfAbilities {
+        get {
+            throw new System.NotImplementedException();
+        }
+
+        set {
+        }
+    }
+
     //public bool Available { get { return OnCooldown(); } }
 
     // Use this for initialization

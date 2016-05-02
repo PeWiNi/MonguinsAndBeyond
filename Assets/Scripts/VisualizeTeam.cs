@@ -12,7 +12,6 @@ public class VisualizeTeam : NetworkBehaviour {
 	[SerializeField]
 	Material fishterial;
 
-
     public void ToggleForeheadItem(int team, bool show = true) {
 //		GetComponent<PlayerStats> ().standardMat.mainTexture = Resources.Load("Materials/Textures/" + (team == 1 ? "monguinUV2_banana" : "monguinUV2_fish")) as Texture;
 		GetComponent<PlayerStats>().SetStandardMaterial(team == 1 ? bananterial : team == 2 ? fishterial : Resources.Load("Materials/monguin") as Material);

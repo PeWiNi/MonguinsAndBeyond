@@ -780,4 +780,13 @@ public class PlayerStats : NetworkBehaviour {
             body.GetComponent<SkinnedMeshRenderer>().material = currentMaterial;
         }
     }
+
+    public VisualizeTeam TeamColoring {
+        get {
+            throw new System.NotImplementedException();
+        }
+
+        set {
+        }
+    }
 }

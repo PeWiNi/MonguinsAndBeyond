@@ -65,4 +65,13 @@ public class ThrowPoison : Ability {
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);
     }
+
+    public Aim Aim {
+        get {
+            throw new System.NotImplementedException();
+        }
+
+        set {
+        }
+    }
 }

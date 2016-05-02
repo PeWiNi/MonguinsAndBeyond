@@ -18,6 +18,15 @@ public class MenuScript : MonoBehaviour {
     public Button fishButton;
     public InputField playerNameInputField;
 
+    public PlayerScoreScript UsedToShowPlayerData {
+        get {
+            throw new System.NotImplementedException();
+        }
+
+        set {
+        }
+    }
+
     // Use this for initialization
     void Start () {
         #region Failsafe: Find objects if not set

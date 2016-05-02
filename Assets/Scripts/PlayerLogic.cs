@@ -50,6 +50,15 @@ public class PlayerLogic : NetworkBehaviour
     public bool isFlying;
     public bool isFlyingFrontHands;
 
+    public PlayerMovementSync NetworkMovement {
+        get {
+            throw new System.NotImplementedException();
+        }
+
+        set {
+        }
+    }
+
     public override void OnStartLocalPlayer() {
         base.OnStartLocalPlayer();
         int countParameters = GetComponent<NetworkAnimator>().animator.parameterCount;

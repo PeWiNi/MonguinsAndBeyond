@@ -28,6 +28,15 @@ public class Trap : NetworkBehaviour
     [SyncVar]
     public Transform owner;
 
+    public SpawnTraps Placement {
+        get {
+            throw new System.NotImplementedException();
+        }
+
+        set {
+        }
+    }
+
     void Update () {
         if (trigger && triggerCount == 0)
             Destroy(gameObject);
