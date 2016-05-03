@@ -310,6 +310,7 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[0] = GetComponent<Smash>();
                 //  Fortify - temporarily increase health and resilience of the defender with 20% for 10 sec. CD:20sec
                 abilities[2] = GetComponent<Fortify>();
+                GetComponent<VisualizeTeam>().SetHat(0);
                 break;
             case (Role.Attacker):
                 //  Boomnana - (yup, same one) deals 80% of current health on enemy target in damage; of no targets are hit it return to the caster and deals 35% of current health damage. CD: 3sec
@@ -318,6 +319,7 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[0] = GetComponent<TailSlap>();
                 //  Punch Dance - deals a stronger tail slap (3% of current health damage) that if it hits stuns the enemy for 2 sec and it's followed by 2 more tail slaps of 4% and 5% damage*current health. CD:20 sec
                 abilities[1] = GetComponent<PunchDance>();
+                GetComponent<VisualizeTeam>().SetHat(1);
                 break;
             case (Role.Supporter):
                 //  Puke - (the old puke, does the same thing) stuns all enemies in range, has about 2 units distance units in range. Channeled 3 sec; CD:5 sec
@@ -326,6 +328,7 @@ public class PlayerStats : NetworkBehaviour {
                 abilities[0] = GetComponent<ThrowPoison>();
                 //  Heal force - ability targets only friendly characters. Heals 50-250 HP over 3 sec depending on skill and herbs used in the ability. Max range 20 units. 1 herb heals instantly for 50HP, 2->4 herb heal over time (50 at first and 50 more for each 'tic'). No CD; instant application; requires herbs to cast
                 abilities[2] = GetComponent<HealForce>();
+                GetComponent<VisualizeTeam>().SetHat(2);
                 break;
             default:
                 // Instead we should do the freeMode player stuff here
