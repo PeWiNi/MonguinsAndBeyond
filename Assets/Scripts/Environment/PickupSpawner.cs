@@ -15,7 +15,7 @@ public class PickupSpawner : NetworkBehaviour {
 	// Use this for initialization
 	void Start () {
         if(isServer) {
-            if(SpawnPosition == new Vector3()) SpawnPosition = transform.position + new Vector3(0, .75f, 0);
+            if(SpawnPosition == new Vector3()) SpawnPosition = new Vector3(0, .75f, 0);
             //InvokeRepeating("RepeatSpawn", 0f, spawnTime);
             Spawn(SpawnPosition);
         }
@@ -34,7 +34,7 @@ public class PickupSpawner : NetworkBehaviour {
     /// </summary>
     void Spawn(Vector3 pos, float destroy = 0) {
         GameObject go = (GameObject)Instantiate(
-            prefab, pos, prefab.transform.rotation);
+            prefab, transform.position + pos, prefab.transform.rotation);
         if (destroy > 0) Destroy(go, destroy);
         go.GetComponent<Pickup>().SetSpawner(this);
         NetworkServer.Spawn(go);
