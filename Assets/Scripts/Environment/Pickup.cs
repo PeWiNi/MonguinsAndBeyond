@@ -20,9 +20,11 @@ public class Pickup : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
-        transform.position = doNotTouchTerrain(transform.position);
-        if (Unreachable() && owner != null)
-            ReturnToSender();
+        if (owner) {
+            transform.position = doNotTouchTerrain(transform.position);
+            if (Unreachable())
+                ReturnToSender();
+        }
     }
 	
 	// Update is called once per frame
@@ -73,8 +75,6 @@ public class Pickup : NetworkBehaviour {
     /// <param name="distance">Y-distance from terrain</param>
     /// <returns>Position away from the terrain</returns>
     public Vector3 doNotTouchTerrain(Vector3 pos, float distance = 1.5f) {
-        if (pos.y < 1)
-            pos.y = 1;
         Vector3 hoverPos = pos;
         RaycastHit hit;
         if (Physics.Raycast(pos, -Vector3.up, out hit, Mathf.Infinity, ~(1 << 8))) {
