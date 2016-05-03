@@ -190,8 +190,8 @@ public class EnvironmentPlacement : NetworkBehaviour
                 randomVector.y = -500f;
                 Ray ray = new Ray(transform.position, randomVector);
                 RaycastHit hitInfo;
-                if (Physics.Raycast(ray, out hitInfo, radius*2, groundLayerMask)) {
-                    if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Environment") || 
+                if (Physics.Raycast(ray, out hitInfo, radius * 2, groundLayerMask)) {
+                    if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Environment") ||
                         //hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Ground") || 
                         hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Ignore Raycast")) {
                         continue;
