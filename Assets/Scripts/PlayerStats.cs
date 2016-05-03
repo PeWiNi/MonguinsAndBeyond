@@ -170,7 +170,7 @@ public class PlayerStats : NetworkBehaviour {
                 return Role.Attacker;
             case "SUP":
                 return Role.Supporter;
-            case "RES":
+            case "RESI":
                 return Role.Defender;
             case "AGI":
                 return Role.Attacker;
