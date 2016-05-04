@@ -229,25 +229,6 @@ public class HUDScript : MonoBehaviour {
         playerNameText.text = "";
         // Turn off world-space healthBar
         ps.GetComponentInChildren<Canvas>().enabled = false;
-        #region IconSwapping
-        /*
-        GetComponent<Canvas>().worldCamera = pl.GetComponentInChildren<Camera>().transform.GetChild(0).GetComponent<Camera>();
-        inventory.transform.FindChild("Banana").FindChild("Banana 3D").gameObject.SetActive(true);
-        inventory.transform.FindChild("Banana").FindChild("Icon").GetComponent<Image>().enabled = false;
-        inventory.transform.FindChild("Stick").FindChild("Stick 3D").gameObject.SetActive(true);
-        inventory.transform.FindChild("Stick").FindChild("Icon").GetComponent<Image>().enabled = false;
-        inventory.transform.FindChild("Sap").FindChild("Sap 3D").gameObject.SetActive(true);
-        inventory.transform.FindChild("Sap").FindChild("Icon").GetComponent<Image>().enabled = false;
-        //inventory.transform.FindChild("Leaf").FindChild("Icon 3D").gameObject.SetActive(true);
-        //inventory.transform.FindChild("Leaf").FindChild("Icon").GetComponent<Image>().enabled = false;
-        inventory.transform.FindChild("BerryR").FindChild("Herb 3D").gameObject.SetActive(true);
-        inventory.transform.FindChild("BerryR").FindChild("Icon").GetComponent<Image>().enabled = false;
-        inventory.transform.FindChild("BerryG").FindChild("Herb 3D").gameObject.SetActive(true);
-        inventory.transform.FindChild("BerryG").FindChild("Icon").GetComponent<Image>().enabled = false;
-        inventory.transform.FindChild("BerryB").FindChild("Herb 3D").gameObject.SetActive(true);
-        inventory.transform.FindChild("BerryB").FindChild("Icon").GetComponent<Image>().enabled = false;
-        */
-        #endregion
         #region Abilities 
         try {
             ability1.sprite = ps.abilities[0].Icon;
@@ -498,13 +479,68 @@ public class HUDScript : MonoBehaviour {
     void SetupMiniMap(Transform player) {
         if (!miniMap) miniMap = GetComponentInChildren<Minimap>();
         miniMap.Target = player;
-        addBlip(player);
+        addBlip(player, Color.white);
+        InvokeRepeating("AddAllPickups", 1, 10);
+        InvokeRepeating("AddAllPlayers", 1, 10);
     }
-    public void addBlip(Transform target) {
+    public void addBlip(Transform target, Color color, bool keepInBounds = true, bool lockScale = false, bool lockRotation = false, Sprite sprite = null) {
         // TODO: Add other players! :D
         GameObject blip = Instantiate(Resources.Load("Prefabs/GUI/Blip"), new Vector3(), Quaternion.identity) as GameObject;
         blip.transform.parent = miniMap.transform;
-        blip.name = "Blip";
+        blip.name = "Blip-" + target.name;
         blip.GetComponent<MinimapBlip>().Target = target;
+        blip.GetComponent<MinimapBlip>().KeepInBounds = keepInBounds;
+        blip.GetComponent<MinimapBlip>().LockScale = lockScale;
+        blip.GetComponent<MinimapBlip>().LockRotation = lockRotation;
+        blip.GetComponent<Image>().color = color;
+        if (sprite) blip.GetComponent<MinimapBlip>().SetDefaultSprite(sprite);
+    }
+    public void AddAllPickups() {
+        bool inThere;
+        foreach (Pickup go in FindObjectsOfType<Pickup>()) {
+            inThere = false;
+            foreach (MinimapBlip mmb in miniMap.GetComponentsInChildren<MinimapBlip>()) {
+                if(mmb.Target == go.transform) {
+                    inThere = true;
+                    break;
+                }
+            }
+            if(!inThere) {
+                addBlip(go.transform, Color.white, false, true, true, Resources.Load<Sprite>("Images/" + GetPickupName(go)));
+            }
+        }
+    }
+    public string GetPickupName(Pickup me) {
+        string str = "";
+        if (me.name == "Banana(Clone)") {
+            str = "banana1";
+        } else if (me.name == "Stick(Clone)") {
+            str = "Sticks";
+        } else if (me.name == "Sap(Clone)") {
+            str = "Sap2";
+        } else if (me.name == "Leaf(Clone)") {
+            str = "Leaf";
+        } else if (me.name == "Herb(Clone)") {
+            str = "BerryMM";
+        } else {
+            str = "Monguin";
+        }
+        return str;
+    }
+    public void AddAllPlayers() {
+        bool inThere;
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
+            inThere = false;
+            foreach (MinimapBlip mmb in miniMap.GetComponentsInChildren<MinimapBlip>()) {
+                if (mmb.Target == go.transform) {
+                    inThere = true;
+                    break;
+                }
+            }
+            if (!inThere) {
+                PlayerStats p = go.GetComponent<PlayerStats>();
+                addBlip(go.transform, p.team == ps.team ? Color.green : Color.red, p.team == ps.team ? true : false);
+            }
+        }
     }
 }

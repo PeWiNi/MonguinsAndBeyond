@@ -32,7 +32,7 @@ public class PlayerLogic : NetworkBehaviour
     Vector3 externalForce;
 
     public bool isSwimming;
-    public float drownDepth = 5;
+    public float drownDepth = 1;
     float drownTimer;
     float drownTime = 15f;
 
@@ -238,7 +238,7 @@ public class PlayerLogic : NetworkBehaviour
     #region Swim stuff
     public void StartSwimming() {
         if (!isSwimming) {
-            if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) { return; }
+            if (Physics.Raycast(transform.position, -Vector3.up, transform.localScale.y * drownDepth, ~(1 << 8) | ~(1 << 4))) { return; }
             isSwimming = true;
             //Play 'Swimming'Animation
             if (animLocal.GetBool(Animator.StringToHash("IsSwimming")) == false) {
@@ -256,7 +256,7 @@ public class PlayerLogic : NetworkBehaviour
         drownTimer = (float)Network.time;
         while (isSwimming && (((float)Network.time - drownTimer) < drownTime)) {
             if (GetComponent<PlayerStats>().isDead) { isSwimming = false; animLocal.SetBool("IsDeadByWater", true); animLocal.SetBool("IsSwimming", false); }
-            if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) {
+            if (Physics.Raycast(transform.position, -Vector3.up, transform.localScale.y * drownDepth, ~(1 << 8))) {
                 isSwimming = false;
                 if (animLocal.GetBool(Animator.StringToHash("IsSwimming")))
                     animLocal.SetBool("IsSwimming", false);
@@ -264,7 +264,7 @@ public class PlayerLogic : NetworkBehaviour
             }
             //print(drownTimeLeft());
             yield return new WaitForSeconds(1);
-        } if (Physics.Raycast(transform.position + (transform.localScale.y * .5f) * Vector3.up, -Vector3.up, drownDepth, ~(1 << 8))) {
+        } if (Physics.Raycast(transform.position, -Vector3.up, transform.localScale.y * drownDepth, ~(1 << 8))) {
             isSwimming = false;
             if (animLocal.GetBool(Animator.StringToHash("IsSwimming")))
                 animLocal.SetBool("IsSwimming", false);

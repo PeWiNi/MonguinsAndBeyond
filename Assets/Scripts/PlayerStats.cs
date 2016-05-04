@@ -211,6 +211,8 @@ public class PlayerStats : NetworkBehaviour {
             GetComponent<SyncInventory>().setInventory(hud.inventory);
             GameObject miniMapCamera = (GameObject)Instantiate(Resources.Load("Prefabs/MinimapCamera"), transform.position, Quaternion.Euler(90,0,0));
             miniMapCamera.GetComponent<FollowTransform>().trans = transform;
+
+            NM.GetComponent<MakeScreenshot>().Setup();
         }
         currentMaterial = standardMaterial;
         syncHealth = syncMaxHealth;

@@ -6,6 +6,6 @@ public class FollowTransform : MonoBehaviour {
 
 	// Use this for initialization
 	void LateUpdate() {
-        if (trans) transform.position = new Vector3(trans.position.x, trans.position.y + 10, trans.position.z);
+        if (trans) transform.position = new Vector3(trans.position.x, trans.position.y + 25, trans.position.z);
     }
 }
