@@ -32,6 +32,9 @@ public class HUDScript : MonoBehaviour {
     ScoreBoard scoreBoard;
 
     [SerializeField]
+    Minimap miniMap;
+
+    [SerializeField]
     Color normalColor;
     [SerializeField]
     Color highlightColor;
@@ -270,6 +273,7 @@ public class HUDScript : MonoBehaviour {
         #endregion
         // TODO: Do stuff with setting up correct ability images
         SetCursorState(true);
+        SetupMiniMap(playerStats.transform);
     }
 
     public PlayerStats GetPlayerStats() {
@@ -489,5 +493,18 @@ public class HUDScript : MonoBehaviour {
         scoreBoard.teamTwoDeathCount = teamDeaths[1];
         scoreBoard.teamOneScore = teamScore[0];
         scoreBoard.teamTwoScore = teamScore[1];
+    }
+
+    void SetupMiniMap(Transform player) {
+        if (!miniMap) miniMap = GetComponentInChildren<Minimap>();
+        miniMap.Target = player;
+        addBlip(player);
+    }
+    public void addBlip(Transform target) {
+        // TODO: Add other players! :D
+        GameObject blip = Instantiate(Resources.Load("Prefabs/GUI/Blip"), new Vector3(), Quaternion.identity) as GameObject;
+        blip.transform.parent = miniMap.transform;
+        blip.name = "Blip";
+        blip.GetComponent<MinimapBlip>().Target = target;
     }
 }

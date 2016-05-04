@@ -4,10 +4,6 @@ using UnityEngine.Networking;
 
 public class VisualizeTeam : NetworkBehaviour {
     [SerializeField]
-    GameObject fish;
-    [SerializeField]
-	GameObject banana;
-    [SerializeField]
     GameObject defHat;
     [SerializeField]
     GameObject attHat;
@@ -28,10 +24,11 @@ public class VisualizeTeam : NetworkBehaviour {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="role">0 is defender, 1 is attacker and 2 is supporter</param>
+    /// <param name="role">1 is defender, 2 is attacker and 3 is supporter (0 is off)</param>
     public void SetHat(int role) {
-        if (role == 0) { defHat.SetActive(true);  attHat.SetActive(false); supHat.SetActive(false); }
-        if (role == 1) { defHat.SetActive(false); attHat.SetActive(true);  supHat.SetActive(false); }
-        if (role == 2) { defHat.SetActive(false); attHat.SetActive(false); supHat.SetActive(true);  }
+        if (role == 0) { defHat.SetActive(false); attHat.SetActive(false); supHat.SetActive(false); }
+        if (role == 1) { defHat.SetActive(true);  attHat.SetActive(false); supHat.SetActive(false); }
+        if (role == 2) { defHat.SetActive(false); attHat.SetActive(true);  supHat.SetActive(false); }
+        if (role == 3) { defHat.SetActive(false); attHat.SetActive(false); supHat.SetActive(true);  }
     }
 }

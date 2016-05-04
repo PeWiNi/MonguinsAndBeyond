@@ -1,4 +1,4 @@
-Shader "Custom/Toon/Lit" {
+Shader "Custom/Toon/TransparentLit" {
 	Properties {
 		_Color ("Main Color", Color) = (0.5,0.5,0.5,1)
 		_MainTex ("Base (RGB)", 2D) = "white" {}
@@ -6,12 +6,13 @@ Shader "Custom/Toon/Lit" {
 	}
 
 	SubShader {
-		Tags{ "RenderType" = "Opaque" }
+		Tags{ "Queue" = "Transparent+1" "RenderType" = "Transparent" }
+		Blend SrcAlpha OneMinusSrcAlpha
 		Pass{ ColorMask 0 }
 		LOD 200
 		
 		CGPROGRAM
-		#pragma surface surf ToonRamp
+		#pragma surface surf ToonRamp alpha
 
 		sampler2D _Ramp;
 
@@ -25,7 +26,7 @@ Shader "Custom/Toon/Lit" {
 			#endif
 	
 			//half d = lerp(0.18, 1, dot (s.Normal, lightDir) * 0.5 + 0.5);
-			half d = clamp((dot(s.Normal, lightDir) * 0.5 + 0.5) * atten, 0.67, 1);
+			half d = clamp(dot(s.Normal, lightDir) * 0.5 + 0.5, 0.67, 1);
 			half3 ramp = tex2D (_Ramp, float2(d, d)).rgb;
 	
 			half4 c;
@@ -45,7 +46,7 @@ Shader "Custom/Toon/Lit" {
 		void surf (Input IN, inout SurfaceOutput o) {
 			half4 c = tex2D(_MainTex, IN.uv_MainTex) * _Color;
 			o.Albedo = c.rgb;
-			o.Alpha = c.a;// *_Color.a;
+			o.Alpha = c.a * _Color.a;
 		}
 		ENDCG
 
