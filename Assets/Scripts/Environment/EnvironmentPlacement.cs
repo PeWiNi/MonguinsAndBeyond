@@ -192,7 +192,7 @@ public class EnvironmentPlacement : NetworkBehaviour
                 RaycastHit hitInfo;
                 if (Physics.Raycast(ray, out hitInfo, radius * 2, groundLayerMask)) {
                     if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Environment") ||
-                        //hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Ground") || 
+                        hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Trees") || 
                         hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Ignore Raycast")) {
                         continue;
                     }
