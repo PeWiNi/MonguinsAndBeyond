@@ -21,20 +21,7 @@ public class MakeScreenshot : MonoBehaviour {
 
     void LateUpdate() {
         if (takeScreenshot) {
-            // Create a texture the size of the screen, RGB24 format
-            var width = Screen.width;
-            var height = Screen.height;
-            var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
-            // Read screen contents into the texture
-            tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
-            tex.Apply();
-            // Encode texture into PNG
-            byte[] bytes = tex.EncodeToPNG();
-            string filename = ScreenShotName(transform.name);
-            System.IO.File.WriteAllBytes(filename, bytes);
-            Destroy(tex);
-            Debug.Log(string.Format("Took screenshot to: {0}", filename));
-            takeScreenshot = false;
+            StartCoroutine(UploadPNG());
         }
     }
 

@@ -479,34 +479,40 @@ public class HUDScript : MonoBehaviour {
     void SetupMiniMap(Transform player) {
         if (!miniMap) miniMap = GetComponentInChildren<Minimap>();
         miniMap.Target = player;
-        addBlip(player, Color.white);
+        addBlip(player, true, false, false, Resources.Load<Sprite>("Images/Minimap/" + GetPlayerRole(ps)), "me", 1.3f);
         InvokeRepeating("AddAllPickups", 1, 10);
         InvokeRepeating("AddAllPlayers", 1, 10);
     }
-    public void addBlip(Transform target, Color color, bool keepInBounds = true, bool lockScale = false, bool lockRotation = false, Sprite sprite = null) {
+    public void addBlip(Transform target, bool keepInBounds = true, bool lockScale = false, bool lockRotation = false, Sprite sprite = null, string type = "", float scale = 1f) {
         // TODO: Add other players! :D
         GameObject blip = Instantiate(Resources.Load("Prefabs/GUI/Blip"), new Vector3(), Quaternion.identity) as GameObject;
-        blip.transform.parent = miniMap.transform;
+        if (type == "me")
+            blip.transform.parent = miniMap.transform;
+        else if (type != "")
+            blip.transform.parent = miniMap.transform.Find(type + "s");
+        else
+            blip.transform.parent = miniMap.transform.Find("Other");
         blip.name = "Blip-" + target.name;
         blip.GetComponent<MinimapBlip>().Target = target;
         blip.GetComponent<MinimapBlip>().KeepInBounds = keepInBounds;
         blip.GetComponent<MinimapBlip>().LockScale = lockScale;
         blip.GetComponent<MinimapBlip>().LockRotation = lockRotation;
-        blip.GetComponent<Image>().color = color;
+        blip.GetComponent<MinimapBlip>().MinScale *= scale;
+        blip.GetComponent<MinimapBlip>().map = miniMap.GetComponent<Minimap>();
         if (sprite) blip.GetComponent<MinimapBlip>().SetDefaultSprite(sprite);
     }
     public void AddAllPickups() {
         bool inThere;
         foreach (Pickup go in FindObjectsOfType<Pickup>()) {
             inThere = false;
-            foreach (MinimapBlip mmb in miniMap.GetComponentsInChildren<MinimapBlip>()) {
+            foreach (MinimapBlip mmb in miniMap.transform.Find("Pickups").GetComponentsInChildren<MinimapBlip>()) {
                 if(mmb.Target == go.transform) {
                     inThere = true;
                     break;
                 }
             }
             if(!inThere) {
-                addBlip(go.transform, Color.white, false, true, true, Resources.Load<Sprite>("Images/" + GetPickupName(go)));
+                addBlip(go.transform, false, true, true, Resources.Load<Sprite>("Images/" + GetPickupName(go)), "Pickup");
             }
         }
     }
@@ -527,11 +533,26 @@ public class HUDScript : MonoBehaviour {
         }
         return str;
     }
+    public string GetPlayerRole(PlayerStats ps) {
+        string str = "";
+        if(ps.role == PlayerStats.Role.Attacker) {
+            str = "MM_Attacker";
+        } else if (ps.role == PlayerStats.Role.Supporter) {
+            str = "MM_Supporter";
+        } else if (ps.role == PlayerStats.Role.Defender) {
+            str = "MM_Defender";
+        } else {
+            str = "MM_Monguin";
+        }
+        return str;
+    }
     public void AddAllPlayers() {
         bool inThere;
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
+            if (go.transform == ps.transform)
+                continue;
             inThere = false;
-            foreach (MinimapBlip mmb in miniMap.GetComponentsInChildren<MinimapBlip>()) {
+            foreach (MinimapBlip mmb in miniMap.transform.Find("Players").GetComponentsInChildren<MinimapBlip>()) {
                 if (mmb.Target == go.transform) {
                     inThere = true;
                     break;
@@ -539,7 +560,7 @@ public class HUDScript : MonoBehaviour {
             }
             if (!inThere) {
                 PlayerStats p = go.GetComponent<PlayerStats>();
-                addBlip(go.transform, p.team == ps.team ? Color.green : Color.red, p.team == ps.team ? true : false);
+                addBlip(go.transform, p.team == ps.team ? true : false, false, false, Resources.Load<Sprite>("Images/Minimap/" + (p.team == ps.team ? GetPlayerRole(ps) : "MM_Enemy")), "Player");
             }
         }
     }

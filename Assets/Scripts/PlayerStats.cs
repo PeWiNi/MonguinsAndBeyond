@@ -21,7 +21,7 @@ public class PlayerStats : NetworkBehaviour {
     [SyncVar]
     Role syncRole = Role.Basic;
     [SerializeField]
-    Role role = Role.Basic; // Current primary Role to determine abilities
+    public Role role = Role.Basic; // Current primary Role to determine abilities
 
     public Ability[] abilities;
 

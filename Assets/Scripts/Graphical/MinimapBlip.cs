@@ -9,7 +9,7 @@ public class MinimapBlip : MonoBehaviour {
     public bool LockRotation = false;
     public float MinScale = 10f;
 
-    Minimap map;
+    public Minimap map;
     RectTransform myRectTransform;
 
     [SerializeField]
@@ -48,9 +48,11 @@ public class MinimapBlip : MonoBehaviour {
                 lRot = true;
                 myRectTransform.localScale *= 2;
                 myRectTransform.pivot = new Vector2(0.5f, 1);
+                GetComponent<Image>().color = Color.green;
             } else {
                 GetComponent<Image>().sprite = defaultSprite;
                 myRectTransform.pivot = new Vector2(0.5f, 0.5f);
+                GetComponent<Image>().color = Color.white;
             }
         }
 
