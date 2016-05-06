@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: a616bea3142641f40b8f449845a1c87d
-timeCreated: 1462449441
+guid: 424c08d47af08f94c8242780069ca0f5
+timeCreated: 1462474711
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,10 +9,9 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: rockArch4
-    9500000: //RootNode
+    4300000: Cylinder
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
   animations:
@@ -69,7 +68,7 @@ ModelImporter:
     rootMotionBoneName: 
     hasTranslationDoF: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
