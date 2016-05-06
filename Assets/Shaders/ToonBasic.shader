@@ -5,15 +5,9 @@ Shader "Custom/Toon/Basic" {
 		_ToonShade ("ToonShader Cubemap(RGB)", CUBE) = "" { }
 	}
 
-
 	SubShader {
 		Tags{ "RenderType"="Opaque" }
-		Blend SrcAlpha OneMinusSrcAlpha
-		Pass{ ColorMask 0 }
 		Pass {
-			Cull Off
-			ZWrite On
-			
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag

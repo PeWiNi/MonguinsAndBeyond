@@ -84,5 +84,5 @@ public class CharacterCamera : MonoBehaviour {
 
         transform.rotation = rotation;
         transform.position = position;
-    }
+    } // Add InWater monguin y-position (and offset) to restrict the camera from going underwater
 }

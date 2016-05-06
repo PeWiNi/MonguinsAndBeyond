@@ -50,14 +50,14 @@ public class HUDScript : MonoBehaviour {
         healthText = healthSlider.GetComponentInChildren<Text>();
         playerNameText = healthSlider.transform.parent.Find("Name").GetComponentInChildren<Text>();
 
-        actionBar = transform.FindChild("ActionBar").gameObject; // index 0 is background
-        ability1 = actionBar.GetComponentsInChildren<Image>()[2]; // index 1 is the picture behind index 2
-        ability2 = actionBar.GetComponentsInChildren<Image>()[4]; // index 3 is the picture behind index 4
-        ability3 = actionBar.GetComponentsInChildren<Image>()[6]; // index 5 is the picture behind index 6
+        actionBar = transform.FindChild("ActionBar").gameObject;
+        ability1 = actionBar.GetComponentsInChildren<Image>()[1]; // index 0 is the picture behind index 1
+        ability2 = actionBar.GetComponentsInChildren<Image>()[3]; // index 2 is the picture behind index 3
+        ability3 = actionBar.GetComponentsInChildren<Image>()[5]; // index 4 is the picture behind index 5
         // index 7 is border
-        trap1 = actionBar.GetComponentsInChildren<Image>()[9]; // index 8 is the picture behind index 9
-        trap2 = actionBar.GetComponentsInChildren<Image>()[11]; // index 10 is the picture behind index 11
-        trap3 = actionBar.GetComponentsInChildren<Image>()[13]; // index 12 is the picture behind index 13
+        trap1 = actionBar.transform.FindChild("Traps").GetComponentsInChildren<Image>()[1]; // index 0 is the picture behind index 1
+        trap2 = actionBar.transform.FindChild("Traps").GetComponentsInChildren<Image>()[3]; // index 2 is the picture behind index 3
+        trap3 = actionBar.transform.FindChild("Traps").GetComponentsInChildren<Image>()[5]; // index 4 is the picture behind index 5
 
         if(!scoreBoard)
             scoreBoard = GameObject.Find("ScoreBoard").GetComponent<ScoreBoard>();
@@ -233,11 +233,11 @@ public class HUDScript : MonoBehaviour {
         #region Abilities 
         try {
             ability1.sprite = ps.abilities[0].Icon;
-            actionBar.GetComponentsInChildren<Image>()[1].sprite = ps.abilities[0].Icon;
+            actionBar.GetComponentsInChildren<Image>()[0].sprite = ps.abilities[0].Icon;
             ability2.sprite = ps.abilities[1].Icon;
-            actionBar.GetComponentsInChildren<Image>()[3].sprite = ps.abilities[1].Icon;
+            actionBar.GetComponentsInChildren<Image>()[2].sprite = ps.abilities[1].Icon;
             ability3.sprite = ps.abilities[2].Icon;
-            actionBar.GetComponentsInChildren<Image>()[5].sprite = ps.abilities[2].Icon;
+            actionBar.GetComponentsInChildren<Image>()[4].sprite = ps.abilities[2].Icon;
             SetTooltips();
         } catch { Debug.Log("Actionbar (automatic) setup for abilities failed.."); }
         #endregion
