@@ -93,6 +93,24 @@ public class ScoreManager : NetworkBehaviour {
     }
 
     void EndGame() {
+        PlayerStats[] ps = GetScoreBoard();
+        string[] names = new string[ps.Length];
+        int[] team = new int[ps.Length];
+        int[] kills = new int[ps.Length];
+        int[] deaths = new int[ps.Length];
+        float[] score = new float[ps.Length];
+        int[] teamKills = new int[2] { teamOneKillCount, teamTwoKillCount };
+        int[] teamDeaths = new int[2] { teamOneDeathCount, teamTwoDeathCount };
+        float[] teamScore = new float[2] { teamOneScore, teamTwoScore };
+        for (int i = 0; i < ps.Length; i++) {
+            if (!ps[i]) continue;
+            names[i] = ps[i].playerName;
+            team[i] = ps[i].team;
+            kills[i] = ps[i].kills;
+            deaths[i] = ps[i].deaths;
+            score[i] = ps[i].score;
+        }
+        GameObject.FindGameObjectWithTag("Player").GetComponent<EventManager>().SendScoreBoardEvent(names, team, kills, deaths, score, teamKills, teamDeaths, teamScore);
         foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
             go.GetComponent<EventManager>().SendEndGame();
             go.GetComponent<PlayerStats>().Stun(float.MaxValue);

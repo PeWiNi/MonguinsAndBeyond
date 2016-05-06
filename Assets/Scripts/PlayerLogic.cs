@@ -311,7 +311,7 @@ public class PlayerLogic : NetworkBehaviour
     }
 
     [Command]
-    void CmdTriggerScoreBoard() {
+    public void CmdTriggerScoreBoard() {
         ScoreManager SM = GameObject.Find("NetworkManager").GetComponentInChildren<ScoreManager>();
         PlayerStats[] ps = SM.GetScoreBoard();
         string[] names = new string[ps.Length];
@@ -336,13 +336,12 @@ public class PlayerLogic : NetworkBehaviour
 
     public void StopGame() {
         GameObject.Find("HUD").GetComponent<HUDScript>().scoreBoard.showScoreBoard = true;
-        TriggerScoreBoard();
         StartCoroutine(delayDisableHUD());
     }
 
     IEnumerator delayDisableHUD() {
         yield return new WaitForSeconds(2);
-        GameObject.Find("HUD").GetComponent<HUDScript>().gameObject.SetActive(false);
+        //GameObject.Find("HUD").GetComponent<HUDScript>().gameObject.SetActive(false);
         GameObject.Find("NetworkManager").GetComponent<MakeScreenshot>().TakeScreenshot("MonguinThesis_EndGame");
     }
 }

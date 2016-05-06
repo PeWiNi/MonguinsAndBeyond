@@ -254,6 +254,7 @@ public class HUDScript : MonoBehaviour {
         #endregion
         // TODO: Do stuff with setting up correct ability images
         SetCursorState(true);
+        if (miniMap) foreach (MinimapBlip mmb in miniMap.GetComponentsInChildren<MinimapBlip>()) Destroy(mmb.gameObject); //Removes previous icons if players reconnect (important when they swap teams)
         SetupMiniMap(playerStats.transform);
     }
 
