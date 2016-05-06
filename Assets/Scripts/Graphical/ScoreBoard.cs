@@ -37,11 +37,10 @@ public class ScoreBoard : MonoBehaviour {
             Clear(team2);
         } else if (showScoreBoard && !scoreBoard.activeSelf) {
             scoreBoard.SetActive(true);
-            StartCoroutine(DrawStuff());
         }
     }
 
-    IEnumerator DrawStuff() {
+    public IEnumerator DrawStuff() {
         yield return new WaitForFixedUpdate(); // We mayhaps need to wait a little longer for the command to finish (depends on serverDelay)
         for (int i = 0; i < teams.Length; i++)
             Add(names[i], kills[i], deaths[i], score[i], teams[i] == 1 ? team1 : team2);

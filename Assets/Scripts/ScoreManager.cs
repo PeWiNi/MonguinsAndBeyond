@@ -25,6 +25,7 @@ public class ScoreManager : NetworkBehaviour {
 
     void Start() {
         initServerTime = Network.time;
+        Invoke("EndGame", 900);
     }
 
     /// <summary>
@@ -89,6 +90,13 @@ public class ScoreManager : NetworkBehaviour {
         foreach (Transform t in players)
             ps[i++] = t.GetComponent<PlayerStats>();
         return ps;
+    }
+
+    void EndGame() {
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player")) {
+            go.GetComponent<EventManager>().SendEndGame();
+            go.GetComponent<PlayerStats>().Stun(float.MaxValue);
+        }
     }
 
     /// <summary>

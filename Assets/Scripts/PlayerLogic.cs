@@ -288,12 +288,14 @@ public class PlayerLogic : NetworkBehaviour
     void OnEnable() {
         GetComponent<EventManager>().EventScoreChange += UpdateScoreInHUD;
         GetComponent<EventManager>().EventScoreBoard += ScoreBoardInHUD;
+        GetComponent<EventManager>().EventEndGame += StopGame;
     }
 
     // Just to make sure that we unsubscribe when the object is no longer in use
     void OnDisable() {
         GetComponent<EventManager>().EventScoreChange -= UpdateScoreInHUD;
         GetComponent<EventManager>().EventScoreBoard -= ScoreBoardInHUD;
+        GetComponent<EventManager>().EventEndGame -= StopGame;
     }
 
     void UpdateScoreInHUD(float team1, float team2) { // Should be isLocalPlayer but #cba it finally works
@@ -331,4 +333,16 @@ public class PlayerLogic : NetworkBehaviour
         GetComponent<EventManager>().SendScoreBoardEvent(names, team, kills, deaths, score, teamKills, teamDeaths, teamScore);
     }
     #endregion
+
+    public void StopGame() {
+        GameObject.Find("HUD").GetComponent<HUDScript>().scoreBoard.showScoreBoard = true;
+        TriggerScoreBoard();
+        StartCoroutine(delayDisableHUD());
+    }
+
+    IEnumerator delayDisableHUD() {
+        yield return new WaitForSeconds(2);
+        GameObject.Find("HUD").GetComponent<HUDScript>().gameObject.SetActive(false);
+        GameObject.Find("NetworkManager").GetComponent<MakeScreenshot>().TakeScreenshot("MonguinThesis_EndGame");
+    }
 }

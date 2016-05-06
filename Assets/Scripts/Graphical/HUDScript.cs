@@ -29,7 +29,7 @@ public class HUDScript : MonoBehaviour {
     #endregion
 
     [SerializeField]
-    ScoreBoard scoreBoard;
+    public ScoreBoard scoreBoard;
 
     [SerializeField]
     Minimap miniMap;
@@ -442,6 +442,8 @@ public class HUDScript : MonoBehaviour {
         Text[] textiez = transform.FindChild("ScoreBoard").GetComponentsInChildren<Text>();
         textiez[1].text = string.Format("Team 1: {0,7:000.00}", team1);
         textiez[2].text = string.Format("Team 2: {0,7:000.00}", team2);
+        if (ps) textiez[3].text = ps.team == 1 ? string.Format("Kills: {0:00} Deaths: {0:00}", ps.kills, ps.deaths) : "";
+        if (ps) textiez[4].text = ps.team == 2 ? string.Format("Kills: {0:00} Deaths: {0:00}", ps.kills, ps.deaths) : "";
     }
 
     /// <summary>
@@ -474,18 +476,22 @@ public class HUDScript : MonoBehaviour {
         scoreBoard.teamTwoDeathCount = teamDeaths[1];
         scoreBoard.teamOneScore = teamScore[0];
         scoreBoard.teamTwoScore = teamScore[1];
+        StartCoroutine(scoreBoard.DrawStuff());
     }
 
+    #region MiniMap
     void SetupMiniMap(Transform player) {
         if (!miniMap) miniMap = GetComponentInChildren<Minimap>();
         miniMap.Target = player;
-        addBlip(player, true, false, false, Resources.Load<Sprite>("Images/Minimap/" + GetPlayerRole(ps)), "me", 1.3f);
+        addBlip(player, true, false, false, "Images/Minimap/" + GetPlayerRole(ps), "me", 1.3f);
         InvokeRepeating("AddAllPickups", 1, 10);
         InvokeRepeating("AddAllPlayers", 1, 10);
     }
-    public void addBlip(Transform target, bool keepInBounds = true, bool lockScale = false, bool lockRotation = false, Sprite sprite = null, string type = "", float scale = 1f) {
-        // TODO: Add other players! :D
-        GameObject blip = Instantiate(Resources.Load("Prefabs/GUI/Blip"), new Vector3(), Quaternion.identity) as GameObject;
+    public void addBlip(Transform target, bool keepInBounds = true, bool lockScale = false, bool lockRotation = false, string sprite = "", string type = "", float scale = 1f) {
+        string typzies = type;
+        if (type == "me") typzies = "Player";
+        Object load = typzies == "Player" ? Resources.Load("Prefabs/GUI/Blip_Monguin") : Resources.Load("Prefabs/GUI/Blip");
+        GameObject blip = Instantiate(load, new Vector3(), Quaternion.identity) as GameObject;
         if (type == "me")
             blip.transform.parent = miniMap.transform;
         else if (type != "")
@@ -499,7 +505,12 @@ public class HUDScript : MonoBehaviour {
         blip.GetComponent<MinimapBlip>().LockRotation = lockRotation;
         blip.GetComponent<MinimapBlip>().MinScale *= scale;
         blip.GetComponent<MinimapBlip>().map = miniMap.GetComponent<Minimap>();
-        if (sprite) blip.GetComponent<MinimapBlip>().SetDefaultSprite(sprite);
+        if (typzies == "Player") {
+            if (sprite != "") {
+                blip.GetComponent<MinimapBlip>().SetDefaultSprite(Resources.Load<Sprite>("Images/Minimap/MM_" + (sprite.Contains("Enemy") ? "Foe" : "Ally")));
+                blip.transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>(sprite);
+            }
+        } else if (sprite != "") blip.GetComponent<MinimapBlip>().SetDefaultSprite(Resources.Load<Sprite>(sprite));
     }
     public void AddAllPickups() {
         bool inThere;
@@ -512,7 +523,7 @@ public class HUDScript : MonoBehaviour {
                 }
             }
             if(!inThere) {
-                addBlip(go.transform, false, true, true, Resources.Load<Sprite>("Images/" + GetPickupName(go)), "Pickup");
+                addBlip(go.transform, false, true, true, "Images/" + GetPickupName(go), "Pickup");
             }
         }
     }
@@ -527,9 +538,11 @@ public class HUDScript : MonoBehaviour {
         } else if (me.name == "Leaf(Clone)") {
             str = "Leaf";
         } else if (me.name == "Herb(Clone)") {
-            str = "BerryMM";
+            str = "Minimap/MM_Berry";
+        } else if (me.name == "Fish(Clone)") {
+            str = "Minimap/MM_Fish";
         } else {
-            str = "Monguin";
+            str = "Sap";
         }
         return str;
     }
@@ -560,8 +573,9 @@ public class HUDScript : MonoBehaviour {
             }
             if (!inThere) {
                 PlayerStats p = go.GetComponent<PlayerStats>();
-                addBlip(go.transform, p.team == ps.team ? true : false, false, false, Resources.Load<Sprite>("Images/Minimap/" + (p.team == ps.team ? GetPlayerRole(ps) : "MM_Enemy")), "Player");
+                addBlip(go.transform, p.team == ps.team ? true : false, false, false, "Images/Minimap/" + (p.team == ps.team ? GetPlayerRole(p) : "MM_Enemy"), "Player");
             }
         }
     }
+    #endregion
 }

@@ -51,14 +51,18 @@ public class MinimapBlip : MonoBehaviour {
                 GetComponent<Image>().color = Color.green;
             } else {
                 GetComponent<Image>().sprite = defaultSprite;
-                myRectTransform.pivot = new Vector2(0.5f, 0.5f);
+                myRectTransform.pivot = new Vector2(0.5f, transform.childCount > 0 ? 0.45f : 0.5f);
                 GetComponent<Image>().color = Color.white;
             }
         }
 
-        if (!lRot)
+        if (!lRot) {
             myRectTransform.localEulerAngles = map.TransformRotation(Target.eulerAngles);
-
+            if (transform.childCount > 0) {
+                myRectTransform.GetChild(0).localEulerAngles = -map.TransformRotation(Target.eulerAngles);
+                myRectTransform.GetChild(0).GetComponent<RectTransform>().pivot = new Vector2(0.5f, 0.45f);
+            }   
+        }
         myRectTransform.localPosition = newPosition;
     }
 

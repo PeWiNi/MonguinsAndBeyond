@@ -11,6 +11,10 @@ public class EventManager : NetworkBehaviour {
     [SyncEvent]
     public event ScoreBoard EventScoreBoard;
 
+    public delegate void EndGame();
+    [SyncEvent]
+    public event EndGame EventEndGame;
+
     public static float amberStunTime = 12;
 
     public void SendScoreEvent(float team1, float team2) {
@@ -21,5 +25,10 @@ public class EventManager : NetworkBehaviour {
     public void SendScoreBoardEvent(string[] names, int[] team, int[] kills, int[] deaths, float[] score, int[] teamKills, int[] teamDeaths, float[] teamScore) {
         if (EventScoreBoard != null)
             EventScoreBoard(names, team, kills, deaths, score, teamKills, teamDeaths, teamScore);
+    }
+
+    public void SendEndGame() {
+        if (EventEndGame != null)
+            EventEndGame();
     }
 }

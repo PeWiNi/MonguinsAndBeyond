@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
+using System.Collections.Generic;
+using System.Linq;
 
 public class SyncInventory : NetworkBehaviour {
     Inventory inventory;
+    List<string> syncPickup = new List<string>();
     
     public void pickupBanana(int count = 1) {
         if(isLocalPlayer) {
@@ -55,24 +58,35 @@ public class SyncInventory : NetworkBehaviour {
         //pickup.transform.FindChild("Berry").GetComponent<MeshRenderer>().materials[1] = Resources.Load("Materials/berry_leaf") as Material;
         //pickup.transform.FindChild("Berry").GetComponent<MeshRenderer>().material = Resources.Load("Materials/berry" + (berryType == 1 ? "_good" : berryType == 2 ? "_bad" : "_neutral")) as Material;
         pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(berry), GetComponentInChildren<Camera>());
-        StartCoroutine(pickupFlashEffect(berry));
+
+        var match = syncPickup.FirstOrDefault(x => x == berry);
+        if (match == null) {
+            syncPickup.Add(berry);
+            StartCoroutine(pickupFlashEffect(berry));
+        }
     }
 
     void pickupEffect(string type) {
         GameObject pickup = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Collectables/" + type), transform.position, transform.rotation);
         pickup.GetComponent<Pickup>().makeMoveGuy(inventory.transform.FindChild(type), GetComponentInChildren<Camera>());
-        StartCoroutine(pickupFlashEffect(type));
+
+        var match = syncPickup.FirstOrDefault(x => x == type);
+        if (match == null) {
+            syncPickup.Add(type);
+            StartCoroutine(pickupFlashEffect(type));
+        }
     }
 
     IEnumerator pickupFlashEffect(string type) { //BUG: sometimes gets stuck (when picking up multiple of the same item)
         Transform button = inventory.transform.FindChild(type);
         while(button.localScale.x < 1.2f) {
             button.localScale *= 1.01f;
-            yield return new  WaitForFixedUpdate();
+            yield return new WaitForFixedUpdate();
         } while(button.localScale.x > 1f) {
             button.localScale /= 1.01f;
             yield return new WaitForFixedUpdate();
         }
+        syncPickup.Remove(type);
         yield return null;
     }
 

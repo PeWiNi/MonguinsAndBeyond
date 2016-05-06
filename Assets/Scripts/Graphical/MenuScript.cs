@@ -60,6 +60,9 @@ public class MenuScript : MonoBehaviour {
         swapMenus(false);
         mainInputField.text = manager.networkAddress;
         mainInputField.onValueChanged.AddListener(delegate { UpdateAddress(); });
+        #region PLAYTEST PURPOSES
+        mainInputField.gameObject.SetActive(false);
+        #endregion
         joinButton.onClick.AddListener(delegate { JoinClient(); });
         bananaButton.onClick.AddListener(delegate { ButtonUpdate(1); });
         fishButton.onClick.AddListener(delegate { ButtonUpdate(2); });
@@ -73,6 +76,10 @@ public class MenuScript : MonoBehaviour {
             return;
         
         if (!NetworkClient.active && !NetworkServer.active && manager.matchMaker == null) {
+            if(Input.GetKeyDown(KeyCode.F3)) {
+                manager.networkAddress = "localhost";
+                JoinClient();
+            }
             if (Input.GetKeyDown(KeyCode.F2)) {
                 MakeServer();
             }
@@ -116,6 +123,12 @@ public class MenuScript : MonoBehaviour {
     }
 
     public void JoinClient() { //LAN Client
+        GetComponent<MakeScreenshot>().TakeScreenshot("MonguinThesis_Stats");
+        StartCoroutine(damnit());
+    }
+
+    IEnumerator damnit() {
+        yield return new WaitForSeconds(.5f);
         fetchAttributes();
         swapMenus(true);
         manager.StartClient();

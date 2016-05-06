@@ -3,12 +3,19 @@ using System.Collections;
 
 public class MakeScreenshot : MonoBehaviour {
     private bool takeScreenshot = false;
+    public string shotName = "MonguinsThesis";
 
     public void Setup() {
         InvokeRepeating("TakeScreenshot", 1, 120);
     }
 
     public void TakeScreenshot() {
+        shotName = "MonguinsThesis";
+        takeScreenshot = true;
+    }
+
+    public void TakeScreenshot(string name) {
+        shotName = name;
         takeScreenshot = true;
     }
 
@@ -38,7 +45,7 @@ public class MakeScreenshot : MonoBehaviour {
         tex.Apply();
         // Encode texture into PNG
         byte[] bytes = tex.EncodeToPNG();
-        string filename = ScreenShotName(transform.name);
+        string filename = ScreenShotName(shotName);
         System.IO.File.WriteAllBytes(filename, bytes);
         Destroy(tex);
         Debug.Log(string.Format("Took screenshot to: {0}", filename));
