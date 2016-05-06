@@ -25,6 +25,8 @@ public class ScoreBoard : MonoBehaviour {
     public float teamOneScore = 0;
     public float teamTwoScore = 0;
 
+    public int currentPlayerIndex;
+
     void Start() {
         scoreBoard.SetActive(false);
     }
@@ -42,15 +44,15 @@ public class ScoreBoard : MonoBehaviour {
         Clear(team1);
         Clear(team2);
         for (int i = 0; i < teams.Length; i++)
-            Add(names[i], kills[i], deaths[i], score[i], teams[i] == 1 ? team1 : team2);
-        Add("TOTAL: ", teamOneKillCount, teamOneDeathCount, teamOneScore, team1);
-        Add("TOTAL: ", teamTwoKillCount, teamTwoDeathCount, teamTwoScore, team2);
+            Add(names[i], kills[i], deaths[i], score[i], teams[i] == 1 ? team1 : team2, currentPlayerIndex == i);
+        Add("TOTAL: ", teamOneKillCount, teamOneDeathCount, teamOneScore, team1, false);
+        Add("TOTAL: ", teamTwoKillCount, teamTwoDeathCount, teamTwoScore, team2, false);
     }
 
-    void Add(string name, int kills, int deaths, float score, Transform team) {
+    void Add(string name, int kills, int deaths, float score, Transform team, bool currentPlayer) {
         GameObject ps = Instantiate(Resources.Load("Prefabs/GUI/PlayerThing"), new Vector3(), Quaternion.identity) as GameObject;
         ps.transform.parent = team.transform;
-        ps.GetComponent<PlayerScoreScript>().SetParams(name, string.Format("{0:00}", kills), string.Format("{0:00}", deaths), string.Format("{0,7:000.00}", score), (team.childCount % 2) == 1);
+        ps.GetComponent<PlayerScoreScript>().SetParams(name, string.Format("{0:00}", kills), string.Format("{0:00}", deaths), string.Format("{0,7:000.00}", score), currentPlayer ? 2 : (team.childCount % 2));
     }
 
     void Clear(Transform content) {

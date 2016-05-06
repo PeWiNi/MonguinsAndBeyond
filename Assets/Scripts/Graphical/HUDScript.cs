@@ -227,6 +227,7 @@ public class HUDScript : MonoBehaviour {
         ps = playerStats;
         pl = playerStats.GetComponent<PlayerLogic>();
         playerNameText.text = "";
+        pl.CmdWhatNumberAmI();
         // Turn off world-space healthBar
         ps.GetComponentInChildren<Canvas>().enabled = false;
         #region Abilities 
@@ -441,8 +442,8 @@ public class HUDScript : MonoBehaviour {
     /// <param name="team2">Death count for Team 2</param>
     public void UpdateDeathScore(float team1, float team2) {
         Text[] textiez = transform.FindChild("ScoreBoard").GetComponentsInChildren<Text>();
-        textiez[1].text = string.Format("Team 1: {0,7:000.00}", team1);
-        textiez[2].text = string.Format("Team 2: {0,7:000.00}", team2);
+        textiez[1].text = string.Format("Team B: {0,7:000.00}", team1);
+        textiez[2].text = string.Format("Team F: {0,7:000.00}", team2);
         if (ps) textiez[3].text = ps.team == 1 ? string.Format("Kills: {0:00} Deaths: {0:00}", ps.kills, ps.deaths) : "";
         if (ps) textiez[4].text = ps.team == 2 ? string.Format("Kills: {0:00} Deaths: {0:00}", ps.kills, ps.deaths) : "";
     }
@@ -465,7 +466,7 @@ public class HUDScript : MonoBehaviour {
         }
     }
 
-    public void SetupScoreBoard(string[] names, int[] team, int[] kills, int[] deaths, float[] score, int[] teamKills, int[] teamDeaths, float[] teamScore) {
+    public void SetupScoreBoard(string[] names, int[] team, int[] kills, int[] deaths, float[] score, int[] teamKills, int[] teamDeaths, float[] teamScore, int indexOfMe) {
         scoreBoard.names = names;
         scoreBoard.teams = team;
         scoreBoard.kills = kills;
@@ -477,7 +478,12 @@ public class HUDScript : MonoBehaviour {
         scoreBoard.teamTwoDeathCount = teamDeaths[1];
         scoreBoard.teamOneScore = teamScore[0];
         scoreBoard.teamTwoScore = teamScore[1];
+        scoreBoard.currentPlayerIndex = indexOfMe;
         StartCoroutine(scoreBoard.DrawStuff());
+    }
+
+    public bool IsThisMe(Transform check) {
+        return check == ps.transform;
     }
 
     #region MiniMap

@@ -45,6 +45,7 @@ Temporary Items
 # =========================
 # Unity Specific Ignores
 # =========================
+images
 
 # The Unity Library
 # When checking the project into a version control system, you should add the Assets and the ProjectSettings directories to the system. The Library directory should be completely ignored - when using .meta files, it’s only a local cache of imported assets.

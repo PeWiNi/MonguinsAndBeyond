@@ -5,8 +5,7 @@ using UnityEngine.Networking;
 /// <summary>
 /// Class in charge of parsing user input
 /// </summary>
-public class PlayerLogic : NetworkBehaviour
-{
+public class PlayerLogic : NetworkBehaviour {
 
     PlayerStats stats;
     CharacterCamera cam;
@@ -35,6 +34,9 @@ public class PlayerLogic : NetworkBehaviour
     public float drownDepth = 1;
     float drownTimer;
     float drownTime = 15f;
+
+    [SyncVar]
+    int indexOfMe = int.MaxValue;
 
     //[SerializeField]
     //private UnityStandardAssets.Characters.FirstPerson.MouseLook m_MouseLook;
@@ -303,7 +305,9 @@ public class PlayerLogic : NetworkBehaviour
     }
 
     void ScoreBoardInHUD(string[] names, int[] team, int[] kills, int[] deaths, float[] score, int[] teamKills, int[] teamDeaths, float[] teamScore) {
-        GameObject.Find("HUD").GetComponent<HUDScript>().SetupScoreBoard(names, team, kills, deaths, score, teamKills, teamDeaths, teamScore);
+        if(isLocalPlayer) {
+            GameObject.Find("HUD").GetComponent<HUDScript>().SetupScoreBoard(names, team, kills, deaths, score, teamKills, teamDeaths, teamScore, indexOfMe);
+        }
     }
 
     public void TriggerScoreBoard() {
@@ -331,6 +335,15 @@ public class PlayerLogic : NetworkBehaviour
             score[i] = ps[i].score;
         }
         GetComponent<EventManager>().SendScoreBoardEvent(names, team, kills, deaths, score, teamKills, teamDeaths, teamScore);
+    }
+
+    [Command]
+    public void CmdWhatNumberAmI() {
+        ScoreManager SM = GameObject.Find("NetworkManager").GetComponentInChildren<ScoreManager>();
+        PlayerStats[] ps = SM.GetScoreBoard();
+        for (int i = 0; i < ps.Length; i++) {
+            if (ps[i].transform == transform) indexOfMe = i;
+        }
     }
     #endregion
 

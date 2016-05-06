@@ -18,11 +18,11 @@ public class PlayerScoreScript : MonoBehaviour {
     [SerializeField]
     Color Light;
 
-    public void SetParams(string name, string kills, string deaths, string score, bool darkColor) {
+    public void SetParams(string name, string kills, string deaths, string score, int darkColor) {
         Player.text = name;
         Kills.text = kills;
         Deaths.text = deaths;
         Score.text = score;
-        GetComponent<Image>().color = darkColor ? Dark : Light;
+        GetComponent<Image>().color = darkColor == 1 ? Dark : darkColor == 0 ? Light : Color.magenta * new Color(1, 1, 1, .5f);
     }
 }
