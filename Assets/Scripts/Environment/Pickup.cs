@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 /// Dummy placeholder object for future pickup'ables
 /// </summary>
 public class Pickup : NetworkBehaviour {
-    bool moveToUI = false;
+    internal bool moveToUI = false;
     Transform GUIlocation;
     Camera cam;
     internal bool canCollide = true;
@@ -20,7 +20,10 @@ public class Pickup : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
-        if (moveToUI) return;
+        if (moveToUI) {
+            transform.Find("PickUpFX").gameObject.SetActive(false);
+            return;
+        }
         if (owner) {
             transform.position = doNotTouchTerrain(transform.position);
             if (Unreachable())

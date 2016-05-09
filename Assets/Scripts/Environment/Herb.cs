@@ -25,6 +25,10 @@ public class Herb : Pickup {
 
     // Use this for initialization
     void Start() {
+        if (moveToUI) {
+            transform.Find("PickUpFX").gameObject.SetActive(false);
+            return;
+        }
         try { if (!isServer) {
                 PlayerStats ps = GameObject.Find("NetworkManager").GetComponentInChildren<HUDScript>().GetPlayerStats();
                 if (ps.team != owner.GetComponent<PlayerStats>().team)
