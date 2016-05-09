@@ -17,6 +17,7 @@ public class ToolTips : MonoBehaviour {
 
     int clickLeft = 0;
     bool mouseIsOnIT = false;
+    public bool isOn { get { return mouseIsOnIT && currentToolTipText != ""; } }
 
     void Start() {
         guiStyleFore = new GUIStyle();

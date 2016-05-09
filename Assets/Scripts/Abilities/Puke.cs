@@ -39,4 +39,16 @@ public class Puke : Ability {
                 }
             }
     }
+
+    public override void ShowAreaOfEffect(bool draw) {
+        if (draw) {
+            if (!areaOfEffect) {
+                areaOfEffect = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                areaOfEffect.GetComponent<MeshRenderer>().material = projection;
+                areaOfEffect.GetComponent<Collider>().isTrigger = true;
+                areaOfEffect.transform.localScale = new Vector3(area, area, area);
+            }
+            areaOfEffect.transform.position = transform.position + ((transform.localScale.y + .5f) * transform.up) + (transform.forward * area / 2);
+        } else { base.ShowAreaOfEffect(draw); }
+    }
 }

@@ -15,7 +15,7 @@ public class Taunt : Ability {
     public float radius = 2;
     [Range(0, 1)]
     public float damage = .08f;
-    public string tooltip = "Forces your enemies to look at you and only you for a brief moment.";
+    public string tooltip = "Taunt: Forces your enemies to look at you and only you for a brief moment.";
     public override string tooltipText { get { return tooltip; } }
 
     public override double Trigger() {
@@ -39,6 +39,18 @@ public class Taunt : Ability {
                 //(Maybe)TODO: <-- Insert affected by taunt animation here (unless we do a check for this in another script).
             }
         }
+    }
+
+    public override void ShowAreaOfEffect(bool draw) {
+        if (draw) {
+            if (!areaOfEffect) {
+                areaOfEffect = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                areaOfEffect.GetComponent<MeshRenderer>().material = projection;
+                areaOfEffect.GetComponent<Collider>().isTrigger = true;
+                areaOfEffect.transform.localScale = new Vector3(radius * 2, radius * 2, radius * 2);
+            }
+            areaOfEffect.transform.position = transform.position + (transform.localScale.y + .5f) * transform.up;
+        } else { base.ShowAreaOfEffect(draw); }
     }
 
     [Command]

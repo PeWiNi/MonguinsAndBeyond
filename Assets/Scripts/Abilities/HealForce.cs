@@ -39,6 +39,18 @@ public class HealForce : Ability {
         } return 0;
     }
 
+    public override void ShowAreaOfEffect(bool draw) {
+        if (draw) {
+            if (!areaOfEffect) {
+                areaOfEffect = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                areaOfEffect.GetComponent<MeshRenderer>().material = projection;
+                areaOfEffect.GetComponent<Collider>().isTrigger = true;
+                areaOfEffect.transform.localScale = new Vector3(impactRadius * 2, .5f, impactRadius * 2);
+            }
+            areaOfEffect.transform.position = transform.position + .5f * transform.up;
+        } else { base.ShowAreaOfEffect(draw); }
+    }
+
     [Command]
     void CmdSpawnHeal() {
         // Initiate GameObject using prefab, position and a rotation
@@ -48,9 +60,4 @@ public class HealForce : Ability {
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);
     }
-
-    //void OnDrawGizmos() {
-    //    Gizmos.color = Color.yellow;
-    //    Gizmos.DrawSphere(transform.position + (transform.localScale.y + .5f) * transform.up, impactRadius);
-    //}
 }

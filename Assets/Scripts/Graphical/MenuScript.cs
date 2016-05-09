@@ -61,7 +61,7 @@ public class MenuScript : MonoBehaviour {
         mainInputField.text = manager.networkAddress;
         mainInputField.onValueChanged.AddListener(delegate { UpdateAddress(); });
         #region PLAYTEST PURPOSES
-        mainInputField.gameObject.SetActive(false);
+        if(manager.networkAddress == "176.23.24.231") mainInputField.gameObject.SetActive(false);
         #endregion
         joinButton.onClick.AddListener(delegate { JoinClient(); });
         bananaButton.onClick.AddListener(delegate { ButtonUpdate(1); });

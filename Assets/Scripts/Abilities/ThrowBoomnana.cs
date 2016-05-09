@@ -35,6 +35,19 @@ public class ThrowBoomnana : Ability
         return 0;
     }
 
+    public override void ShowAreaOfEffect(bool draw) {
+        if (draw) {
+            if (!areaOfEffect) {
+                areaOfEffect = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                areaOfEffect.GetComponent<MeshRenderer>().material = projection;
+                areaOfEffect.GetComponent<Collider>().isTrigger = true;
+                areaOfEffect.transform.localScale = new Vector3(1, 1, distance);
+                areaOfEffect.transform.rotation = transform.rotation;
+            }
+            areaOfEffect.transform.position = transform.position + Vector3.up * .5f + (distance / 2) * transform.forward;
+        } else { base.ShowAreaOfEffect(draw); }
+    }
+
     public void Throw(Vector3 pos, Transform target) {
         CmdTarget(target.gameObject);
         GetComponent<NetworkAnimator>().SetTrigger("CastBOOMnana");

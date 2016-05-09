@@ -30,6 +30,7 @@ public class CharacterCamera : MonoBehaviour {
     
     public Vector3 rotate;
     PlayerStats ps;
+    PlayerLogic pl;
 
     void Start() {
         currentDistance = distance;
@@ -41,6 +42,7 @@ public class CharacterCamera : MonoBehaviour {
         y = angles.x;
 
         ps = GetComponentInParent<PlayerStats>();
+        pl = GetComponentInParent<PlayerLogic>();
     }
 
     void LateUpdate() {
@@ -54,7 +56,10 @@ public class CharacterCamera : MonoBehaviour {
                 x = Mathf.LerpAngle(currentRotationAngle, targetRotationAngle, Time.deltaTime * rotationDampening);
         }
 
+        float tempYMin = yMin;
+        if (pl.isSwimming) { yMin = 10; }//Don't allow the camera to move underwater
         y = Mathf.Clamp(y, yMin, yMax);//Restrain 'Y' between MAX and MIN values.
+        yMin = tempYMin;
 
         var rotation = Quaternion.Euler(y, x, 0);
 

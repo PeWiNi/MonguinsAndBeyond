@@ -16,6 +16,9 @@ public class Ability : NetworkBehaviour {
     public Sprite Icon;
     public virtual string tooltipText { get { return ""; } }
 
+    internal GameObject areaOfEffect;
+    internal Material projection;
+
     public PlayerStats ArrayOfAbilities {
         get {
             throw new System.NotImplementedException();
@@ -28,10 +31,10 @@ public class Ability : NetworkBehaviour {
     //public bool Available { get { return OnCooldown(); } }
 
     // Use this for initialization
-    void Start () { }
-	
-	// Update is called once per frame
-	void Update () {
+    void Start() { projection = Resources.Load<Material>("Materials/Projection"); }
+
+    // Update is called once per frame
+    void Update() {
         SelectTeam();
     }
 
@@ -50,6 +53,12 @@ public class Ability : NetworkBehaviour {
         timer = (float)Network.time;
         GetComponent<Camouflage>().brokeStealth = true;
         return castTime;
+    }
+
+    public virtual void ShowAreaOfEffect(bool draw) {
+        if (!draw && areaOfEffect) {
+            Destroy(areaOfEffect);
+        }
     }
 
     /// <summary>

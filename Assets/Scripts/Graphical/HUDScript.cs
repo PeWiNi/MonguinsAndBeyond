@@ -16,6 +16,8 @@ public class HUDScript : MonoBehaviour {
     PlayerStats ps;
     PlayerLogic pl;
 
+    ToolTips[] tooltips;
+
     #region Trap action bar fields
     Image trap1;
     public float trap1Cooldown = 10f;
@@ -91,6 +93,11 @@ public class HUDScript : MonoBehaviour {
             ActionBarUpdate(ref ability2, ps.abilities[1]);
             ActionBarUpdate(ref ability3, ps.abilities[2]);
             #endregion
+            if(tooltips.Length > 0) {
+                if (tooltips[0].isOn) ps.abilities[0].ShowAreaOfEffect(true); else ps.abilities[0].ShowAreaOfEffect(false);
+                if (tooltips[1].isOn) ps.abilities[1].ShowAreaOfEffect(true); else ps.abilities[1].ShowAreaOfEffect(false);
+                if (tooltips[2].isOn) ps.abilities[2].ShowAreaOfEffect(true); else ps.abilities[2].ShowAreaOfEffect(false);
+            }
             #region Trap Bar
             if (Input.GetKeyDown(KeyCode.Alpha1) && !ps.GetComponentInChildren<SpawnTraps>().isPlacing && !OnCooldown(trap1Cooldown, trap1Timer) && ps.CanIMove()) {
                 SpawnBananaTrap();
@@ -418,13 +425,17 @@ public class HUDScript : MonoBehaviour {
     #endregion
 
     void SetTooltips() {
+        tooltips = new ToolTips[3];
+        tooltips[0] = actionBar.transform.Find("Abilities").Find("Action_1").GetComponent<ToolTips>();
+        tooltips[1] = actionBar.transform.Find("Abilities").Find("Action_2").GetComponent<ToolTips>();
+        tooltips[2] = actionBar.transform.Find("Abilities").Find("Action_3").GetComponent<ToolTips>();
         // Ability tooltips are set in their respective abilities
-        actionBar.transform.Find("Abilities").Find("Action_1").GetComponent<ToolTips>().toolTipText = ps.abilities[0].tooltipText;
-        actionBar.transform.Find("Abilities").Find("Action_2").GetComponent<ToolTips>().toolTipText = ps.abilities[1].tooltipText;
-        actionBar.transform.Find("Abilities").Find("Action_3").GetComponent<ToolTips>().toolTipText = ps.abilities[2].tooltipText;
-        actionBar.transform.Find("Traps").Find("Trap_1").GetComponent<ToolTips>().toolTipText = "Banana Splat: Makes you slip uncontrollably for at least 2 sec. Can throw your enemies further, if you’re one of the supporters. Trap remains active for 60 seconds. (Consumes Bananas)";
-        actionBar.transform.Find("Traps").Find("Trap_2").GetComponent<ToolTips>().toolTipText = "Spikes: Hides some sharp-sharp spikes, depending on agility, on the ground that hurt when you or your enemies walk through them. Trap can be triggered 3 times. (Consumes Sticks and Leaves)";
-        actionBar.transform.Find("Traps").Find("Trap_3").GetComponent<ToolTips>().toolTipText = "Sap trap: Whomever it is thrown at, is slowed and has a chance to turn to amber if they touch the water. Trap remains active for 20 seconds. (Consumes Sap)";
+        tooltips[0].toolTipText = ps.abilities[0].tooltipText;
+        tooltips[1].toolTipText = ps.abilities[1].tooltipText;
+        tooltips[2].toolTipText = ps.abilities[2].tooltipText;
+        actionBar.transform.Find("Traps").Find("Trap_1").GetComponent<ToolTips>().toolTipText = "Banana Splat: Makes you slip uncontrollably for at least 2 sec. It's enhanced by wisdom. Trap is active for 60 seconds. (Consumes Bananas)";
+        actionBar.transform.Find("Traps").Find("Trap_2").GetComponent<ToolTips>().toolTipText = "Spikes: Hides some hurtful spikes, depending on agility, on the ground. Trap can be triggered 3 times. (Consumes Sticks and Leaves)";
+        actionBar.transform.Find("Traps").Find("Trap_3").GetComponent<ToolTips>().toolTipText = "Sap trap: Slows. Traps enemies in amber if they touch the water, while under the effect. Trap is active for 20 seconds. (Consumes Sap)";
 
         inventory.transform.Find("Banana").GetComponent<ToolTips>().toolTipText = "Bananas: Used for banana splat. 1 Banana per trap.";
         inventory.transform.Find("Stick").GetComponent<ToolTips>().toolTipText  = "Sticks: Used for the spikes trap. 1 Stick + 1 Leaf are consumed for every trap.";

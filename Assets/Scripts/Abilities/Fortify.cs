@@ -21,6 +21,18 @@ public class Fortify : Ability {
         return base.Trigger();
     }
 
+    public override void ShowAreaOfEffect(bool draw) {
+        if (draw) {
+            if(!areaOfEffect) {
+                areaOfEffect = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+                areaOfEffect.GetComponent<MeshRenderer>().material = projection;
+                areaOfEffect.GetComponent<Collider>().isTrigger = true;
+                areaOfEffect.transform.localScale = transform.localScale;
+            }
+            areaOfEffect.transform.position = transform.position + transform.localScale.y * Vector3.up;
+        } else { base.ShowAreaOfEffect(draw); }
+    }
+
     [Command]
     void CmdFortify(GameObject player, float duration) {
         // TODO: Implement in PlayerStats

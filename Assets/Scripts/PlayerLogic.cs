@@ -156,7 +156,7 @@ public class PlayerLogic : NetworkBehaviour {
         transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
 
         //Rotation
-        if (Input.GetMouseButton(1) && (!stats.isDead && !stats.isStunned)) {// && !stats.isIncapacitated)) {// if dead they cannot turn their char around (but they can still look around with their camera)
+        if (Input.GetMouseButton(1) && (!stats.isDead && !stats.isStunned && !stats.isTaunted())) {// && !stats.isIncapacitated)) {// if dead they cannot turn their char around (but they can still look around with their camera)
             transform.rotation = Quaternion.Euler(0, cam.rotate.y, 0);
         }
         // Jumping
@@ -240,7 +240,7 @@ public class PlayerLogic : NetworkBehaviour {
     #region Swim stuff
     public void StartSwimming() {
         if (!isSwimming) {
-            if (Physics.Raycast(transform.position, -Vector3.up, transform.localScale.y * drownDepth, ~(1 << 8) | ~(1 << 4))) { return; }
+            if (Physics.Raycast(transform.position, -Vector3.up, transform.localScale.y * drownDepth, ~((1 << 8) | (1 << 4)))) { return; }
             isSwimming = true;
             //Play 'Swimming'Animation
             if (animLocal.GetBool(Animator.StringToHash("IsSwimming")) == false) {
@@ -257,20 +257,15 @@ public class PlayerLogic : NetworkBehaviour {
     IEnumerator InWater() {
         drownTimer = (float)Network.time;
         while (isSwimming && (((float)Network.time - drownTimer) < drownTime)) {
+            yield return new WaitForSeconds(1);
             if (GetComponent<PlayerStats>().isDead) { isSwimming = false; animLocal.SetBool("IsDeadByWater", true); animLocal.SetBool("IsSwimming", false); }
-            if (Physics.Raycast(transform.position, -Vector3.up, transform.localScale.y * drownDepth, ~(1 << 8))) {
+            if (Physics.Raycast(transform.position, -Vector3.up, transform.localScale.y * drownDepth, ~((1 << 8) | (1 << 4)))) {
                 isSwimming = false;
                 if (animLocal.GetBool(Animator.StringToHash("IsSwimming")))
                     animLocal.SetBool("IsSwimming", false);
                 yield return null;
             }
             //print(drownTimeLeft());
-            yield return new WaitForSeconds(1);
-        } if (Physics.Raycast(transform.position, -Vector3.up, transform.localScale.y * drownDepth, ~(1 << 8))) {
-            isSwimming = false;
-            if (animLocal.GetBool(Animator.StringToHash("IsSwimming")))
-                animLocal.SetBool("IsSwimming", false);
-            yield return null;
         }
         if (isLocalPlayer && isSwimming)
             stats.CmdTakeDmg(10000);
