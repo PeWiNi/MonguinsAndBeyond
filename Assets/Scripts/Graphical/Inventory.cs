@@ -114,7 +114,8 @@ public class Inventory : MonoBehaviour {
     /// <param name="RNG">The Wisdom stat of the player</param>
     /// <returns>0 if unknown, 1 if good, 2 if bad</returns>
     public int pickupBerry(int value, float RNG) {
-        if(RNG == 0) {
+        GetComponentInParent<HUDScript>().ResetCastBar();
+        if (RNG == 0) {
             return pickupBerry(Herb.Condition.Random);
         } else { 
             int rand = Random.Range(0, 100);

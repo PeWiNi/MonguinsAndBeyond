@@ -60,4 +60,16 @@ public class HealForce : Ability {
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);
     }
+
+    public override bool OnCooldown() {
+        if (GetComponent<SyncInventory>().GetCount("BerryG") == 0)
+            return true;
+        return base.OnCooldown();
+    }
+
+    public override float CooldownRemaining() {
+        if (GetComponent<SyncInventory>().GetCount("BerryG") == 0)
+            return -1;
+        return base.CooldownRemaining();
+    }
 }

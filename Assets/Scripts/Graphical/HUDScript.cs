@@ -92,12 +92,12 @@ public class HUDScript : MonoBehaviour {
             ActionBarUpdate(ref ability1, ps.abilities[0]);
             ActionBarUpdate(ref ability2, ps.abilities[1]);
             ActionBarUpdate(ref ability3, ps.abilities[2]);
-            #endregion
-            if(tooltips.Length > 0) {
+            if(tooltips.Length > 0) { // Show area of effect when tooltip is being hovered over
                 if (tooltips[0].isOn) ps.abilities[0].ShowAreaOfEffect(true); else ps.abilities[0].ShowAreaOfEffect(false);
                 if (tooltips[1].isOn) ps.abilities[1].ShowAreaOfEffect(true); else ps.abilities[1].ShowAreaOfEffect(false);
                 if (tooltips[2].isOn) ps.abilities[2].ShowAreaOfEffect(true); else ps.abilities[2].ShowAreaOfEffect(false);
             }
+            #endregion
             #region Trap Bar
             if (Input.GetKeyDown(KeyCode.Alpha1) && !ps.GetComponentInChildren<SpawnTraps>().isPlacing && !OnCooldown(trap1Cooldown, trap1Timer) && ps.CanIMove()) {
                 SpawnBananaTrap();
@@ -155,8 +155,8 @@ public class HUDScript : MonoBehaviour {
                     castBar.value = value;
                 else
                     castBar.gameObject.SetActive(false);
-            } else if (ps.GetComponent<Camouflage>().isCamouflaged) {
-                if (!castBar.gameObject.activeSelf || currentText.Substring(0, 7) != "Stealthed") {
+            } else if (ps.GetComponent<Camouflage>().isCamouflaged) { // STEALTHED
+                if (!castBar.gameObject.activeSelf || currentText.Substring(0, 9) != "Stealthed") {
                     castBar.gameObject.SetActive(true);
                     castBar.fillRect.GetComponentInChildren<Image>().color = new Color(49f / 255f, 187f / 255f, 0f / 255f); //Foreground
                     castBar.targetGraphic.GetComponentInChildren<Image>().color = new Color(51f / 255f, 68f / 255f, 37f / 255f); //Background
@@ -175,7 +175,8 @@ public class HUDScript : MonoBehaviour {
                     castBar.gameObject.SetActive(false);
                 
             } else if (castBar.gameObject.activeSelf) {
-                castBar.gameObject.SetActive(false);
+                if(!currentText.EndsWith("Berries"))
+                    castBar.gameObject.SetActive(false);
             }
             #endregion
             if(Input.GetKeyDown(KeyCode.Tab)) {
@@ -201,10 +202,26 @@ public class HUDScript : MonoBehaviour {
     /// <param name="ability">The ability corresponding to the action bar slot</param>
     public void ActionBarUpdate(ref Image overlayImage, Ability ability) {
         if (ability.OnCooldown()) {
+            if(ability.CooldownRemaining() < 0) {
+                if (!castBar.gameObject.activeSelf) {
+                    string[] subpar = ability.tooltipText.Split(':');
+                    castBar.gameObject.SetActive(true);
+                    Color color = subpar[0] == "Poison Dart" ? new Color(106f / 255f, 197f / 255f, 54f / 255f) : new Color(106f / 255f, 0f / 255f, 0f / 255f);
+                    castBar.fillRect.GetComponentInChildren<Image>().color = color;
+                    castBar.targetGraphic.GetComponentInChildren<Image>().color = new Color(255f / 255f, 255f / 255f, 255f / 255f);
+                    currentText = string.Format("Out of {0} Berries", subpar[0] == "Poison Dart" ? "Bad" : "Good");
+                    castBar.GetComponentInChildren<Text>().text = currentText;
+                    castBar.value = 1;
+                }
+            }
             overlayImage.fillAmount = ability.CooldownRemaining();
         } else if (overlayImage.fillAmount < 1) {
             overlayImage.fillAmount = 1;
         }
+    }
+
+    public void ResetCastBar() {
+        currentText = "";
     }
 
     /// <summary>

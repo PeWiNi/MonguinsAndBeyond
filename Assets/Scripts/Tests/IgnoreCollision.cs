@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class IgnoreCollision : MonoBehaviour {
-
+    public bool player;
+    public bool ability;
 	// Use this for initialization
 	void Start () {
 	
@@ -14,9 +15,13 @@ public class IgnoreCollision : MonoBehaviour {
 	}
 
     void OnCollisionEnter(Collision _collision) {
-        if (_collision.collider.tag == "Player") {
-            Collision collidedPlayer = _collision;
-            Physics.IgnoreCollision(_collision.collider, GetComponent<Collider>());
-        }
+        if (ability)
+            if (_collision.collider.tag == "Ability") {
+                Physics.IgnoreCollision(_collision.collider, GetComponent<Collider>());
+            }
+        if (player)
+            if (_collision.collider.tag == "Player") {
+                Physics.IgnoreCollision(_collision.collider, GetComponent<Collider>());
+            }
     }
 }

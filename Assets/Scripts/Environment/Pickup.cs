@@ -20,6 +20,7 @@ public class Pickup : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
+        if (moveToUI) return;
         if (owner) {
             transform.position = doNotTouchTerrain(transform.position);
             if (Unreachable())

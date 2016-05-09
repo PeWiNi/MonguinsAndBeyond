@@ -112,7 +112,7 @@ public class SyncInventory : NetworkBehaviour {
 
     [Command]
     public void CmdSpawnItem(string go, Vector3 position, float duration) {
-        Vector3 spawnPos = transform.position + ((transform.localScale.x * 2) * transform.forward);
+        Vector3 spawnPos = transform.position + ((transform.localScale.x * 2) * transform.forward) + transform.localScale.y * Vector3.up;
         if (position != new Vector3())
             spawnPos = position;
 
@@ -151,5 +151,16 @@ public class SyncInventory : NetworkBehaviour {
 
     public bool ThrowPoisonBerryConsume() {
         return inventory.useBerry("BerryB");
+    }
+
+    public int GetCount(string type) {
+        switch(type) {
+            case ("BerryG"):
+                return inventory.berryGCount;
+            case ("BerryB"):
+                return inventory.berryBCount;
+            default:
+                return 0;
+        }
     }
 }

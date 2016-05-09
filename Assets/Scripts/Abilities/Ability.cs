@@ -107,11 +107,11 @@ public class Ability : NetworkBehaviour {
         player.GetComponent<PlayerBehaviour>().state = playerState;
     }
 
-    public bool OnCooldown() {
+    public virtual bool OnCooldown() {
         return ((float)Network.time - timer) < cooldown;
     }
 
-    public float CooldownRemaining() {
+    public virtual float CooldownRemaining() {
         return (1.0f / cooldown * ((float)Network.time - timer));
     }
 }
