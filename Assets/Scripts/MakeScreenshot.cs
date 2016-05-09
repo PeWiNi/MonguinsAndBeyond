@@ -6,7 +6,7 @@ public class MakeScreenshot : MonoBehaviour {
     public string shotName = "MonguinsThesis";
 
     public void Setup() {
-        InvokeRepeating("TakeScreenshot", 1, 120);
+        InvokeRepeating("TakeScreenshot", 1, 30);
     }
 
     public void TakeScreenshot() {
