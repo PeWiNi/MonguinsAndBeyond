@@ -60,14 +60,12 @@ public class MenuScript : MonoBehaviour {
         swapMenus(false);
         mainInputField.text = manager.networkAddress;
         mainInputField.onValueChanged.AddListener(delegate { UpdateAddress(); });
-        #region PLAYTEST PURPOSES
-        if(manager.networkAddress == "176.23.24.231") mainInputField.gameObject.SetActive(false);
-        #endregion
         joinButton.onClick.AddListener(delegate { JoinClient(); });
         bananaButton.onClick.AddListener(delegate { ButtonUpdate(1); });
         fishButton.onClick.AddListener(delegate { ButtonUpdate(2); });
         playerNameInputField.onValueChanged.AddListener(delegate { UpdateName(); });
-        joinButton.interactable = false;
+        joinButton.gameObject.SetActive(false);
+        mainInputField.gameObject.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -108,7 +106,10 @@ public class MenuScript : MonoBehaviour {
 
     public void ButtonUpdate(int teamSelect) {
         team = teamSelect;
-        joinButton.interactable = team > 0;
+        joinButton.gameObject.SetActive(team > 0);
+        #region PLAYTEST PURPOSES
+        if (manager.networkAddress != "176.23.24.231") mainInputField.gameObject.SetActive(team > 0);
+        #endregion
         Color highlight = new Color(51f / 255f, 68f / 255f, 34f / 255f);
         Color normal = new Color(137f / 255f, 143f / 255f, 43f / 255f);
         bananaButton.image.color = team == 1 ? highlight : normal;
