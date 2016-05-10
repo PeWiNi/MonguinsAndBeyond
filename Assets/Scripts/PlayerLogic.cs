@@ -351,7 +351,6 @@ public class PlayerLogic : NetworkBehaviour {
         yield return new WaitForSeconds(2);
         //GameObject.Find("HUD").GetComponent<HUDScript>().gameObject.SetActive(false);
         GameObject.Find("NetworkManager").GetComponent<MakeScreenshot>().TakeScreenshot("MonguinThesis_EndGame");
-        yield return new WaitForSeconds(2);
-        GameObject.Find("NetworkManager").GetComponent<MakeScreenshot>().gameObject.SetActive(false); // TOADZ not optimal to kill the NetworkManager, but no more screenshotzies
+        //GameObject.Find("NetworkManager").GetComponent<MakeScreenshot>().gameObject.SetActive(false); // TOADZ not optimal to kill the NetworkManager, but no more screenshotzies
     }
 }
