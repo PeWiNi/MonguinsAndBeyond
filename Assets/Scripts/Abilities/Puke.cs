@@ -11,6 +11,8 @@ using UnityEngine.Networking;
 /// </summary>
 public class Puke : Ability {
     public float area = 2;
+    [SerializeField]
+    GameObject prefab;
     public float slowDuration = 3.0f;
     [Range(0, 1)]
     public float damage = .08f;
@@ -25,19 +27,32 @@ public class Puke : Ability {
     }
 
     void Pukey() {
+        CmdDoFire();
         gameObject.GetComponent<PlayerStats>().Incapacitate((float)castTime);
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position + ((transform.localScale.y + .5f) * transform.up) + (transform.forward * area / 2), area / 2);
-            foreach (Collider c in hitColliders) {
-                if (c.tag != "Player" || c.gameObject == gameObject) continue;
-                if (c.GetComponentInParent<PlayerStats>().team != team) {
-                    // Set PlayerState to HitByPuke
-                    CmdHitPlayerAnimation(c.gameObject, PlayerBehaviour.PlayerState.HitByPuke);
-                    // Slow
-                    CmdSlowPlayer(c.gameObject, slowDuration);
-                    //Damage
-                    CmdDamagePlayer(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
-                }
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position + ((transform.localScale.y + .5f) * transform.up) + (transform.forward * area / 2), area / 2);
+        foreach (Collider c in hitColliders) {
+            if (c.tag != "Player" || c.gameObject == gameObject) continue;
+            if (c.GetComponentInParent<PlayerStats>().team != team) {
+                // Set PlayerState to HitByPuke
+                CmdHitPlayerAnimation(c.gameObject, PlayerBehaviour.PlayerState.HitByPuke);
+                // Slow
+                CmdSlowPlayer(c.gameObject, slowDuration);
+                //Damage
+                CmdDamagePlayer(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
             }
+        }
+    }
+
+    [Command]
+    void CmdDoFire() {
+        // Initiate GameObject using prefab, position and a rotation
+        GameObject bullet = (GameObject)Instantiate( // Offset by 5?
+            prefab, transform.position + (transform.localScale.x + .5f) * transform.forward + (transform.localScale.y + .5f) * transform.up,
+            Quaternion.identity);
+        bullet.GetComponent<PukeVX>().Setup(transform, 2);
+
+        // Spawn GameObject on Server
+        NetworkServer.Spawn(bullet);
     }
 
     public override void ShowAreaOfEffect(bool draw) {
