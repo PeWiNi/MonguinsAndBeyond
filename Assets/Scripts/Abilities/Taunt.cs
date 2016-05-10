@@ -18,6 +18,9 @@ public class Taunt : Ability {
     public string tooltip = "Taunt: Forces your enemies to look at you and only you for a brief moment.";
     public override string tooltipText { get { return tooltip; } }
 
+    [SerializeField]
+    GameObject tauntVFXPrefab;
+
     public override double Trigger() {
         //Play Taunt Animation
         GetComponent<NetworkAnimator>().SetTrigger("CastTaunt");
@@ -27,6 +30,7 @@ public class Taunt : Ability {
     }
 
     void TauntTargets(Collider[] hitColliders) {
+        CmdDoFire();
         foreach (Collider c in hitColliders) {
             if (c.tag != "Player" || c.gameObject == gameObject) continue;
             if (c.GetComponentInParent<PlayerStats>().team != team) {
@@ -57,5 +61,17 @@ public class Taunt : Ability {
     void CmdTauntPlayer(GameObject player, float duration) {
         // TODO: Implement in PlayerStats
         player.GetComponent<PlayerStats>().Taunt(gameObject, duration);
+    }
+
+    [Command]
+    void CmdDoFire() {
+        // Initiate GameObject using prefab, position and a rotation
+        GameObject bullet = (GameObject)Instantiate( // Offset by 5?
+            tauntVFXPrefab, transform.position + (transform.localScale.x + .5f) * transform.forward + (transform.localScale.y + .5f) * transform.up,
+            Quaternion.identity);
+        bullet.GetComponent<VFX>().Setup(transform, 2, Vector3.up * (transform.localScale.y * 2f));
+
+        // Spawn GameObject on Server
+        NetworkServer.Spawn(bullet);
     }
 }

@@ -12,7 +12,7 @@ using UnityEngine.Networking;
 public class Puke : Ability {
     public float area = 2;
     [SerializeField]
-    GameObject prefab;
+    GameObject pukeVFXPrefab;
     public float slowDuration = 3.0f;
     [Range(0, 1)]
     public float damage = .08f;
@@ -47,9 +47,9 @@ public class Puke : Ability {
     void CmdDoFire() {
         // Initiate GameObject using prefab, position and a rotation
         GameObject bullet = (GameObject)Instantiate( // Offset by 5?
-            prefab, transform.position + (transform.localScale.x + .5f) * transform.forward + (transform.localScale.y + .5f) * transform.up,
+            pukeVFXPrefab, transform.position + (transform.localScale.x + .5f) * transform.forward + (transform.localScale.y + .5f) * transform.up,
             Quaternion.identity);
-        bullet.GetComponent<PukeVX>().Setup(transform, 2);
+        bullet.GetComponent<VFX>().Setup(transform, 2, Vector3.up * (transform.localScale.y * 1.15f));
 
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);
