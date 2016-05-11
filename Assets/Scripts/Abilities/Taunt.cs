@@ -69,7 +69,7 @@ public class Taunt : Ability {
         GameObject bullet = (GameObject)Instantiate( // Offset by 5?
             tauntVFXPrefab, transform.position + (transform.localScale.x + .5f) * transform.forward + (transform.localScale.y + .5f) * transform.up,
             Quaternion.identity);
-        bullet.GetComponent<VFX>().Setup(transform, 2, Vector3.up * (transform.localScale.y * 2f));
+        bullet.GetComponent<VFX>().Setup(transform, 2, true, Vector3.up * (transform.localScale.y * 2f));
 
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);

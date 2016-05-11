@@ -49,7 +49,7 @@ public class Puke : Ability {
         GameObject bullet = (GameObject)Instantiate( // Offset by 5?
             pukeVFXPrefab, transform.position + (transform.localScale.x + .5f) * transform.forward + (transform.localScale.y + .5f) * transform.up,
             Quaternion.identity);
-        bullet.GetComponent<VFX>().Setup(transform, 2, Vector3.up * (transform.localScale.y * 1.15f));
+        bullet.GetComponent<VFX>().Setup(transform, 2, true, Vector3.up * (transform.localScale.y * 1.15f));
 
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);

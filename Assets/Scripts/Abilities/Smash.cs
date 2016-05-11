@@ -18,6 +18,9 @@ public class Smash : Ability {
     public string tooltip = "Smash: Many tiny hits to shake the ground underneath your enemies and disorient them.";
     public override string tooltipText { get { return tooltip; } }
 
+    [SerializeField]
+    GameObject smashVFXPrefab;
+
     public override double Trigger() {
         //Play Smash Animation
         GetComponent<NetworkAnimator>().SetTrigger("CastSmash");
@@ -40,6 +43,7 @@ public class Smash : Ability {
     }
 
     void Attack(Collider[] hitColliders) {
+        CmdDoFire();
         foreach (Collider c in hitColliders) {
             if (c.tag != "Player" || c.gameObject == gameObject) continue;
             if (c.GetComponentInParent<PlayerStats>().team != team) {
@@ -51,5 +55,17 @@ public class Smash : Ability {
                 CmdDamagePlayer(c.gameObject, gameObject.GetComponent<PlayerStats>().maxHealth * damage);
             }
         }
+    }
+
+    [Command]
+    void CmdDoFire() {
+        // Initiate GameObject using prefab, position and a rotation
+        GameObject bullet = (GameObject)Instantiate( // Offset by 5?
+            smashVFXPrefab, transform.position + (transform.localScale.x + .5f) * transform.forward + (transform.localScale.y + .5f) * transform.up,
+            smashVFXPrefab.transform.rotation);
+        bullet.GetComponent<VFX>().Setup(transform, 2, false, new Vector3(), smashVFXPrefab.transform.rotation.eulerAngles);
+
+        // Spawn GameObject on Server
+        NetworkServer.Spawn(bullet);
     }
 }
