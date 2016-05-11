@@ -52,7 +52,7 @@ public class ThrowBoomnana : Ability
         CmdTarget(target.gameObject);
         GetComponent<NetworkAnimator>().SetTrigger("CastBOOMnana");
         CmdDoFire(pos);
-        timer = (float)Network.time;
+        base.Trigger();
         print(target + ", maxDist = " + distance);
     }
 

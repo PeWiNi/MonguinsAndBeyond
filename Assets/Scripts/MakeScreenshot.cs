@@ -19,11 +19,16 @@ public class MakeScreenshot : MonoBehaviour {
         takeScreenshot = true;
     }
 
-    public static string ScreenShotName(string name) {
-        string filePath = string.Format("{0}/images", System.IO.Directory.GetParent(Application.dataPath));
-        System.IO.Directory.CreateDirectory(filePath);
-        return string.Format("{0}/{1}_screen({2}).png", filePath,
-                             System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"), name);
+    public static string ScreenShotName(string name, bool saveLocal = true) {
+        if(saveLocal) {
+            string filePath = string.Format("{0}/images", System.IO.Directory.GetParent(Application.dataPath));
+            System.IO.Directory.CreateDirectory(filePath);
+            return string.Format("{0}/{1}_screen({2}).png", filePath,
+                                 System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"), name);
+        } else {
+            return string.Format("{0}_screen({1}).png",
+                                 System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"), name);
+        }
     }
 
     void LateUpdate() {
@@ -45,10 +50,29 @@ public class MakeScreenshot : MonoBehaviour {
         tex.Apply();
         // Encode texture into PNG
         byte[] bytes = tex.EncodeToPNG();
-        string filename = ScreenShotName(shotName);
-        System.IO.File.WriteAllBytes(filename, bytes);
         Destroy(tex);
+        string filename = "";
+#if UNITY_STANDALONE_WIN
+        filename = ScreenShotName(shotName);
+        System.IO.File.WriteAllBytes(filename, bytes);
         Debug.Log(string.Format("Took screenshot to: {0}", filename));
+#endif
+#if UNITY_WEBGL
+        filename = ScreenShotName(shotName, false) + ".png";
+        // Create a Web Form
+		WWWForm form = new WWWForm();
+        form.AddField("action", "image upload");
+        form.AddField("frameCount", Time.frameCount.ToString());
+		form.AddBinaryData("fileUpload", bytes, filename, "image/png");
+        // Upload to a cgi script
+        WWW w = new WWW("http://www.yourdomainname.com/ImageUpload.php", form); // Change to wherever we put the .php file :)
+        yield return w;
+        if (!string.IsNullOrEmpty(w.error)) {
+            print(w.error);
+        } else {
+            print("Finished Uploading Screenshot");
+        }
+#endif
         takeScreenshot = false;
     }
 }

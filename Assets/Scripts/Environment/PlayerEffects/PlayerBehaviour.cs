@@ -33,6 +33,8 @@ public class PlayerBehaviour : NetworkBehaviour
     float currentTime = 0f;
     public bool isIdle = false;
 
+    PlayerStats ps;
+
     public enum PlayerState
     {
         HitByBOOMnana,
@@ -55,6 +57,7 @@ public class PlayerBehaviour : NetworkBehaviour
         anim = GetComponent<Animator>();
         Random.seed = 42;
         state = PlayerState.None;
+        ps = GetComponent<PlayerStats>();
     }
 
     // Update is called once per frame
@@ -99,47 +102,48 @@ public class PlayerBehaviour : NetworkBehaviour
 
         #region PlayerState Section
         //if (!isLocalPlayer) {
-        if (state == PlayerState.HitByBOOMnana) {
-            anim.SetTrigger("HitByBOOMnana");
-            state = PlayerState.None;
-            isIdle = false;
+        if(!ps.isDead) {
+            if (state == PlayerState.HitByBOOMnana) {
+                anim.SetTrigger("HitByBOOMnana");
+                state = PlayerState.None;
+                isIdle = false;
+            }
+            if (state == PlayerState.HitByTailSlap) {
+                anim.SetTrigger("HitByTailSlap");
+                state = PlayerState.None;
+                isIdle = false;
+            }
+            if (state == PlayerState.HitByPunch) {
+                anim.SetTrigger("HitByPunch");
+                state = PlayerState.None;
+                isIdle = false;
+            }
+            if (state == PlayerState.HitByHealForce) {
+                anim.SetTrigger("HitByHealForce");
+                state = PlayerState.None;
+                isIdle = false;
+            }
+            if (state == PlayerState.HitByPuke) {
+                anim.SetTrigger("HitByPuke");
+                state = PlayerState.None;
+                isIdle = false;
+            }
+            if (state == PlayerState.HitByThrowPoison) {
+                anim.SetTrigger("HitByThrowPoison");
+                state = PlayerState.None;
+                isIdle = false;
+            }
+            if (state == PlayerState.HitByTaunt) {
+                anim.SetTrigger("HitByTaunt");
+                state = PlayerState.None;
+                isIdle = false;
+            }
+            if (state == PlayerState.HitBySmash) {
+                anim.SetTrigger("HitBySmash");
+                state = PlayerState.None;
+                isIdle = false;
+            }
         }
-        if (state == PlayerState.HitByTailSlap) {
-            anim.SetTrigger("HitByTailSlap");
-            state = PlayerState.None;
-            isIdle = false;
-        }
-        if (state == PlayerState.HitByPunch) {
-            anim.SetTrigger("HitByPunch");
-            state = PlayerState.None;
-            isIdle = false;
-        }
-        if (state == PlayerState.HitByHealForce) {
-            anim.SetTrigger("HitByHealForce");
-            state = PlayerState.None;
-            isIdle = false;
-        }
-        if (state == PlayerState.HitByPuke) {
-            anim.SetTrigger("HitByPuke");
-            state = PlayerState.None;
-            isIdle = false;
-        }
-        if (state == PlayerState.HitByThrowPoison) {
-            anim.SetTrigger("HitByThrowPoison");
-            state = PlayerState.None;
-            isIdle = false;
-        }
-        if (state == PlayerState.HitByTaunt) {
-            anim.SetTrigger("HitByTaunt");
-            state = PlayerState.None;
-            isIdle = false;
-        }
-        if (state == PlayerState.HitBySmash) {
-            anim.SetTrigger("HitBySmash");
-            state = PlayerState.None;
-            isIdle = false;
-        }
-        //}
         #endregion
     }
 

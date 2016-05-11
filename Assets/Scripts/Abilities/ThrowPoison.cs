@@ -48,7 +48,6 @@ public class ThrowPoison : Ability {
         GetComponent<NetworkAnimator>().SetTrigger("CastThrowPoison");
         CmdDoFire(pos);
         base.Trigger();
-        timer = (float)Network.time;
         print(target + ", maxDist = " + distance);
     }
 

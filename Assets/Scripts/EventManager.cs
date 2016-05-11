@@ -15,6 +15,14 @@ public class EventManager : NetworkBehaviour {
     [SyncEvent]
     public event EndGame EventEndGame;
 
+    public delegate void PlayerDeath();
+    [SyncEvent]
+    public event PlayerDeath EventDeath;
+
+    public delegate void PlayerRespawn();
+    [SyncEvent]
+    public event PlayerRespawn EventRespawn;
+
     public static float amberStunTime = 12;
 
     public void SendScoreEvent(float team1, float team2) {
@@ -30,5 +38,15 @@ public class EventManager : NetworkBehaviour {
     public void SendEndGame() {
         if (EventEndGame != null)
             EventEndGame();
+    }
+
+    public void SendPlayerDeath() {
+        if (EventDeath != null)
+            EventDeath();
+    }
+
+    public void SendPlayerRespawn() {
+        if (EventRespawn != null)
+            EventRespawn();
     }
 }
