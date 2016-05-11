@@ -43,7 +43,7 @@ public class Smash : Ability {
     }
 
     void Attack(Collider[] hitColliders) {
-        CmdDoFire();
+        StartCoroutine(Pospone(0.15f));
         foreach (Collider c in hitColliders) {
             if (c.tag != "Player" || c.gameObject == gameObject) continue;
             if (c.GetComponentInParent<PlayerStats>().team != team) {
@@ -67,5 +67,10 @@ public class Smash : Ability {
 
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);
+    }
+
+    IEnumerator Pospone(float time) {
+        yield return new WaitForSeconds(time);
+        CmdDoFire();
     }
 }
