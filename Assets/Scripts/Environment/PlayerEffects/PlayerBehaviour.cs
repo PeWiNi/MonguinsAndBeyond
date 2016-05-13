@@ -74,7 +74,8 @@ public class PlayerBehaviour : NetworkBehaviour
                     int agi = GetComponent<PlayerStats>().Agility;
                     float distanceAMP = (agi <= 10 ? (float)(agi / 100) + 1f : agi <= 35 ? ((((float)(agi - 10) / 100) * .2f) + 1.1f) : agi > 35 ? ((((float)(agi - 36) / 100) * 0.15625f) + 1.15f) : 1f);
                     targetLandingSpot = rubberTreeparent.transform.position + (-rubberTreeparent.transform.forward * (shootingRange * distanceAMP));//Based on Trees orientation.
-                    targetLandingSpot.y = 1f;
+                    print(targetLandingSpot);
+                    //targetLandingSpot.y = 1f;
                     Debug.DrawLine(transform.position, targetLandingSpot, Color.yellow, 10f);
                     thrust = Mathf.Sqrt((shootingRange * Physics.gravity.magnitude) / Mathf.Sin(2f * shootingAngle * Mathf.Deg2Rad));//Determine the launch velocity.
                     print("THRUST! = " + thrust);
@@ -206,31 +207,6 @@ public class PlayerBehaviour : NetworkBehaviour
     }
 
     /// <summary>
-    /// Player slipped
-    /// </summary>
-    /// <param name="effectDuration"></param>
-    /// <param name="thrust"></param>
-    public void PlayerSlipped(int effectDuration, float thrust) {
-        if (!isLocalPlayer || isServer)
-            return;
-        if (!isSlipping) {
-            this.thrust = thrust;
-            StartCoroutine(Slipping(effectDuration, thrust));
-        }
-    }
-
-    IEnumerator Slipping(int effectDuration, float thrust) {
-        isSlipping = true;
-        transform.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * thrust, ForceMode.Impulse);
-        CmdStun(effectDuration);
-        while (effectDuration > 0) {
-            yield return new WaitForSeconds(1f);
-            effectDuration--;
-        }
-        isSlipping = false;
-    }
-
-    /// <summary>
     /// The player will take damage while moving inside a Spike Trap.
     /// </summary>
     /// <param name="player"></param>
@@ -259,11 +235,6 @@ public class PlayerBehaviour : NetworkBehaviour
             lastPosition.z - threshold <= here.z))
             ret = true;
         return ret;
-    }
-
-    [Command]
-    void CmdStun(int effectDuration) {
-        transform.GetComponent<PlayerStats>().Stun(effectDuration);
     }
 
     /// <summary>

@@ -153,7 +153,14 @@ public class PlayerLogic : NetworkBehaviour {
         //SetSpeed(out speed);
         SetSpeed();
         // Movement
-        transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
+        //transform.Translate(new Vector3(horizAxis, 0f, vertAxis) * Speed * Time.fixedDeltaTime);
+        Vector3 velo = GetComponent<Rigidbody>().velocity;
+        if (stats.CanIMove()) {
+            if ((vertAxis != 0f || horizAxis != 0f))
+                GetComponent<Rigidbody>().velocity = ((transform.forward * vertAxis + transform.right * horizAxis) / Time.fixedDeltaTime / 40) * Speed + (velo.y * transform.up);
+            else
+                GetComponent<Rigidbody>().velocity = (velo.y * transform.up);
+        }
 
         //Rotation
         if (Input.GetMouseButton(1) && (!stats.isDead && !stats.isStunned && !stats.isTaunted())) {// && !stats.isIncapacitated)) {// if dead they cannot turn their char around (but they can still look around with their camera)
@@ -169,7 +176,7 @@ public class PlayerLogic : NetworkBehaviour {
         }
         // Double Jumping 
         else if (jump && dblJump) {
-            GetComponent<Rigidbody>().velocity += new Vector3(0, jumpSpeed, 0);
+            GetComponent<Rigidbody>().velocity = new Vector3(0, jumpSpeed, 0);
             dblJump = false;
             //Play 'Jump' Animation
             if (!isSwimming)//Shouldplay on Ground only.

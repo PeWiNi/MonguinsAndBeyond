@@ -156,7 +156,7 @@ public class HUDScript : MonoBehaviour {
                 else
                     castBar.gameObject.SetActive(false);
             } else if (ps.GetComponent<Camouflage>().isCamouflaged) { // STEALTHED
-                if (!castBar.gameObject.activeSelf || currentText.Substring(0, 9) != "Stealthed") {
+                if (!castBar.gameObject.activeSelf || currentText.Substring(0, 7) != "Stealth") {
                     castBar.gameObject.SetActive(true);
                     castBar.fillRect.GetComponentInChildren<Image>().color = new Color(49f / 255f, 187f / 255f, 0f / 255f); //Foreground
                     castBar.targetGraphic.GetComponentInChildren<Image>().color = new Color(51f / 255f, 68f / 255f, 37f / 255f); //Background

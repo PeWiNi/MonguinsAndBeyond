@@ -96,6 +96,18 @@ public class MenuScript : MonoBehaviour {
         }
     }
 
+    void OnGUI () {
+        if (NetworkClient.active && !ClientScene.ready) {
+            if (GUI.Button(new Rect(Screen.width / 2 - 100, Screen.height / 2 - 10, 200, 20), "Client Ready")) {
+                ClientScene.Ready(manager.client.connection);
+
+                if (ClientScene.localPlayers.Count == 0) {
+                    ClientScene.AddPlayer(0);
+                }
+            }
+        }
+    }
+
     public void UpdateName() {
         pName = playerNameInputField.text;
     }

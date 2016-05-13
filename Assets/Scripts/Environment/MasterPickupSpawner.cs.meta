@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 73e8c985f84fb6c46bca6da124498cd6
+timeCreated: 1463092780
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - terrainParent: {instanceID: 0}
+  - BananaSpawner: {fileID: 147612, guid: 3fc9bd44c71218e42ae1e36816850a90, type: 2}
+  - StickSpawner: {fileID: 199140, guid: 2aded4b652d81a14d876d56f4515a517, type: 2}
+  - SapSpawner: {fileID: 166826, guid: 1d9071f3d087e1346b116305e5312c6d, type: 2}
+  - LeafSpawner: {fileID: 198640, guid: 102b283057276ac47a07ec70695c2c67, type: 2}
+  - BerrySpawner: {fileID: 172110, guid: ce820beb3fd0cdd41b86509664a31d46, type: 2}
+  - FishSpawner: {fileID: 114398, guid: 4f241d4066ddc1b4e926fc19a6b0ce6f, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
