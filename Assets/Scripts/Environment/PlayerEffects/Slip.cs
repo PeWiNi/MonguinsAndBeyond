@@ -14,7 +14,7 @@ public class Slip : NetworkBehaviour
     /// <param name="effectDuration"></param>
     /// <param name="thrust"></param>
     public void PlayerSlipped(int effectDuration, float thrust) {
-        if (!isLocalPlayer || isServer)
+        if (!isLocalPlayer)// || isServer)
             return;
         if (!isSlipping) {
             if (animLocal == null)
@@ -30,12 +30,8 @@ public class Slip : NetworkBehaviour
 
     IEnumerator Slipping(float effectDuration, float thrust) {
         isSlipping = true;
-        transform.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * thrust, ForceMode.Impulse);
         CmdStun(effectDuration);
-        while (effectDuration > 0) {
-            yield return new WaitForSeconds(1f);
-            effectDuration--;
-        }
+        yield return new WaitForSeconds(effectDuration);
         animLocal.SetBool("AffectedByBananaPeelTrap", false);
         isSlipping = false;
     }
@@ -43,5 +39,7 @@ public class Slip : NetworkBehaviour
     [Command]
     void CmdStun(float effectDuration) {
         transform.GetComponent<PlayerStats>().Incapacitate(effectDuration);
+        transform.GetComponent<Rigidbody>().velocity = new Vector3();
+        transform.GetComponent<Rigidbody>().AddRelativeForce(Vector3.forward * thrust, ForceMode.Impulse);
     }
 }

@@ -50,7 +50,7 @@ public class Camouflage : NetworkBehaviour
         if (isCamouflaged && !isStealthed) { // Hide / Vanish / Disappear
             Hide();
         }
-        if((!isCamouflaged && isStealthed) || brokeStealth) { // Appear / isVisibru
+        if((!isCamouflaged && isStealthed) || (brokeStealth && isStealthed)) { // Appear / isVisibru
             Appear();
             CmdChangeIsCamouflaged(false);
         }

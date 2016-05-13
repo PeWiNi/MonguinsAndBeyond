@@ -143,14 +143,17 @@ public class PlayerStats : NetworkBehaviour {
             // Resilience-speed math
             spd -= (resi > 35 ? ((float)(resi - 36) / 100) * 0.15625f : 0);
             // Agility-speed math
-            spd += (agi > 35 ? ((float)(resi - 36) / 100) * 0.234375f : 0);
+            spd += (agi > 35 ? ((float)(agi - 36) / 100) * 0.234375f : 0);
 
             float dmg = 1f;
             // Agility-damage math
             dmg += (agi <= 10 ? (agi / 100) : agi <= 35 ? ((((float)(agi - 10) / 100) * .4f) + .1f) : agi > 35 ? ((((float)(agi - 36) / 100) * 0.3125f) + .20f) : 0);
 
             float dmgR = 1f;
+            // Resilience-damageReduction math
             dmgR -= (resi <= 10 ? (resi / 100) : resi <= 35 ? ((((float)(resi - 10) / 100) * .4f) + .1f) : resi > 35 ? ((((float)(resi - 36) / 100) * 0.3125f) + .20f) : 0);
+            print("mHp " + mHp + ", spd " + spd + ", dmg " + dmg + ", dmgR " + dmgR);
+
             maxHealth = mHp;
             dmgMultiplier = dmg;
             dmgReduction = dmgR;
@@ -181,8 +184,17 @@ public class PlayerStats : NetworkBehaviour {
         }
     }
 
-	// Use this for initialization
-	void Start () {
+    void OnEnable() {
+        GetComponent<EventManager>().EventDeath += Death;
+        GetComponent<EventManager>().EventRespawn += Respawn;
+    }
+    void OnDisable() {
+        GetComponent<EventManager>().EventDeath -= Death;
+        GetComponent<EventManager>().EventRespawn -= Respawn;
+    }
+
+    // Use this for initialization
+    void Start () {
         syncSpeed = speed;
         if (isLocalPlayer) {
             #region Loading attributes and determining Role
@@ -217,25 +229,22 @@ public class PlayerStats : NetworkBehaviour {
         currentMaterial = standardMaterial;
         syncHealth = syncMaxHealth;
     }
-	
+
 	// Update is called once per frame
 	void Update () {
-        if (isDead) { // Send to co-routine?
+        /* if (isDead) { // Send to co-routine?
             if (((float)getServerTime() - deathTimer) > deathCooldown) {
-                ChangeMaterial(false);
                 Respawn();
                 return;
             }
             health = 0;
             if (currentMaterial != stealthMat) {
-                ChangeMaterial(true);
-                Color c = body.GetComponent<SkinnedMeshRenderer>().material.color;
-                body.GetComponent<SkinnedMeshRenderer>().material.color = new Color(c.r, c.g, c.b, .2f);
-                GetComponent<Animator>().SetBool("IsAlive", false);
-                GetComponent<NetworkAnimator>().SetTrigger("DeadByDamageTrigger");
+                Death();
             }
             return;
-        } if (isStunned) 
+        } */
+        //if (isDead) return;
+        if (isStunned) 
             GetComponent<Rigidbody>().velocity = new Vector3();
 
         if (isServer)
@@ -245,7 +254,7 @@ public class PlayerStats : NetworkBehaviour {
         ApplyRole();
         StatSync();
 
-        if(changeMaxHealth) { NewPlayerJoinedTeam(); }
+        if (changeMaxHealth) { NewPlayerJoinedTeam(); }
         //if(makeMap) { GenerateTerrain(initSinking); }
         if (makeMap) { GenerateTerrain(); }
     }
@@ -301,8 +310,7 @@ public class PlayerStats : NetworkBehaviour {
         abilities = new Ability[3];
         if (isLocalPlayer) {
             roleStats = new RoleStats((int)attributes["RESI"], (int)attributes["AGI"], (int)attributes["WIS"]);
-            CmdProvideStats(roleStats.maxHealth, roleStats.dmgMultiplier, roleStats.dmgReduction, roleStats.sapModifier, roleStats.speed, roleStats.resilience, roleStats.agility, roleStats.wisdom);
-            SetStats(roleStats.resilience, roleStats.agility, roleStats.wisdom, roleStats.speed, roleStats.dmgMultiplier, roleStats.dmgReduction, roleStats.sapModifier);
+            CmdProvideStats(roleStats.maxHealth, roleStats.speed, roleStats.dmgMultiplier, roleStats.dmgReduction, roleStats.sapModifier, roleStats.resilience, roleStats.agility, roleStats.wisdom);
         }
         switch (role) {
             case (Role.Defender):
@@ -360,7 +368,7 @@ public class PlayerStats : NetworkBehaviour {
     void TeamSelect() {
         if(standardMat != Resources.Load("Materials/monguin")) { return; }
         try {
-            GetComponent<VisualizeTeam>().ToggleForeheadItem(team);
+            GetComponent<VisualizeTeam>().TeamMaterialChange(team);
         } catch { Debug.Log("Team visualization could not be achieved :("); }
     }
 
@@ -376,6 +384,7 @@ public class PlayerStats : NetworkBehaviour {
     /// <param name="wis"></param>
     [Command]
     void CmdProvideStats(float maxHp, float spd, float dmg, float dmgR, float sapEffect, int resi, int agi, int wis) {
+  //CmdProvideStats(roleStats.maxHealth, roleStats.dmgMultiplier, roleStats.dmgReduction, roleStats.sapModifier, roleStats.speed, roleStats.resilience, roleStats.agility, roleStats.wisdom);
         ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
         syncMaxHealth = SM.compositeHealthFormula(team == 1 ? SM.teamOne : team == 2 ? SM.teamTwo : 0) * maxHp;
         maxHealth = syncMaxHealth;
@@ -393,6 +402,7 @@ public class PlayerStats : NetworkBehaviour {
         wisdom = wis;
         sizeModifier = (maxHealth / 1000);
         syncSpeed = speed * spd;
+        print(spd);
         damageModifier = dmg;
         damageReduction = dmgR;
         sapModifier = sapEffect;
@@ -454,6 +464,8 @@ public class PlayerStats : NetworkBehaviour {
     /// Also for some reason you need to tell everybody your new position
     /// </summary>
     void Respawn() {
+        print(isDead);
+        ChangeMaterial(false);
         if (isLocalPlayer)
         {
             CmdRespawn();
@@ -476,8 +488,8 @@ public class PlayerStats : NetworkBehaviour {
     public void TakeDmg(float amount, Transform attacker) {
         if (!isServer)
             return;
-        GetComponent<Camouflage>().brokeStealth = true;
         if(!isDead) {
+            GetComponent<Camouflage>().brokeStealth = true;
             syncHealth -= amount * damageReduction;
             // Add gore effect on dmg taken
             GameObject bullet = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/ParticleSystems/Gore"), transform.position + (transform.localScale.y - .5f) * transform.up, Quaternion.identity);
@@ -486,6 +498,7 @@ public class PlayerStats : NetworkBehaviour {
             NetworkServer.Spawn(bullet);
         }
         if (syncHealth <= 0 && !isDead) {
+            GetComponent<Camouflage>().brokeStealth = false;
             ScoreManager SM = GameObject.Find("ScoreManager").GetComponent<ScoreManager>();
             isDead = true;
             deathTimer = (float)(getServerTime());
@@ -498,8 +511,25 @@ public class PlayerStats : NetworkBehaviour {
             } else SM.CountDeaths(this, null);
             deaths++;
             #endregion
+            GetComponent<EventManager>().SendPlayerDeath();
+            StartCoroutine(WaitRespawn(deathCooldown));
         }
         RpcTakeDmg(amount * damageReduction);
+    }
+
+    void Death() {
+        isDead = true;
+        ChangeMaterial(true);
+        Color c = body.GetComponent<SkinnedMeshRenderer>().material.color;
+        body.GetComponent<SkinnedMeshRenderer>().material.color = new Color(c.r, c.g, c.b, .2f);
+        syncHealth = 0;
+        GetComponent<Animator>().SetBool("IsAlive", false);
+        GetComponent<NetworkAnimator>().SetTrigger("DeadByDamageTrigger");
+    }
+
+    IEnumerator WaitRespawn(float time) {
+        yield return new WaitForSeconds(time);
+        GetComponent<EventManager>().SendPlayerRespawn();
     }
 
     /// <summary>
@@ -755,7 +785,7 @@ public class PlayerStats : NetworkBehaviour {
     }
 
     public bool CanIMove() {
-        return !isDead && !isStunned && !isIncapacitated;
+        return !isDead && !isStunned && !isIncapacitated;// && !GetComponent<PlayerBehaviour>().isThrown;
     }
 
     /// <summary>

@@ -13,7 +13,7 @@ public class Pickup : NetworkBehaviour {
     float ElapsedTime;
     float FinishTime;
 
-    PickupSpawner spawner;
+    internal PickupSpawner spawner;
 
     [SyncVar]
     public Transform owner = null;
