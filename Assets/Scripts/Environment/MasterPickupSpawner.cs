@@ -92,43 +92,39 @@ public class MasterPickupSpawner : NetworkBehaviour {
                 DetermineSpawnerValues(FindObjectsOfType<PlayerStats>());
             }
             int playersSum = players[0] + players[1] + players[2];
-            //if(playersSum > 0) {
-                ypos += spacing;
-                if (GUI.Button(new Rect(xpos, ypos, 500, 20), string.Format("Total # of players: {0}. Defenders: {1}, Attackers: {2}, Supporters: {3}", playersSum, players[1], players[0], players[2]))) { }
-                ypos += spacing;
-                if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Banana", bananaSpawners.Count, bananaTimer, bananaValue))) {
-                    Vector3 randomVector = Random.insideUnitSphere * 5;
-                    randomVector.y = 5f;
-                    AreaPlacement(5, bananaSpawners[Random.Range(0, bananaSpawners.Count)].transform.position + randomVector, BananaSpawner);
-                }
-                ypos += spacing;
-                if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Stick", stickSpawners.Count, stickTimer, stickValue))) {
-                    Vector3 randomVector = Random.insideUnitSphere * 5;
-                    randomVector.y = 5f;
-                    AreaPlacement(5, stickSpawners[Random.Range(0, stickSpawners.Count)].transform.position + randomVector, StickSpawner);
-                }
-                ypos += spacing;
-                GUI.Label(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Sap", sapSpawners.Count, sapTimer, sapValue));
-                ypos += spacing;
-                if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Leaf", leafSpawners.Count, leafTimer, leafValue))) {
-                    Vector3 randomVector = Random.insideUnitSphere * 5;
-                    randomVector.y = 5f;
-                    AreaPlacement(5, leafSpawners[Random.Range(0, leafSpawners.Count)].transform.position + randomVector, LeafSpawner);
-                }
-                ypos += spacing;
-                GUI.Label(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Berry", berrySpawners.Count, berryTimer, berryValue));
-                ypos += spacing;
-                GUI.Label(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}", "Fish", fishSpawners.Count));
-                ypos += spacing;
-            //}
-            /*
-            GUI.Label(new Rect(xpos, ypos, 300, 20), "Berry Spawners: " + berrySpawners.Count);
             ypos += spacing;
-            GUI.Label(new Rect(xpos + 10, ypos, 300, 20), "Berry Pickup Timer: " + berryTimer);
+            if (GUI.Button(new Rect(xpos, ypos, 500, 20), string.Format("Total # of players: {0}. Defenders: {1}, Attackers: {2}, Supporters: {3}", playersSum, players[1], players[0], players[2]))) { print("It's not very effective!"); }
             ypos += spacing;
-            GUI.Label(new Rect(xpos + 10, ypos, 300, 20), "Berry Pickup Value: " + berryValue);
-            ypos += spacing;
-            */
+            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Banana", bananaSpawners.Count, bananaTimer, bananaValue))) {
+                Vector3 randomVector = Random.insideUnitSphere * 5;
+                randomVector.y = 5f;
+                AreaPlacement(5, bananaSpawners[Random.Range(0, bananaSpawners.Count)].transform.position + randomVector, BananaSpawner);
+            } ypos += spacing;
+            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Stick", stickSpawners.Count, stickTimer, stickValue))) {
+                Vector3 randomVector = Random.insideUnitSphere * 5;
+                randomVector.y = 5f;
+                AreaPlacement(5, stickSpawners[Random.Range(0, stickSpawners.Count)].transform.position + randomVector, StickSpawner);
+            } ypos += spacing;
+            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Sap", sapSpawners.Count, sapTimer, sapValue))) {
+                Vector3 randomVector = Random.insideUnitSphere * 5;
+                randomVector.y = 5f;
+                AreaPlacement(5, sapSpawners[Random.Range(0, sapSpawners.Count)].transform.position + randomVector, SapSpawner);
+            } ypos += spacing;
+            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Leaf", leafSpawners.Count, leafTimer, leafValue))) {
+                Vector3 randomVector = Random.insideUnitSphere * 5;
+                randomVector.y = 5f;
+                AreaPlacement(5, leafSpawners[Random.Range(0, leafSpawners.Count)].transform.position + randomVector, LeafSpawner);
+            } ypos += spacing;
+            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Berry", berrySpawners.Count, berryTimer, berryValue))) {
+                Vector3 randomVector = Random.insideUnitSphere * 5;
+                randomVector.y = 5f;
+                AreaPlacement(5, berrySpawners[Random.Range(0, berrySpawners.Count)].transform.position + randomVector, BerrySpawner);
+            } ypos += spacing;
+            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}", "Fish", fishSpawners.Count))) {
+                Vector3 randomVector = Random.insideUnitSphere * 5;
+                randomVector.y = 5f;
+                FishPlacement(5, fishSpawners[Random.Range(0, fishSpawners.Count)].transform.position + randomVector, FishSpawner);
+            } ypos += spacing;
         }
 
     }
@@ -241,9 +237,9 @@ public class MasterPickupSpawner : NetworkBehaviour {
         }
         // Leaf value
         weight = attackers * weights[0];
-        weight /= leafSpawners.Count / playerModifier;
+        weight /= playerModifier;
         spawnerCount = leafSpawners.Count;
-        leafTimer = defaultSpawnTime / playerModifier * spawnerCount;
+        leafTimer = defaultSpawnTime / weight * spawnerCount;
         while (60 < leafTimer) { //TODO: don't destroy original spawners
             Destroy(leafSpawners[spawnerCount - 1].gameObject);
             spawnerCount--;
@@ -254,9 +250,9 @@ public class MasterPickupSpawner : NetworkBehaviour {
             randomVector.y = 5f;
             AreaPlacement(5, leafSpawners[Random.Range(0, spawnerCount)].transform.position + randomVector, LeafSpawner);
             spawnerCount++;
-            leafTimer = defaultSpawnTime / playerModifier * spawnerCount;
+            leafTimer = defaultSpawnTime / weight * spawnerCount;
         }
-        leafTimer = defaultSpawnTime / playerModifier * spawnerCount;
+        leafTimer = defaultSpawnTime / weight * spawnerCount;
         leafValue = Mathf.CeilToInt(weight > defaultSpawnValue ? weight : defaultSpawnValue);
         GetSpawners();
         foreach (PickupSpawner leaf in leafSpawners) {
