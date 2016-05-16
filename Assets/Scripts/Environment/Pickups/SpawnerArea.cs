@@ -26,19 +26,16 @@ public class SpawnerArea : NetworkBehaviour {
     public int Capacity = 5;
 
     // TODO: Figure out a smart way to spawn asset signifying the type of collectable spawned in that area
-    [SerializeField]
-    EnvironmentPlacement BananaSignifier;
-    [SerializeField]
-    EnvironmentPlacement StickSignifier;
-    [SerializeField]
-    EnvironmentPlacement SapSignifier;
-    [SerializeField]
-    EnvironmentPlacement LeafSignifier;
-    [SerializeField]
-    EnvironmentPlacement BerrySignifier;
-
-    public GameObject terrainParent = null;
-    TerrainInfo terrainParentInfo;
+    [SerializeField] [Tooltip("5 Trees and a rock")]
+    GameObject[] BananaSignifier;
+    [SerializeField] [Tooltip("Roots and whatevs")]
+    GameObject[] StickSignifier;
+    [SerializeField] [Tooltip("")]
+    GameObject[] SapSignifier;
+    [SerializeField] [Tooltip("Fern")]
+    GameObject[] LeafSignifier;
+    [SerializeField] [Tooltip("2 Berry bushes and a rock")]
+    GameObject[] BerrySignifier;
 
     public enum SpawnerType {
         Unknown, Banana, Stick, Sap, Leaf, Berry, Fish
@@ -63,11 +60,6 @@ public class SpawnerArea : NetworkBehaviour {
         }
     }
 
-    void Start() {
-        if (terrainParent != null)
-            terrainParentInfo = terrainParent.GetComponent<TerrainInfo>();
-    }
-
     public void AssignSpawnerType(string type) { AssignSpawnerType(determineType(type)); }
     void AssignSpawnerType(SpawnerType type) {
         if (ContainsType(type) == 1) 
@@ -75,15 +67,15 @@ public class SpawnerArea : NetworkBehaviour {
         else if (Spawner1 == SpawnerType.Unknown) {
             Spawner1 = type;
             Spawners1 = new List<PickupSpawner>();
-            setupTypeProps(type);
+            setupTypeProps(type, Spawner1Pos);
         } else if (Spawner2 == SpawnerType.Unknown) {
             Spawner2 = type;
             Spawners2 = new List<PickupSpawner>();
-            setupTypeProps(type);
+            setupTypeProps(type, Spawner2Pos);
         } else if (Spawner3 == SpawnerType.Unknown) {
             Spawner3 = type;
             Spawners3 = new List<PickupSpawner>();
-            setupTypeProps(type);
+            setupTypeProps(type, Spawner3Pos);
         } else {
             Debug.Log("Cannot add " + type.ToString() + "; no more room in " + name);
         }
@@ -93,20 +85,45 @@ public class SpawnerArea : NetworkBehaviour {
     /// Setup <fern, bush, bananaTree, etc.>
     /// </summary>
     /// <param name="type"></param>
-    void setupTypeProps(SpawnerType type) {
+    void setupTypeProps(SpawnerType type, Vector3 position) {
+        GameObject[] stuff = new GameObject[1];
         switch(type) {
             case (SpawnerType.Banana):
+                stuff = new GameObject[3];
+                stuff[0] = BananaSignifier[Random.Range(0, 5)];
+                stuff[1] = BananaSignifier[5];
+                stuff[2] = BananaSignifier[5];
+                stuff[3] = BananaSignifier[5];
                 break;
             case (SpawnerType.Stick):
+                stuff = new GameObject[3];
+                stuff[0] = StickSignifier[0];
+                stuff[1] = StickSignifier[1];
+                stuff[2] = StickSignifier[1];
                 break;
             case (SpawnerType.Sap):
+                stuff = SapSignifier;
                 break;
             case (SpawnerType.Leaf):
+                stuff = new GameObject[2];
+                stuff[0] = LeafSignifier[0];
+                stuff[1] = LeafSignifier[0];
                 break;
             case (SpawnerType.Berry):
+                stuff = new GameObject[5];
+                stuff[0] = BerrySignifier[Random.Range(0, 2)];
+                stuff[1] = BerrySignifier[Random.Range(0, 2)];
+                stuff[2] = BerrySignifier[Random.Range(0, 2)];
+                stuff[3] = BerrySignifier[2];
+                stuff[4] = BerrySignifier[2];
                 break;
             default:
                 break;
+        }
+        foreach (GameObject go in stuff) {
+            Vector3 randomVector = Random.insideUnitSphere * 5;
+            randomVector.y = 5f;
+            AreaPlacement(5, position + randomVector, go, transform);
         }
     }
 
@@ -250,9 +267,6 @@ public class SpawnerArea : NetworkBehaviour {
     /// <param name="asset"></param>
     PickupSpawner AreaPlacement(float radius, Vector3 where, GameObject asset, Transform parent) {
         PickupSpawner ps = null;
-        #region UnityTerrain: If we are using a Unity Terrain.
-        TerrainData myTerrainData = terrainParentInfo.GetTerrainData();
-
         makeRay:
         Vector3 randomVector = Random.insideUnitSphere * radius * 3;
         randomVector.y = -radius * 3;
@@ -270,7 +284,6 @@ public class SpawnerArea : NetworkBehaviour {
             }
         }
         return ps;
-        #endregion
     }
 
     PickupSpawner CreateObject(GameObject go, Vector3 p, Quaternion r, GameObject g) {

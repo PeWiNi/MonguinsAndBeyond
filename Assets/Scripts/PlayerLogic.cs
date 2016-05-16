@@ -157,7 +157,7 @@ public class PlayerLogic : NetworkBehaviour {
         Vector3 velo = GetComponent<Rigidbody>().velocity;
         if (stats.CanIMove()) {
             if ((vertAxis != 0f || horizAxis != 0f))
-                GetComponent<Rigidbody>().velocity = ((transform.forward * vertAxis + transform.right * horizAxis) / Time.fixedDeltaTime / 40) * Speed + (velo.y * transform.up);
+                GetComponent<Rigidbody>().velocity = ((transform.forward * vertAxis + transform.right * horizAxis) / Time.fixedDeltaTime / 50) * Speed + (velo.y * transform.up);
             else
                 GetComponent<Rigidbody>().velocity = (velo.y * transform.up);
         }
