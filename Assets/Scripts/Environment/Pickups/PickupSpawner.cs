@@ -14,7 +14,9 @@ public class PickupSpawner : NetworkBehaviour {
     [SyncVar]
     public float spawnTime = 5f;
     [SyncVar]
-    public int value = 1;
+    public float value = 0;
+    float increment = 3;
+    bool pickedUp;
 
     // Use this for initialization
     void Start () {
@@ -57,11 +59,25 @@ public class PickupSpawner : NetworkBehaviour {
     }
 
     public void TriggerSpawn() {
+        pickedUp = true;
         StartCoroutine(TriggerSpawnRoutine());
     }
 
     IEnumerator TriggerSpawnRoutine() {
-        yield return new WaitForSeconds(spawnTime);
+        yield return new WaitForSeconds(spawnTime + value);
         Spawn(SpawnPosition);
+        pickedUp = false;
+        StartCoroutine(makeIncrement());
+    }
+
+    IEnumerator makeIncrement() {
+        value += increment; // Discourage camping by increasing the spawntime whenever picked up
+        yield return new WaitForSeconds(spawnTime + value);
+        while (!pickedUp && value > 0) { // Decrement the spawnTime over time if they leave it alone
+            value -= increment;
+            yield return new WaitForSeconds(spawnTime + value);
+        }
+        value = value < 0 ? 0 : value;
+        yield return null;
     }
 }

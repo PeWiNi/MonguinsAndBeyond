@@ -49,9 +49,12 @@ public class MasterPickupSpawner : NetworkBehaviour {
 
     int[] players = new int[3];
 
+    SpawnerArea[] collectableAreas;
+
     public float defaultSpawnValue = 1;
     public float maxSpawnValue = 5;
     public float defaultSpawnTime = 30;
+    public float minSpawnTime = 15;
 
     // Use this for initialization
     void Start () {
@@ -71,7 +74,6 @@ public class MasterPickupSpawner : NetworkBehaviour {
         }
         if(Input.GetKeyDown(KeyCode.B)) {
             print("Balance Time!");
-            GetSpawners();
             DetermineSpawnerValues(FindObjectsOfType<PlayerStats>());
         }
     }
@@ -88,12 +90,28 @@ public class MasterPickupSpawner : NetworkBehaviour {
             ypos += spacing;
 
             if (GUI.Button(new Rect(xpos, ypos, 200, 20), "Rebalance Spawners")) {
-                GetSpawners();
                 DetermineSpawnerValues(FindObjectsOfType<PlayerStats>());
+                StartCoroutine(GetSpawners());
             }
             int playersSum = players[0] + players[1] + players[2];
             ypos += spacing;
             if (GUI.Button(new Rect(xpos, ypos, 500, 20), string.Format("Total # of players: {0}. Defenders: {1}, Attackers: {2}, Supporters: {3}", playersSum, players[1], players[0], players[2]))) { print("It's not very effective!"); }
+            #region Cheat in Players
+            if (GUI.Button(new Rect(xpos + 500, ypos, 120, 20), string.Format("Defenders: {0} +1", players[1]))) {
+                StartCoroutine(spawnerMasterLogic(players[0], ++players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+            } if (GUI.Button(new Rect(xpos + 620, ypos, 20, 20), "-1")) {
+                StartCoroutine(spawnerMasterLogic(players[0], --players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+            }
+            if (GUI.Button(new Rect(xpos + 500, ypos + spacing, 120, 20), string.Format("Attackers: {0} +1", players[0]))) {
+                StartCoroutine(spawnerMasterLogic(++players[0], players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+            } if (GUI.Button(new Rect(xpos + 620, ypos + spacing, 20, 20), "-1")) {
+                StartCoroutine(spawnerMasterLogic(--players[0], players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+            } if (GUI.Button(new Rect(xpos + 500, ypos + spacing + spacing, 120, 20), string.Format("Supporters: {0} +1", players[2]))) {
+                StartCoroutine(spawnerMasterLogic(players[0], players[1], ++players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+            } if (GUI.Button(new Rect(xpos + 620, ypos + spacing + spacing, 20, 20), "-1")) {
+                StartCoroutine(spawnerMasterLogic(players[0], players[1], --players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+            }
+            #endregion
             ypos += spacing;
             if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Banana", bananaSpawners.Count, bananaTimer, bananaValue))) {
                 Vector3 randomVector = Random.insideUnitSphere * 5;
@@ -129,7 +147,8 @@ public class MasterPickupSpawner : NetworkBehaviour {
 
     }
 
-    void GetSpawners() {
+    IEnumerator GetSpawners() {
+        //if (collectableAreas.Length < 5) collectableAreas = FindObjectsOfType<SpawnerArea>();
         PickupSpawner[] spawners = FindObjectsOfType<PickupSpawner>();
         bananaSpawners.Clear();
         stickSpawners.Clear();
@@ -161,6 +180,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
                     break;
             }
         }
+        yield return null;
     }
 
     public void DetermineSpawnerValues(PlayerStats[] ps) {
@@ -205,80 +225,47 @@ public class MasterPickupSpawner : NetworkBehaviour {
         players[1] = defenders;
         players[2] = supporters;
         print("Attackers: " + attackers + ", Defenders: " + defenders + ", Supporters: " + supporters);
-        spawnerValueSetter(attackers, defenders, supporters, new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, numberOfPlayers);
+        StartCoroutine(spawnerMasterLogic(attackers, defenders, supporters, new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, numberOfPlayers));
     }
 
-    void spawnerValueSetter(int attackers, int defenders, int supporters, float[] weights, float playerModifier) {
-        int spawnerCount;
-        float weight;
-        // Bananas value
-        weight = defenders * weights[1] + attackers * weights[2] + supporters * weights[3];
-        weight /= bananaSpawners.Count / playerModifier;
-        bananaValue = Mathf.CeilToInt(weight > defaultSpawnValue ? weight : defaultSpawnValue);
-        foreach (PickupSpawner banana in bananaSpawners) {
-            //banana.value = bananaValue;
-            banana.spawnTime = defaultSpawnTime / playerModifier;
-        }
+    IEnumerator spawnerMasterLogic(int attackers, int defenders, int supporters, float[] weights, float playerModifier) {
+        yield return StartCoroutine(GetSpawners());
+        // Bananas
+        DetermineSpawnTime(bananaSpawners, BananaSpawner,
+            (defenders * weights[1] + attackers * weights[2] + supporters * weights[3]), 
+            out bananaTimer, playerModifier);
         // Sticks value
-        weight = attackers * weights[0];
-        weight /= stickSpawners.Count / playerModifier;
-        stickValue = Mathf.CeilToInt(weight > defaultSpawnValue ? weight : defaultSpawnValue);
-        foreach (PickupSpawner stick in stickSpawners) {
-            //stick.value = stickValue;
-            stick.spawnTime = defaultSpawnTime / playerModifier;
-        }
+        DetermineSpawnTime(stickSpawners, StickSpawner,
+            (attackers * weights[0]), 
+            out stickTimer, playerModifier);
         // Sap value
-        weight = supporters * weights[1] + defenders * weights[2] + attackers * weights[3];
-        weight /= sapSpawners.Count / playerModifier;
-        sapValue = Mathf.CeilToInt(weight > defaultSpawnValue ? weight : defaultSpawnValue);
-        foreach (PickupSpawner sap in sapSpawners) {
-            //sap.value = sapValue;
-            sap.spawnTime = defaultSpawnTime / playerModifier;
-        }
+        DetermineSpawnTime(sapSpawners, SapSpawner,
+            (supporters * weights[1] + defenders * weights[2] + attackers * weights[3]), 
+            out sapTimer, playerModifier);
         // Leaf value
-        weight = attackers * weights[0];
-        weight /= playerModifier;
-        spawnerCount = leafSpawners.Count;
-        leafTimer = defaultSpawnTime / weight * spawnerCount;
-        while (60 < leafTimer) { //TODO: don't destroy original spawners
-            Destroy(leafSpawners[spawnerCount - 1].gameObject);
-            spawnerCount--;
-            leafTimer = defaultSpawnTime / playerModifier * spawnerCount;
-        }
-        while(leafTimer < 15) {
-            Vector3 randomVector = Random.insideUnitSphere * 5;
-            randomVector.y = 5f;
-            AreaPlacement(5, leafSpawners[Random.Range(0, spawnerCount)].transform.position + randomVector, LeafSpawner);
-            spawnerCount++;
-            leafTimer = defaultSpawnTime / weight * spawnerCount;
-        }
-        leafTimer = defaultSpawnTime / weight * spawnerCount;
-        leafValue = Mathf.CeilToInt(weight > defaultSpawnValue ? weight : defaultSpawnValue);
-        GetSpawners();
-        foreach (PickupSpawner leaf in leafSpawners) {
-            //leaf.value = leafValue;
-            leaf.spawnTime = leafTimer;
-        }
+        DetermineSpawnTime(leafSpawners, LeafSpawner, 
+            (attackers * weights[0]), 
+            out leafTimer, playerModifier);
         // Berry value
-        weight = supporters * weights[0];
-        weight /= berrySpawners.Count / playerModifier;
-        spawnerCount = berrySpawners.Count;
-        while (maxSpawnValue < weight) {
-            Vector3 randomVector = Random.insideUnitSphere * 5;
-            randomVector.y = 5f;
-            AreaPlacement(5, berrySpawners[Random.Range(0, spawnerCount)].transform.position + randomVector, BerrySpawner);
-            spawnerCount++;
-            weight = supporters * weights[0];
-            weight /= spawnerCount / playerModifier;
-        }
-        berryTimer = defaultSpawnTime / playerModifier * spawnerCount;
-        berryValue = Mathf.CeilToInt(weight > defaultSpawnValue ? weight : defaultSpawnValue);
-        foreach (PickupSpawner berry in berrySpawners) {
-            //berry.value = berryValue;
-            berry.spawnTime = defaultSpawnTime / playerModifier;
+        DetermineSpawnTime(berrySpawners, BerrySpawner,
+            (supporters * weights[0]), 
+            out berryTimer, playerModifier);
+
+        yield return StartCoroutine(GetSpawners());
+
+        foreach (PickupSpawner banana in bananaSpawners) {
+            banana.spawnTime = Random.Range(minSpawnTime, bananaTimer);
+        } foreach (PickupSpawner stick in stickSpawners) {
+            stick.spawnTime = Random.Range(minSpawnTime, stickTimer);
+        } foreach (PickupSpawner sap in sapSpawners) {
+            sap.spawnTime = Random.Range(minSpawnTime, sapTimer);
+        } foreach (PickupSpawner leaf in leafSpawners) {
+            leaf.spawnTime = Random.Range(minSpawnTime, leafTimer);
+        } foreach (PickupSpawner berry in berrySpawners) {
+            berry.spawnTime = Random.Range(minSpawnTime, berryTimer);
         }
         #region Fish value
-        weight = defenders * weights[0];
+        float weight = defenders * weights[0];
         weight -= fishSpawners.Count;
         while (0 < weight) {
             Vector3 randomVector = Random.insideUnitSphere * 5;
@@ -290,15 +277,37 @@ public class MasterPickupSpawner : NetworkBehaviour {
             fish.spawnTime = defaultSpawnTime / playerModifier;
         }
         #endregion
+        yield return null;
+    }
 
+    void DetermineSpawnTime(List<PickupSpawner> spawners, GameObject spawnerPrefab, float weight, out float timer, float playerModifier) {
+        weight = weight < 1 ? 1 : weight;
+        int spawnerCount;
+        spawnerCount = spawners.Count;
+        timer = defaultSpawnTime * spawnerCount / weight;
+        while (defaultSpawnTime < timer && spawnerCount > 1) { //don't destroy original spawners
+            print(timer);
+            Destroy(spawners[spawnerCount - 1].gameObject);
+            spawnerCount--;
+            timer = defaultSpawnTime * spawnerCount / weight;
+        }
+        while (timer < minSpawnTime) {
+            Vector3 randomVector = Random.insideUnitSphere * 5;
+            randomVector.y = 5f;
+            AreaPlacement(5, spawners[Random.Range(0, spawners.Count)].transform.position + randomVector, spawnerPrefab);
+            spawnerCount++;
+            timer = defaultSpawnTime * spawnerCount / weight;
+        }
+        timer = defaultSpawnTime * spawnerCount / weight;
     }
 
     /// <summary>
     /// Based on a Radius, the method will spawn randomly placed assets within a Spherical area.
+    /// Tailored for Fish Spawners
     /// </summary>
     /// <param name="radius"></param>
     /// <param name="where">Where to place the spawner</param>
-    /// <param name="asset"></param>
+    /// <param name="asset">What to spawn in water (preferably watery things)</param>
     public void FishPlacement(float radius, Vector3 where, GameObject asset) {
         makeRay:
         Vector3 randomVector = Random.insideUnitSphere * radius * 3;

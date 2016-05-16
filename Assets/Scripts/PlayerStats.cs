@@ -464,10 +464,8 @@ public class PlayerStats : NetworkBehaviour {
     /// Also for some reason you need to tell everybody your new position
     /// </summary>
     void Respawn() {
-        print(isDead);
         ChangeMaterial(false);
-        if (isLocalPlayer)
-        {
+        if (isLocalPlayer) {
             CmdRespawn();
             ////Set to IsAlive parameter to True in the Animator.
             //GetComponent<Animator>().SetBool("IsDead", false);
