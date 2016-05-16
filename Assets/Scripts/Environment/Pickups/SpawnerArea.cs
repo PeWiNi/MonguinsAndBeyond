@@ -70,7 +70,7 @@ public class SpawnerArea : NetworkBehaviour {
 
     public void AssignSpawnerType(string type) { AssignSpawnerType(determineType(type)); }
     void AssignSpawnerType(SpawnerType type) {
-        if (ContainsType(type)) 
+        if (ContainsType(type) == 1) 
             Debug.Log(type.ToString() + " already exists in " + name);
         else if (Spawner1 == SpawnerType.Unknown) {
             Spawner1 = type;
@@ -112,9 +112,10 @@ public class SpawnerArea : NetworkBehaviour {
 
     public void AddSpawner(string type, GameObject spawner) { AddSpawner(determineType(type), spawner); }
     void AddSpawner(SpawnerType type, GameObject spawner) {
-        if (!ContainsType(type))
+        if (ContainsType(type) == 0)
             Debug.Log("There are no " + type.ToString() + " here in " + name);
-        else {
+            
+        else if (ContainsType(type) == 1) {
             Vector3 randomVector = Random.insideUnitSphere * 5;
             randomVector.y = 5f;
             if (type == Spawner1) {
@@ -123,16 +124,19 @@ public class SpawnerArea : NetworkBehaviour {
                 Spawners2.Add(AreaPlacement(5, Spawner2Pos + randomVector, spawner, Spawner2Location));
             } else if (type == Spawner3) {
                 Spawners3.Add(AreaPlacement(5, Spawner3Pos + randomVector, spawner, Spawner3Location));
-            }
+            } 
         }
     }
 
     public void RemoveSpawner(string type) { RemoveSpawner(determineType(type)); }
     void RemoveSpawner(SpawnerType type) {
-        if (!ContainsType(type))
+        if (ContainsType(type) == 0)
             Debug.Log("There are no " + type.ToString() + " here in " + name);
         else if (type == Spawner3) {
-            Destroy(Spawners3[Spawners3.Count - 1].gameObject);
+            if (Spawners3.Count > 0) {
+                Destroy(Spawners3[Spawners3.Count - 1].gameObject);
+                Spawners3.RemoveAt(Spawners3.Count - 1);
+            }
             if (Spawners3.Count == 0) {
                 Spawner3 = SpawnerType.Unknown;
                 Spawners3 = null;
@@ -142,7 +146,10 @@ public class SpawnerArea : NetworkBehaviour {
                 children.ForEach(child => Destroy(child));
             }
         } else if (type == Spawner2) {
-            Destroy(Spawners2[Spawners2.Count - 1].gameObject);
+            if (Spawners2.Count > 0) {
+                Destroy(Spawners2[Spawners2.Count - 1].gameObject);
+                Spawners2.RemoveAt(Spawners2.Count - 1);
+            }
             if (Spawners2.Count == 0) {
                 Spawner2 = SpawnerType.Unknown;
                 Spawners2 = null;
@@ -152,7 +159,10 @@ public class SpawnerArea : NetworkBehaviour {
                 children.ForEach(child => Destroy(child));
             }
         } else if (type == Spawner1) {
-            Destroy(Spawners1[Spawners1.Count - 1].gameObject);
+            if (Spawners1.Count > 0) {
+                Destroy(Spawners1[Spawners1.Count - 1].gameObject);
+                Spawners1.RemoveAt(Spawners1.Count - 1);
+            }
             if (Spawners1.Count == 0) {
                 Spawner1 = SpawnerType.Unknown;
                 Spawners1 = null;
@@ -166,32 +176,35 @@ public class SpawnerArea : NetworkBehaviour {
 
     public int CountSpawners(string type) { return CountSpawners(determineType(type)); }
     int CountSpawners(SpawnerType type) {
-        if (!ContainsType(type))
+        if (ContainsType(type) == 0)
             Debug.Log("No instances of " + type.ToString() + " found in " + name);
         else if (Spawner1 == type) {
+            if (Spawners1.Count > 1) Spawners1.RemoveAll(x => x == null);
             return Spawners1.Count;
         } else if (Spawner2 == type) {
+            if (Spawners2.Count > 1) Spawners2.RemoveAll(x => x == null);
             return Spawners2.Count;
         } else if (Spawner3 == type) {
+            if (Spawners3.Count > 1) Spawners3.RemoveAll(x => x == null);
             return Spawners3.Count;
         }
         return 0;
     }
 
     #region Area Type check methods
-    bool ContainsType(SpawnerType type) {
+    int ContainsType(SpawnerType type) {
         if (type == Spawner1) {
-            return true;
+            return Spawn1(type);
         } else if (type == Spawner2) {
-            return true;
+            return Spawn2(type);
         } else if (type == Spawner3) {
-            return true;
+            return Spawn3(type);
         }
-        return false;
+        return 0;
     }
 
-    public bool SpawnIteration(string type, int area = 0) { return SpawnIteration(determineType(type), area); }
-    bool SpawnIteration(SpawnerType type, int area) {
+    public int SpawnIteration(string type, int area = 0) { return SpawnIteration(determineType(type), area); }
+    int SpawnIteration(SpawnerType type, int area) {
         switch (area) {
             case (1):
                 return Spawn1(type);
@@ -203,23 +216,29 @@ public class SpawnerArea : NetworkBehaviour {
                 return ContainsType(type);
         }
     }
-    bool Spawn1(SpawnerType type) {
-        if (type == Spawner1)
+    int Spawn1(SpawnerType type) {
+        if (type == Spawner1) { 
             if (Spawners1.Count < Capacity)
-                return true;
-        return false;
+                return 1;
+            return 2;
+        }
+        return 0;
     }
-    bool Spawn2(SpawnerType type) {
-        if (type == Spawner2)
+    int Spawn2(SpawnerType type) {
+        if (type == Spawner2) { 
             if (Spawners2.Count < Capacity)
-                return true;
-        return false;
+                return 1;
+            return 2;
+        }
+        return 0;
     }
-    bool Spawn3(SpawnerType type) {
-        if (type == Spawner3)
+    int Spawn3(SpawnerType type) {
+        if (type == Spawner3) {
             if (Spawners3.Count < Capacity)
-                return true;
-        return false;
+                return 1;
+            return 2;
+        }
+        return 0;
     }
     #endregion
 
@@ -239,7 +258,7 @@ public class SpawnerArea : NetworkBehaviour {
         randomVector.y = -radius * 3;
         Ray ray = new Ray(where, randomVector);
         RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, radius * 2, (1 << 9) | (1 << 0) | (1 << 10) | (1 << 11))) {
+        if (Physics.Raycast(ray, out hitInfo, float.MaxValue, (1 << 9) | (1 << 0) | (1 << 10) | (1 << 11))) {
             if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Default") ||
                 hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Environment") ||
                 hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Trees")) {

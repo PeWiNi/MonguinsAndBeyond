@@ -55,7 +55,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
         if (terrainParent != null)
             terrainParentInfo = terrainParent.GetComponent<TerrainInfo>();
         manager = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>();
-        GetCollectableAreas();
+        StartCoroutine(GetCollectableAreas());
     }
 
     void Update() {
@@ -100,7 +100,6 @@ public class MasterPickupSpawner : NetworkBehaviour {
             GUI.Label(new Rect(xpos, ypos, 300, 20), "Server: address=" + manager.networkAddress + " port=" + manager.networkPort);
             ypos += spacing;
             if (GUI.Button(new Rect(xpos, ypos, 200, 20), "Use Collectables Area Code")) {
-                GetCollectableAreas();
                 DetermineSpawnerValues(FindObjectsOfType<PlayerStats>(), true);
             }
             ypos += spacing;
@@ -113,44 +112,49 @@ public class MasterPickupSpawner : NetworkBehaviour {
             if (GUI.Button(new Rect(xpos, ypos, 500, 20), string.Format("Total # of players: {0}. Defenders: {1}, Attackers: {2}, Supporters: {3}", playersSum, players[1], players[0], players[2]))) { print("It's not very effective!"); }
             #region Cheat in Players
             if (GUI.Button(new Rect(xpos + 500, ypos, 120, 20), string.Format("Defenders: {0} +1", players[1]))) {
-                StartCoroutine(spawnerMasterLogic(players[0], ++players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+                StartCoroutine(spawnerMasterLogic(players[0], ++players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2], true));
             } if (GUI.Button(new Rect(xpos + 620, ypos, 20, 20), "-1")) {
-                StartCoroutine(spawnerMasterLogic(players[0], --players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+                StartCoroutine(spawnerMasterLogic(players[0], --players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2], true));
             } if (GUI.Button(new Rect(xpos + 500, ypos + spacing, 120, 20), string.Format("Attackers: {0} +1", players[0]))) {
-                StartCoroutine(spawnerMasterLogic(++players[0], players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+                StartCoroutine(spawnerMasterLogic(++players[0], players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2], true));
             } if (GUI.Button(new Rect(xpos + 620, ypos + spacing, 20, 20), "-1")) {
-                StartCoroutine(spawnerMasterLogic(--players[0], players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+                StartCoroutine(spawnerMasterLogic(--players[0], players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2], true));
             } if (GUI.Button(new Rect(xpos + 500, ypos + spacing + spacing, 120, 20), string.Format("Supporters: {0} +1", players[2]))) {
-                StartCoroutine(spawnerMasterLogic(players[0], players[1], ++players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+                StartCoroutine(spawnerMasterLogic(players[0], players[1], ++players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2], true));
             } if (GUI.Button(new Rect(xpos + 620, ypos + spacing + spacing, 20, 20), "-1")) {
-                StartCoroutine(spawnerMasterLogic(players[0], players[1], --players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
+                StartCoroutine(spawnerMasterLogic(players[0], players[1], --players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2], true));
             }
             #endregion
             ypos += spacing;
             if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}", "Banana", bananaSpawners.Count, bananaTimer))) {
-                Vector3 randomVector = Random.insideUnitSphere * 5;
-                randomVector.y = 5f;
-                AreaPlacement(5, bananaSpawners[Random.Range(0, bananaSpawners.Count)].transform.position + randomVector, BananaSpawner);
+                //Vector3 randomVector = Random.insideUnitSphere * 5;
+                //randomVector.y = 5f;
+                //AreaPlacement(5, bananaSpawners[Random.Range(0, bananaSpawners.Count)].transform.position + randomVector, BananaSpawner);
+                AddTypeToAreas("Banana");
             } ypos += spacing;
             if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}", "Stick", stickSpawners.Count, stickTimer))) {
-                Vector3 randomVector = Random.insideUnitSphere * 5;
-                randomVector.y = 5f;
-                AreaPlacement(5, stickSpawners[Random.Range(0, stickSpawners.Count)].transform.position + randomVector, StickSpawner);
+                //Vector3 randomVector = Random.insideUnitSphere * 5;
+                //randomVector.y = 5f;
+                //AreaPlacement(5, stickSpawners[Random.Range(0, stickSpawners.Count)].transform.position + randomVector, StickSpawner);
+                AddTypeToAreas("Stick");
             } ypos += spacing;
             if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}", "Sap", sapSpawners.Count, sapTimer))) {
-                Vector3 randomVector = Random.insideUnitSphere * 5;
-                randomVector.y = 5f;
-                AreaPlacement(5, sapSpawners[Random.Range(0, sapSpawners.Count)].transform.position + randomVector, SapSpawner);
+                //Vector3 randomVector = Random.insideUnitSphere * 5;
+                //randomVector.y = 5f;
+                //AreaPlacement(5, sapSpawners[Random.Range(0, sapSpawners.Count)].transform.position + randomVector, SapSpawner);
+                AddTypeToAreas("Sap");
             } ypos += spacing;
             if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}", "Leaf", leafSpawners.Count, leafTimer))) {
-                Vector3 randomVector = Random.insideUnitSphere * 5;
-                randomVector.y = 5f;
-                AreaPlacement(5, leafSpawners[Random.Range(0, leafSpawners.Count)].transform.position + randomVector, LeafSpawner);
+                //Vector3 randomVector = Random.insideUnitSphere * 5;
+                //randomVector.y = 5f;
+                //AreaPlacement(5, leafSpawners[Random.Range(0, leafSpawners.Count)].transform.position + randomVector, LeafSpawner);
+                AddTypeToAreas("Leaf");
             } ypos += spacing;
             if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}", "Berry", berrySpawners.Count, berryTimer))) {
-                Vector3 randomVector = Random.insideUnitSphere * 5;
-                randomVector.y = 5f;
-                AreaPlacement(5, berrySpawners[Random.Range(0, berrySpawners.Count)].transform.position + randomVector, BerrySpawner);
+                //Vector3 randomVector = Random.insideUnitSphere * 5;
+                //randomVector.y = 5f;
+                //AreaPlacement(5, berrySpawners[Random.Range(0, berrySpawners.Count)].transform.position + randomVector, BerrySpawner);
+                AddTypeToAreas("Berry");
             } ypos += spacing;
             if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}", "Fish", fishSpawners.Count))) {
                 Vector3 randomVector = Random.insideUnitSphere * 5;
@@ -199,7 +203,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
     public void DetermineSpawnerValues(PlayerStats[] ps, bool areas = false) {
         /*
         Weights:
-            SingleRole: 1.5 
+            SingleRole: 1.5 , 1.0, 1.0
             MutipleRoles: 1.3, 1.2, 1.0 
         
         RoleDefined:
@@ -237,7 +241,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
         players[0] = attackers;
         players[1] = defenders;
         players[2] = supporters;
-        print("Attackers: " + attackers + ", Defenders: " + defenders + ", Supporters: " + supporters);
+        //print("Attackers: " + attackers + ", Defenders: " + defenders + ", Supporters: " + supporters);
         StartCoroutine(spawnerMasterLogic(attackers, defenders, supporters, new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, numberOfPlayers, areas));
     }
 
@@ -249,7 +253,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
             out bananaTimer, areas ? "Banana" : "");
         // Sticks value
         DetermineSpawnTime(stickSpawners, StickSpawner,
-            (attackers * weights[0]), 
+            (attackers * weights[0] + supporters * weights[3] + defenders * weights[3]), 
             out stickTimer, areas ? "Stick" : "");
         // Sap value
         DetermineSpawnTime(sapSpawners, SapSpawner,
@@ -257,11 +261,11 @@ public class MasterPickupSpawner : NetworkBehaviour {
             out sapTimer, areas ? "Sap" : "");
         // Leaf value
         DetermineSpawnTime(leafSpawners, LeafSpawner, 
-            (attackers * weights[0]), 
+            (attackers * weights[0] + defenders * weights[3] + supporters * weights[3]), 
             out leafTimer, areas ? "Leaf" : "");
         // Berry value
         DetermineSpawnTime(berrySpawners, BerrySpawner,
-            (supporters * weights[0]), 
+            (supporters * weights[0] + attackers * weights[3] + defenders * weights[3]), 
             out berryTimer, areas ? "Berry" : "");
 
         yield return StartCoroutine(GetSpawners());
@@ -278,7 +282,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
             berry.spawnTime = Random.Range(minSpawnTime, berryTimer);
         }
         #region Fish value
-        float weight = defenders * weights[0];
+        float weight = defenders * weights[0] + attackers * weights[3] + supporters * weights[3];
         weight -= fishSpawners.Count;
         while (0 < weight) {
             Vector3 randomVector = Random.insideUnitSphere * 5;
@@ -307,12 +311,13 @@ public class MasterPickupSpawner : NetworkBehaviour {
         spawnerCount = type == "" ? spawners.Count : CountSpawners(type);
         timer = defaultSpawnTime * spawnerCount / weight;
         while (defaultSpawnTime < timer && spawnerCount > 1) { //don't destroy original spawners
-            print(timer);
+            print("RemovingTime " + type + " " + timer + " " + weight);
             if (type == "") Destroy(spawners[spawnerCount - 1].gameObject);
-            else RemoveTypeFromAreas(type);
+            else if (CountSpawners(type) > 1) RemoveTypeFromAreas(type);
             spawnerCount--;
             timer = defaultSpawnTime * spawnerCount / weight;
         }
+        print("InbetweenTime " + type + " " + timer + " " + weight);
         while (timer < minSpawnTime) {
             Vector3 randomVector = Random.insideUnitSphere * 5;
             randomVector.y = 5f;
@@ -320,6 +325,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
             else AddTypeToAreas(type, spawnerPrefab);
             spawnerCount++;
             timer = defaultSpawnTime * spawnerCount / weight;
+            print("AddingTime " + type + " " + timer + " " + weight);
         }
         timer = defaultSpawnTime * spawnerCount / weight;
     }
@@ -343,39 +349,68 @@ public class MasterPickupSpawner : NetworkBehaviour {
         }
     }
 
-    void GetCollectableAreas() {
+    IEnumerator GetCollectableAreas() {
         collectableAreas = FindObjectsOfType<SpawnerArea>();
         List<string> types = new List<string> { "Banana", "Stick", "Sap", "Leaf", "Berry" };
         foreach (SpawnerArea area in collectableAreas) {
             string type = types[Random.Range(0, types.Count)];
+            print("Creating: " + type);
             area.AssignSpawnerType(type);
+            yield return new WaitForFixedUpdate();
+            area.AddSpawner(type, GetPrefab(type));
             types.Remove(type);
         }
     }
 
     void AddTypeToAreas(string type) { AddTypeToAreas(type, GetPrefab(type)); }
     void AddTypeToAreas(string type, GameObject prefab) {
+        bool wasFull = false;
         foreach (SpawnerArea area in collectableAreas) {
-            if (area.SpawnIteration(type))
+            if (area.SpawnIteration(type) == 1) {
+                print("Adding: " + type);
                 area.AddSpawner(type, prefab);
+                wasFull = false;
+                return;
+            } else if (area.SpawnIteration(type) == 2) {
+                wasFull = true;
+                continue;
+            }
         }
+        if (wasFull) {
+            foreach (SpawnerArea area in collectableAreas) {
+                if (area.SpawnIteration(type) == 0) {
+                    StartCoroutine(AssignAndAdd(area, type));
+                    return;
+                }
+            }
+        }
+    }
+
+    IEnumerator AssignAndAdd(SpawnerArea area, string type) {
+        print("Creating more: " + type);
+        area.AssignSpawnerType(type);
+        yield return new WaitForFixedUpdate();
+        area.AddSpawner(type, GetPrefab(type));
     }
 
     void RemoveTypeFromAreas(string type) {
         foreach (SpawnerArea area in collectableAreas) {
-            if (area.SpawnIteration(type, 3)) {
+            if (area.SpawnIteration(type, 3) == 1 || area.SpawnIteration(type, 3) == 2) {
+                print("Removing from 3: " + type);
                 area.RemoveSpawner(type);
                 return;
             }
         }
         foreach (SpawnerArea area in collectableAreas) {
-            if (area.SpawnIteration(type, 2)) { 
+            if (area.SpawnIteration(type, 2) == 1 || area.SpawnIteration(type, 2) == 2) {
+                print("Removing from 2: " + type);
                 area.RemoveSpawner(type);
                 return;
             }
         }
         foreach (SpawnerArea area in collectableAreas) {
-            if (area.SpawnIteration(type, 1)) { 
+            if (area.SpawnIteration(type, 1) == 1 || area.SpawnIteration(type, 1) == 2) {
+                print("Removing from 1: " + type);
                 area.RemoveSpawner(type);
                 return;
             }
@@ -385,7 +420,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
     int CountSpawners(string type) {
         int tally = 0;
         foreach (SpawnerArea area in collectableAreas) {
-            if (area.SpawnIteration(type)) 
+            if (area.SpawnIteration(type) == 1 || area.SpawnIteration(type) == 2) 
                 tally += area.CountSpawners(type);
         }
         return tally;
