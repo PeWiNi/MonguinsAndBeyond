@@ -28,6 +28,9 @@ public class Ability : NetworkBehaviour {
         }
     }
 
+    [SerializeField]
+    GameObject flutterflyStunVFXPrefab;
+
     //public bool Available { get { return OnCooldown(); } }
 
     // Use this for initialization
@@ -91,6 +94,7 @@ public class Ability : NetworkBehaviour {
     [Command]
     internal void CmdStunPlayer(GameObject player, float duration) {
         player.GetComponent<PlayerStats>().Stun(duration);
+        StunVFX(player, duration);
     }
     [Command]
     internal void CmdSlowPlayer(GameObject player, float duration) {
@@ -113,5 +117,16 @@ public class Ability : NetworkBehaviour {
 
     public virtual float CooldownRemaining() {
         return (1.0f / cooldown * ((float)Network.time - timer));
+    }
+
+    void StunVFX(GameObject target, float stunDuration) {
+        // Initiate GameObject using prefab, position and a rotation
+        GameObject bullet = (GameObject)Instantiate( // Offset by 5?
+            flutterflyStunVFXPrefab, target.transform.position + (target.transform.localScale.x + .5f) * target.transform.forward + (target.transform.localScale.y + .5f) * target.transform.up,
+            flutterflyStunVFXPrefab.transform.rotation);
+        bullet.GetComponent<VFX>().Setup(target.transform, stunDuration, true, Vector3.up * (target.transform.localScale.y * 1.725f));
+
+        // Spawn GameObject on Server
+        NetworkServer.Spawn(bullet);
     }
 }
