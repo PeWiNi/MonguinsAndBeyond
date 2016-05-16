@@ -1,10 +1,13 @@
 fileFormatVersion: 2
 guid: c8fc104c679047143ad9101ea4d0b3c7
-timeCreated: 1450379730
+timeCreated: 1463392711
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - Icon: {instanceID: 0}
+  - flutterflyStunVFXPrefab: {fileID: 132662, guid: 5acfb326798ed4a428976da509e8b00f,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

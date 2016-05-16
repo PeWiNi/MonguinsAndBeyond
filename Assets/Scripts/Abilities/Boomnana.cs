@@ -185,7 +185,7 @@ public class Boomnana : NetworkBehaviour {
         PlayerStats targetPS = null;
         foreach (Collider _collider in hitColliders) {
             if (_collider.tag == "Player") { // Check if player
-                CmdDoFire(_collider.gameObject);// Explosion VFX
+                DoFire(_collider.gameObject);// Explosion VFX
                 targetPS = _collider.transform.GetComponent<PlayerStats>();
                 // Determine maxDamage based on team
                 dmg = damage * (targetPS.team != ownerTeam ? fullDamage : selfDamage);
@@ -210,13 +210,12 @@ public class Boomnana : NetworkBehaviour {
         player.GetComponent<PlayerBehaviour>().state = playerState;
     }
 
-    [Command]
-    void CmdDoFire(GameObject target) {
+    void DoFire(GameObject target) {
         // Initiate GameObject using prefab, position and a rotation
         GameObject bullet = (GameObject)Instantiate( // Offset by 5?
             boomnanaVFXPrefab, target.transform.position + (target.transform.localScale.x + .5f) * target.transform.forward + (target.transform.localScale.y + .5f) * target.transform.up,
             boomnanaVFXPrefab.transform.rotation);
-        bullet.GetComponent<VFX>().Setup(target.transform, 1, false, Vector3.up * (target.transform.localScale.y * 1f));
+        bullet.GetComponent<VFX>().Setup(target.transform, 2, false, Vector3.up * (target.transform.localScale.y * 1f));
 
         // Spawn GameObject on Server
         NetworkServer.Spawn(bullet);
