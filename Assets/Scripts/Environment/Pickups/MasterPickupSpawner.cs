@@ -52,6 +52,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
 
     // Use this for initialization
     void Start () {
+        if (!isServer) return;
         if (terrainParent != null)
             terrainParentInfo = terrainParent.GetComponent<TerrainInfo>();
         manager = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>();

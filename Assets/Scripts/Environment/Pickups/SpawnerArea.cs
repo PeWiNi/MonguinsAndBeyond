@@ -89,33 +89,33 @@ public class SpawnerArea : NetworkBehaviour {
         GameObject[] stuff = new GameObject[1];
         switch(type) {
             case (SpawnerType.Banana):
-                stuff = new GameObject[3];
-                stuff[0] = BananaSignifier[Random.Range(0, 5)];
-                stuff[1] = BananaSignifier[5];
-                stuff[2] = BananaSignifier[5];
-                stuff[3] = BananaSignifier[5];
+                stuff = new GameObject[4];
+                stuff[0] = BananaSignifier[Random.Range(0, 5)]; // Tree
+                stuff[1] = BananaSignifier[5]; // Rock
+                stuff[2] = BananaSignifier[5]; // Rock
+                stuff[3] = BananaSignifier[5]; // Rock
                 break;
             case (SpawnerType.Stick):
                 stuff = new GameObject[3];
-                stuff[0] = StickSignifier[0];
-                stuff[1] = StickSignifier[1];
-                stuff[2] = StickSignifier[1];
+                stuff[0] = StickSignifier[0]; // Rock
+                stuff[1] = StickSignifier[1]; // Roots
+                stuff[2] = StickSignifier[1]; // Roots
                 break;
             case (SpawnerType.Sap):
                 stuff = SapSignifier;
                 break;
             case (SpawnerType.Leaf):
                 stuff = new GameObject[2];
-                stuff[0] = LeafSignifier[0];
-                stuff[1] = LeafSignifier[0];
+                stuff[0] = LeafSignifier[0]; // Fern
+                stuff[1] = LeafSignifier[0]; // Fern
                 break;
             case (SpawnerType.Berry):
                 stuff = new GameObject[5];
-                stuff[0] = BerrySignifier[Random.Range(0, 2)];
-                stuff[1] = BerrySignifier[Random.Range(0, 2)];
-                stuff[2] = BerrySignifier[Random.Range(0, 2)];
-                stuff[3] = BerrySignifier[2];
-                stuff[4] = BerrySignifier[2];
+                stuff[0] = BerrySignifier[Random.Range(0, 2)]; // Bush
+                stuff[1] = BerrySignifier[Random.Range(0, 2)]; // Bush
+                stuff[2] = BerrySignifier[Random.Range(0, 2)]; // Bush
+                stuff[3] = BerrySignifier[2]; // Rock
+                stuff[4] = BerrySignifier[2]; // Rock
                 break;
             default:
                 break;
