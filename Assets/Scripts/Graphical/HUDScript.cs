@@ -185,7 +185,14 @@ public class HUDScript : MonoBehaviour {
             }
         }
         // When pressing Alt the mouse will be released from whatever state is set
-        if (Input.GetKeyDown(KeyCode.LeftAlt)) {
+        if(Input.GetMouseButtonDown(1)) {
+            if (wantedMode != CursorLockMode.Locked) {
+                Cursor.lockState = wantedMode = CursorLockMode.Locked;
+                SetCursorState();
+            } else
+                SetCursorState(true);
+        }
+        if (Input.GetMouseButtonUp(0) || Input.GetMouseButtonUp(1)) {
             if (wantedMode != CursorLockMode.None) {
                 Cursor.lockState = wantedMode = CursorLockMode.None;
                 SetCursorState();

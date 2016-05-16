@@ -7,6 +7,22 @@ using UnityEngine.Networking;
 /// An extended NetworkManager to allow increased control of how the server behaves
 /// </summary>
 public class MyNetworkManager : NetworkManager {
+    public delegate void PlayerConnect();
+    [SyncEvent]
+    public event PlayerConnect EventConnectPlayer;
+
+    public delegate void PlayerDisconnect();
+    [SyncEvent]
+    public event PlayerDisconnect EventDisconnectPlayer;
+
+    public void SendConnectPlayerEvent() {
+        if (EventConnectPlayer != null)
+            EventConnectPlayer();
+    }
+    public void SendDisconnectPlayerEvent() {
+        if (EventDisconnectPlayer != null)
+            EventDisconnectPlayer();
+    }
 
     int playerNumber = 0;
 
@@ -37,6 +53,12 @@ public class MyNetworkManager : NetworkManager {
                 go.GetComponent<PlayerStats>().GenerateTerrain();
                 //go.GetComponent<PlayerStats>().GenerateTerrain(GetComponentInChildren<ScoreManager>().sinkTimer);
         }
+        StartCoroutine(PlayerJoined());
+    }
+
+    IEnumerator PlayerJoined() {
+        yield return new WaitForSeconds(2);
+        SendConnectPlayerEvent();
     }
 
     /// <summary>
@@ -99,6 +121,7 @@ public class MyNetworkManager : NetworkManager {
         if (players != playerNumber)
             Debug.Log("Player count mismatch; actual count: " + players);
 
+        SendDisconnectPlayerEvent();
         base.OnServerDisconnect(conn);
     }
 

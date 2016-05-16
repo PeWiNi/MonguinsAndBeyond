@@ -130,7 +130,7 @@ public class EnvironmentPlacement : NetworkBehaviour
     /// <param name="maxNumberOfAssets"></param>
     /// <param name="assetID"></param>
     /// <param name="randomAssets"></param>
-    public void AreaPlacement(float radius, int maxNumberOfAssets, int assetID, bool randomAssets) {
+    public void AreaPlacement(float radius, int maxNumberOfAssets, int assetID, bool randomAssets, Vector3 pos = new Vector3()) {
         int groundLayerMask = (1 << 9);//The 'Ground' Layers we want to check.
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, radius, groundLayerMask);//Get a collection of all colliders touched or within the sphere.
         GameObject assetGameObject = assets[assetID];//Get the environment asset you want to fill this area with.
@@ -188,7 +188,8 @@ public class EnvironmentPlacement : NetworkBehaviour
                 //Ray ray = new Ray(first, second);
                 Vector3 randomVector = Random.insideUnitSphere * 500;
                 randomVector.y = -500f;
-                Ray ray = new Ray(transform.position, randomVector);
+                Vector3 position = pos == new Vector3() ? transform.position : pos;
+                Ray ray = new Ray(position, randomVector);
                 RaycastHit hitInfo;
                 if (Physics.Raycast(ray, out hitInfo, radius * 2, groundLayerMask)) {
                     if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Environment") ||
@@ -203,7 +204,7 @@ public class EnvironmentPlacement : NetworkBehaviour
                         //GameObject go = Instantiate(assetGameObject, hitInfo.point, Quaternion.identity) as GameObject;
                         GameObject go = Instantiate(assetGameObject, hitInfo.point, Quaternion.FromToRotation(Vector3.up, hitInfo.normal)) as GameObject;
                         go.transform.parent = transform;
-                        Debug.DrawLine(gameObject.transform.position, hitInfo.point, Color.red, 100f);
+                        Debug.DrawLine(position, hitInfo.point, Color.red, 100f);
                         amountWeNeed++;
                         NetworkServer.Spawn(go);
                     }

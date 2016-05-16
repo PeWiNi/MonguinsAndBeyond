@@ -4,7 +4,7 @@ using UnityEngine.Networking;
 using System.Collections.Generic;
 
 public class MasterPickupSpawner : NetworkBehaviour {
-	private NetworkManager manager;
+	private MyNetworkManager manager;
 
     [SerializeField]
     public bool showGUI = true;
@@ -41,12 +41,6 @@ public class MasterPickupSpawner : NetworkBehaviour {
     float leafTimer;
     float berryTimer;
 
-    int bananaValue;
-    int stickValue;
-    int sapValue;
-    int leafValue;
-    int berryValue;
-
     int[] players = new int[3];
 
     SpawnerArea[] collectableAreas;
@@ -60,9 +54,8 @@ public class MasterPickupSpawner : NetworkBehaviour {
     void Start () {
         if (terrainParent != null)
             terrainParentInfo = terrainParent.GetComponent<TerrainInfo>();
-        manager = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
-        //GetSpawners();
-        //AreaPlacement(areaRadius, transform.position, BerrySpawner);
+        manager = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>();
+        GetCollectableAreas();
     }
 
     void Update() {
@@ -78,6 +71,24 @@ public class MasterPickupSpawner : NetworkBehaviour {
         }
     }
 
+    #region Event handling
+    void OnEnable() {
+        manager = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>();
+        manager.EventConnectPlayer += Listener;
+        manager.EventDisconnectPlayer += Listener;
+    }
+
+    // Just to make sure that we unsubscribe when the object is no longer in use
+    void OnDisable() {
+        manager.EventConnectPlayer -= Listener;
+        manager.EventDisconnectPlayer -= Listener;
+    }
+
+    void Listener() {
+        DetermineSpawnerValues(FindObjectsOfType<PlayerStats>(), true);
+    }
+    #endregion
+
     void OnGUI() {
         if (!isServer || !showGUI) return;
 
@@ -88,7 +99,11 @@ public class MasterPickupSpawner : NetworkBehaviour {
         if (NetworkServer.active) {
             GUI.Label(new Rect(xpos, ypos, 300, 20), "Server: address=" + manager.networkAddress + " port=" + manager.networkPort);
             ypos += spacing;
-
+            if (GUI.Button(new Rect(xpos, ypos, 200, 20), "Use Collectables Area Code")) {
+                GetCollectableAreas();
+                DetermineSpawnerValues(FindObjectsOfType<PlayerStats>(), true);
+            }
+            ypos += spacing;
             if (GUI.Button(new Rect(xpos, ypos, 200, 20), "Rebalance Spawners")) {
                 DetermineSpawnerValues(FindObjectsOfType<PlayerStats>());
                 StartCoroutine(GetSpawners());
@@ -101,8 +116,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
                 StartCoroutine(spawnerMasterLogic(players[0], ++players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
             } if (GUI.Button(new Rect(xpos + 620, ypos, 20, 20), "-1")) {
                 StartCoroutine(spawnerMasterLogic(players[0], --players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
-            }
-            if (GUI.Button(new Rect(xpos + 500, ypos + spacing, 120, 20), string.Format("Attackers: {0} +1", players[0]))) {
+            } if (GUI.Button(new Rect(xpos + 500, ypos + spacing, 120, 20), string.Format("Attackers: {0} +1", players[0]))) {
                 StartCoroutine(spawnerMasterLogic(++players[0], players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
             } if (GUI.Button(new Rect(xpos + 620, ypos + spacing, 20, 20), "-1")) {
                 StartCoroutine(spawnerMasterLogic(--players[0], players[1], players[2], new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, players[0] + players[1] + players[2]));
@@ -113,27 +127,27 @@ public class MasterPickupSpawner : NetworkBehaviour {
             }
             #endregion
             ypos += spacing;
-            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Banana", bananaSpawners.Count, bananaTimer, bananaValue))) {
+            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}", "Banana", bananaSpawners.Count, bananaTimer))) {
                 Vector3 randomVector = Random.insideUnitSphere * 5;
                 randomVector.y = 5f;
                 AreaPlacement(5, bananaSpawners[Random.Range(0, bananaSpawners.Count)].transform.position + randomVector, BananaSpawner);
             } ypos += spacing;
-            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Stick", stickSpawners.Count, stickTimer, stickValue))) {
+            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}", "Stick", stickSpawners.Count, stickTimer))) {
                 Vector3 randomVector = Random.insideUnitSphere * 5;
                 randomVector.y = 5f;
                 AreaPlacement(5, stickSpawners[Random.Range(0, stickSpawners.Count)].transform.position + randomVector, StickSpawner);
             } ypos += spacing;
-            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Sap", sapSpawners.Count, sapTimer, sapValue))) {
+            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}", "Sap", sapSpawners.Count, sapTimer))) {
                 Vector3 randomVector = Random.insideUnitSphere * 5;
                 randomVector.y = 5f;
                 AreaPlacement(5, sapSpawners[Random.Range(0, sapSpawners.Count)].transform.position + randomVector, SapSpawner);
             } ypos += spacing;
-            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Leaf", leafSpawners.Count, leafTimer, leafValue))) {
+            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}", "Leaf", leafSpawners.Count, leafTimer))) {
                 Vector3 randomVector = Random.insideUnitSphere * 5;
                 randomVector.y = 5f;
                 AreaPlacement(5, leafSpawners[Random.Range(0, leafSpawners.Count)].transform.position + randomVector, LeafSpawner);
             } ypos += spacing;
-            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}, Value: {3}", "Berry", berrySpawners.Count, berryTimer, berryValue))) {
+            if (GUI.Button(new Rect(xpos, ypos, 300, 20), string.Format("{0} Spawners: {1}, Timer: {2}", "Berry", berrySpawners.Count, berryTimer))) {
                 Vector3 randomVector = Random.insideUnitSphere * 5;
                 randomVector.y = 5f;
                 AreaPlacement(5, berrySpawners[Random.Range(0, berrySpawners.Count)].transform.position + randomVector, BerrySpawner);
@@ -144,11 +158,10 @@ public class MasterPickupSpawner : NetworkBehaviour {
                 FishPlacement(5, fishSpawners[Random.Range(0, fishSpawners.Count)].transform.position + randomVector, FishSpawner);
             } ypos += spacing;
         }
-
     }
-
+    
     IEnumerator GetSpawners() {
-        //if (collectableAreas.Length < 5) collectableAreas = FindObjectsOfType<SpawnerArea>();
+        yield return new WaitForFixedUpdate();
         PickupSpawner[] spawners = FindObjectsOfType<PickupSpawner>();
         bananaSpawners.Clear();
         stickSpawners.Clear();
@@ -183,7 +196,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
         yield return null;
     }
 
-    public void DetermineSpawnerValues(PlayerStats[] ps) {
+    public void DetermineSpawnerValues(PlayerStats[] ps, bool areas = false) {
         /*
         Weights:
             SingleRole: 1.5 
@@ -225,31 +238,31 @@ public class MasterPickupSpawner : NetworkBehaviour {
         players[1] = defenders;
         players[2] = supporters;
         print("Attackers: " + attackers + ", Defenders: " + defenders + ", Supporters: " + supporters);
-        StartCoroutine(spawnerMasterLogic(attackers, defenders, supporters, new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, numberOfPlayers));
+        StartCoroutine(spawnerMasterLogic(attackers, defenders, supporters, new float[] { 1.5f, 1.3f, 1.2f, 1.0f }, numberOfPlayers, areas));
     }
 
-    IEnumerator spawnerMasterLogic(int attackers, int defenders, int supporters, float[] weights, float playerModifier) {
+    IEnumerator spawnerMasterLogic(int attackers, int defenders, int supporters, float[] weights, float playerModifier, bool areas = false) {
         yield return StartCoroutine(GetSpawners());
         // Bananas
         DetermineSpawnTime(bananaSpawners, BananaSpawner,
             (defenders * weights[1] + attackers * weights[2] + supporters * weights[3]), 
-            out bananaTimer, playerModifier);
+            out bananaTimer, areas ? "Banana" : "");
         // Sticks value
         DetermineSpawnTime(stickSpawners, StickSpawner,
             (attackers * weights[0]), 
-            out stickTimer, playerModifier);
+            out stickTimer, areas ? "Stick" : "");
         // Sap value
         DetermineSpawnTime(sapSpawners, SapSpawner,
             (supporters * weights[1] + defenders * weights[2] + attackers * weights[3]), 
-            out sapTimer, playerModifier);
+            out sapTimer, areas ? "Sap" : "");
         // Leaf value
         DetermineSpawnTime(leafSpawners, LeafSpawner, 
             (attackers * weights[0]), 
-            out leafTimer, playerModifier);
+            out leafTimer, areas ? "Leaf" : "");
         // Berry value
         DetermineSpawnTime(berrySpawners, BerrySpawner,
             (supporters * weights[0]), 
-            out berryTimer, playerModifier);
+            out berryTimer, areas ? "Berry" : "");
 
         yield return StartCoroutine(GetSpawners());
 
@@ -280,27 +293,105 @@ public class MasterPickupSpawner : NetworkBehaviour {
         yield return null;
     }
 
-    void DetermineSpawnTime(List<PickupSpawner> spawners, GameObject spawnerPrefab, float weight, out float timer, float playerModifier) {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="spawners">PickupSpawner list which is to be modified</param>
+    /// <param name="spawnerPrefab">Define prefab used if a new spawner is needed</param>
+    /// <param name="weight">The impact players choice has put on this type</param>
+    /// <param name="timer">The respective timer for the type of spawner</param>
+    /// <param name="type">If using CollectableAreas define type of spawner/collectable</param>
+    void DetermineSpawnTime(List<PickupSpawner> spawners, GameObject spawnerPrefab, float weight, out float timer, string type = "") {
         weight = weight < 1 ? 1 : weight;
         int spawnerCount;
-        spawnerCount = spawners.Count;
+        spawnerCount = type == "" ? spawners.Count : CountSpawners(type);
         timer = defaultSpawnTime * spawnerCount / weight;
         while (defaultSpawnTime < timer && spawnerCount > 1) { //don't destroy original spawners
             print(timer);
-            Destroy(spawners[spawnerCount - 1].gameObject);
+            if (type == "") Destroy(spawners[spawnerCount - 1].gameObject);
+            else RemoveTypeFromAreas(type);
             spawnerCount--;
             timer = defaultSpawnTime * spawnerCount / weight;
         }
         while (timer < minSpawnTime) {
             Vector3 randomVector = Random.insideUnitSphere * 5;
             randomVector.y = 5f;
-            AreaPlacement(5, spawners[Random.Range(0, spawners.Count)].transform.position + randomVector, spawnerPrefab);
+            if (type == "") AreaPlacement(5, spawners[Random.Range(0, spawners.Count)].transform.position + randomVector, spawnerPrefab);
+            else AddTypeToAreas(type, spawnerPrefab);
             spawnerCount++;
             timer = defaultSpawnTime * spawnerCount / weight;
         }
         timer = defaultSpawnTime * spawnerCount / weight;
     }
+    
+    GameObject GetPrefab(string type) {
+        switch(type) {
+            case "Banana":
+                return BananaSpawner;
+            case "Stick":
+                return StickSpawner;
+            case "Sap":
+                return SapSpawner;
+            case "Leaf":
+                return LeafSpawner;
+            case "Berry":
+                return BerrySpawner;
+            case "Fish":
+                return FishSpawner;
+            default:
+                return null;
+        }
+    }
 
+    void GetCollectableAreas() {
+        collectableAreas = FindObjectsOfType<SpawnerArea>();
+        List<string> types = new List<string> { "Banana", "Stick", "Sap", "Leaf", "Berry" };
+        foreach (SpawnerArea area in collectableAreas) {
+            string type = types[Random.Range(0, types.Count)];
+            area.AssignSpawnerType(type);
+            types.Remove(type);
+        }
+    }
+
+    void AddTypeToAreas(string type) { AddTypeToAreas(type, GetPrefab(type)); }
+    void AddTypeToAreas(string type, GameObject prefab) {
+        foreach (SpawnerArea area in collectableAreas) {
+            if (area.SpawnIteration(type))
+                area.AddSpawner(type, prefab);
+        }
+    }
+
+    void RemoveTypeFromAreas(string type) {
+        foreach (SpawnerArea area in collectableAreas) {
+            if (area.SpawnIteration(type, 3)) {
+                area.RemoveSpawner(type);
+                return;
+            }
+        }
+        foreach (SpawnerArea area in collectableAreas) {
+            if (area.SpawnIteration(type, 2)) { 
+                area.RemoveSpawner(type);
+                return;
+            }
+        }
+        foreach (SpawnerArea area in collectableAreas) {
+            if (area.SpawnIteration(type, 1)) { 
+                area.RemoveSpawner(type);
+                return;
+            }
+        }
+    }
+
+    int CountSpawners(string type) {
+        int tally = 0;
+        foreach (SpawnerArea area in collectableAreas) {
+            if (area.SpawnIteration(type)) 
+                tally += area.CountSpawners(type);
+        }
+        return tally;
+    }
+
+    #region Environment placement
     /// <summary>
     /// Based on a Radius, the method will spawn randomly placed assets within a Spherical area.
     /// Tailored for Fish Spawners
@@ -367,4 +458,5 @@ public class MasterPickupSpawner : NetworkBehaviour {
         spawner.transform.SetParent(g.transform);
         NetworkServer.Spawn(spawner);
     }
+    #endregion
 }
