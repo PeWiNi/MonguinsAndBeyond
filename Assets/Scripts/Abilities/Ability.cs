@@ -29,7 +29,7 @@ public class Ability : NetworkBehaviour {
     }
 
     [SerializeField]
-    GameObject flutterflyStunVFXPrefab;
+    GameObject stunVFXPrefab;
 
     //public bool Available { get { return OnCooldown(); } }
 
@@ -122,8 +122,8 @@ public class Ability : NetworkBehaviour {
     void StunVFX(GameObject target, float stunDuration) {
         // Initiate GameObject using prefab, position and a rotation
         GameObject bullet = (GameObject)Instantiate( // Offset by 5?
-            flutterflyStunVFXPrefab, target.transform.position + (target.transform.localScale.x + .5f) * target.transform.forward + (target.transform.localScale.y + .5f) * target.transform.up,
-            flutterflyStunVFXPrefab.transform.rotation);
+            stunVFXPrefab, target.transform.position + (target.transform.localScale.x + .5f) * target.transform.forward + (target.transform.localScale.y + .5f) * target.transform.up,
+            stunVFXPrefab.transform.rotation);
         bullet.GetComponent<VFX>().Setup(target.transform, stunDuration, true, Vector3.up * (target.transform.localScale.y * 1.725f));
 
         // Spawn GameObject on Server

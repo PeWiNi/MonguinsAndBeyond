@@ -101,12 +101,12 @@ public class SpawnTraps : NetworkBehaviour {
     /// </summary>
     /// <param name="activate">State of activation (isPlacing)</param>
     void Activate(bool activate, bool threeDee = false) {
-        if(activate) {
+        if(activate && isLocalPlayer) {
             projector = (GameObject)Instantiate(Resources.Load("Prefabs/Environments/Trap_Projector_3D") as GameObject, transform.position,
                 Quaternion.Euler(new Vector3(0, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z)));
             projector.gameObject.SetActive(activate);
             CmdChangeDist(distFromTerrain);
-        } else { Destroy(projector); }
+        } else if (isLocalPlayer) { Destroy(projector); }
         active = activate;
     }
 
