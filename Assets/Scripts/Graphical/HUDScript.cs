@@ -28,6 +28,7 @@ public class HUDScript : MonoBehaviour {
     Image trap3;
     public float trap3Cooldown = 10f;
     float trap3Timer;
+    public TrapResources trapImages;
     #endregion
 
     [SerializeField]
@@ -60,8 +61,9 @@ public class HUDScript : MonoBehaviour {
         trap1 = actionBar.transform.FindChild("Traps").GetComponentsInChildren<Image>()[1]; // index 0 is the picture behind index 1
         trap2 = actionBar.transform.FindChild("Traps").GetComponentsInChildren<Image>()[3]; // index 2 is the picture behind index 3
         trap3 = actionBar.transform.FindChild("Traps").GetComponentsInChildren<Image>()[5]; // index 4 is the picture behind index 5
+        trapImages = actionBar.transform.FindChild("Traps").GetComponent<TrapResources>();
 
-        if(!scoreBoard)
+        if (!scoreBoard)
             scoreBoard = GameObject.Find("ScoreBoard").GetComponent<ScoreBoard>();
         if (!scoreBoard) {
             GameObject ScoreBoard = Instantiate(Resources.Load("Prefabs/GUI/ScoreBoard"), new Vector3(), Quaternion.identity) as GameObject;

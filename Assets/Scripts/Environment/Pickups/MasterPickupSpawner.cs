@@ -204,7 +204,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
     public void DetermineSpawnerValues(PlayerStats[] ps, bool areas = false) {
         /*
         Weights:
-            SingleRole: 1.5 , 1.0, 1.0
+            SingleRole: 1.5, 1.0, 1.0
             MutipleRoles: 1.3, 1.2, 1.0 
         
         RoleDefined:
@@ -266,7 +266,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
             out leafTimer, areas ? "Leaf" : "");
         // Berry value
         DetermineSpawnTime(berrySpawners, BerrySpawner,
-            (supporters * weights[0] + attackers * weights[3] + defenders * weights[3]), 
+            ((supporters * (weights[0] + 1)) + attackers * weights[3] + defenders * weights[3]), 
             out berryTimer, areas ? "Berry" : "");
 
         yield return StartCoroutine(GetSpawners());

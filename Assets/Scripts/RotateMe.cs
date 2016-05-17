@@ -12,10 +12,15 @@ public class RotateMe : NetworkBehaviour {
 
     [SyncVar]
     public bool rotateAroundSelf;
+    [SyncVar]
+    public bool randomRotation;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         transform.rotation = Quaternion.Euler(x, y, z);
+        if (randomRotation) {
+            transform.rotation = Quaternion.Euler(0, Random.Range(0, 360), 0);
+        }
     }
 
     void Update() {

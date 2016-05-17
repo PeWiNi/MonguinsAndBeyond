@@ -102,7 +102,8 @@ public class SpawnerArea : NetworkBehaviour {
                 stuff[2] = StickSignifier[1]; // Roots
                 break;
             case (SpawnerType.Sap):
-                stuff = SapSignifier;
+                stuff = new GameObject[1];
+                stuff[0] = SapSignifier[Random.Range(0, 2)]; // Tree-hollow
                 break;
             case (SpawnerType.Leaf):
                 stuff = new GameObject[2];
@@ -267,9 +268,10 @@ public class SpawnerArea : NetworkBehaviour {
     /// <param name="asset"></param>
     PickupSpawner AreaPlacement(float radius, Vector3 where, GameObject asset, Transform parent) {
         PickupSpawner ps = null;
-        makeRay:
+        int addy = -1;
+    makeRay:
         Vector3 randomVector = Random.insideUnitSphere * radius * 3;
-        randomVector.y = -radius * 3;
+        randomVector.y = -50 + --addy;
         Ray ray = new Ray(where, randomVector);
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, float.MaxValue, (1 << 9) | (1 << 0) | (1 << 10) | (1 << 11))) {

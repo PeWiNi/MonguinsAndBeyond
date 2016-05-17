@@ -57,11 +57,9 @@ public class SpawnTraps : NetworkBehaviour {
         pos = doNotTouchTerrain(Limiter(pos, range), distFromTerrain);
         // Check if behind player - and disable projector if it is
         Vector3 toOther = pos - transform.position;
+        Debug.DrawLine(pos, new Vector3(pos.x, 5, pos.z), Color.blue);
         if (isBehind(toOther) || tooFarAway(pos))
-            projector.gameObject.SetActive(false);
-        else if (!projector.gameObject.activeSelf)
-            projector.gameObject.SetActive(true);
-        //Debug.DrawLine(pos, new Vector3(pos.x, 5, pos.z), Color.blue);
+            pos = transform.position - transform.forward * .1f;
         return pos;
     }
 
@@ -87,8 +85,7 @@ public class SpawnTraps : NetworkBehaviour {
     /// <returns>True if the point is in front of (and inside of the castAngles)</returns>
     bool isBehind(Vector3 point) {
         Vector3 forward = transform.TransformDirection(Vector3.forward) + transform.forward * playerOffset;
-        Vector3 toOther = projector.transform.position - transform.position;
-        return Vector3.Dot(forward.normalized, toOther.normalized) < castAngles;
+        return Vector3.Dot(forward.normalized, point.normalized) < castAngles;
     }
 
     bool tooFarAway(Vector3 point) {
