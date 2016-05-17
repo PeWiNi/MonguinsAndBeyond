@@ -227,23 +227,12 @@ public class PlayerStats : NetworkBehaviour {
             NM.GetComponent<MakeScreenshot>().Setup();
         }
         currentMaterial = standardMaterial;
-        syncHealth = syncMaxHealth;
+        if (isServer)
+            syncHealth = syncMaxHealth;
     }
 
 	// Update is called once per frame
 	void Update () {
-        /* if (isDead) { // Send to co-routine?
-            if (((float)getServerTime() - deathTimer) > deathCooldown) {
-                Respawn();
-                return;
-            }
-            health = 0;
-            if (currentMaterial != stealthMat) {
-                Death();
-            }
-            return;
-        } */
-        //if (isDead) return;
         if (isStunned) 
             GetComponent<Rigidbody>().velocity = new Vector3();
 

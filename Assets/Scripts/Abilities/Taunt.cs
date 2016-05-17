@@ -20,6 +20,8 @@ public class Taunt : Ability {
 
     [SerializeField]
     GameObject tauntVFXPrefab;
+    [SerializeField]
+    GameObject tauntedVFXPrefab;
 
     public override double Trigger() {
         //Play Taunt Animation
@@ -61,8 +63,19 @@ public class Taunt : Ability {
     void CmdTauntPlayer(GameObject player, float duration) {
         // TODO: Implement in PlayerStats
         player.GetComponent<PlayerStats>().Taunt(gameObject, duration);
+        // Initiate GameObject using prefab, position and a rotation
+        GameObject bullet = (GameObject)Instantiate( // Offset by 5?
+            tauntedVFXPrefab, player.transform.position + (player.transform.localScale.x + .5f) * player.transform.forward + (player.transform.localScale.y + .5f) * player.transform.up,
+            Quaternion.identity);
+        bullet.GetComponent<VFX>().Setup(player.transform, 2, true, Vector3.up * (player.transform.localScale.y * 2f));
+
+        // Spawn GameObject on Server
+        NetworkServer.Spawn(bullet);
     }
 
+    /// <summary>
+    /// Taun VFX for the player casting.
+    /// </summary>
     [Command]
     void CmdDoFire() {
         // Initiate GameObject using prefab, position and a rotation
