@@ -460,7 +460,7 @@ public class MasterPickupSpawner : NetworkBehaviour {
     /// <param name="where">Where to place the spawner</param>
     /// <param name="asset"></param>
     public void AreaPlacement(float radius, Vector3 where, GameObject asset) {
-        int groundLayerMask = (1 << 9);//The 'Ground' Layers we want to check.
+        int layerMask = (1 << 0) | (1 << 9) | (1 << 10) | (1 << 11);//The Layers we want to check.
         int amountWeNeed = 0;
         #region UnityTerrain: If we are using a Unity Terrain.
         if (isUsingUnityTerrain) {
@@ -471,8 +471,8 @@ public class MasterPickupSpawner : NetworkBehaviour {
             randomVector.y = -radius * 3;
             Ray ray = new Ray(where, randomVector);
             RaycastHit hitInfo;
-            if (Physics.Raycast(ray, out hitInfo, radius * 2, groundLayerMask | (1 << 0) | (1 << 10) | (1 << 11))) {
-                if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Default") || 
+            if (Physics.Raycast(ray, out hitInfo, radius * 2, layerMask)) {
+                if (//hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Default") || 
                     hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Environment") ||
                     hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Trees")) {
                     goto makeRay;

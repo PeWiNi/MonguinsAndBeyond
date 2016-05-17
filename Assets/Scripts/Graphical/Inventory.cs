@@ -31,7 +31,7 @@ public class Inventory : MonoBehaviour {
             return false;
         if (use)
             bananas -= count;
-        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(bananas == 0, 0);
+        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(bananas > 0, 0);
         transform.FindChild("Banana").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().bananaCount;
         return true;
     }
@@ -41,7 +41,7 @@ public class Inventory : MonoBehaviour {
             return false;
         if (use)
             sticks -= count;
-        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(sticks == 0, 1);
+        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(sticks > 0, 2);
         transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().stickCount;
         return true;
     }
@@ -53,8 +53,8 @@ public class Inventory : MonoBehaviour {
             sticks -= count;
             leaves -= count;
         }
-        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(sticks == 0, 1);
-        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(leaves == 0, 2);
+        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(sticks > 0, 2);
+        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(leaves > 0, 1);
         transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().stickCount;
         transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().leafCount;
         return true;
@@ -65,7 +65,7 @@ public class Inventory : MonoBehaviour {
             return false;
         if (use)
             sap -= count;
-        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(sap == 0, 3);
+        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(sap > 0, 3);
         transform.FindChild("Sap").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().sapCount;
         return true;
     }
@@ -75,7 +75,7 @@ public class Inventory : MonoBehaviour {
             return false;
         if (use)
             leaves -= count;
-        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(leaves == 0, 2);
+        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(leaves > 0, 1);
         transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + GetComponent<Inventory>().leafCount;
         return true;
     }
@@ -100,7 +100,7 @@ public class Inventory : MonoBehaviour {
 
     public void pickupSticks(int count = 1) {
         sticks += count;
-        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(true, 1);
+        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(true, 2);
         transform.FindChild("Stick").GetComponentInChildren<Text>().text = "" + stickCount;
     }
 
@@ -112,7 +112,7 @@ public class Inventory : MonoBehaviour {
 
     public void pickupLeaf(int count = 1) {
         leaves += count;
-        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(true, 2);
+        transform.parent.GetComponent<HUDScript>().trapImages.Toggle(true, 1);
         transform.FindChild("Leaf").GetComponentInChildren<Text>().text = "" + leafCount;
     }
 

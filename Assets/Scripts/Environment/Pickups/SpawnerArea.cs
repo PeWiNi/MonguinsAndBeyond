@@ -267,14 +267,17 @@ public class SpawnerArea : NetworkBehaviour {
     /// <param name="where">Where to place the spawner</param>
     /// <param name="asset"></param>
     PickupSpawner AreaPlacement(float radius, Vector3 where, GameObject asset, Transform parent) {
+        int layerMask = (1 << 0) | (1 << 9) | (1 << 10) | (1 << 11);//The Layers we want to check.
         PickupSpawner ps = null;
         int addy = -1;
     makeRay:
         Vector3 randomVector = Random.insideUnitSphere * radius * 3;
-        randomVector.y = -50 + --addy;
+        if (addy < 50)
+            addy++;
+        randomVector.y = -50 + addy;
         Ray ray = new Ray(where, randomVector);
         RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, float.MaxValue, (1 << 9) | (1 << 0) | (1 << 10) | (1 << 11))) {
+        if (Physics.Raycast(ray, out hitInfo, float.MaxValue, layerMask)) {
             if (hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Default") ||
                 hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Environment") ||
                 hitInfo.transform.gameObject.layer == LayerMask.NameToLayer("Trees")) {

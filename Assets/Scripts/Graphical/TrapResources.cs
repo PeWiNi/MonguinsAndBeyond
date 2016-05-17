@@ -12,10 +12,10 @@ public class TrapResources : MonoBehaviour {
 
     /// <summary>
     /// Toggle color of trap resources
-    /// 0 is Banana, 1 is Stick, 2 is Leaf, 3 is Sap
+    /// 0 is Banana, 1 is Leaf, 2 is Stick, 3 is Sap
     /// </summary>
     /// <param name="on">Toggle white(true) or black(false)</param>
-    /// <param name="number">0 is Banana, 1 is Stick, 2 is Leaf, 3 is Sap</param>
+    /// <param name="number">0 is Banana, 1 is Leaf, 2 is Stick, 3 is Sap</param>
     public void Toggle(bool on, int number) {
         switch(number) {
             case (0):
